@@ -13,9 +13,12 @@ def test_settings_loads_from_env(monkeypatch):
     assert s.anthropic_model == "claude-sonnet-4-6"
 
 
-def test_settings_defaults():
-    """Optional knobs have sensible defaults."""
-    s = Settings(anthropic_api_key="x", app_env="development")
+def test_settings_defaults(monkeypatch):
+    """Optional knobs have sensible defaults. We clear matching env vars AND
+    bypass env-file loading so a developer's local .env doesn't bleed in."""
+    for k in ("MAX_TOKENS", "TEMPERATURE", "RETRY_LIMIT", "LOG_LEVEL"):
+        monkeypatch.delenv(k, raising=False)
+    s = Settings(anthropic_api_key="x", app_env="development", _env_file=None)
     assert s.max_tokens == 4096
     assert s.temperature == 0.0
     assert s.retry_limit == 1
