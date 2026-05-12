@@ -1,22 +1,23 @@
-.PHONY: install test eval serve build lint fmt
+.PHONY: install test test-live eval serve build up down logs lint fmt clean
 
 install:
-	uv venv && uv pip install -e ".[dev]"
+	python -m venv .venv
+	. .venv/Scripts/activate && pip install --upgrade pip && pip install -e ".[dev]"
 
 test:
-	uv run pytest -q
+	. .venv/Scripts/activate && pytest -q
 
 test-live:
-	TNA_RUN_LIVE_TESTS=1 uv run pytest -m live -v
+	. .venv/Scripts/activate && TNA_RUN_LIVE_TESTS=1 pytest -m live -v
 
 eval:
-	uv run python scripts/run_eval.py
+	. .venv/Scripts/activate && python scripts/run_eval.py
 
 eval-refresh-golden:
-	uv run python scripts/refresh_golden.py
+	. .venv/Scripts/activate && python scripts/refresh_golden.py
 
 serve:
-	uv run uvicorn tna_service.interface.router:app --host 0.0.0.0 --port 8000
+	. .venv/Scripts/activate && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
 
 build:
 	docker compose build
@@ -27,8 +28,14 @@ up:
 down:
 	docker compose down
 
+logs:
+	docker compose logs -f api
+
 lint:
-	uv run ruff check src tests evals
+	. .venv/Scripts/activate && ruff check app tests evals
 
 fmt:
-	uv run ruff format src tests evals
+	. .venv/Scripts/activate && ruff format app tests evals
+
+clean:
+	rm -rf .venv .pytest_cache .ruff_cache .coverage htmlcov *.egg-info
