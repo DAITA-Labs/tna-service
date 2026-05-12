@@ -6,6 +6,7 @@ from app.core.telemetry import (
     agent_tokens_input, agent_tokens_output,
     validator_findings_total, llm_inference_duration_seconds,
 )
+from app.core.prompt_loader import load_prompt
 
 __all__ = [
     "configure_logging", "get_logger",
@@ -13,4 +14,5 @@ __all__ = [
     "agent_duration_seconds", "agent_retry_count",
     "agent_tokens_input", "agent_tokens_output",
     "validator_findings_total", "llm_inference_duration_seconds",
+    "load_prompt",
 ]
