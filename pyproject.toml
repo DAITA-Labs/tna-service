@@ -1,0 +1,46 @@
+[project]
+name = "tna_service"
+version = "0.1.0"
+description = "TNA Excel extraction microservice — multi-agent orchestration + deterministic validation"
+requires-python = ">=3.12"
+dependencies = [
+    "haystack-ai>=2.10",
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.27",
+    "pydantic>=2.6",
+    "pydantic-settings>=2.2",
+    "python-dotenv>=1.0",
+    "anthropic>=0.49",
+    "openpyxl==3.1.5",
+    "structlog>=24.1",
+    "prometheus-client>=0.20",
+    "starlette-prometheus>=0.10",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "pytest-cov>=4.1",
+    "ruff>=0.4",
+]
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["tna_service*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "strict"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+markers = [
+    "live: end-to-end tests against real Anthropic API (gated by TNA_RUN_LIVE_TESTS=1)",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
