@@ -6,6 +6,23 @@ datasources:
     access: proxy
     url: http://prometheus:9090
     isDefault: true
+  - name: Tempo
+    type: tempo
+    uid: tempo
+    access: proxy
+    url: http://tempo:3200
+    isDefault: false
+    jsonData:
+      tracesToLogsV2:
+        datasourceUid: loki
+        spanStartTimeShift: -1h
+        spanEndTimeShift: 1h
+        tags:
+          - { key: 'service.name', value: 'job' }
+      tracesToMetrics:
+        datasourceUid: prometheus
+      serviceMap:
+        datasourceUid: prometheus
   - name: Loki
     type: loki
     uid: loki
@@ -14,3 +31,9 @@ datasources:
     isDefault: false
     jsonData:
       maxLines: 5000
+      derivedFields:
+        - datasourceUid: tempo
+          matcherRegex: "trace_id=([a-f0-9]+)"
+          name: TraceID
+          url: '$${__value.raw}'
+          urlDisplayLabel: 'View trace'
