@@ -3,6 +3,43 @@
   "title": "TNA Extraction — overview",
   "schemaVersion": 38,
   "version": 1,
+  "templating": {
+    "list": [
+      {
+        "name": "request_id",
+        "type": "query",
+        "label": "Request ID",
+        "datasource": { "type": "loki", "uid": "loki" },
+        "query": "label_values(request_id)",
+        "refresh": 2,
+        "multi": true,
+        "includeAll": true,
+        "hide": 0
+      },
+      {
+        "name": "phase",
+        "type": "query",
+        "label": "Phase",
+        "datasource": { "type": "loki", "uid": "loki" },
+        "query": "label_values({job=\"tna-service\"}, phase)",
+        "refresh": 2,
+        "multi": true,
+        "includeAll": true,
+        "hide": 0
+      },
+      {
+        "name": "agent",
+        "type": "query",
+        "label": "Agent",
+        "datasource": { "type": "loki", "uid": "loki" },
+        "query": "label_values({job=\"tna-service\"}, agent)",
+        "refresh": 2,
+        "multi": true,
+        "includeAll": true,
+        "hide": 0
+      }
+    ]
+  },
   "panels": [
     {
       "id": 1,
@@ -159,6 +196,23 @@
         "refId": "A",
         "legendFormat": "{{phase}}"
       }]
+    },
+    {
+      "id": 15,
+      "title": "Logs (filterable by request_id / phase / agent)",
+      "type": "logs",
+      "gridPos": { "x": 0, "y": 52, "w": 24, "h": 12 },
+      "datasource": { "type": "loki", "uid": "loki" },
+      "targets": [{
+        "datasource": { "type": "loki", "uid": "loki" },
+        "expr": "{job=\"tna-service\"} | json | __error__=\"\"",
+        "refId": "A"
+      }],
+      "options": {
+        "showTime": true,
+        "wrapLogMessage": true,
+        "dedupStrategy": "none"
+      }
     }
   ]
 }
