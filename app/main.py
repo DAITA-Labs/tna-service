@@ -2,7 +2,7 @@
 import os
 from fastapi import FastAPI
 from app.config.settings import get_settings
-from app.core.logs import configure_logging, attach_otel_log_handler
+from app.core.logs import configure_logging
 from app.core.middleware import RequestIdMiddleware
 from app.core.telemetry import extractions_total  # noqa: F401 — register collectors
 from app.routers.extract import router as extract_router
@@ -23,12 +23,10 @@ configure_logging(
 # OTel telemetry — traces + metrics + logs over a single OTLP gRPC channel.
 # Initialise inside containers (SDK installed there) or when OTEL_ENABLED is set.
 _tracing_enabled = _in_container or os.environ.get("OTEL_ENABLED", "").lower() in ("1", "true", "yes")
-_logger_provider = None
 if _tracing_enabled:
     try:
         from app.core.tracing import configure_tracing
-        _logger_provider = configure_tracing(service_name="tna-service")
-        attach_otel_log_handler(_logger_provider)
+        configure_tracing(service_name="tna-service")
     except ImportError:
         _tracing_enabled = False
 

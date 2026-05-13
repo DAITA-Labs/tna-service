@@ -145,6 +145,52 @@ class _NoopSpan:
         pass
 
 
+_OTEL_SEVERITY = {
+    "debug":     (5, "DEBUG"),
+    "info":      (9, "INFO"),
+    "warning":   (13, "WARN"),
+    "warn":      (13, "WARN"),
+    "error":     (17, "ERROR"),
+    "exception": (17, "ERROR"),
+    "critical":  (21, "FATAL"),
+}
+
+
+def emit_to_otel_logs(logger, method_name, event_dict):
+    """Structlog processor that side-emits every event to OTel logs over OTLP.
+
+    Runs before JSONRenderer so the event is still a dict. Bypasses stdlib
+    logging entirely — directly pushes a LogRecord through the SDK's global
+    LoggerProvider. Returns the unchanged event_dict so the rest of the
+    processor chain (JSON rendering to stdout) is unaffected.
+
+    No-op when OTel SDK isn't installed or no LoggerProvider is configured.
+    """
+    try:
+        import time
+        from opentelemetry._logs import get_logger
+        from opentelemetry.sdk._logs._internal import LogRecord
+    except ImportError:
+        return event_dict
+    try:
+        severity_number, severity_text = _OTEL_SEVERITY.get(
+            method_name, (9, "INFO"))
+        body = event_dict.get("event", "")
+        attributes = {k: str(v) for k, v in event_dict.items() if k != "event"}
+        ts_ns = int(time.time() * 1_000_000_000)
+        get_logger("app").emit(LogRecord(
+            timestamp=ts_ns,
+            observed_timestamp=ts_ns,
+            severity_number=severity_number,
+            severity_text=severity_text,
+            body=body,
+            attributes=attributes,
+        ))
+    except Exception:
+        pass
+    return event_dict
+
+
 def add_trace_context_to_log(logger, method_name, event_dict):
     """Structlog processor that injects current span's trace_id / span_id
     into every log record so Grafana Loki <-> Tempo correlation works.

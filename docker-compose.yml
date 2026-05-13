@@ -10,7 +10,7 @@ services:
       - .env
     environment:
       - APP_ENV=${APP_ENV:-production}
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://signoz-otel-collector:4317
       - OTEL_SERVICE_NAME=tna-service
     volumes:
       - ./dataset:/app/dataset:ro
@@ -21,63 +21,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-    depends_on:
-      - otel-collector
-    networks: [observability]
-
-  clickhouse:
-    image: clickhouse/clickhouse-server:24.1.2-alpine
-    container_name: tna-service-clickhouse
-    volumes:
-      - clickhouse-data:/var/lib/clickhouse
-      - ./signoz/clickhouse-config.xml:/etc/clickhouse-server/config.d/local.xml:ro
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "localhost:8123/ping"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-    networks: [observability]
-
-  otel-collector:
-    image: signoz/signoz-otel-collector:0.111.7
-    container_name: tna-service-otel-collector
-    command: ["--config=/etc/otelcol/config.yml"]
-    volumes:
-      - ./signoz/otel-collector-config.yml:/etc/otelcol/config.yml:ro
-    ports:
-      - "4317:4317"   # OTLP gRPC
-      - "4318:4318"   # OTLP HTTP
-    depends_on:
-      clickhouse: { condition: service_healthy }
-    networks: [observability]
-
-  signoz-query-service:
-    image: signoz/query-service:0.55.0
-    container_name: tna-service-signoz-query
-    environment:
-      - ClickHouseUrl=tcp://clickhouse:9000
-      - STORAGE=clickhouse
-      - SIGNOZ_LOCAL_DB_PATH=/var/lib/signoz/signoz.db
-    volumes:
-      - signoz-data:/var/lib/signoz
-    depends_on:
-      clickhouse: { condition: service_healthy }
-    networks: [observability]
-
-  signoz-frontend:
-    image: signoz/frontend:0.55.0
-    container_name: tna-service-signoz-frontend
-    ports:
-      - "3301:3301"
-    environment:
-      - FRONTEND_API_ENDPOINT=http://signoz-query-service:8080
-    depends_on:
-      - signoz-query-service
-    networks: [observability]
+    networks: [signoz-net]
 
 networks:
-  observability: {}
-
-volumes:
-  clickhouse-data: {}
-  signoz-data: {}
+  signoz-net:
+    external: true
