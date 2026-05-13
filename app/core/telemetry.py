@@ -71,6 +71,13 @@ tool_calls_total = Counter(
     labelnames=("tool_name",),
 )
 
+# LLM-level invocation counter
+llm_calls_total = Counter(
+    "llm_calls_total",
+    "Total LLM API invocations.",
+    labelnames=("model", "status"),  # success | failure
+)
+
 # Agent-level invocation counter
 agent_calls_total = Counter(
     "agent_calls_total",

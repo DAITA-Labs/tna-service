@@ -19,6 +19,7 @@ from app.core.telemetry import (
     llm_inference_duration_seconds,
     agent_tokens_input,
     agent_tokens_output,
+    llm_calls_total,
 )
 
 T = TypeVar("T", bound=BaseModel)
@@ -115,18 +116,23 @@ class AnthropicProvider:
         log.debug("llm_call_start", model=self.model, tool=tool_name,
                   system_chars=len(system), user_chars=len(user))
         t0 = time.monotonic()
-        resp = self.client.messages.create(
-            model=self.model,
-            max_tokens=self.max_tokens,
-            temperature=self.temperature,
-            system=system,
-            messages=[{"role": "user", "content": user}],
-            tools=[tool],
-            tool_choice={"type": "tool", "name": tool_name},
-        )
+        try:
+            resp = self.client.messages.create(
+                model=self.model,
+                max_tokens=self.max_tokens,
+                temperature=self.temperature,
+                system=system,
+                messages=[{"role": "user", "content": user}],
+                tools=[tool],
+                tool_choice={"type": "tool", "name": tool_name},
+            )
+        except Exception:
+            llm_calls_total.labels(model=self.model, status="failure").inc()
+            raise
         llm_inference_duration_seconds.labels(model=self.model).observe(
             time.monotonic() - t0
         )
+        llm_calls_total.labels(model=self.model, status="success").inc()
         usage = getattr(resp, "usage", None)
         if usage is not None:
             inp = getattr(usage, "input_tokens", None)
