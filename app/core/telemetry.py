@@ -57,6 +57,13 @@ validator_findings_total = Counter(
     labelnames=("check", "severity"),
 )
 
+# Per-tool
+tool_calls_total = Counter(
+    "tool_calls_total",
+    "Total invocations of @tool-registered workbook tools.",
+    labelnames=("tool_name",),
+)
+
 # LLM provider — isolates network time from agent loop time
 llm_inference_duration_seconds = Histogram(
     "llm_inference_duration_seconds",

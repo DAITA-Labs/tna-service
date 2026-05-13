@@ -5,7 +5,9 @@ Agents look them up by name when calling. Adding a tool is one file + one
 decorator; no other place to wire it up.
 """
 from __future__ import annotations
+import functools
 from typing import Callable
+from app.core.telemetry import tool_calls_total
 
 
 class ToolRegistry:
@@ -18,7 +20,13 @@ class ToolRegistry:
         def decorator(fn: Callable) -> Callable:
             if name in self._tools:
                 raise ValueError(f"tool {name!r} already registered")
-            self._tools[name] = fn
+
+            @functools.wraps(fn)
+            def _counted(*args, **kwargs):
+                tool_calls_total.labels(tool_name=name).inc()
+                return fn(*args, **kwargs)
+
+            self._tools[name] = _counted
             return fn
         return decorator
 
