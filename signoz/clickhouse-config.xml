@@ -20,6 +20,46 @@
   <mark_cache_size>5368709120</mark_cache_size>
   <mlock_executable>true</mlock_executable>
 
+  <!-- Single-node cluster definition required by SigNoz migrations (ON CLUSTER cluster). -->
+  <remote_servers>
+    <cluster>
+      <shard>
+        <replica>
+          <host>localhost</host>
+          <port>9000</port>
+        </replica>
+      </shard>
+    </cluster>
+  </remote_servers>
+
+  <macros>
+    <shard>01</shard>
+    <replica>clickhouse</replica>
+    <cluster>cluster</cluster>
+  </macros>
+
+  <!-- Embedded ClickHouse Keeper (replaces ZooKeeper for single-node ReplicatedMergeTree). -->
+  <keeper_server>
+    <tcp_port>9181</tcp_port>
+    <server_id>1</server_id>
+    <log_storage_path>/var/lib/clickhouse/coordination/log</log_storage_path>
+    <snapshot_storage_path>/var/lib/clickhouse/coordination/snapshots</snapshot_storage_path>
+    <raft_configuration>
+      <server>
+        <id>1</id>
+        <hostname>localhost</hostname>
+        <port>9444</port>
+      </server>
+    </raft_configuration>
+  </keeper_server>
+
+  <zookeeper>
+    <node>
+      <host>localhost</host>
+      <port>9181</port>
+    </node>
+  </zookeeper>
+
   <users>
     <default>
       <password></password>

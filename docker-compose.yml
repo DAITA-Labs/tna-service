@@ -9,12 +9,10 @@ services:
     env_file:
       - .env
     environment:
-      # Default to production inside the container so structlog emits JSON
-      # (which Promtail can parse). Override by exporting APP_ENV before `make up`.
       - APP_ENV=${APP_ENV:-production}
-      - TEMPO_OTLP_ENDPOINT=http://tempo:4317
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_SERVICE_NAME=tna-service
     volumes:
-      # Mount the local labeled dataset for `make eval` from inside the container.
       - ./dataset:/app/dataset:ro
     restart: unless-stopped
     healthcheck:
@@ -23,75 +21,63 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-    networks: [observability]
-
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: tna-service-prometheus
-    volumes:
-      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
-    ports:
-      - "9090:9090"
     depends_on:
-      - api
+      - otel-collector
     networks: [observability]
 
-  grafana:
-    image: grafana/grafana:latest
-    container_name: tna-service-grafana
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.1.2-alpine
+    container_name: tna-service-clickhouse
     volumes:
-      - ./grafana/datasources:/etc/grafana/provisioning/datasources:ro
-      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards:ro
+      - clickhouse-data:/var/lib/clickhouse
+      - ./signoz/clickhouse-config.xml:/etc/clickhouse-server/config.d/local.xml:ro
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "localhost:8123/ping"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks: [observability]
+
+  otel-collector:
+    image: signoz/signoz-otel-collector:0.111.7
+    container_name: tna-service-otel-collector
+    command: ["--config=/etc/otelcol/config.yml"]
+    volumes:
+      - ./signoz/otel-collector-config.yml:/etc/otelcol/config.yml:ro
+    ports:
+      - "4317:4317"   # OTLP gRPC
+      - "4318:4318"   # OTLP HTTP
+    depends_on:
+      clickhouse: { condition: service_healthy }
+    networks: [observability]
+
+  signoz-query-service:
+    image: signoz/query-service:0.55.0
+    container_name: tna-service-signoz-query
     environment:
-      - GF_AUTH_ANONYMOUS_ENABLED=true
-      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
-    ports:
-      - "3000:3000"
+      - ClickHouseUrl=tcp://clickhouse:9000
+      - STORAGE=clickhouse
+      - SIGNOZ_LOCAL_DB_PATH=/var/lib/signoz/signoz.db
+    volumes:
+      - signoz-data:/var/lib/signoz
     depends_on:
-      - prometheus
-      - loki
-      - tempo
+      clickhouse: { condition: service_healthy }
     networks: [observability]
 
-  tempo:
-    image: grafana/tempo:2.4.0
-    container_name: tna-service-tempo
-    command: ["-config.file=/etc/tempo/tempo.yml"]
-    volumes:
-      - ./tempo/tempo.yml:/etc/tempo/tempo.yml:ro
-      - tempo-data:/var/tempo
+  signoz-frontend:
+    image: signoz/frontend:0.55.0
+    container_name: tna-service-signoz-frontend
     ports:
-      - "3200:3200"      # Tempo UI / HTTP query
-      - "4317:4317"      # OTLP gRPC
-      - "4318:4318"      # OTLP HTTP
-    networks: [observability]
-
-  loki:
-    image: grafana/loki:2.9.0
-    container_name: tna-service-loki
-    volumes:
-      - ./loki/loki-config.yml:/etc/loki/local-config.yaml:ro
-      - loki-data:/loki
-    command: -config.file=/etc/loki/local-config.yaml
-    ports:
-      - "3100:3100"
-    networks: [observability]
-
-  promtail:
-    image: grafana/promtail:2.9.0
-    container_name: tna-service-promtail
-    volumes:
-      - ./promtail/promtail-config.yml:/etc/promtail/config.yml:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /var/lib/docker/containers:/var/lib/docker/containers:ro
-    command: -config.file=/etc/promtail/config.yml
+      - "3301:3301"
+    environment:
+      - FRONTEND_API_ENDPOINT=http://signoz-query-service:8080
     depends_on:
-      - loki
+      - signoz-query-service
     networks: [observability]
 
 networks:
   observability: {}
 
 volumes:
-  loki-data: {}
-  tempo-data: {}
+  clickhouse-data: {}
+  signoz-data: {}
