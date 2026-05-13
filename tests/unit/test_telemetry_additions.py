@@ -78,3 +78,9 @@ def test_tool_error_counter_fires_on_tool_failure(tmp_path):
         pass
     after = tool_errors_total.labels(tool_name=_NAME)._value.get()
     assert after == before + 1
+
+
+def test_plis_extracted_counter_exists():
+    from app.core.telemetry import plis_extracted_total
+    # It's an unlabeled Counter; verify it has _value attribute and starts at zero or ≥0
+    assert plis_extracted_total._value.get() >= 0

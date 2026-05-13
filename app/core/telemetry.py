@@ -111,3 +111,8 @@ llm_inference_duration_seconds = Histogram(
     labelnames=("model",),
     buckets=(0.5, 1.0, 2.5, 5.0, 10.0, 20.0, 60.0),
 )
+
+plis_extracted_total = Counter(
+    "plis_extracted_total",
+    "Cumulative count of PLI rows emitted across all extractions.",
+)

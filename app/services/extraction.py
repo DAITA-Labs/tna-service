@@ -33,6 +33,7 @@ from app.core.telemetry import (
     extraction_pli_count,
     extraction_phase_duration_seconds,
     extractions_total,
+    plis_extracted_total,
 )
 import app.repositories.workbook_tools.survey  # noqa: F401
 import app.repositories.workbook_tools.bulk_read  # noqa: F401
@@ -172,6 +173,7 @@ def extract(workbook_path: Path | str, *, llm=None) -> ExtractionResult:
             extractions_total.labels(status="empty").inc()
         else:
             extractions_total.labels(status="success").inc()
+        plis_extracted_total.inc(len(final.plis))
         return final
     except Exception:
         extractions_total.labels(status="failure").inc()
