@@ -1,0 +1,48 @@
+{
+  "annotations": { "list": [] },
+  "title": "TNA Extraction — overview",
+  "schemaVersion": 38,
+  "version": 1,
+  "panels": [
+    {
+      "id": 1,
+      "title": "Extraction latency p95 (s)",
+      "type": "stat",
+      "gridPos": { "x": 0, "y": 0, "w": 6, "h": 6 },
+      "targets": [{
+        "expr": "histogram_quantile(0.95, sum(rate(extraction_duration_seconds_bucket[5m])) by (le))",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 2,
+      "title": "Agent retries (rate / min)",
+      "type": "timeseries",
+      "gridPos": { "x": 6, "y": 0, "w": 12, "h": 6 },
+      "targets": [{
+        "expr": "sum(rate(agent_retry_count[1m])) by (agent)",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 3,
+      "title": "Validator findings (rate / min)",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 6, "w": 12, "h": 6 },
+      "targets": [{
+        "expr": "sum(rate(validator_findings[1m])) by (check, severity)",
+        "refId": "A"
+      }]
+    },
+    {
+      "id": 4,
+      "title": "PLIs per file",
+      "type": "timeseries",
+      "gridPos": { "x": 12, "y": 6, "w": 12, "h": 6 },
+      "targets": [{
+        "expr": "extraction_pli_count",
+        "refId": "A"
+      }]
+    }
+  ]
+}
