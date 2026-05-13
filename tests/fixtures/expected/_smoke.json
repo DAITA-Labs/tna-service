@@ -1,0 +1,10 @@
+{
+  "fixture": "_smoke",
+  "description": "Minimal smoke fixture used by conftest loader tests.",
+  "layer_expectations": {
+    "flow": {
+      "pli_mode": "row_per_pli"
+    }
+  },
+  "failure_expectations": null
+}
