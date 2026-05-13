@@ -3,5 +3,9 @@ providers:
   - name: tna
     folder: TNA
     type: file
+    updateIntervalSeconds: 5
+    allowUiUpdates: false
+    disableDeletion: false
     options:
       path: /etc/grafana/provisioning/dashboards
+      foldersFromFilesStructure: false
