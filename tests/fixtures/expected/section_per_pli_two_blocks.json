@@ -1,0 +1,25 @@
+{
+  "fixture": "section_per_pli_two_blocks",
+  "description": "Two PLI blocks separated by a blank-row gap.",
+  "layer_expectations": {
+    "flow": {
+      "pli_mode_acceptable": ["section_per_pli", "row_per_pli"],
+      "pli_count_min": 2,
+      "pli_count_max": 2
+    },
+    "e2e": {
+      "fake_llm_responses": {
+        "SheetClassifierOutput": {"relevant_sheets": ["S"]},
+        "CanonicalNameMap": {
+          "field_labels": {"IO": "io_number"},
+          "stage_names": {"Cut": "cutting", "Sew": "sewing"}
+        },
+        "LayoutHints": {},
+        "PlanVerdict": {"verdict": "looks_correct"}
+      },
+      "pli_count": 2,
+      "io_numbers": ["1063", "1064"]
+    }
+  },
+  "failure_expectations": null
+}

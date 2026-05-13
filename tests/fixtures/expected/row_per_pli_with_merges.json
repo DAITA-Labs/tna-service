@@ -1,0 +1,28 @@
+{
+  "fixture": "row_per_pli_with_merges",
+  "description": "2 IOs with vertical-merge identity, 5 color rows total.",
+  "layer_expectations": {
+    "flow": {
+      "pli_mode": "row_per_pli",
+      "identity_column": "B",
+      "anchor_count": 2,
+      "child_count": 3,
+      "total_count": 0,
+      "header_rows": [1]
+    },
+    "e2e": {
+      "fake_llm_responses": {
+        "SheetClassifierOutput": {"relevant_sheets": ["S"]},
+        "CanonicalNameMap": {
+          "field_labels": {"IO NO": "io_number", "COLOR": "color_code", "ORDER QTY": "quantity"},
+          "stage_names": {}
+        },
+        "LayoutHints": {},
+        "PlanVerdict": {"verdict": "looks_correct"}
+      },
+      "pli_count": 5,
+      "io_numbers": ["1063", "1063", "1063", "1064", "1064"]
+    }
+  },
+  "failure_expectations": null
+}

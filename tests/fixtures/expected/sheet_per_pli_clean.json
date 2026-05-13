@@ -1,0 +1,26 @@
+{
+  "fixture": "sheet_per_pli_clean",
+  "description": "3 sheets, each a single PLI with scattered KV identity and one stage band.",
+  "layer_expectations": {
+    "flow": {
+      "pli_mode": "sheet_is_pli",
+      "kv_anchor_count_per_sheet": [2, 2, 2],
+      "stage_band_count_per_sheet": [1, 1, 1]
+    },
+    "e2e": {
+      "fake_llm_responses": {
+        "SheetClassifierOutput": {"relevant_sheets": ["63315", "63306", "63305"]},
+        "CanonicalNameMap": {
+          "field_labels": {"Job No": "io_number", "Quantity": "quantity"},
+          "stage_names": {"L/D send": "lab_dip_send", "Fit send": "fit_send"}
+        },
+        "LayoutHints": {},
+        "PlanVerdict": {"verdict": "looks_correct"}
+      },
+      "pli_count": 3,
+      "io_numbers": ["63315", "63306", "63305"],
+      "stage_count_per_pli": [2, 2, 2]
+    }
+  },
+  "failure_expectations": null
+}
