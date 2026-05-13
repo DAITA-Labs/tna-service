@@ -238,3 +238,28 @@ class SheetPlan(BaseModel):
     stage_bands: list[StageBandSpec] = Field(default_factory=list)
     stage_scope: StageScope = StageScope.SHEET_LEVEL
     confidence: float = 1.0
+
+
+class CanonicalNameMap(BaseModel):
+    """FieldNamer's output — map detected labels to canonical names."""
+    model_config = ConfigDict(extra="ignore")
+    field_labels: dict[str, str] = Field(default_factory=dict)
+    stage_names: dict[str, str] = Field(default_factory=dict)
+
+
+class LayoutHints(BaseModel):
+    """LayoutHinter's output — disambiguation hints for the planner."""
+    model_config = ConfigDict(extra="ignore")
+    identity_column_suggestion: str | None = None
+    mode_suggestion: str | None = None
+    notes: list[str] = Field(default_factory=list)
+
+
+class PlanVerdict(BaseModel):
+    """PlanReviewer's output — judging a draft SheetPlan."""
+    model_config = ConfigDict(extra="ignore")
+    verdict: str = "looks_correct"
+    row_corrections: list[dict] = Field(default_factory=list)
+    identity_column_suggestion: str | None = None
+    warnings: list[str] = Field(default_factory=list)
+    confidence: float = 1.0

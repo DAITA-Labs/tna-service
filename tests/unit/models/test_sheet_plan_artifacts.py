@@ -85,3 +85,42 @@ def test_sheet_plan_sheet_is_pli_minimal():
     )
     assert plan.pli_mode is PliMode.SHEET_IS_PLI
     assert plan.kv_anchors[0].field == "io_number"
+
+
+from app.models.artifacts import CanonicalNameMap, LayoutHints, PlanVerdict
+
+
+def test_canonical_name_map():
+    nm = CanonicalNameMap(
+        field_labels={"Ex-Fty date": "delivery_date",
+                      "Job No": "io_number"},
+        stage_names={"L/D send": "lab_dip_send"},
+    )
+    assert nm.field_labels["Ex-Fty date"] == "delivery_date"
+
+
+def test_layout_hints():
+    h = LayoutHints(
+        identity_column_suggestion="B",
+        mode_suggestion="row_per_pli",
+        notes=["B is clearly the IO column"],
+    )
+    assert h.identity_column_suggestion == "B"
+
+
+def test_plan_verdict_looks_correct():
+    v = PlanVerdict(verdict="looks_correct", row_corrections=[],
+                    identity_column_suggestion=None, warnings=[],
+                    confidence=0.95)
+    assert v.verdict == "looks_correct"
+
+
+def test_plan_verdict_needs_fix():
+    v = PlanVerdict(
+        verdict="needs_fix",
+        row_corrections=[{"row": 8, "current_role": "total",
+                          "suggested_role": "child", "anchor_idx": 4}],
+        warnings=["stage band 'CUTTING' may start one column earlier"],
+        confidence=0.85,
+    )
+    assert v.row_corrections[0]["row"] == 8
