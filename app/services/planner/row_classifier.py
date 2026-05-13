@@ -122,7 +122,7 @@ def classify_rows(
                         continue
                 grand_sum = sum(v for _, v in recent_qtys)
                 if abs(grand_sum - target) < 0.5:
-                    rows.append(RowSpec(idx=r, role=RowRole.TOTAL))
+                    rows.append(RowSpec(idx=r, role=RowRole.GRAND_TOTAL))
                     continue
 
         rows.append(RowSpec(idx=r, role=RowRole.BLANK))
