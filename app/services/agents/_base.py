@@ -14,8 +14,10 @@ from pydantic import BaseModel, ValidationError
 from app.services.llm_provider import LLMProvider
 from app.core.logs import get_logger
 from app.core.telemetry import agent_duration_seconds, agent_retry_count, agent_calls_total
+from app.core.tracing import get_tracer
 
 log = get_logger(__name__)
+_tracer = get_tracer(__name__)
 
 
 @dataclass(frozen=True)
@@ -60,56 +62,62 @@ class AgentRunner:
         log.info("agent_run_start", agent=self.spec.name,
                  input_keys=sorted(inputs.keys()))
 
-        while attempt <= self.spec.retry.max_retries:
-            attempt += 1
-            t0 = time.monotonic()
-            try:
-                out = self.llm.complete_with_schema(
-                    system=self.spec.system_prompt,
-                    user=user,
-                    output_schema=self.spec.output_schema,
-                    tool_name=tool_name,
-                    agent_name=self.spec.name,
-                )
-                agent_duration_seconds.labels(
-                    agent=self.spec.name, status="success"
-                ).observe(time.monotonic() - t0)
-                agent_calls_total.labels(
-                    agent=self.spec.name, status="success"
-                ).inc()
-                log.info("agent_run_success", agent=self.spec.name,
-                         attempt=attempt)
-                return out
-            except ValidationError as e:
-                last_error = str(e)
-                agent_retry_count.labels(
-                    agent=self.spec.name, reason="schema_validation"
-                ).inc()
-                log.warning("agent_run_schema_validation_failed",
-                            agent=self.spec.name, attempt=attempt, error=last_error)
-                if attempt > self.spec.retry.max_retries:
-                    break
-                user = (
-                    user
-                    + "\n\n# Previous attempt failed validation:\n"
-                    + last_error
-                    + "\n\nPlease emit a result that matches the schema exactly."
-                )
-            except Exception as e:
-                last_error = f"{type(e).__name__}: {e}"
-                log.error("agent_run_unexpected_error",
-                          agent=self.spec.name, error=last_error)
-                if attempt > self.spec.retry.max_retries:
-                    break
+        with _tracer.start_as_current_span(f"agent.{self.spec.name}") as span:
+            span.set_attribute("agent.name", self.spec.name)
 
-        agent_duration_seconds.labels(
-            agent=self.spec.name, status="failure"
-        ).observe(time.monotonic() - run_t0)
-        agent_calls_total.labels(
-            agent=self.spec.name, status="failure"
-        ).inc()
-        return AgentRunFailure(
-            agent_name=self.spec.name,
-            attempt_count=attempt,
-            final_error=last_error,
-        )
+            while attempt <= self.spec.retry.max_retries:
+                attempt += 1
+                t0 = time.monotonic()
+                try:
+                    out = self.llm.complete_with_schema(
+                        system=self.spec.system_prompt,
+                        user=user,
+                        output_schema=self.spec.output_schema,
+                        tool_name=tool_name,
+                        agent_name=self.spec.name,
+                    )
+                    agent_duration_seconds.labels(
+                        agent=self.spec.name, status="success"
+                    ).observe(time.monotonic() - t0)
+                    agent_calls_total.labels(
+                        agent=self.spec.name, status="success"
+                    ).inc()
+                    log.info("agent_run_success", agent=self.spec.name,
+                             attempt=attempt)
+                    span.set_attribute("agent.status", "success")
+                    return out
+                except ValidationError as e:
+                    last_error = str(e)
+                    agent_retry_count.labels(
+                        agent=self.spec.name, reason="schema_validation"
+                    ).inc()
+                    log.warning("agent_run_schema_validation_failed",
+                                agent=self.spec.name, attempt=attempt, error=last_error)
+                    if attempt > self.spec.retry.max_retries:
+                        break
+                    user = (
+                        user
+                        + "\n\n# Previous attempt failed validation:\n"
+                        + last_error
+                        + "\n\nPlease emit a result that matches the schema exactly."
+                    )
+                except Exception as e:
+                    last_error = f"{type(e).__name__}: {e}"
+                    log.error("agent_run_unexpected_error",
+                              agent=self.spec.name, error=last_error)
+                    if attempt > self.spec.retry.max_retries:
+                        break
+
+            agent_duration_seconds.labels(
+                agent=self.spec.name, status="failure"
+            ).observe(time.monotonic() - run_t0)
+            agent_calls_total.labels(
+                agent=self.spec.name, status="failure"
+            ).inc()
+            span.set_attribute("agent.status", "failure")
+            span.set_attribute("agent.error", str(last_error)[:200])
+            return AgentRunFailure(
+                agent_name=self.spec.name,
+                attempt_count=attempt,
+                final_error=last_error,
+            )

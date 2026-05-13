@@ -21,9 +21,11 @@ from app.core.telemetry import (
     agent_tokens_output,
     llm_calls_total,
 )
+from app.core.tracing import get_tracer
 
 T = TypeVar("T", bound=BaseModel)
 log = get_logger(__name__)
+_tracer = get_tracer(__name__)
 
 
 class MissingAPIKey(RuntimeError):
@@ -116,39 +118,44 @@ class AnthropicProvider:
         log.debug("llm_call_start", model=self.model, tool=tool_name,
                   system_chars=len(system), user_chars=len(user))
         t0 = time.monotonic()
-        try:
-            resp = self.client.messages.create(
-                model=self.model,
-                max_tokens=self.max_tokens,
-                temperature=self.temperature,
-                system=system,
-                messages=[{"role": "user", "content": user}],
-                tools=[tool],
-                tool_choice={"type": "tool", "name": tool_name},
+        with _tracer.start_as_current_span("llm.complete") as span:
+            span.set_attribute("llm.model", self.model)
+            span.set_attribute("llm.agent", agent_name)
+            try:
+                resp = self.client.messages.create(
+                    model=self.model,
+                    max_tokens=self.max_tokens,
+                    temperature=self.temperature,
+                    system=system,
+                    messages=[{"role": "user", "content": user}],
+                    tools=[tool],
+                    tool_choice={"type": "tool", "name": tool_name},
+                )
+            except Exception:
+                llm_calls_total.labels(model=self.model, status="failure").inc()
+                raise
+            llm_inference_duration_seconds.labels(model=self.model).observe(
+                time.monotonic() - t0
             )
-        except Exception:
-            llm_calls_total.labels(model=self.model, status="failure").inc()
-            raise
-        llm_inference_duration_seconds.labels(model=self.model).observe(
-            time.monotonic() - t0
-        )
-        llm_calls_total.labels(model=self.model, status="success").inc()
-        usage = getattr(resp, "usage", None)
-        inp_tokens: int | None = None
-        out_tokens: int | None = None
-        if usage is not None:
-            inp_tokens = getattr(usage, "input_tokens", None)
-            out_tokens = getattr(usage, "output_tokens", None)
-            if isinstance(inp_tokens, int):
-                agent_tokens_input.labels(agent=agent_name, model=self.model).inc(inp_tokens)
-            if isinstance(out_tokens, int):
-                agent_tokens_output.labels(agent=agent_name, model=self.model).inc(out_tokens)
-        log.info("llm_call_complete", model=self.model, agent=agent_name,
-                 input_tokens=inp_tokens, output_tokens=out_tokens)
+            llm_calls_total.labels(model=self.model, status="success").inc()
+            usage = getattr(resp, "usage", None)
+            inp_tokens: int | None = None
+            out_tokens: int | None = None
+            if usage is not None:
+                inp_tokens = getattr(usage, "input_tokens", None)
+                out_tokens = getattr(usage, "output_tokens", None)
+                if isinstance(inp_tokens, int):
+                    agent_tokens_input.labels(agent=agent_name, model=self.model).inc(inp_tokens)
+                    span.set_attribute("llm.input_tokens", inp_tokens)
+                if isinstance(out_tokens, int):
+                    agent_tokens_output.labels(agent=agent_name, model=self.model).inc(out_tokens)
+                    span.set_attribute("llm.output_tokens", out_tokens)
+            log.info("llm_call_complete", model=self.model, agent=agent_name,
+                     input_tokens=inp_tokens, output_tokens=out_tokens)
 
-        for block in resp.content:
-            if getattr(block, "type", None) == "tool_use" and block.name == tool_name:
-                return output_schema(**block.input)
+            for block in resp.content:
+                if getattr(block, "type", None) == "tool_use" and block.name == tool_name:
+                    return output_schema(**block.input)
 
         raise RuntimeError(
             f"Anthropic returned no tool_use block for {tool_name!r}. "

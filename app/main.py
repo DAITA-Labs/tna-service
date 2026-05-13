@@ -21,8 +21,19 @@ configure_logging(
     json_output=_in_container or _settings.app_env != Environment.DEVELOPMENT,
 )
 
+from app.core.tracing import configure_tracing
+from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
+
+# Tracing must be initialized BEFORE FastAPI auto-instrumentation.
+_tracing_enabled = _in_container or os.environ.get("OTEL_ENABLED", "").lower() in ("1", "true", "yes")
+if _tracing_enabled:
+    configure_tracing(service_name="tna-service")
 
 app = FastAPI(title="TNA Service", version="0.1.0")
+
+if _tracing_enabled:
+    FastAPIInstrumentor.instrument_app(app)
+
 app.add_middleware(PrometheusMiddleware)
 app.add_middleware(RequestIdMiddleware)
 app.add_route("/metrics", metrics)
