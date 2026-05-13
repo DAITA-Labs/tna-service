@@ -1,6 +1,4 @@
-"""Tests for app/models/artifacts — bridge schemas + enum coupling."""
-from app.enums.boundary_pattern import BoundaryPattern
-from app.enums.stage_layout_mode import StageLayoutMode
+"""Tests for app/models/artifacts — bridge schemas."""
 from app.enums.location_pattern import LocationPattern
 from app.enums.validation_severity import ValidationSeverity
 from app.models.artifacts import (
@@ -11,22 +9,22 @@ from app.models.artifacts import (
 )
 
 
-def test_structural_fingerprint_uses_stage_layout_enum():
+def test_structural_fingerprint_stage_layout_mode_str():
     fp = StructuralFingerprint(
         sheets_appear_parallel=False, has_scattered_metadata=False,
         has_tabular_header_band=True, multi_row_headers=True,
         has_vertical_merges_in_data=False, has_totals_rows=False,
         has_noise_sheets=False, multi_band_stages_per_pli=False,
-        stage_layout_mode=StageLayoutMode.WIDE_SUB_COLUMNS, sample_evidence={},
+        stage_layout_mode="wide_sub_columns", sample_evidence={},
     )
-    assert fp.stage_layout_mode == StageLayoutMode.WIDE_SUB_COLUMNS
+    assert fp.stage_layout_mode == "wide_sub_columns"
 
 
-def test_pli_boundaries_uses_boundary_pattern_enum():
-    b = PLIBoundaries(sheet="S1", pattern=BoundaryPattern.VERTICAL_MERGE,
+def test_pli_boundaries_pattern_str():
+    b = PLIBoundaries(sheet="S1", pattern="vertical_merge",
                      data_start_row=4, data_end_row=11,
                      grouping_columns=["B"], confidence=0.9)
-    assert b.pattern == BoundaryPattern.VERTICAL_MERGE
+    assert b.pattern == "vertical_merge"
 
 
 def test_field_map_locations_and_metadata():

@@ -7,25 +7,6 @@ from pathlib import Path
 import pytest
 
 ROOT = Path(__file__).resolve().parents[2]
-PATTERNS_DIR = ROOT / "app" / "services" / "applier" / "patterns"
-
-
-def test_pattern_handlers_are_registry_dispatched():
-    """The applier dispatches via PATTERN_REGISTRY — no naked if/elif over
-    BoundaryPattern values for ROW ITERATION."""
-    field_applier = (ROOT / "app" / "services" / "applier" / "field_applier.py").read_text()
-    stage_applier = (ROOT / "app" / "services" / "applier" / "stage_applier.py").read_text()
-    for text in (field_applier, stage_applier):
-        # Each applier uses get_pattern_handler for row iteration.
-        assert "get_pattern_handler" in text
-
-
-def test_adding_new_pattern_is_single_file():
-    """Every BoundaryPattern handler is in its own file under patterns/."""
-    handlers = [h for h in PATTERNS_DIR.glob("*.py") if h.name != "__init__.py"]
-    names = {h.stem for h in handlers}
-    assert names == {"one_row_per_pli", "data_then_total",
-                    "vertical_merge", "one_sheet_per_pli"}
 
 
 def test_workflow_agents_each_in_own_module():
@@ -75,8 +56,8 @@ def test_enums_each_in_own_module():
     enums = {p.stem for p in enums_dir.glob("*.py")
              if p.name != "__init__.py"}
     assert enums >= {
-        "environment", "cell_dtype", "boundary_pattern",
-        "stage_layout_mode", "location_pattern", "validation_severity",
+        "environment", "cell_dtype", "location_pattern",
+        "validation_severity", "pli_mode", "row_role", "stage_scope",
     }
 
 

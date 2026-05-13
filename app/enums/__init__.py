@@ -1,13 +1,14 @@
 """All enums used across the service."""
 from app.enums.environment import Environment
 from app.enums.cell_dtype import CellDtype
-from app.enums.boundary_pattern import BoundaryPattern
-from app.enums.stage_layout_mode import StageLayoutMode
 from app.enums.location_pattern import LocationPattern
 from app.enums.validation_severity import ValidationSeverity
+from app.enums.pli_mode import PliMode
+from app.enums.row_role import RowRole, SubRowRole
+from app.enums.stage_scope import StageScope
 
 __all__ = [
     "Environment", "CellDtype",
-    "BoundaryPattern", "StageLayoutMode",
     "LocationPattern", "ValidationSeverity",
+    "PliMode", "RowRole", "SubRowRole", "StageScope",
 ]

@@ -1,10 +1,4 @@
-"""Deterministic applier — pattern-dispatched PLI row iteration."""
-from app.services.applier._registry import (
-    pattern_handler, get_pattern_handler, list_patterns, PatternRegistry,
-    PATTERN_REGISTRY,
-)
+"""Applier package — pure deterministic resolver."""
+from app.services.applier.apply_plan import apply_plan
 
-__all__ = [
-    "pattern_handler", "get_pattern_handler", "list_patterns",
-    "PatternRegistry", "PATTERN_REGISTRY",
-]
+__all__ = ["apply_plan"]

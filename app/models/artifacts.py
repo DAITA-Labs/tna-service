@@ -7,8 +7,6 @@ extra="ignore" everywhere so envelope additions stay backward-compatible.
 from __future__ import annotations
 from typing import Any
 from pydantic import BaseModel, ConfigDict, Field
-from app.enums.boundary_pattern import BoundaryPattern
-from app.enums.stage_layout_mode import StageLayoutMode
 from app.enums.location_pattern import LocationPattern
 from app.enums.validation_severity import ValidationSeverity
 
@@ -33,7 +31,7 @@ class StructuralFingerprint(BaseModel):
     has_totals_rows: bool
     has_noise_sheets: bool
     multi_band_stages_per_pli: bool
-    stage_layout_mode: StageLayoutMode
+    stage_layout_mode: str
     sample_evidence: dict[str, Any] = Field(default_factory=dict)
 
 
@@ -51,7 +49,7 @@ class InspectorReport(BaseModel):
 class PLIBoundaries(BaseModel):
     model_config = ConfigDict(extra="ignore")
     sheet: str
-    pattern: BoundaryPattern
+    pattern: str
     data_start_row: int | None = None
     data_end_row: int | None = None
     total_row_indicator_col: str | None = None
@@ -114,7 +112,7 @@ class StageBand(BaseModel):
     section_name: str | None = None
     section_anchor_cell: str | None = None
     name_row: int
-    layout_mode: StageLayoutMode
+    layout_mode: str
     sub_header_row: int | None = None
     data_start_row: int | None = None
     data_end_row: int | None = None

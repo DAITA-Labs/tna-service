@@ -1,13 +1,12 @@
 """Tests for coverage_verifier + field_dropout_verifier."""
 from app.models.extraction import PLI, ExtractionResult
 from app.models.artifacts import PLIBoundaries
-from app.enums.boundary_pattern import BoundaryPattern
 from app.services.validation.coverage_verifier import CoverageVerifier
 from app.services.validation.field_dropout_verifier import FieldDropoutVerifier
 
 
 def test_coverage_warns_when_extracted_lt_80pct():
-    boundaries = PLIBoundaries(sheet="S", pattern=BoundaryPattern.ONE_ROW_PER_PLI,
+    boundaries = PLIBoundaries(sheet="S", pattern="one_row_per_pli",
                               data_start_row=4, data_end_row=100, confidence=1.0)
     # Range = 97 rows; extracted only 5.
     result = ExtractionResult(plis=[PLI(io_number=str(i)) for i in range(5)])
@@ -17,7 +16,7 @@ def test_coverage_warns_when_extracted_lt_80pct():
 
 
 def test_coverage_passes_when_extracted_ge_80pct():
-    boundaries = PLIBoundaries(sheet="S", pattern=BoundaryPattern.ONE_ROW_PER_PLI,
+    boundaries = PLIBoundaries(sheet="S", pattern="one_row_per_pli",
                               data_start_row=4, data_end_row=10, confidence=1.0)
     # Range = 7 rows; extracted 6 (85%).
     result = ExtractionResult(plis=[PLI(io_number=str(i)) for i in range(6)])

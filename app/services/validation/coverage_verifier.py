@@ -9,7 +9,6 @@ from app.models.extraction import ExtractionResult
 from app.models.artifacts import (
     PLIBoundaries, ValidationFinding, ValidationFindings,
 )
-from app.enums.boundary_pattern import BoundaryPattern
 from app.enums.validation_severity import ValidationSeverity
 from app.core.telemetry import validator_findings_total
 
@@ -25,7 +24,7 @@ class CoverageVerifier:
         findings: list[ValidationFinding] = []
         total_candidate_rows = 0
         for b in self.boundaries:
-            if b.pattern == BoundaryPattern.ONE_SHEET_PER_PLI:
+            if b.pattern == "one_sheet_per_pli":
                 total_candidate_rows += len(b.sheet_iter)
                 continue
             if b.data_start_row is None or b.data_end_row is None:
