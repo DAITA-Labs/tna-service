@@ -32,6 +32,7 @@ from app.core.telemetry import (
     extraction_duration_seconds,
     extraction_pli_count,
     extraction_phase_duration_seconds,
+    extractions_total,
 )
 import app.repositories.workbook_tools.survey  # noqa: F401
 import app.repositories.workbook_tools.bulk_read  # noqa: F401
@@ -121,48 +122,57 @@ def extract(workbook_path: Path | str, *, llm=None) -> ExtractionResult:
     ctx = register_workbook(workbook_path)
     llm = llm or AnthropicProvider.from_env()
 
-    with _phase("sheet_classifier"):
-        summary = TOOL_REGISTRY.get("workbook_summary")(ctx)
-        sc = SheetClassifier(llm=llm)
-        relevant = sc.run(workbook_ctx=ctx, workbook_summary=summary)["relevant_sheets"]
-    if not relevant:
-        return ExtractionResult(
-            plis=[], source_file=str(ctx.path),
-            warnings=[Warning(message="No relevant sheets identified", severity="warning")],
+    try:
+        with _phase("sheet_classifier"):
+            summary = TOOL_REGISTRY.get("workbook_summary")(ctx)
+            sc = SheetClassifier(llm=llm)
+            relevant = sc.run(workbook_ctx=ctx, workbook_summary=summary)["relevant_sheets"]
+        if not relevant:
+            extractions_total.labels(status="empty").inc()
+            return ExtractionResult(
+                plis=[], source_file=str(ctx.path),
+                warnings=[Warning(message="No relevant sheets identified", severity="warning")],
+            )
+
+        all_plis: list[PLI] = []
+        all_warnings: list[Warning] = []
+        format_detected: str | None = None
+
+        for sheet in relevant:
+            plan, name_map, warns = _plan_for_sheet(ctx, sheet, llm)
+            all_warnings.extend(warns)
+            with _phase("apply_plan"):
+                plis = apply_plan(ctx, plan, name_map)
+            for pli in plis:
+                if not pli.source.sheet:
+                    pli.source.sheet = sheet
+            all_plis.extend(plis)
+            if format_detected is None:
+                format_detected = plan.pli_mode.value
+
+        result = ExtractionResult(
+            plis=all_plis, warnings=all_warnings,
+            format_detected=format_detected, source_file=str(ctx.path),
         )
-
-    all_plis: list[PLI] = []
-    all_warnings: list[Warning] = []
-    format_detected: str | None = None
-
-    for sheet in relevant:
-        plan, name_map, warns = _plan_for_sheet(ctx, sheet, llm)
-        all_warnings.extend(warns)
-        with _phase("apply_plan"):
-            plis = apply_plan(ctx, plan, name_map)
-        for pli in plis:
-            if not pli.source.sheet:
-                pli.source.sheet = sheet
-        all_plis.extend(plis)
-        if format_detected is None:
-            format_detected = plan.pli_mode.value
-
-    result = ExtractionResult(
-        plis=all_plis, warnings=all_warnings,
-        format_detected=format_detected, source_file=str(ctx.path),
-    )
-    with _phase("validators"):
-        src_v = SourceCellVerifier(workbook_ctx=ctx).run(extraction=result)["findings"]
-        hdr_v = HeaderMatchVerifier(workbook_ctx=ctx).run(extraction=result)["findings"]
-        cov_v = CoverageVerifier(boundaries=[]).run(extraction=result)["findings"]
-        drop_v = FieldDropoutVerifier().run(extraction=result)["findings"]
-    all_findings = ValidationFindings(findings=(
-        src_v.findings + hdr_v.findings + cov_v.findings + drop_v.findings
-    ))
-    with _phase("reconciler"):
-        final = reconcile(workflow_out=result, validation_out=all_findings)
-    extraction_duration_seconds.labels(
-        format_detected=final.format_detected or "unknown"
-    ).observe(time.monotonic() - t0)
-    extraction_pli_count.labels(source_file=ctx.path.name).set(len(final.plis))
-    return final
+        with _phase("validators"):
+            src_v = SourceCellVerifier(workbook_ctx=ctx).run(extraction=result)["findings"]
+            hdr_v = HeaderMatchVerifier(workbook_ctx=ctx).run(extraction=result)["findings"]
+            cov_v = CoverageVerifier(boundaries=[]).run(extraction=result)["findings"]
+            drop_v = FieldDropoutVerifier().run(extraction=result)["findings"]
+        all_findings = ValidationFindings(findings=(
+            src_v.findings + hdr_v.findings + cov_v.findings + drop_v.findings
+        ))
+        with _phase("reconciler"):
+            final = reconcile(workflow_out=result, validation_out=all_findings)
+        extraction_duration_seconds.labels(
+            format_detected=final.format_detected or "unknown"
+        ).observe(time.monotonic() - t0)
+        extraction_pli_count.labels(source_file=ctx.path.name).set(len(final.plis))
+        if len(final.plis) == 0:
+            extractions_total.labels(status="empty").inc()
+        else:
+            extractions_total.labels(status="success").inc()
+        return final
+    except Exception:
+        extractions_total.labels(status="failure").inc()
+        raise

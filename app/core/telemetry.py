@@ -71,6 +71,13 @@ tool_calls_total = Counter(
     labelnames=("tool_name",),
 )
 
+# Extraction-level outcome counter
+extractions_total = Counter(
+    "extractions_total",
+    "Total invocations of the extract() orchestrator.",
+    labelnames=("status",),  # success | empty | failure
+)
+
 # LLM provider — isolates network time from agent loop time
 llm_inference_duration_seconds = Histogram(
     "llm_inference_duration_seconds",
