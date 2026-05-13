@@ -6,7 +6,7 @@ change — no orchestrator surgery."""
 from pathlib import Path
 import pytest
 
-ROOT = Path(__file__).resolve().parents[2]
+ROOT = Path(__file__).resolve().parents[3]
 
 
 def test_workflow_agents_each_in_own_module():
