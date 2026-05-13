@@ -156,3 +156,38 @@ class ValidationFindings(BaseModel):
             if f.severity in (ValidationSeverity.WARN, ValidationSeverity.ERROR)
         )
         return n_warn / len(self.findings)
+
+
+# ===== SheetRowPlanner artifacts =====
+
+from app.enums.row_role import RowRole, SubRowRole
+
+
+class SheetSignals(BaseModel):
+    """Raw structural signals collected by SheetSurveyor for a sheet."""
+    model_config = ConfigDict(extra="ignore")
+    sheet: str
+    max_row: int
+    max_col: int
+    merges: list[tuple[int, int, int, int]] = Field(default_factory=list)
+    identity_col_candidates: list[str] = Field(default_factory=list)
+    header_vocab_hits: dict[str, list[str]] = Field(default_factory=dict)
+    date_typed_cols: list[str] = Field(default_factory=list)
+    blank_run_gaps: list[tuple[int, int]] = Field(default_factory=list)
+    kv_label_hits: list[tuple[str, str]] = Field(default_factory=list)
+
+
+class RowSpec(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    idx: int
+    role: RowRole
+    anchor_idx: int | None = None
+    group_id: int | None = None
+    sub_row_role: SubRowRole | None = None
+
+
+class KVAnchor(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    label_cell: str
+    value_cell: str
+    field: str
