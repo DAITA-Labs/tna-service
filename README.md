@@ -97,12 +97,14 @@ Upload an `.xlsx`, get structured PLIs.
           "metadata": { "end_planned": "2026-04-27", "qty": 1420 } }
       ],
       "metadata": { "buyer": "MARC O'POLO INTERNATIONAL GMBH", ... },
-      "source_sheet": "Sheet 1",
-      "source_rows": [4],
-      "source_cells": {
-        "io_number": "K4",
-        "style_code": "E4",
-        "delivery_date": "P4"
+      "source": {
+        "sheet": "Sheet 1",
+        "rows": [4],
+        "cells": {
+          "io_number": "K4",
+          "style_code": "E4",
+          "delivery_date": "P4"
+        }
       },
       "confidence": { "io_number": 0.95, "style_code": 0.93, ... }
     }
@@ -221,9 +223,12 @@ tna-service/
 │   └── runs/                         history JSON per `make eval` run
 │
 ├── tests/
-│   ├── unit/                         per-module, fast, mocked LLM
-│   ├── repositories/                 per-tool with real workbook fixtures
-│   └── integration/                  end-to-end (gated by TNA_RUN_LIVE_TESTS=1)
+│   ├── unit/                         per-module, no fixture, sub-second
+│   ├── flow/                         2+ deterministic functions chained, fixture-driven
+│   ├── agent/                        single LLM agent + FakeLLM stub, fixture-driven
+│   ├── e2e/                          full extract() + FakeLLM, fixture-driven
+│   ├── live/                         real Anthropic API + real dataset (@pytest.mark.live)
+│   └── fixtures/                     builders/ + expected/ — one xlsx scenario per file
 │
 ├── scripts/run_eval.py               `make eval` entrypoint
 ├── prometheus/prometheus.yml
@@ -234,21 +239,58 @@ tna-service/
 
 ## Testing
 
-Three layers:
+Five tiers, each with one job. **For the full conventions — fixture authoring,
+expected.json shape, failure-case patterns, the cookbook for adding new
+layouts — read [`docs/TESTING.md`](./docs/TESTING.md).**
 
-| Layer | What | When it runs |
-|---|---|---|
-| **Unit** (`tests/unit/`) | One module at a time. LLM mocked. Sub-second. | Every commit |
-| **Repository** (`tests/repositories/`) | Workbook-tool functions against real xlsx fixtures from `dataset/` | Every commit |
-| **Integration** (`tests/integration/`) | End-to-end orchestrator against real Anthropic API on labeled files. Gated by `TNA_RUN_LIVE_TESTS=1`. | On demand / pre-merge |
+| Tier | What it exercises | LLM | Fixture |
+|---|---|---|---|
+| `tests/unit/` | One function in isolation — enums, models, individual planner / applier / validator helpers, tools | none | inline (no fixture file) |
+| `tests/flow/` | 2+ deterministic functions chained — e.g. `survey → row_classifier → segmenter → apply_plan` | none | per scenario |
+| `tests/agent/` | One LLM agent under controlled inputs via `FakeLLM` stub | stub | per scenario |
+| `tests/e2e/` | Full `extract()` pipeline with `FakeLLM` returning canned responses | stub | per scenario |
+| `tests/live/` | Real Anthropic API against real `dataset/*.xlsx` — marked `@pytest.mark.live` | real | real dataset files |
 
 ```bash
-make test          # everything except live (sub-second on a quiet machine)
-make test-live     # the 5 e2e regression guards (one per known-tricky layout family)
-make eval          # full label scoreboard — every labeled file in dataset/extracted/
+make test                                              # everything except live (~3s)
+.venv/Scripts/python.exe -m pytest tests -m live -q    # live tier — needs ANTHROPIC_API_KEY
+make eval                                              # full label scoreboard
 ```
 
-The eval framework treats the extractor as a black box. It imports only `app.models.*` and the `ExtractorProtocol` — see [`ARCHITECTURE.md`](./ARCHITECTURE.md#eval-framework).
+### Adding a new test scenario
+
+Two files, no test-code changes if a parametrized test in the right tier
+already exists:
+
+1. `tests/fixtures/builders/<name>.py` — a `build(wb)` function that
+   populates a minimal workbook exhibiting the scenario.
+2. `tests/fixtures/expected/<name>.json` — tier-keyed assertions
+   (`layer_expectations.flow`, `layer_expectations.e2e`, …) plus an optional
+   `failure_expectations` block for failure scenarios.
+
+Then use `@fixture_case("<name>")` in your test (or add the name to an
+existing parametrized test). The decorator handles xlsx materialization,
+`WorkbookCtx` registration, expected.json parsing, and cache cleanup.
+
+### What's enforced
+
+- Function-scoped pytest fixtures → each test gets a fresh `tmp_path` + fresh
+  `WorkbookCtx`. No state leakage.
+- Fixture builders are Python modules — no xlsx binaries committed under
+  `tests/fixtures/`. Files materialize per-test into `tmp_path`.
+- Failure-case fixtures cover six categories: input validation, planner
+  ambiguity, plan invariant violation, apply mismatch, agent failure
+  (including irregular LLM responses — raise / wrong-type / missing-required /
+  extra-fields), data anomaly.
+- Negative assertions for every positive fixture confirm mode differentiation
+  and absence of features that don't apply (e.g., a ROW_PER_PLI fixture must
+  NOT emit `kv_anchors` or `pli_blocks`).
+- `apply_plan` has a static AST guard (`tests/unit/applier/test_apply_plan_no_llm_imports.py`)
+  ensuring it never imports `app.services.agents` or `app.services.llm_provider`.
+
+The eval framework is separate from `tests/`. It treats the extractor as a
+black box, imports only `app.models.*` and the `ExtractorProtocol` — see
+[`ARCHITECTURE.md`](./ARCHITECTURE.md#eval-framework).
 
 ---
 
@@ -274,7 +316,7 @@ Every common extension is a small contained change — typically one file plus o
 - **New validator** → one file under `app/services/validation/`.
 - **New tool** → one `@tool`-decorated function under `app/repositories/workbook_tools/`.
 
-The acceptance tests in `tests/integration/test_acceptance_extensibility.py` enforce these conventions structurally.
+The structural-layout acceptance tests in `tests/unit/structure/test_layout.py` enforce these conventions (one file per agent / validator / enum / tool group).
 
 ---
 
@@ -285,7 +327,7 @@ The acceptance tests in `tests/integration/test_acceptance_extensibility.py` enf
 | `ModuleNotFoundError: app` | Not running from `tna-service/` or venv not activated | `cd tna-service && .venv/Scripts/activate` (Windows) / `source .venv/bin/activate` (Linux) |
 | `MissingAPIKey: ANTHROPIC_API_KEY is not set` | `.env` missing or key blank | `cp .env.example .env` and fill in your key |
 | `/extract` returns 500 | Look at the response body and api logs (`make logs`) — usually a tool/agent exception |
-| Tests in `tests/integration/` all skipped | `TNA_RUN_LIVE_TESTS` not set | `set -a && . ./.env && set +a && TNA_RUN_LIVE_TESTS=1 pytest -m live` |
+| Tests in `tests/live/` all skipped | Default deselects `@pytest.mark.live` | `.venv/Scripts/python.exe -m pytest tests -m live -q` (with `ANTHROPIC_API_KEY` set) |
 | `make eval` says no labels found | `dataset/extracted/` doesn't exist inside `tna-service/` | This dir ships with the corpus; if missing, re-clone or restore from git |
 | Prometheus says target down | api container not yet healthy | `docker compose logs api` |
 
