@@ -15,7 +15,11 @@ from anthropic import Anthropic
 from pydantic import BaseModel
 from app.config.settings import get_settings
 from app.core.logs import get_logger
-from app.core.telemetry import llm_inference_duration_seconds
+from app.core.telemetry import (
+    llm_inference_duration_seconds,
+    agent_tokens_input,
+    agent_tokens_output,
+)
 
 T = TypeVar("T", bound=BaseModel)
 log = get_logger(__name__)
@@ -70,6 +74,7 @@ class LLMProvider(Protocol):
     def complete_with_schema(
         self, *, system: str, user: str,
         output_schema: type[T], tool_name: str,
+        agent_name: str = "unknown",
     ) -> T: ...
 
 
@@ -104,6 +109,7 @@ class AnthropicProvider:
     def complete_with_schema(
         self, *, system: str, user: str,
         output_schema: type[T], tool_name: str,
+        agent_name: str = "unknown",
     ) -> T:
         tool = schema_to_tool(tool_name, output_schema)
         log.debug("llm_call_start", model=self.model, tool=tool_name,
@@ -121,6 +127,14 @@ class AnthropicProvider:
         llm_inference_duration_seconds.labels(model=self.model).observe(
             time.monotonic() - t0
         )
+        usage = getattr(resp, "usage", None)
+        if usage is not None:
+            inp = getattr(usage, "input_tokens", None)
+            out = getattr(usage, "output_tokens", None)
+            if isinstance(inp, int):
+                agent_tokens_input.labels(agent=agent_name, model=self.model).inc(inp)
+            if isinstance(out, int):
+                agent_tokens_output.labels(agent=agent_name, model=self.model).inc(out)
 
         for block in resp.content:
             if getattr(block, "type", None) == "tool_use" and block.name == tool_name:

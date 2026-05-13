@@ -68,6 +68,7 @@ class AgentRunner:
                     user=user,
                     output_schema=self.spec.output_schema,
                     tool_name=tool_name,
+                    agent_name=self.spec.name,
                 )
                 agent_duration_seconds.labels(agent=self.spec.name).observe(
                     time.monotonic() - t0

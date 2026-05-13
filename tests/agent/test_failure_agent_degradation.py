@@ -21,7 +21,8 @@ from tests.fixtures.case import fixture_case
 class _RaisingLLM:
     """Always raises — simulates HTTP / SDK error."""
 
-    def complete_with_schema(self, system, user, output_schema, tool_name=None):
+    def complete_with_schema(self, system, user, output_schema, tool_name=None,
+                             agent_name="unknown"):
         raise RuntimeError("simulated LLM transport failure")
 
 
@@ -35,7 +36,8 @@ class _BadResponseLLM:
     def __init__(self, response: dict):
         self._response = response
 
-    def complete_with_schema(self, system, user, output_schema, tool_name=None):
+    def complete_with_schema(self, system, user, output_schema, tool_name=None,
+                             agent_name="unknown"):
         return output_schema(**self._response)
 
 

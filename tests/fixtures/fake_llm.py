@@ -12,7 +12,8 @@ class FakeLLM:
         self._canned = canned
 
     def complete_with_schema(self, system: str, user: str,
-                            output_schema: type, tool_name: str | None = None) -> Any:
+                            output_schema: type, tool_name: str | None = None,
+                            agent_name: str = "unknown") -> Any:
         name = output_schema.__name__
         if name not in self._canned:
             raise AssertionError(
