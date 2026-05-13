@@ -46,7 +46,34 @@ services:
       - "3000:3000"
     depends_on:
       - prometheus
+      - loki
+    networks: [observability]
+
+  loki:
+    image: grafana/loki:2.9.0
+    container_name: tna-service-loki
+    volumes:
+      - ./loki/loki-config.yml:/etc/loki/local-config.yaml:ro
+      - loki-data:/loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    networks: [observability]
+
+  promtail:
+    image: grafana/promtail:2.9.0
+    container_name: tna-service-promtail
+    volumes:
+      - ./promtail/promtail-config.yml:/etc/promtail/config.yml:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
     networks: [observability]
 
 networks:
   observability: {}
+
+volumes:
+  loki-data: {}
