@@ -294,6 +294,16 @@ black box, imports only `app.models.*` and the `ExtractorProtocol` — see
 
 ---
 
+## Logs (Loki)
+
+Logs are emitted as structured JSON via structlog, shipped by Promtail to a local Loki container, and queried by Grafana via the "Loki" datasource. Open the dashboard, scroll to the "Logs" panel at the bottom, and pivot from any metric spike to the matching log lines by filtering on `request_id`, `phase`, or `agent`.
+
+On Docker Desktop (Windows/Mac), if the Logs panel is empty, install the Loki Docker driver plugin and use `docker-compose.override.yml.example` (see Troubleshooting). On native Linux, the default config works as-is.
+
+For the full collector + dashboard inventory, see [`ARCHITECTURE.md`](./ARCHITECTURE.md#telemetry).
+
+---
+
 ## Telemetry
 
 The api emits Prometheus metrics from `/metrics`. The pre-provisioned Grafana dashboard (TNA folder → "TNA Extraction — overview") shows:
@@ -330,6 +340,7 @@ The structural-layout acceptance tests in `tests/unit/structure/test_layout.py` 
 | Tests in `tests/live/` all skipped | Default deselects `@pytest.mark.live` | `.venv/Scripts/python.exe -m pytest tests -m live -q` (with `ANTHROPIC_API_KEY` set) |
 | `make eval` says no labels found | `dataset/extracted/` doesn't exist inside `tna-service/` | This dir ships with the corpus; if missing, re-clone or restore from git |
 | Prometheus says target down | api container not yet healthy | `docker compose logs api` |
+| Logs panel in Grafana shows nothing on Docker Desktop | Promtail's file mount may not see the api container's log file inside Docker Desktop's VM | Install the Loki Docker driver plugin and use the override: `docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions && cp docker-compose.override.yml.example docker-compose.override.yml && docker compose down && docker compose up -d` |
 
 For any extraction-quality regression, the path is: run `make eval`, open `evals/runs/<timestamp>.json`, compare to a prior run. The `source_cells` and `warnings` arrays on each PLI tell you exactly where each value came from and what the validators flagged.
 
