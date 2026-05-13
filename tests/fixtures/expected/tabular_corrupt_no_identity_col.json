@@ -1,0 +1,26 @@
+{
+  "fixture": "tabular_corrupt_no_identity_col",
+  "description": "Header row has no canonical identity column (no IO/JOB/PO).",
+  "layer_expectations": {
+    "flow": {
+      "anchor_count": 0,
+      "plan_statistics_warnings_must_contain": ["pli_count_sanity"]
+    },
+    "e2e": {
+      "fake_llm_responses": {
+        "SheetClassifierOutput": {"relevant_sheets": ["S"]},
+        "LayoutHints": {"identity_column_suggestion": null},
+        "PlanVerdict": {"verdict": "looks_correct"},
+        "CanonicalNameMap": {"field_labels": {}, "stage_names": {}}
+      },
+      "pli_count": 0,
+      "warning_count_min": 1
+    }
+  },
+  "failure_expectations": {
+    "category": "planner_ambiguity",
+    "expected_warning_check": "pli_count_sanity",
+    "fires_layout_hinter": true,
+    "graceful_degradation": true
+  }
+}

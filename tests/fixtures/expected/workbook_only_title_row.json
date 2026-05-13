@@ -1,0 +1,25 @@
+{
+  "fixture": "workbook_only_title_row",
+  "description": "Sheet contains only a title row; no extractable PLIs.",
+  "layer_expectations": {
+    "flow": {
+      "anchor_count": 0,
+      "child_count": 0
+    },
+    "e2e": {
+      "fake_llm_responses": {
+        "SheetClassifierOutput": {"relevant_sheets": ["S"]},
+        "CanonicalNameMap": {"field_labels": {}, "stage_names": {}},
+        "LayoutHints": {},
+        "PlanVerdict": {"verdict": "looks_correct"}
+      },
+      "pli_count": 0,
+      "warning_count_min": 0
+    }
+  },
+  "failure_expectations": {
+    "category": "input_validation",
+    "graceful_degradation": true,
+    "must_not_raise": true
+  }
+}

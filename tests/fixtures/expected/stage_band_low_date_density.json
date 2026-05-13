@@ -1,0 +1,14 @@
+{
+  "fixture": "stage_band_low_date_density",
+  "description": "Stage band columns mostly contain string placeholders, not dates.",
+  "layer_expectations": {
+    "flow": {
+      "plan_statistics_warnings_must_contain": ["date_band_density"]
+    }
+  },
+  "failure_expectations": {
+    "category": "data_anomaly",
+    "expected_warning_check": "date_band_density",
+    "graceful_degradation": true
+  }
+}
