@@ -1,0 +1,2629 @@
+{
+  "total_plis": 35,
+  "plis": [
+    {
+      "io_number": "62330",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-04-08",
+      "quantity": 4800,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-11",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/CUTTING"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-03-16",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "NILL"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62330",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62330.1",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-05-09",
+      "quantity": 4800,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/CUTTING"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-04-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "NILL"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62330.1",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62330.2",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-06-09",
+      "quantity": 4800,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-11",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-14",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/CUTTING"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "NILL"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-05-04",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62330.2",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62330.3",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-04-06",
+      "quantity": 300,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/CUTTING"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-03-15",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "NILL"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-03-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62330.3",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62338",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-04-06",
+      "quantity": 9600,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-04",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "NILL"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-03-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62338",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62338.1",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-05-07",
+      "quantity": 9600,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "NILL"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-04-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62338.1",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62338.2",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-06-07",
+      "quantity": 2004,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "NILL"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-05-19",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62338.2",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62328",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-07-05",
+      "quantity": 7200,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-05",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-05-15",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-06-16",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62328",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62339.1",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-04-06",
+      "quantity": 180768,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-04",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-03-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/INSP"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62339.1",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62339.2",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-05-07",
+      "quantity": 122424,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-04-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/INSP"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62339.2",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62339.3",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-06-03",
+      "quantity": 1824,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-05-15",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/INSP"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62339.3",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62339.4",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-06-07",
+      "quantity": 24108,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-05-19",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/INSP"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62339.4",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62950",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-06-10",
+      "quantity": 20000,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-05-01",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-11",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-05-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-05-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62950",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62951",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-06-10",
+      "quantity": 12000,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-05-01",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-11",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-05-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-05-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62951",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62949",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-06-03",
+      "quantity": 14400,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-05-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-05-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-05-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62949",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62336",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-04-08",
+      "quantity": 3096,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-03-15",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62336",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62336.1",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-05-14",
+      "quantity": 50,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-05-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62336.1",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62336.2",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-06-03",
+      "quantity": 576,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-04-14",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-04-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-05-15",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62336.2",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "62265",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-05-06",
+      "quantity": 9100,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-03-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62265",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63305",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-07-07",
+      "quantity": 2401,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-05-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-05-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-06-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63305",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63305.1",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-09-06",
+      "quantity": 2702,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-05-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-06-01",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-06-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-06-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-08-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63305.1",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63306",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-07-07",
+      "quantity": 10003,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-05-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-05-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-06-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63306",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63306.1",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-08-07",
+      "quantity": 300,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-05-15",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-06-04",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-07-19",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63306.1",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63306.2",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-09-06",
+      "quantity": 2401,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-05-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-06-01",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-06-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-06-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-08-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63306.2",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63308",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-07-07",
+      "quantity": 2702,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/CUTTING"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-05-05",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "NILL"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-06-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63308",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63308.1",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-09-06",
+      "quantity": 4207,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-05-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-06-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/CUTTING"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-06-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "NILL"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-06-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-06-22",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-08-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63308.1",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63309",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-07-07",
+      "quantity": 2401,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-23",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-05-01",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "NILL"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-05-16",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-06-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63309",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63309.1",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-08-07",
+      "quantity": 2100,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-05-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-05-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-05-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "NILL"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-23",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-06-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-07-19",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63309.1",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63315",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-06-07",
+      "quantity": 6012,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-05-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-05-19",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63315",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63315.1",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-07-07",
+      "quantity": 104203,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-05-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-05-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-06-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63315.1",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63315.2",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-08-07",
+      "quantity": 35620,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-05-15",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-06-04",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-07-19",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63315.2",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63315.3",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-09-06",
+      "quantity": 26824,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-05-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-06-01",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-06-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-06-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-08-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63315.3",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63315.4",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-08-17",
+      "quantity": 1260,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-05-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-05-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-05-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-31",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-06-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-07-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63315.4",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63315.5",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-09-16",
+      "quantity": 900,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-06-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-06-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-06-16",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-06-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-08-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63315.5",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "63261",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-05-07",
+      "quantity": 16200,
+      "stages": [
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "NILL"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-04-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "63261",
+      "source_rows": [
+        4,
+        5,
+        9,
+        10,
+        11
+      ]
+    }
+  ],
+  "warnings": [
+    "[Sheet11] too small to be a Job sheet — skipped"
+  ]
+}

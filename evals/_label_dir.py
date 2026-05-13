@@ -1,9 +1,7 @@
-"""Label directory resolver.
-
-On systems where symlinks require admin, this module resolves
-to the extracted labels directory via pathlib.
-"""
+"""Label directory resolver — resolves to the local dataset/extracted/ shipped
+with the microservice. Self-contained: no path outside tna-service/."""
 from pathlib import Path
 
-# Absolute path to the parent dataset extracted labels directory.
-LABELS_DIR = Path("F:/DAITA/ARENA/TNA/dataset/extracted").resolve()
+# Local copy of the labeled corpus under tna-service/dataset/extracted/.
+# evals/_label_dir.py → evals → tna-service → dataset / extracted
+LABELS_DIR = (Path(__file__).resolve().parents[1] / "dataset" / "extracted").resolve()

@@ -1,0 +1,556 @@
+{
+  "total_plis": 7,
+  "plis": [
+    {
+      "io_number": "1063",
+      "style_code": "T-SLANIA LONG BP,                    D-T-SHIRT 3/4",
+      "color_code": "422 - MAGENTA",
+      "fabric_code": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+      "delivery_date": "2026-05-05",
+      "quantity": 2356,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "received_date": "2026-03-04",
+            "approval": "2026-03-26"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-09",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-14"
+          }
+        },
+        {
+          "name": "Lot Card",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-06"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-12",
+          "quantity": 2482,
+          "metadata": {
+            "actual_date": "2026-03-16"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-03-18",
+          "quantity": 2481,
+          "metadata": {
+            "actual_date": "2026-03-18"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "D-T-SHIRT 3/4",
+      "article_no": "569510267",
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "style_name": 0.7,
+        "color_code": 0.85,
+        "fabric_code": 0.8,
+        "delivery_date": 0.95,
+        "quantity": 1.0,
+        "article_no": 1.0
+      },
+      "source_sheet": "CHRISTIAN BERG",
+      "source_rows": [
+        4
+      ]
+    },
+    {
+      "io_number": "1063",
+      "style_code": "T-SLANIA LONG BP,                    D-T-SHIRT 3/4",
+      "color_code": "630 - NAVY",
+      "fabric_code": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+      "delivery_date": "2026-05-05",
+      "quantity": 2356,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "received_date": "2026-03-13",
+            "approval": "2026-03-26"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-09",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-14"
+          }
+        },
+        {
+          "name": "Lot Card",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-14"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-12",
+          "quantity": 2482,
+          "metadata": {
+            "actual_date": "2026-03-23"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-03-18",
+          "quantity": 2482,
+          "metadata": {
+            "actual_date": "2026-03-24"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "D-T-SHIRT 3/4",
+      "article_no": "569510267",
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "style_name": 0.7,
+        "color_code": 0.85,
+        "fabric_code": 0.8,
+        "delivery_date": 0.95,
+        "quantity": 1.0,
+        "article_no": 1.0
+      },
+      "source_sheet": "CHRISTIAN BERG",
+      "source_rows": [
+        4,
+        5
+      ]
+    },
+    {
+      "io_number": "1063",
+      "style_code": "T-SLANIA LONG BP,                    D-T-SHIRT 3/4",
+      "color_code": "840 - WHITE SAND",
+      "fabric_code": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+      "delivery_date": "2026-05-05",
+      "quantity": 2356,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "received_date": "2026-03-09",
+            "approval": "2026-03-26"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-09",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-14"
+          }
+        },
+        {
+          "name": "Lot Card",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-10"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-12",
+          "quantity": 2481,
+          "metadata": {
+            "actual_date": "2026-03-19"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-03-18",
+          "quantity": 2481,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "D-T-SHIRT 3/4",
+      "article_no": "569510267",
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "style_name": 0.7,
+        "color_code": 0.85,
+        "fabric_code": 0.8,
+        "delivery_date": 0.95,
+        "quantity": 1.0,
+        "article_no": 1.0
+      },
+      "source_sheet": "CHRISTIAN BERG",
+      "source_rows": [
+        4,
+        6
+      ]
+    },
+    {
+      "io_number": "1063",
+      "style_code": "T-SLANIA LONG BP,                    D-T-SHIRT 3/4",
+      "color_code": "940 - DEEP TAUPE",
+      "fabric_code": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+      "delivery_date": "2026-05-05",
+      "quantity": 2356,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "received_date": "2026-03-19",
+            "approval": "2026-03-26"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-09",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-14"
+          }
+        },
+        {
+          "name": "Lot Card",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-21"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-12",
+          "quantity": 2482,
+          "metadata": {
+            "actual_date": "2026-03-26"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-03-18",
+          "quantity": 2482,
+          "metadata": {
+            "actual_date": "2026-01-28"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "D-T-SHIRT 3/4",
+      "article_no": "569510267",
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "style_name": 0.7,
+        "color_code": 0.85,
+        "fabric_code": 0.8,
+        "delivery_date": 0.95,
+        "quantity": 1.0,
+        "article_no": 1.0
+      },
+      "source_sheet": "CHRISTIAN BERG",
+      "source_rows": [
+        4,
+        7
+      ]
+    },
+    {
+      "io_number": "1064",
+      "style_code": "T-SLANIA R LONG,  D-T-SHIRT 3/4",
+      "color_code": "630 - NAVY / 810 OFF WHITE",
+      "fabric_code": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+      "delivery_date": "2026-05-05",
+      "quantity": 2050,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "received_date": "2026-03-04",
+            "approval": "2026-03-26"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-04-02",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-04"
+          }
+        },
+        {
+          "name": "Lot Card",
+          "planned_date": "2026-03-28",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-04"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-05",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "D-T-SHIRT 3/4",
+      "article_no": "569510271",
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "style_name": 0.7,
+        "color_code": 0.85,
+        "fabric_code": 0.8,
+        "delivery_date": 0.95,
+        "quantity": 1.0,
+        "article_no": 1.0
+      },
+      "source_sheet": "CHRISTIAN BERG",
+      "source_rows": [
+        9
+      ]
+    },
+    {
+      "io_number": "1064",
+      "style_code": "T-SLANIA R LONG,  D-T-SHIRT 3/4",
+      "color_code": "732 - SMOKE PINE / 630 NAVY",
+      "fabric_code": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+      "delivery_date": "2026-05-05",
+      "quantity": 1576,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-28",
+          "quantity": null,
+          "metadata": {
+            "received_date": "2026-03-28",
+            "approval": "2026-03-26"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-04-02",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-04"
+          }
+        },
+        {
+          "name": "Lot Card",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-26"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-05",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "D-T-SHIRT 3/4",
+      "article_no": "569510271",
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "style_name": 0.7,
+        "color_code": 0.85,
+        "fabric_code": 0.8,
+        "delivery_date": 0.95,
+        "quantity": 1.0,
+        "article_no": 1.0
+      },
+      "source_sheet": "CHRISTIAN BERG",
+      "source_rows": [
+        9,
+        10
+      ]
+    },
+    {
+      "io_number": "1064",
+      "style_code": "T-SLANIA R LONG,  D-T-SHIRT 3/4",
+      "color_code": "940 - DEEP TAUPE /  840 WHITE SAND",
+      "fabric_code": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+      "delivery_date": "2026-05-05",
+      "quantity": 2050,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "received_date": "2026-03-28",
+            "approval": "2026-03-26"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-04-02",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-04"
+          }
+        },
+        {
+          "name": "Lot Card",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-26"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-04",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-10",
+          "quantity": 1336,
+          "metadata": {
+            "actual_date": "2026-04-11"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-05",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "D-T-SHIRT 3/4",
+      "article_no": "569510271",
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "style_name": 0.7,
+        "color_code": 0.85,
+        "fabric_code": 0.8,
+        "delivery_date": 0.95,
+        "quantity": 1.0,
+        "article_no": 1.0
+      },
+      "source_sheet": "CHRISTIAN BERG",
+      "source_rows": [
+        9,
+        11
+      ]
+    }
+  ],
+  "warnings": []
+}

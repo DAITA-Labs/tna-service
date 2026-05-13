@@ -24,7 +24,7 @@ pytestmark = [
 ]
 
 
-DATASET = Path(__file__).resolve().parents[3] / "dataset"
+DATASET = Path(__file__).resolve().parents[2] / "dataset"
 
 
 class _Adapter:

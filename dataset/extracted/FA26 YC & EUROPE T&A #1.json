@@ -1,0 +1,1684 @@
+{
+  "total_plis": 16,
+  "plis": [
+    {
+      "io_number": "1078",
+      "style_code": "W5BI42K49A1",
+      "color_code": "RGP REGAL PLUM",
+      "fabric_code": "",
+      "delivery_date": "2026-05-19",
+      "quantity": 2056,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": "2026-03-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-16",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        2
+      ]
+    },
+    {
+      "io_number": "1080",
+      "style_code": "W5RI08K9RM1",
+      "color_code": "G011 PURE WHITE",
+      "fabric_code": "",
+      "delivery_date": "2026-05-19",
+      "quantity": 1228,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": "2026-03-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-03-13",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-03-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": "2026-04-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        4
+      ]
+    },
+    {
+      "io_number": "1083",
+      "style_code": "W2BI70KA0Q1",
+      "color_code": "G1E0 CREME BRULEE",
+      "fabric_code": "",
+      "delivery_date": "2026-05-29",
+      "quantity": 1151,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-03-23",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-04-02",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": "2026-04-23",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        6
+      ]
+    },
+    {
+      "io_number": "1127",
+      "style_code": "W5YP05K68D2",
+      "color_code": "JBLK-JET BLACK A996",
+      "fabric_code": "",
+      "delivery_date": "2026-05-24",
+      "quantity": 2500,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-03-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-04-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-24",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        8
+      ]
+    },
+    {
+      "io_number": "1127",
+      "style_code": "W5YP05K68D2",
+      "color_code": "G011-PURE WHITE",
+      "fabric_code": "",
+      "delivery_date": "2026-05-24",
+      "quantity": 1800,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-03-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-24",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        9
+      ]
+    },
+    {
+      "io_number": "1128",
+      "style_code": "W6YI54K4870",
+      "color_code": "JBLK-JET BLACK A996",
+      "fabric_code": "",
+      "delivery_date": "2026-05-24",
+      "quantity": 700,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-03-17",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-10",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        11
+      ]
+    },
+    {
+      "io_number": "1128",
+      "style_code": "W6YI54K4870",
+      "color_code": "G011-PURE WHITE",
+      "fabric_code": "",
+      "delivery_date": "2026-05-24",
+      "quantity": 700,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-03-17",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-10",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        12
+      ]
+    },
+    {
+      "io_number": "1128",
+      "style_code": "W6YI54K4870",
+      "color_code": "G596-RED NOIR",
+      "fabric_code": "",
+      "delivery_date": "2026-05-24",
+      "quantity": 400,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-03-23",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-03-23",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-10",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        13
+      ]
+    },
+    {
+      "io_number": "1079",
+      "style_code": "W5BP79KBC01",
+      "color_code": "G012 CREAM WHITE",
+      "fabric_code": "",
+      "delivery_date": "2026-05-27",
+      "quantity": 818,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-18",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        15
+      ]
+    },
+    {
+      "io_number": "1079",
+      "style_code": "W5BP79KBC01",
+      "color_code": "JBLK JET BLACK",
+      "fabric_code": "",
+      "delivery_date": "2026-05-27",
+      "quantity": 598,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-18",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        16
+      ]
+    },
+    {
+      "io_number": "1139",
+      "style_code": "W6BI21K6040",
+      "color_code": "JBLK JET BLACK",
+      "fabric_code": "",
+      "delivery_date": "2026-06-07",
+      "quantity": 2181,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-03-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-03-23",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": "2026-03-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-30",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        18
+      ]
+    },
+    {
+      "io_number": "1139",
+      "style_code": "W6BI21K6040",
+      "color_code": "G011 PURE WHITE",
+      "fabric_code": "",
+      "delivery_date": "2026-06-07",
+      "quantity": 1516,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-03-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-03-23",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": "2026-03-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": "2026-05-05",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-30",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        19
+      ]
+    },
+    {
+      "io_number": "1139",
+      "style_code": "W6BI21K6040",
+      "color_code": "G7V2 SMART BLUE",
+      "fabric_code": "",
+      "delivery_date": "2026-06-07",
+      "quantity": 1254,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-03-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-04-11",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": "2026-05-10",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-30",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        20
+      ]
+    },
+    {
+      "io_number": "1141",
+      "style_code": "W6BI21K6040",
+      "color_code": "H167 ALMOND BEIGE MELANGE",
+      "fabric_code": "",
+      "delivery_date": "2026-06-07",
+      "quantity": 2807,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-03-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": "2026-05-05",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-05-05",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": "2026-05-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-30",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        21
+      ]
+    },
+    {
+      "io_number": "1197",
+      "style_code": "W6BI66K99AY",
+      "color_code": "JBLK JET BLACK",
+      "fabric_code": "",
+      "delivery_date": "2026-06-05",
+      "quantity": 4350,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": "2026-05-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-06-07",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        23
+      ]
+    },
+    {
+      "io_number": "1197",
+      "style_code": "W6BI66K99AY",
+      "color_code": "G011 PURE WHITE",
+      "fabric_code": "",
+      "delivery_date": "2026-06-05",
+      "quantity": 3851,
+      "stages": [
+        {
+          "name": "PPS Com",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "File",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ppm",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cuting",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Send",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 1 Rec",
+          "planned_date": "2026-05-05",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Vap 2 Send",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Vap 2 Rec",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "raw": "N/A"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-14",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Garment Handwork",
+          "planned_date": "2026-05-19",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-06-07",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.95,
+        "quantity": 0.85
+      },
+      "source_sheet": "Sheet1",
+      "source_rows": [
+        24
+      ]
+    }
+  ],
+  "warnings": []
+}

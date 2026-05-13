@@ -455,7 +455,7 @@ flowchart TB
 
 **`make eval`** runs `scripts/run_eval.py` which:
 1. Wires `TnaServiceExtractor(orchestrator.extract)` as the `ExtractorProtocol`
-2. Iterates every JSON in `evals/labels/` (symlink to `../dataset/extracted/`)
+2. Iterates every JSON in `dataset/extracted/` (resolved via `evals/_label_dir.py`)
 3. For each one, opens the corresponding xlsx, runs extraction, scores 6 metrics, records an `EvalRow`
 4. Writes the full run to `evals/runs/<utc-timestamp>.json` and prints the matrix to stdout
 
@@ -524,7 +524,7 @@ Adding new things should be small contained changes. This matrix is enforced by 
 | **New tool** | 1× `@tool`-decorated function under `app/repositories/workbook_tools/` | agents that don't need it |
 | **New agent** | 1× file under `app/services/agents/` + 1× prompt in `app/prompts/workflow/` | other agents; orchestrator hard-coded list (just one connection to add) |
 | **New validator** | 1× file under `app/services/validation/` + 1× wire-up in orchestrator | workflow side; reconciler |
-| **New labeled file (no rule change)** | drop JSON in `../dataset/extracted/` | nothing else — eval auto-picks it up |
+| **New labeled file (no rule change)** | drop JSON in `dataset/extracted/` + the matching xlsx in `dataset/` | nothing else — eval auto-picks it up |
 
 ```mermaid
 flowchart LR

@@ -1,0 +1,2771 @@
+{
+  "total_plis": 10,
+  "plis": [
+    {
+      "io_number": "62329",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-04-16",
+      "quantity": 38670,
+      "stages": [
+        {
+          "name": "L/D Send",
+          "planned_date": "2026-02-05",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "L/D Appl",
+          "planned_date": "2026-02-14",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Send",
+          "planned_date": "2026-02-05",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Appl",
+          "planned_date": "2026-02-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Send",
+          "planned_date": "2026-02-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Appl",
+          "planned_date": "2026-02-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Send",
+          "planned_date": "2026-02-22",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Appl",
+          "planned_date": "2026-02-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Send",
+          "planned_date": "2026-02-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Appl",
+          "planned_date": "2026-03-05",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "FPT",
+          "planned_date": "2026-03-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "GPT",
+          "planned_date": "2026-03-09",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Job Sheet",
+          "planned_date": "2026-02-01",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Consumption Locking",
+          "planned_date": "2026-02-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Costing Freezed",
+          "planned_date": "2026-02-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn Req. Deadline",
+          "planned_date": "2026-02-04",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn I/H",
+          "planned_date": "2026-02-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Knit",
+          "planned_date": "2026-02-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Dyeing",
+          "planned_date": "2026-02-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Finishing",
+          "planned_date": "2026-02-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fabric I/H",
+          "planned_date": "2026-03-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-03-15",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/packing"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62329",
+      "source_rows": [
+        4,
+        5,
+        8,
+        9,
+        10,
+        13,
+        14,
+        15,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "io_number": "62330",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-06-17",
+      "quantity": 14700,
+      "stages": [
+        {
+          "name": "L/D Send",
+          "planned_date": "2026-02-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "L/D Appl",
+          "planned_date": "2026-02-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Send",
+          "planned_date": "2026-02-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Appl",
+          "planned_date": "2026-03-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Send",
+          "planned_date": "2026-02-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Appl",
+          "planned_date": "2026-03-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Send",
+          "planned_date": "2026-03-15",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Appl",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Send",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Appl",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "FPT",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "GPT",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Job Sheet",
+          "planned_date": "2026-02-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Consumption Locking",
+          "planned_date": "2026-02-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Costing Freezed",
+          "planned_date": "2026-02-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn Req. Deadline",
+          "planned_date": "2026-02-09",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn I/H",
+          "planned_date": "2026-02-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Knit",
+          "planned_date": "2026-02-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Dyeing",
+          "planned_date": "2026-03-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Finishing",
+          "planned_date": "2026-03-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fabric I/H",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/CUTTING"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "NILL"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-23",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-05-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-06-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62330",
+      "source_rows": [
+        4,
+        5,
+        8,
+        9,
+        10,
+        13,
+        14,
+        15,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "io_number": "62338",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-04-16",
+      "quantity": 21204,
+      "stages": [
+        {
+          "name": "L/D Send",
+          "planned_date": "2026-01-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "L/D Appl",
+          "planned_date": "2026-02-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Send",
+          "planned_date": "2026-01-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Appl",
+          "planned_date": "2026-02-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Send",
+          "planned_date": "2026-02-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Appl",
+          "planned_date": "2026-02-16",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Send",
+          "planned_date": "2026-02-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Appl",
+          "planned_date": "2026-02-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Send",
+          "planned_date": "2026-02-24",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Appl",
+          "planned_date": "2026-03-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "FPT",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "GPT",
+          "planned_date": "2026-03-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-04",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Job Sheet",
+          "planned_date": "2026-01-24",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Consumption Locking",
+          "planned_date": "2026-01-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Costing Freezed",
+          "planned_date": "2026-01-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn Req. Deadline",
+          "planned_date": "2026-01-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn I/H",
+          "planned_date": "2026-02-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Knit",
+          "planned_date": "2026-02-04",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Dyeing",
+          "planned_date": "2026-02-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Finishing",
+          "planned_date": "2026-02-23",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fabric I/H",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-04",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "NILL"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62338",
+      "source_rows": [
+        4,
+        5,
+        8,
+        9,
+        10,
+        13,
+        14,
+        15,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "io_number": "62328",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-05-19",
+      "quantity": 7200,
+      "stages": [
+        {
+          "name": "L/D Send",
+          "planned_date": "2026-01-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "L/D Appl",
+          "planned_date": "2026-02-14",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Send",
+          "planned_date": "2026-01-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Appl",
+          "planned_date": "2026-02-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Send",
+          "planned_date": "2026-02-05",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Appl",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Send",
+          "planned_date": "2026-02-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Appl",
+          "planned_date": "2026-03-04",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Send",
+          "planned_date": "2026-03-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Appl",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "FPT",
+          "planned_date": "2026-03-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "GPT",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Job Sheet",
+          "planned_date": "2026-01-24",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Consumption Locking",
+          "planned_date": "2026-01-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Costing Freezed",
+          "planned_date": "2026-01-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn Req. Deadline",
+          "planned_date": "2026-01-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn I/H",
+          "planned_date": "2026-02-05",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Knit",
+          "planned_date": "2026-02-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Dyeing",
+          "planned_date": "2026-02-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Finishing",
+          "planned_date": "2026-03-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fabric I/H",
+          "planned_date": "2026-03-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62328",
+      "source_rows": [
+        4,
+        5,
+        8,
+        9,
+        10,
+        13,
+        14,
+        15,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "io_number": "62339",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-05-17",
+      "quantity": 329124,
+      "stages": [
+        {
+          "name": "L/D Send",
+          "planned_date": "2026-01-31",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "L/D Appl",
+          "planned_date": "2026-02-14",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Send",
+          "planned_date": "2026-01-31",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Appl",
+          "planned_date": "2026-02-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Send",
+          "planned_date": "2026-02-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Appl",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Send",
+          "planned_date": "2026-02-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Appl",
+          "planned_date": "2026-03-04",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Send",
+          "planned_date": "2026-03-09",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Appl",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "FPT",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "GPT",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Job Sheet",
+          "planned_date": "2026-01-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Consumption Locking",
+          "planned_date": "2026-01-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Costing Freezed",
+          "planned_date": "2026-01-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn Req. Deadline",
+          "planned_date": "2026-01-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn I/H",
+          "planned_date": "2026-02-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Knit",
+          "planned_date": "2026-02-09",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Dyeing",
+          "planned_date": "2026-02-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Finishing",
+          "planned_date": "2026-03-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fabric I/H",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-05-04",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/INSP"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62339",
+      "source_rows": [
+        4,
+        5,
+        8,
+        9,
+        10,
+        13,
+        14,
+        15,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "io_number": "62950",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-06-20",
+      "quantity": 20000,
+      "stages": [
+        {
+          "name": "L/D Send",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "L/D Appl",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Send",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Appl",
+          "planned_date": "2026-04-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Send",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Appl",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Send",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Appl",
+          "planned_date": "2026-04-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Send",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Appl",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production"
+          }
+        },
+        {
+          "name": "FPT",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production"
+          }
+        },
+        {
+          "name": "GPT",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production"
+          }
+        },
+        {
+          "name": "Job Sheet",
+          "planned_date": "2026-03-09",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Consumption Locking",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Costing Freezed",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn Req. Deadline",
+          "planned_date": "2026-03-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn I/H",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Knit",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Dyeing",
+          "planned_date": "2026-04-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "U/DYEING"
+          }
+        },
+        {
+          "name": "Finishing",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric"
+          }
+        },
+        {
+          "name": "Fabric I/H",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-05-01",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-11",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-05-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-06-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62950",
+      "source_rows": [
+        4,
+        5,
+        8,
+        9,
+        10,
+        13,
+        14,
+        15,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "io_number": "62951",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-06-20",
+      "quantity": 12000,
+      "stages": [
+        {
+          "name": "L/D Send",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "L/D Appl",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Send",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Appl",
+          "planned_date": "2026-04-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Send",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Appl",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Send",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Appl",
+          "planned_date": "2026-04-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Send",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Appl",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production"
+          }
+        },
+        {
+          "name": "FPT",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production"
+          }
+        },
+        {
+          "name": "GPT",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production"
+          }
+        },
+        {
+          "name": "Job Sheet",
+          "planned_date": "2026-03-09",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Consumption Locking",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Costing Freezed",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn Req. Deadline",
+          "planned_date": "2026-03-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn I/H",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Knit",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Dyeing",
+          "planned_date": "2026-04-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "U/DYEING"
+          }
+        },
+        {
+          "name": "Finishing",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric"
+          }
+        },
+        {
+          "name": "Fabric I/H",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-05-01",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-11",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-05-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-06-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62951",
+      "source_rows": [
+        4,
+        5,
+        8,
+        9,
+        10,
+        13,
+        14,
+        15,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "io_number": "62949",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-06-20",
+      "quantity": 14400,
+      "stages": [
+        {
+          "name": "L/D Send",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "L/D Appl",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Send",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Appl",
+          "planned_date": "2026-04-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Send",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Appl",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Send",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Appl",
+          "planned_date": "2026-04-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Send",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Appl",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production"
+          }
+        },
+        {
+          "name": "FPT",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production"
+          }
+        },
+        {
+          "name": "GPT",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production"
+          }
+        },
+        {
+          "name": "Job Sheet",
+          "planned_date": "2026-03-09",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Consumption Locking",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Costing Freezed",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn Req. Deadline",
+          "planned_date": "2026-03-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn I/H",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Knit",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Dyeing",
+          "planned_date": "2026-04-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "U/DYEING"
+          }
+        },
+        {
+          "name": "Finishing",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric"
+          }
+        },
+        {
+          "name": "Fabric I/H",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-05-01",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-11",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-05-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-06-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62949",
+      "source_rows": [
+        4,
+        5,
+        8,
+        9,
+        10,
+        13,
+        14,
+        15,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "io_number": "62336",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-05-24",
+      "quantity": 3722,
+      "stages": [
+        {
+          "name": "L/D Send",
+          "planned_date": "2026-02-04",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "L/D Appl",
+          "planned_date": "2026-02-19",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Send",
+          "planned_date": "2026-02-04",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Appl",
+          "planned_date": "2026-02-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Send",
+          "planned_date": "2026-02-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Appl",
+          "planned_date": "2026-03-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Send",
+          "planned_date": "2026-03-05",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Appl",
+          "planned_date": "2026-03-09",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Send",
+          "planned_date": "2026-03-15",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Appl",
+          "planned_date": "2026-03-23",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "FPT",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "GPT",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Job Sheet",
+          "planned_date": "2026-01-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Consumption Locking",
+          "planned_date": "2026-02-01",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Costing Freezed",
+          "planned_date": "2026-02-01",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn Req. Deadline",
+          "planned_date": "2026-02-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn I/H",
+          "planned_date": "2026-02-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Knit",
+          "planned_date": "2026-02-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Dyeing",
+          "planned_date": "2026-02-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Finishing",
+          "planned_date": "2026-03-13",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fabric I/H",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-05-11",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62336",
+      "source_rows": [
+        4,
+        5,
+        8,
+        9,
+        10,
+        13,
+        14,
+        15,
+        18,
+        19,
+        20
+      ]
+    },
+    {
+      "io_number": "62265",
+      "style_code": "",
+      "color_code": "",
+      "fabric_code": "",
+      "delivery_date": "2026-05-16",
+      "quantity": 2200,
+      "stages": [
+        {
+          "name": "L/D Send",
+          "planned_date": "2026-01-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "L/D Appl",
+          "planned_date": "2026-02-11",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Send",
+          "planned_date": "2026-01-27",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fit Appl",
+          "planned_date": "2026-02-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Send",
+          "planned_date": "2026-02-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "A/W Appl",
+          "planned_date": "2026-02-23",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Send",
+          "planned_date": "2026-02-25",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "I/B Fab Appl",
+          "planned_date": "2026-03-01",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Send",
+          "planned_date": "2026-03-07",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PP Appl",
+          "planned_date": "2026-03-15",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "FPT",
+          "planned_date": "2026-03-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "GPT",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Pre-Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Job Sheet",
+          "planned_date": "2026-01-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Consumption Locking",
+          "planned_date": "2026-01-24",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Costing Freezed",
+          "planned_date": "2026-01-24",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn Req. Deadline",
+          "planned_date": "2026-01-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Yarn I/H",
+          "planned_date": "2026-02-02",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Knit",
+          "planned_date": "2026-02-05",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Dyeing",
+          "planned_date": "2026-02-17",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Finishing",
+          "planned_date": "2026-03-05",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Fabric I/H",
+          "planned_date": "2026-03-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Fabric",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "PCD",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-21",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Prnt/EMB",
+          "planned_date": "2026-03-26",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "Clear"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "section": "Production",
+            "status": "U/sewing"
+          }
+        },
+        {
+          "name": "CIP",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        },
+        {
+          "name": "Final Inspection",
+          "planned_date": "2026-05-03",
+          "quantity": null,
+          "metadata": {
+            "section": "Production"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "quantity": 1.0,
+        "delivery_date": 1.0
+      },
+      "source_sheet": "62265",
+      "source_rows": [
+        4,
+        5,
+        8,
+        9,
+        10,
+        13,
+        14,
+        15,
+        18,
+        19,
+        20
+      ]
+    }
+  ],
+  "warnings": [
+    "[Sheet11] too small to be a Job sheet — skipped"
+  ]
+}

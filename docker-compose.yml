@@ -11,8 +11,8 @@ services:
     environment:
       - APP_ENV=${APP_ENV:-development}
     volumes:
-      # Mount labeled dataset for `make eval` from inside the container.
-      - ../dataset:/app/dataset:ro
+      # Mount the local labeled dataset for `make eval` from inside the container.
+      - ./dataset:/app/dataset:ro
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "python", "-c",

@@ -1,0 +1,5719 @@
+{
+  "total_plis": 80,
+  "plis": [
+    {
+      "io_number": "1126",
+      "style_code": "J6BG04",
+      "color_code": "G7P1-19-3921 TCX\n BLACKENED BLUE",
+      "fabric_code": "FABRIC CODE-KQ63/ KN233460 - ECO\nCOTTON SCUBA\n360 -82% Organic COTTON,\n16%  POLYESTER, 2%Regular\nELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 1460,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 20
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-23",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {
+            "supplier": "VPR",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-13",
+            "remaining_days": "27"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        3
+      ]
+    },
+    {
+      "io_number": "1126",
+      "style_code": "J6BG04",
+      "color_code": "G012-11-0605 TCX CREAM WHITE",
+      "fabric_code": "FABRIC CODE-KQ63/ KN233460 - ECO\nCOTTON SCUBA\n360 -82% Organic COTTON,\n16%  POLYESTER, 2%Regular\nELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 250,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 20
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-23",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {
+            "supplier": "VPR",
+            "lead_time": 15
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-13",
+            "remaining_days": "27"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        3,
+        4
+      ]
+    },
+    {
+      "io_number": "1085",
+      "style_code": "J6BI02",
+      "color_code": "G011",
+      "fabric_code": "FABRIC CODE -J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 2600,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09",
+            "remaining_days": "31"
+          }
+        }
+      ],
+      "production_qty": 2738,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        5
+      ]
+    },
+    {
+      "io_number": "1085",
+      "style_code": "J6BI02",
+      "color_code": "G532 - 19-1557 TCX \nCHILLI RED",
+      "fabric_code": "FABRIC CODE -J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 250,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09",
+            "remaining_days": "31"
+          }
+        }
+      ],
+      "production_qty": 323,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        5,
+        6
+      ]
+    },
+    {
+      "io_number": "1085",
+      "style_code": "J6BI02",
+      "color_code": "G5B7-19-1652 TCX \nBEET JUICE RED",
+      "fabric_code": "FABRIC CODE -J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 1100,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09",
+            "remaining_days": "31"
+          }
+        }
+      ],
+      "production_qty": 1162,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        5,
+        7
+      ]
+    },
+    {
+      "io_number": "1085",
+      "style_code": "J6BI02",
+      "color_code": "JBLK",
+      "fabric_code": "FABRIC CODE -J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 3150,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09",
+            "remaining_days": "31"
+          }
+        }
+      ],
+      "production_qty": 3306,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        5,
+        8
+      ]
+    },
+    {
+      "io_number": "1084",
+      "style_code": "J6BI10",
+      "color_code": "G011",
+      "fabric_code": "FABRIC CODE -J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 300,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "supplier": "ESS.EMB",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09",
+            "remaining_days": "31"
+          }
+        }
+      ],
+      "production_qty": 364,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        9
+      ]
+    },
+    {
+      "io_number": "1084",
+      "style_code": "J6BI10",
+      "color_code": "JBLK",
+      "fabric_code": "FABRIC CODE -J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 1650,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {
+            "supplier": "ESS.EMB",
+            "lead_time": 13
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-11",
+            "remaining_days": "29"
+          }
+        }
+      ],
+      "production_qty": 1780,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        9,
+        10
+      ]
+    },
+    {
+      "io_number": "1086",
+      "style_code": "J6BQ07",
+      "color_code": "G5B7-19-1652 TCX \nBEET JUICE RED",
+      "fabric_code": "FABRIC-KAV34/KN235535 -MID ORG. CO BRUSH\nFLEECE 340 KAV34 50% Regular\nCOTTON,50% OrganicCOTTON",
+      "delivery_date": "2026-05-14",
+      "quantity": 2000,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "supplier": "VPR",
+            "actual_date": "2026-04-16",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {
+            "supplier": "ESS.EMB",
+            "lead_time": 8
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-28",
+            "remaining_days": "12"
+          }
+        }
+      ],
+      "production_qty": 2169,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        11
+      ]
+    },
+    {
+      "io_number": "1086",
+      "style_code": "J6BQ07",
+      "color_code": "G012-11-0605 TCX CREAM WHITE",
+      "fabric_code": "FABRIC-KAV34/KN235535 -MID ORG. CO BRUSH\nFLEECE 340 KAV34 50% Regular\nCOTTON,50% OrganicCOTTON",
+      "delivery_date": "2026-05-14",
+      "quantity": 1650,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 13
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "supplier": "VPR",
+            "actual_date": "2026-04-18",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": "2026-04-26",
+          "quantity": null,
+          "metadata": {
+            "supplier": "ESS.EMB",
+            "lead_time": 8
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-30",
+            "remaining_days": "10"
+          }
+        }
+      ],
+      "production_qty": 1788,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        11,
+        12
+      ]
+    },
+    {
+      "io_number": "1086",
+      "style_code": "J6BQ07",
+      "color_code": "JBLK",
+      "fabric_code": "FABRIC-KAV34/KN235535 -MID ORG. CO BRUSH\nFLEECE 340 KAV34 50% Regular\nCOTTON,50% OrganicCOTTON",
+      "delivery_date": "2026-05-14",
+      "quantity": 1550,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 15
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "supplier": "VPR",
+            "actual_date": "2026-04-20",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {
+            "supplier": "ESS.EMB",
+            "lead_time": 8
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-05-02",
+            "remaining_days": "8"
+          }
+        }
+      ],
+      "production_qty": 1681,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        11,
+        13
+      ]
+    },
+    {
+      "io_number": "1086",
+      "style_code": "J6BQ07",
+      "color_code": "A62H -13-2803 TCX ROMANTIC LILLAC",
+      "fabric_code": "FABRIC-KAV34/KN235535 -MID ORG. CO BRUSH\nFLEECE 340 KAV34 50% Regular\nCOTTON,50% OrganicCOTTON",
+      "delivery_date": "2026-05-14",
+      "quantity": 800,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "supplier": "VPR",
+            "actual_date": "2026-04-16",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {
+            "supplier": "ESS.EMB",
+            "lead_time": 8
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-28",
+            "remaining_days": "12"
+          }
+        }
+      ],
+      "production_qty": 877,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        11,
+        14
+      ]
+    },
+    {
+      "io_number": "1087",
+      "style_code": "",
+      "color_code": "G532 - 19-1557 TCX \nCHILLI RED",
+      "fabric_code": "FABIC CODE -KAV34/KN235535 - MID ORG. CO BRUSH\nFLEECE 340 KAV34 50% Regular\nCOTTON, 50% Organic COTTON",
+      "delivery_date": "2026-05-14",
+      "quantity": 510,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "supplier": "VPR",
+            "actual_date": "2026-04-16",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-20",
+            "remaining_days": "20"
+          }
+        }
+      ],
+      "production_qty": 575,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 0.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        15
+      ]
+    },
+    {
+      "io_number": "1087",
+      "style_code": "J6BQ20",
+      "color_code": "G012-11-0605 TCX CREAM WHITE",
+      "fabric_code": "FABIC CODE -KAV34/KN235535 - MID ORG. CO BRUSH\nFLEECE 340 KAV34 50% Regular\nCOTTON, 50% Organic COTTON",
+      "delivery_date": "2026-05-14",
+      "quantity": 3500,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 20
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "supplier": "VPR",
+            "actual_date": "2026-04-18",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-22",
+            "remaining_days": "18"
+          }
+        }
+      ],
+      "production_qty": 3752,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        15,
+        16
+      ]
+    },
+    {
+      "io_number": "1087",
+      "style_code": "",
+      "color_code": "JBLK",
+      "fabric_code": "FABIC CODE -KAV34/KN235535 - MID ORG. CO BRUSH\nFLEECE 340 KAV34 50% Regular\nCOTTON, 50% Organic COTTON",
+      "delivery_date": "2026-05-14",
+      "quantity": 2010,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-07",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 9
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-12",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-02",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 8
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "supplier": "VPR",
+            "actual_date": "2026-04-13",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-17",
+            "remaining_days": "23"
+          }
+        }
+      ],
+      "production_qty": 2160,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 0.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        15,
+        17
+      ]
+    },
+    {
+      "io_number": "1088",
+      "style_code": "K6BI01",
+      "color_code": "A62H -13-2803 TCX ROMANTIC LILLAC",
+      "fabric_code": "FABRIC CODE -J1314/KN234780 - MID\nORGANIC STRETCH\nJERSEY 180\nJ1314 50% Organic COTTON,\n45% Regular COTTON,\n5% Regular\nELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 200,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "supplier": "NAVEEN PRINT",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09",
+            "remaining_days": "31"
+          }
+        }
+      ],
+      "production_qty": 275,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        18
+      ]
+    },
+    {
+      "io_number": "1088",
+      "style_code": "K6BI01",
+      "color_code": "G011",
+      "fabric_code": "FABRIC CODE -J1314/KN234780 - MID\nORGANIC STRETCH\nJERSEY 180\nJ1314 50% Organic COTTON,\n45% Regular COTTON,\n5% Regular\nELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 400,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "supplier": "NAVEEN PRINT",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09",
+            "remaining_days": "31"
+          }
+        }
+      ],
+      "production_qty": 487,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        18,
+        19
+      ]
+    },
+    {
+      "io_number": "1088",
+      "style_code": "K6BI01",
+      "color_code": "G532 - 19-1557 TCX \nCHILLI RED",
+      "fabric_code": "FABRIC CODE -J1314/KN234780 - MID\nORGANIC STRETCH\nJERSEY 180\nJ1314 50% Organic COTTON,\n45% Regular COTTON,\n5% Regular\nELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 350,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "supplier": "NAVEEN PRINT",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09",
+            "remaining_days": "31"
+          }
+        }
+      ],
+      "production_qty": 434,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        18,
+        20
+      ]
+    },
+    {
+      "io_number": "1088",
+      "style_code": "K6BI01",
+      "color_code": "JBLK",
+      "fabric_code": "FABRIC CODE -J1314/KN234780 - MID\nORGANIC STRETCH\nJERSEY 180\nJ1314 50% Organic COTTON,\n45% Regular COTTON,\n5% Regular\nELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 650,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "supplier": "NAVEEN PRINT",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09",
+            "remaining_days": "31"
+          }
+        }
+      ],
+      "production_qty": 737,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        18,
+        21
+      ]
+    },
+    {
+      "io_number": "1089",
+      "style_code": "K6BI03",
+      "color_code": "A62H -13-2803 TCX ROMANTIC LILLAC",
+      "fabric_code": "FABRIC CODE -J1314/KN234780 - MID\nORGANIC STRETCH\nJERSEY 180\nJ1314 50% Organic COTTON,\n45% Regular COTTON,\n5% Regular\nELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 1600,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "supplier": "NAVEEN PRINT",
+            "lead_time": 12
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-10",
+            "remaining_days": "30"
+          }
+        }
+      ],
+      "production_qty": 1705,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        22
+      ]
+    },
+    {
+      "io_number": "1089",
+      "style_code": "K6BI03",
+      "color_code": "G011",
+      "fabric_code": "FABRIC CODE -J1314/KN234780 - MID\nORGANIC STRETCH\nJERSEY 180\nJ1314 50% Organic COTTON,\n45% Regular COTTON,\n5% Regular\nELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 3100,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "supplier": "NAVEEN PRINT",
+            "lead_time": 12
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-10",
+            "remaining_days": "30"
+          }
+        }
+      ],
+      "production_qty": 3256,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        22,
+        23
+      ]
+    },
+    {
+      "io_number": "1089",
+      "style_code": "K6BI03",
+      "color_code": "G532 - 19-1557 TCX \nCHILLI RED",
+      "fabric_code": "FABRIC CODE -J1314/KN234780 - MID\nORGANIC STRETCH\nJERSEY 180\nJ1314 50% Organic COTTON,\n45% Regular COTTON,\n5% Regular\nELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 550,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "supplier": "NAVEEN PRINT",
+            "lead_time": 12
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-10",
+            "remaining_days": "30"
+          }
+        }
+      ],
+      "production_qty": 647,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        22,
+        24
+      ]
+    },
+    {
+      "io_number": "1089",
+      "style_code": "K6BI03",
+      "color_code": "JBLK",
+      "fabric_code": "FABRIC CODE -J1314/KN234780 - MID\nORGANIC STRETCH\nJERSEY 180\nJ1314 50% Organic COTTON,\n45% Regular COTTON,\n5% Regular\nELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 600,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "supplier": "NAVEEN PRINT",
+            "lead_time": 12
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-10",
+            "remaining_days": "30"
+          }
+        }
+      ],
+      "production_qty": 697,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        22,
+        25
+      ]
+    },
+    {
+      "io_number": "1089",
+      "style_code": "K6BI03",
+      "color_code": "G5B7-19-1652 TCX \nBEET JUICE RED",
+      "fabric_code": "FABRIC CODE -J1314/KN234780 - MID\nORGANIC STRETCH\nJERSEY 180\nJ1314 50% Organic COTTON,\n45% Regular COTTON,\n5% Regular\nELASTANE/SPANDEX",
+      "delivery_date": "2026-05-14",
+      "quantity": 600,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "supplier": "NAVEEN PRINT",
+            "lead_time": 12
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-10",
+            "remaining_days": "30"
+          }
+        }
+      ],
+      "production_qty": 673,
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0,
+        "production_qty": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        22,
+        26
+      ]
+    },
+    {
+      "io_number": "1090",
+      "style_code": "L6BI05",
+      "color_code": "G7T2 -19-4029 TCX BLUE LILY",
+      "fabric_code": "FABRIC CODE- I3Z14/KN234781 - MID ORGANIC STREAM\nJERSEY 180 I3Z14 50% Regular\nCOTTON, 50% Organic COTTON",
+      "delivery_date": "2026-05-14",
+      "quantity": 540,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09",
+            "remaining_days": "31"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        27
+      ]
+    },
+    {
+      "io_number": "1090",
+      "style_code": "L6BI05",
+      "color_code": "G7V2-19-3924 TCX -SMART BLUE",
+      "fabric_code": "FABRIC CODE- I3Z14/KN234781 - MID ORGANIC STREAM\nJERSEY 180 I3Z14 50% Regular\nCOTTON, 50% Organic COTTON",
+      "delivery_date": "2026-05-14",
+      "quantity": 1090,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09",
+            "remaining_days": "31"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        27,
+        28
+      ]
+    },
+    {
+      "io_number": "1090",
+      "style_code": "L6BI05",
+      "color_code": "G011",
+      "fabric_code": "FABRIC CODE- I3Z14/KN234781 - MID ORGANIC STREAM\nJERSEY 180 I3Z14 50% Regular\nCOTTON, 50% Organic COTTON",
+      "delivery_date": "2026-05-14",
+      "quantity": 890,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 11
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09",
+            "remaining_days": "31"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        27,
+        29
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "M6BI40K6177 - CN SS TRIANGLE SPRAY TEE",
+      "color_code": "A74B-",
+      "fabric_code": "FABRIC CODE-J1314-40s/30D-50% ORG COTTON/45%REG COTTON/5%LYCRA JSY 180 GSM",
+      "delivery_date": "2026-05-14",
+      "quantity": 2000,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 15
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-13",
+            "remaining_days": "27"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        31
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "M6BI40K6177 - CN SS TRIANGLE SPRAY TEE",
+      "color_code": "FJHG",
+      "fabric_code": "FABRIC CODE-J1314-40s/30D-50% ORG COTTON/45%REG COTTON/5%LYCRA JSY 180 GSM",
+      "delivery_date": "2026-05-14",
+      "quantity": 2637,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 15
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-13",
+            "remaining_days": "27"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        31,
+        32
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "M6BI40K6177 - CN SS TRIANGLE SPRAY TEE",
+      "color_code": "WHITE",
+      "fabric_code": "FABRIC CODE-J1314-40s/30D-50% ORG COTTON/45%REG COTTON/5%LYCRA JSY 180 GSM",
+      "delivery_date": "2026-05-14",
+      "quantity": 5698,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 16
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 10
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-13",
+            "remaining_days": "27"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        31,
+        33
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "M6BI40K6177 - CN SS TRIANGLE SPRAY TEE",
+      "color_code": "G5B0",
+      "fabric_code": "FABRIC CODE-J1314-40s/30D-50% ORG COTTON/45%REG COTTON/5%LYCRA JSY 180 GSM",
+      "delivery_date": "2026-05-14",
+      "quantity": 2252,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 21
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-14",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 15
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-18",
+            "remaining_days": "22"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        31,
+        34
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "M6BI40K6177 - CN SS TRIANGLE SPRAY TEE",
+      "color_code": "G7V2-SMART BLUE",
+      "fabric_code": "FABRIC CODE-J1314-40s/30D-50% ORG COTTON/45%REG COTTON/5%LYCRA JSY 180 GSM",
+      "delivery_date": "2026-05-14",
+      "quantity": 808,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 21
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-14",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 15
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-18",
+            "remaining_days": "22"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        31,
+        35
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "M6BI40K6177 - CN SS TRIANGLE SPRAY TEE",
+      "color_code": "G5B7-19-1652 TCX \nBEET JUICE RED",
+      "fabric_code": "FABRIC CODE-J1314-40s/30D-50% ORG COTTON/45%REG COTTON/5%LYCRA JSY 180 GSM",
+      "delivery_date": "2026-05-14",
+      "quantity": 1780,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": "2026-03-19",
+          "quantity": null,
+          "metadata": {
+            "program_pass": "2026-02-26 00:00:00",
+            "lead_time": 21
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 5
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "lead_time": 6
+          }
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": "2026-04-14",
+          "quantity": null,
+          "metadata": {
+            "supplier": "FRESH",
+            "lead_time": 15
+          }
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-18",
+            "remaining_days": "22"
+          }
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 1.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        31,
+        36
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "H4BJ06",
+      "color_code": "JBLK",
+      "fabric_code": "50% Regular\nCOTTON,\n50% Organic\nCOTTON 180 GSM",
+      "delivery_date": null,
+      "quantity": 300,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        40
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "H4BJ06",
+      "color_code": "PURE WHITE",
+      "fabric_code": "50% Regular\nCOTTON,\n50% Organic\nCOTTON 180 GSM",
+      "delivery_date": null,
+      "quantity": 1500,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        40,
+        41
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "H4BT01",
+      "color_code": "PURE WHITE",
+      "fabric_code": "50% Regular\nCOTTON,\n50% Organic\nCOTTON 180 GSM",
+      "delivery_date": null,
+      "quantity": 300,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "status": "34830"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        42
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J4YG01",
+      "color_code": "JET BLACK",
+      "fabric_code": "TOP -50% ORGANIC COTTON 50% REGULAR COTTON, PANT-50% ORGANIC COTTON 45% REGULAR 5% ELASTAN-180 GSM",
+      "delivery_date": null,
+      "quantity": 1250,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "program_pass": "SINGLE JERSEY -180 GSM ( 25'S 50% ORGANIC COTTON 50% REGULAR COTTON",
+            "lot_cutting": "SINGLE JERSEY -180 GSM ( 25'S 50% ORGANIC COTTON 50% REGULAR COTTON",
+            "planned_raw": "PURE WHITE",
+            "actual_plan": "PURE WHITE",
+            "lead_time": "PURE WHITE",
+            "status": "6300"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "status": "33350"
+          }
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        43
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J4YI49",
+      "color_code": "JBLK",
+      "fabric_code": "50% Organic \nCOTTON,\n44% Regular 6% elastan\nCOTTON 230 GSM",
+      "delivery_date": null,
+      "quantity": 1050,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "program_pass": "SINGLE JERSEY -180 GSM ( 25'S 50% ORGANIC COTTON 50% REGULAR COTTON",
+            "lot_cutting": "SINGLE JERSEY -180 GSM ( 25'S 50% ORGANIC COTTON 50% REGULAR COTTON",
+            "planned_raw": "GREIGE",
+            "actual_plan": "GREIGE",
+            "lead_time": "GREIGE",
+            "status": "6300"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        44
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J4YI49",
+      "color_code": "BALLAT PINK",
+      "fabric_code": "50% Organic \nCOTTON,\n44% Regular 6% elastan\nCOTTON 230 GSM",
+      "delivery_date": null,
+      "quantity": 450,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "program_pass": "SINGLE JERSEY -180 GSM ( 25'S 50% ORGANIC COTTON 50% REGULAR COTTON",
+            "lot_cutting": "SINGLE JERSEY -180 GSM ( 25'S 50% ORGANIC COTTON 50% REGULAR COTTON",
+            "planned_raw": "GREIGE",
+            "actual_plan": "GREIGE",
+            "lead_time": "GREIGE",
+            "status": "6300"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        44,
+        45
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J4YI49",
+      "color_code": "PURE WHITE",
+      "fabric_code": "50% Organic \nCOTTON,\n44% Regular 6% elastan\nCOTTON 230 GSM",
+      "delivery_date": null,
+      "quantity": 1350,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "program_pass": "SINGLE JERSEY -180 GSM ( 25'S 50% ORGANIC COTTON 50% REGULAR COTTON",
+            "lot_cutting": "SINGLE JERSEY -180 GSM ( 25'S 50% ORGANIC COTTON 50% REGULAR COTTON",
+            "planned_raw": "GREIGE",
+            "actual_plan": "GREIGE",
+            "lead_time": "GREIGE",
+            "status": "6300"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        44,
+        46
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI20",
+      "color_code": "G011",
+      "fabric_code": "J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 1600,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        47
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI20",
+      "color_code": "G532 - 19-1557 TCX \nCHILLI RED",
+      "fabric_code": "J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 1500,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        47,
+        48
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI20",
+      "color_code": "G7P1-19-3921 TCX\n BLACKENED BLUE",
+      "fabric_code": "J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 650,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        47,
+        49
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI21",
+      "color_code": "G011",
+      "fabric_code": "J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 1200,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        50
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI21",
+      "color_code": "G532 - 19-1557 TCX \nCHILLI RED",
+      "fabric_code": "J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 250,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        50,
+        51
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI21",
+      "color_code": "G7P1-19-3921 TCX\n BLACKENED BLUE",
+      "fabric_code": "J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 1300,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        50,
+        52
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI23",
+      "color_code": "G011",
+      "fabric_code": "J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 600,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        53
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI30",
+      "color_code": "G011",
+      "fabric_code": "J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 2700,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        54
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI30",
+      "color_code": "JBLK",
+      "fabric_code": "J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 2000,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        54,
+        55
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI30",
+      "color_code": "G60N",
+      "fabric_code": "J1314 / KN234780 - MID ORGANIC\nSTRETCH JERSEY 180 50% Organic COTTON, 45% Regular COTTON, 5%\nRegular ELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 500,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        54,
+        56
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI31",
+      "color_code": "G011",
+      "fabric_code": "KN234567 -ECO VI COMPACT STR\nRIB 350 93% ECOVERO -Regular - Green VISCOSE/RAYON, 7%\nRegularELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 1200,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        57
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI31",
+      "color_code": "JBLK",
+      "fabric_code": "KN234567 -ECO VI COMPACT STR\nRIB 350 93% ECOVERO -Regular - Green VISCOSE/RAYON, 7%\nRegularELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 350,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        57,
+        58
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI41",
+      "color_code": "JBLK",
+      "fabric_code": "I3Z14- 50% Regular\nCOTTON,\n50% Organic\nCOTTON 180 GSM",
+      "delivery_date": null,
+      "quantity": 450,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        59
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI44",
+      "color_code": "G011",
+      "fabric_code": "I3Z14- 50% Regular\nCOTTON,\n50% Organic\nCOTTON 180 GSM",
+      "delivery_date": null,
+      "quantity": 600,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        60
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI44",
+      "color_code": "JBLK",
+      "fabric_code": "I3Z14- 50% Regular\nCOTTON,\n50% Organic\nCOTTON 180 GSM",
+      "delivery_date": null,
+      "quantity": 350,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        60,
+        61
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BI44",
+      "color_code": "G63C",
+      "fabric_code": "I3Z14- 50% Regular\nCOTTON,\n50% Organic\nCOTTON 180 GSM",
+      "delivery_date": null,
+      "quantity": 400,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        60,
+        62
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BQ12",
+      "color_code": "G012-11-0605 TCX CREAM WHITE",
+      "fabric_code": "KN235535 - MID ORG. CO BRUSH\nFLEECE 340 KAV34 50% Regular\nCOTTON, 50% Organic COTTON",
+      "delivery_date": null,
+      "quantity": 500,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        63
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "J6BQ12",
+      "color_code": "G7JZ-12-4108 TCX \nFROZEN LIGHT BLUE",
+      "fabric_code": "KN235535 - MID ORG. CO BRUSH\nFLEECE 340 KAV34 50% Regular\nCOTTON, 50% Organic COTTON",
+      "delivery_date": null,
+      "quantity": 1200,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        63,
+        64
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "K6BI16",
+      "color_code": "G011",
+      "fabric_code": "KN234780 - MID\nORGANIC STRETCH\nJERSEY 180\nJ1314 50% Organic COTTON,\n45% Regular COTTON,\n5% Regular\nELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 300,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        65
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "K6BI18",
+      "color_code": "G011",
+      "fabric_code": "KN234780 - MID\nORGANIC STRETCH\nJERSEY 180\nJ1314 50% Organic COTTON,\n45% Regular COTTON,\n5% Regular\nELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 400,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        66
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "K6BI18",
+      "color_code": "G60N",
+      "fabric_code": "KN234780 - MID\nORGANIC STRETCH\nJERSEY 180\nJ1314 50% Organic COTTON,\n45% Regular COTTON,\n5% Regular\nELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 450,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        66,
+        67
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "K6BI18",
+      "color_code": "G7JZ-12-4108 TCX \nFROZEN LIGHT BLUE",
+      "fabric_code": "KN234780 - MID\nORGANIC STRETCH\nJERSEY 180\nJ1314 50% Organic COTTON,\n45% Regular COTTON,\n5% Regular\nELASTANE/SPANDEX",
+      "delivery_date": null,
+      "quantity": 250,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        66,
+        68
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "K6BQ05",
+      "color_code": "G7P1-19-3921 TCX\n BLACKENED BLUE",
+      "fabric_code": "KN237895 - ORGCO/RECYPOLY\nBRUSHED FLEECE 290\nKG99 62% Organic COTTON, 38%\nRecycled POLYESTER",
+      "delivery_date": null,
+      "quantity": 250,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        69
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "L5BI13",
+      "color_code": "SMART BLUE",
+      "fabric_code": "50% Regular\nCOTTON,\n50% Organic\nCOTTON 180 GSM",
+      "delivery_date": null,
+      "quantity": 1100,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        70
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "L5BI13",
+      "color_code": "PURE WHITE",
+      "fabric_code": "50% Regular\nCOTTON,\n50% Organic\nCOTTON 180 GSM",
+      "delivery_date": null,
+      "quantity": 1000,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        70,
+        71
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "L5BI16",
+      "color_code": "JBLK",
+      "fabric_code": "50% Regular\nCOTTON,\n50% Organic\nCOTTON 210 GSM",
+      "delivery_date": null,
+      "quantity": 550,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        72
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "L5BI16",
+      "color_code": "PURE WHITE",
+      "fabric_code": "50% Regular\nCOTTON,\n50% Organic\nCOTTON 210 GSM",
+      "delivery_date": null,
+      "quantity": 550,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        72,
+        73
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "L6BI07",
+      "color_code": "G011",
+      "fabric_code": "KN234781 - MID ORGANIC STREAM\nJERSEY 180 I3Z14 50% Regular\nCOTTON, 50% Organic COTTON",
+      "delivery_date": null,
+      "quantity": 300,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        74
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "N4BI08",
+      "color_code": "SMART BLUE",
+      "fabric_code": "50% Regular\nCOTTON,\n50% Organic\nCOTTON 180 GSM",
+      "delivery_date": null,
+      "quantity": 250,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        75
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "N4BI08",
+      "color_code": "PURE WHITE",
+      "fabric_code": "50% Regular\nCOTTON,\n50% Organic\nCOTTON 180 GSM",
+      "delivery_date": null,
+      "quantity": 180,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        75,
+        76
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "N6BI10",
+      "color_code": "G011",
+      "fabric_code": "KN234781 - MID ORGANIC\nSTREAM JERSEY 180\nI3Z14 50% Regular\nCOTTON,\n50% Organic",
+      "delivery_date": null,
+      "quantity": 950,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        77
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "N6BI10",
+      "color_code": "G7V2-19-3924 TCX -\nSMART BLUE",
+      "fabric_code": "KN234781 - MID ORGANIC\nSTREAM JERSEY 180\nI3Z14 50% Regular\nCOTTON,\n50% Organic",
+      "delivery_date": null,
+      "quantity": 200,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        77,
+        78
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "N6BI10",
+      "color_code": "G7EH -17-4020 TCX \nPARISIAN ROOFBLUE",
+      "fabric_code": "KN234781 - MID ORGANIC\nSTREAM JERSEY 180\nI3Z14 50% Regular\nCOTTON,\n50% Organic",
+      "delivery_date": null,
+      "quantity": 150,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        77,
+        79
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "N6BI11",
+      "color_code": "G7EH -17-4020 TCX \nPARISIAN ROOFBLUE",
+      "fabric_code": "KN234781 - MID ORGANIC\nSTREAM JERSEY 180\nI3Z14 50% Regular\nCOTTON,\n50% Organic",
+      "delivery_date": null,
+      "quantity": 1100,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        80
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "N6BI11",
+      "color_code": "G7V2 SMART BLUE",
+      "fabric_code": "KN234781 - MID ORGANIC\nSTREAM JERSEY 180\nI3Z14 50% Regular\nCOTTON,\n50% Organic",
+      "delivery_date": null,
+      "quantity": 700,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        80,
+        81
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "N6BI15",
+      "color_code": "G369 - 16-1460 TCX\n BRIGHT MANGO",
+      "fabric_code": "KN234781 - MID ORGANIC\nSTREAM JERSEY 180\nI3Z14 50% Regular\nCOTTON,\n50% Organic",
+      "delivery_date": null,
+      "quantity": 250,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        82
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "N6BI15",
+      "color_code": "JBLK",
+      "fabric_code": "KN234781 - MID ORGANIC\nSTREAM JERSEY 180\nI3Z14 50% Regular\nCOTTON,\n50% Organic",
+      "delivery_date": null,
+      "quantity": 350,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        82,
+        83
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "N6BI16",
+      "color_code": "G011 PURE WHITE",
+      "fabric_code": "KN234781 - MID ORGANIC\nSTREAM JERSEY 180\nI3Z14 50% Regular\nCOTTON,\n50% Organic",
+      "delivery_date": null,
+      "quantity": 1500,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        84
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "N6BI16",
+      "color_code": "G369 - 16-1460 TCX\n BRIGHT MANGO",
+      "fabric_code": "KN234781 - MID ORGANIC\nSTREAM JERSEY 180\nI3Z14 50% Regular\nCOTTON,\n50% Organic",
+      "delivery_date": null,
+      "quantity": 150,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        84,
+        85
+      ]
+    },
+    {
+      "io_number": "",
+      "style_code": "N6BI16",
+      "color_code": "JBLK",
+      "fabric_code": "KN234781 - MID ORGANIC\nSTREAM JERSEY 180\nI3Z14 50% Regular\nCOTTON,\n50% Organic",
+      "delivery_date": null,
+      "quantity": 350,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Size Set",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-1",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-2",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "VAP-3",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Feeding",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.0,
+        "style_code": 1.0,
+        "color_code": 1.0,
+        "fabric_code": 1.0,
+        "delivery_date": 0.0,
+        "quantity": 1.0
+      },
+      "source_sheet": "MASTER (2)",
+      "source_rows": [
+        84,
+        86
+      ]
+    }
+  ],
+  "warnings": []
+}

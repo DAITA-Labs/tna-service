@@ -1,0 +1,2032 @@
+{
+  "total_plis": 30,
+  "plis": [
+    {
+      "io_number": "7000018275,",
+      "style_code": "CMJE FW26 07 1000001232 5000015326",
+      "color_code": "0001-BLACK",
+      "fabric_code": "SINGLE JERSEY/96% ORGANIC COTTON 4% ELASTHANE/40S/20D///28GG/160//FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-04-30",
+      "quantity": 1344,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-01-29",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-01-24"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-01-27",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-01-20"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-01",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-12-25 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-02-18",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-16"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-02"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09"
+          }
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        4
+      ]
+    },
+    {
+      "io_number": "7000018275,",
+      "style_code": "CMJE FW26 07 1000001232 5000015326",
+      "color_code": "1183 SILKY WHITE",
+      "fabric_code": "SINGLE JERSEY/96% ORGANIC COTTON 4% ELASTHANE/40S/20D///28GG/160//FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-04-30",
+      "quantity": 1341,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-01-29",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-01-24"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-01-27",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-01-31"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-01",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-12-25 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-02-18",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-16"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-02"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09"
+          }
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        4,
+        5
+      ]
+    },
+    {
+      "io_number": "7000018275,",
+      "style_code": "CMJE FW26 07 1000001232 5000015326",
+      "color_code": "4131 DARK NAVY",
+      "fabric_code": "SINGLE JERSEY/96% ORGANIC COTTON 4% ELASTHANE/40S/20D///28GG/160//FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-04-30",
+      "quantity": 1344,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-01-29",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-01-24"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-01-27",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-01-20"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-01",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-12-25 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-02-18",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-16"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-02"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09"
+          }
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        4,
+        6
+      ]
+    },
+    {
+      "io_number": "7000018278,",
+      "style_code": "CMJE FW26 07 1000001232 5000015344",
+      "color_code": "0001-BLACK",
+      "fabric_code": "SINGLE JERSEY/96% ORGANIC COTTON 4% ELASTHANE/40S/20D///28GG/160//FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-04-30",
+      "quantity": 660,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-01-29",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-01-24"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-01-27",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-01-20"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-01",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-12-25 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-23",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-28"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-07"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09"
+          }
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        7
+      ]
+    },
+    {
+      "io_number": "7000018278,",
+      "style_code": "CMJE FW26 07 1000001232 5000015344",
+      "color_code": "1183-SILKY WHITE",
+      "fabric_code": "SINGLE JERSEY/96% ORGANIC COTTON 4% ELASTHANE/40S/20D///28GG/160//FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-04-30",
+      "quantity": 608,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-01-29",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-01-24"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-01-27",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-01-31"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-01",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-12-25 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-23",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-28"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-07"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09"
+          }
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        7,
+        8
+      ]
+    },
+    {
+      "io_number": "7000018278,",
+      "style_code": "CMJE FW26 07 1000001232 5000015344",
+      "color_code": "4131 - DARK NAVY",
+      "fabric_code": "SINGLE JERSEY/96% ORGANIC COTTON 4% ELASTHANE/40S/20D///28GG/160//FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-04-30",
+      "quantity": 657,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-01-29",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-01-24"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-01-27",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-01-20"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-01",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-12-25 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-23",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-28"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-07"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09"
+          }
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        7,
+        9
+      ]
+    },
+    {
+      "io_number": "7000020130, 7000020134, 7000020253, 7000020257, 7000020262",
+      "style_code": "CMJE FW26 08 1000001241 5000013565",
+      "color_code": "4175-PEPPERCORN GREY",
+      "fabric_code": "SCUBA INTERLOCK/75%ORGANIC COTTON 20%RECYCLE POLYESTER 5%ELASTHANE/40S/75D////350/30D/FABRIC DYED",
+      "delivery_date": "2026-05-21",
+      "quantity": 1632,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-23",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-23"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-19",
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-21",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS ZIPPER HOODED SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        10
+      ]
+    },
+    {
+      "io_number": "7000020106, 7000020110, 7000020217, 7000020223, 7000020229",
+      "style_code": "CMJE FW26 08 1000001241 5000012892",
+      "color_code": "4175-PEPPERCORN GREY",
+      "fabric_code": "SCUBA INTERLOCK/75%ORGANIC COTTON 20%RECYCLE POLYESTER 5%ELASTHANE/40S/75D////350/30D/FABRIC DYED",
+      "delivery_date": "2026-05-21",
+      "quantity": 2127,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-19",
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-21",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS ZIPPER SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        11
+      ]
+    },
+    {
+      "io_number": "7000020074, 7000020081, 7000020180, 7000020182",
+      "style_code": "CMJE FW26 08 1000002516 5000011625",
+      "color_code": "4175-PEPPERCORN GREY",
+      "fabric_code": "DIAGONAL FRENCH TERRY/100% RECYCLED COTTON/34S/34S/2/24S/UNDEFINED/20GG/325//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 678,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-10"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-31"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-19",
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-17"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-23",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        12
+      ]
+    },
+    {
+      "io_number": "7000020074, 7000020081, 7000020180, 7000020182",
+      "style_code": "CMJE FW26 08 1000002516 5000011625",
+      "color_code": "6931-DARK BURGUNDY",
+      "fabric_code": "DIAGONAL FRENCH TERRY/100% RECYCLED COTTON/34S/34S/2/24S/UNDEFINED/20GG/325//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 231,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-10"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-31"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-19",
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-17"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-23",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        12,
+        13
+      ]
+    },
+    {
+      "io_number": "7000020085, 7000020184, 7000020190, 7000020200, 7000020203",
+      "style_code": "CMJE FW26 08 1000001208 5000011972",
+      "color_code": "0388-GRAPHITE DUST",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 1134,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-05"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-01"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-02-27",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-27 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-18"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        14
+      ]
+    },
+    {
+      "io_number": "7000020085, 7000020184, 7000020190, 7000020200, 7000020203",
+      "style_code": "CMJE FW26 08 1000001208 5000011972",
+      "color_code": "0619-BLACK PEPPER",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 840,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-05"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-06"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-02-27",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-27 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-18"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        14,
+        15
+      ]
+    },
+    {
+      "io_number": "7000020085, 7000020184, 7000020190, 7000020200, 7000020203",
+      "style_code": "CMJE FW26 08 1000001208 5000011972",
+      "color_code": "1183-SILKY WHITE",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 1025,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-05"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-04"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-02-27",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-27 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-18"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        14,
+        16
+      ]
+    },
+    {
+      "io_number": "7000020085, 7000020184, 7000020190, 7000020200, 7000020203",
+      "style_code": "CMJE FW26 08 1000001208 5000011972",
+      "color_code": "4175-PEPPERCORN GREY",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 1854,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-05"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-02-27",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-27 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-18"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        14,
+        17
+      ]
+    },
+    {
+      "io_number": "7000020085, 7000020184, 7000020190, 7000020200, 7000020203",
+      "style_code": "CMJE FW26 08 1000001208 5000011972",
+      "color_code": "6169-LIGHT MAUVE",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 1093,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-05"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-31"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-02-27",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-27 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-18"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        14,
+        18
+      ]
+    },
+    {
+      "io_number": "7000020085, 7000020184, 7000020190, 7000020200, 7000020203",
+      "style_code": "CMJE FW26 08 1000001208 5000011972",
+      "color_code": "0001 BLACK",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 344,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-05"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-29"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-02-27",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-27 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-18"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        14,
+        19
+      ]
+    },
+    {
+      "io_number": "7000020114, 7000020127, 7000020231, 7000020243, 7000020251",
+      "style_code": "CMJE FW26 09 1000001208 5000012898",
+      "color_code": "0001 BLACK",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-06-11",
+      "quantity": 1250,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        20
+      ]
+    },
+    {
+      "io_number": "7000020114, 7000020127, 7000020231, 7000020243, 7000020251",
+      "style_code": "CMJE FW26 09 1000001208 5000012898",
+      "color_code": "0013-WOODEN EARTH",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-06-11",
+      "quantity": 1305,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        20,
+        21
+      ]
+    },
+    {
+      "io_number": "7000020114, 7000020127, 7000020231, 7000020243, 7000020251",
+      "style_code": "CMJE FW26 09 1000001208 5000012898",
+      "color_code": "0381-SKIPPING STONE",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-06-11",
+      "quantity": 642,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        20,
+        22
+      ]
+    },
+    {
+      "io_number": "7000020114, 7000020127, 7000020231, 7000020243, 7000020251",
+      "style_code": "CMJE FW26 09 1000001208 5000012898",
+      "color_code": "0471-DARK GREY MELANGE",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-06-11",
+      "quantity": 1007,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        20,
+        23
+      ]
+    },
+    {
+      "io_number": "7000020114, 7000020127, 7000020231, 7000020243, 7000020251",
+      "style_code": "CMJE FW26 09 1000001208 5000012898",
+      "color_code": "3727-FADED MINT",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-06-11",
+      "quantity": 382,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-23",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        20,
+        24
+      ]
+    },
+    {
+      "io_number": "7000020145, 7000020155, 7000020269, 7000020279",
+      "style_code": "CMJE FW26 09 1000001208 5000014725",
+      "color_code": "0001 BLACK",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-06-11",
+      "quantity": 2701,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS POLO SHIRT SHORT SLEEVE",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        25
+      ]
+    },
+    {
+      "io_number": "7000020145, 7000020155, 7000020269, 7000020279",
+      "style_code": "CMJE FW26 09 1000001208 5000014725",
+      "color_code": "0013-WOODEN EARTH",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-06-11",
+      "quantity": 755,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS POLO SHIRT SHORT SLEEVE",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        25,
+        26
+      ]
+    },
+    {
+      "io_number": "7000020145, 7000020155, 7000020269, 7000020279",
+      "style_code": "CMJE FW26 09 1000001208 5000014725",
+      "color_code": "0381-SKIPPING STONE",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-06-11",
+      "quantity": 748,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS POLO SHIRT SHORT SLEEVE",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        25,
+        27
+      ]
+    },
+    {
+      "io_number": "7000020145, 7000020155, 7000020269, 7000020279",
+      "style_code": "CMJE FW26 09 1000001208 5000014725",
+      "color_code": "0471-DARK GREY MELANGE",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-06-11",
+      "quantity": 2681,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS POLO SHIRT SHORT SLEEVE",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        25,
+        28
+      ]
+    },
+    {
+      "io_number": "7000020145, 7000020155, 7000020269, 7000020279",
+      "style_code": "CMJE FW26 09 1000001208 5000014725",
+      "color_code": "3727-FADED MINT",
+      "fabric_code": "SINGLE JERSEY/100% ORGANIC COTTON/2/30S////12GG/180//FABRIC DYED",
+      "delivery_date": "2026-06-11",
+      "quantity": 502,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-23",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS POLO SHIRT SHORT SLEEVE",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        25,
+        29
+      ]
+    },
+    {
+      "io_number": "7000020136, 7000020142, 7000020264, 7000020267",
+      "style_code": "CMJE FW26 09 1000002040 5000014715",
+      "color_code": "0013-WOODEN EARTH",
+      "fabric_code": "FRENCH TERRY/100% ORGANIC COTTON/40S/2/10S///12GG/340//FABRIC DYED + BRUSHED",
+      "delivery_date": "2026-06-11",
+      "quantity": 557,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-14"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS SWEAT SHIRT TROYER",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        30
+      ]
+    },
+    {
+      "io_number": "7000020136, 7000020142, 7000020264, 7000020267",
+      "style_code": "CMJE FW26 09 1000002040 5000014715",
+      "color_code": "0381-SKIPPING STONE",
+      "fabric_code": "FRENCH TERRY/100% ORGANIC COTTON/40S/2/10S///12GG/340//FABRIC DYED + BRUSHED",
+      "delivery_date": "2026-06-11",
+      "quantity": 286,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-14"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS SWEAT SHIRT TROYER",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        30,
+        31
+      ]
+    },
+    {
+      "io_number": "7000020099, 7000020208, 7000020216",
+      "style_code": "CMJE FW26 09 1000002040 5000012618",
+      "color_code": "0013-WOODEN EARTH",
+      "fabric_code": "FRENCH TERRY/100% ORGANIC COTTON/40S/2/10S///12GG/340//FABRIC DYED + BRUSHED",
+      "delivery_date": "2026-06-11",
+      "quantity": 252,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-14"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-20 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        32
+      ]
+    },
+    {
+      "io_number": "7000020099, 7000020208, 7000020216",
+      "style_code": "CMJE FW26 09 1000002040 5000012618",
+      "color_code": "0381-SKIPPING STONE",
+      "fabric_code": "FRENCH TERRY/100% ORGANIC COTTON/40S/2/10S///12GG/340//FABRIC DYED + BRUSHED",
+      "delivery_date": "2026-06-11",
+      "quantity": 198,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-14"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-19",
+          "quantity": null,
+          "metadata": {
+            "approval": "2026-02-20 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        32,
+        33
+      ]
+    }
+  ],
+  "warnings": []
+}

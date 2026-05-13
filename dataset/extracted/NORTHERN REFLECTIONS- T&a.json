@@ -1,0 +1,421 @@
+{
+  "total_plis": 5,
+  "plis": [
+    {
+      "io_number": "1068",
+      "style_code": "99F26 - 405H",
+      "color_code": "BUTTER MILK - AOP",
+      "fabric_code": "",
+      "delivery_date": "2026-05-06",
+      "quantity": 1800,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-15"
+          }
+        },
+        {
+          "name": "Lot Card",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PP Sample",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "sent": "2026-04-11 00:00:00"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Printing",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "send plan": "N/A",
+            "sent act": "N/A",
+            "recvd plan": "N/A",
+            "recvvd act": "N/A"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-23",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.9,
+        "quantity": 1.0
+      },
+      "source_sheet": "NORTHER REFLECTIONS",
+      "source_rows": [
+        4
+      ]
+    },
+    {
+      "io_number": "1070",
+      "style_code": "99F26 - 405PH",
+      "color_code": "BUTTER MILK - AOP",
+      "fabric_code": "",
+      "delivery_date": "2026-05-06",
+      "quantity": 1400,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-15"
+          }
+        },
+        {
+          "name": "Lot Card",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PP Sample",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "sent": "2026-04-24 00:00:00"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-05-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Printing",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "send plan": "N/A",
+            "sent act": "N/A",
+            "recvd plan": "N/A",
+            "recvvd act": "N/A"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-18",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.9,
+        "quantity": 1.0
+      },
+      "source_sheet": "NORTHER REFLECTIONS",
+      "source_rows": [
+        6
+      ]
+    },
+    {
+      "io_number": "1071",
+      "style_code": "99F26 - 404H",
+      "color_code": "BLACK - DIGITAL",
+      "fabric_code": "",
+      "delivery_date": "2026-05-06",
+      "quantity": 1800,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Lot Card",
+          "planned_date": "2026-05-02",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PP Sample",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "sent": "2026-05-06 00:00:00"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-05-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-05-11",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Printing",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "send plan": "N/A",
+            "sent act": "N/A",
+            "recvd plan": "N/A",
+            "recvvd act": "N/A"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-05-14",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-18",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-05-30",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.9,
+        "quantity": 1.0
+      },
+      "source_sheet": "NORTHER REFLECTIONS",
+      "source_rows": [
+        8
+      ]
+    },
+    {
+      "io_number": "1201",
+      "style_code": "14F26-35",
+      "color_code": "NAVY SPORT",
+      "fabric_code": "",
+      "delivery_date": "2026-06-01",
+      "quantity": 900,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Lot Card",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PP Sample",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "sent": "2026-04-29 00:00:00"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-05-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-05-11",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Printing",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "send plan": "2026-05-16 00:00:00",
+            "recvd plan": "2026-05-23 00:00:00"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-05-25",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-06-01",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.9,
+        "quantity": 1.0
+      },
+      "source_sheet": "NORTHER REFLECTIONS",
+      "source_rows": [
+        13
+      ]
+    },
+    {
+      "io_number": "1201",
+      "style_code": "14F26-35",
+      "color_code": "NAVY SPORT",
+      "fabric_code": "",
+      "delivery_date": "2026-06-01",
+      "quantity": 900,
+      "stages": [
+        {
+          "name": "Fabric",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Lot Card",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PP Sample",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "sent": "2026-04-29 00:00:00"
+          }
+        },
+        {
+          "name": "Size Set",
+          "planned_date": "2026-05-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Cutting",
+          "planned_date": "2026-05-11",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Printing",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "send plan": "2026-05-16 00:00:00",
+            "recvd plan": "2026-05-23 00:00:00"
+          }
+        },
+        {
+          "name": "Feeding",
+          "planned_date": "2026-05-25",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "FI",
+          "planned_date": "2026-06-01",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "confidence": {
+        "io_number": 0.95,
+        "style_code": 0.9,
+        "color_code": 0.85,
+        "fabric_code": 0.0,
+        "delivery_date": 0.9,
+        "quantity": 1.0
+      },
+      "source_sheet": "NORTHER REFLECTIONS",
+      "source_rows": [
+        18
+      ]
+    }
+  ],
+  "warnings": []
+}

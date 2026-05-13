@@ -3,8 +3,9 @@ from pathlib import Path
 import pytest
 
 
-# Datasets live one level up from tna-service/.
-DATASET_DIR = Path(__file__).resolve().parents[2] / "dataset"
+# Dataset ships inside tna-service/ so the microservice is self-contained.
+# tests/conftest.py → tests → tna-service → dataset
+DATASET_DIR = Path(__file__).resolve().parents[1] / "dataset"
 
 
 @pytest.fixture

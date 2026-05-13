@@ -1,4 +1,4 @@
-"""All hand-labeled ExtractionResult JSON files in ../dataset/extracted/ must
+"""All hand-labeled ExtractionResult JSON files in dataset/extracted/ must
 round-trip through the Pydantic models without error."""
 import json
 from pathlib import Path
@@ -7,7 +7,7 @@ from app.models.extraction import ExtractionResult
 
 
 LABELS = sorted(
-    (Path(__file__).resolve().parents[2].parent / "dataset" / "extracted").glob("*.json")
+    (Path(__file__).resolve().parents[2] / "dataset" / "extracted").glob("*.json")
 )
 
 

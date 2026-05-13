@@ -139,7 +139,7 @@ Prometheus exposition. See [`ARCHITECTURE.md`](./ARCHITECTURE.md#telemetry) for 
 | `make install` | Creates `.venv/` and runs `pip install -e ".[dev]"` |
 | `make test` | `pytest -q` — all unit + integration tests (live e2e tests are skipped by default) |
 | `make test-live` | `TNA_RUN_LIVE_TESTS=1 pytest -m live -v` — runs e2e tests against the real Anthropic API |
-| `make eval` | Runs the extractor over every labeled file in `../dataset/extracted/`, prints scoreboard, writes a run JSON under `evals/runs/` |
+| `make eval` | Runs the extractor over every labeled file in `dataset/extracted/`, prints scoreboard, writes a run JSON under `evals/runs/` |
 | `make serve` | `uvicorn app.main:app --reload` |
 | `make build` | `docker compose build` |
 | `make up` | `docker compose up -d` (api + Prometheus + Grafana) |
@@ -237,13 +237,13 @@ Three layers:
 | Layer | What | When it runs |
 |---|---|---|
 | **Unit** (`tests/unit/`) | One module at a time. LLM mocked. Sub-second. | Every commit |
-| **Repository** (`tests/repositories/`) | Workbook-tool functions against real xlsx fixtures from `../dataset/` | Every commit |
+| **Repository** (`tests/repositories/`) | Workbook-tool functions against real xlsx fixtures from `dataset/` | Every commit |
 | **Integration** (`tests/integration/`) | End-to-end orchestrator against real Anthropic API on labeled files. Gated by `TNA_RUN_LIVE_TESTS=1`. | On demand / pre-merge |
 
 ```bash
 make test          # everything except live (sub-second on a quiet machine)
 make test-live     # the 5 e2e regression guards (one per known-tricky layout family)
-make eval          # full label scoreboard — every labeled file in ../dataset/extracted/
+make eval          # full label scoreboard — every labeled file in dataset/extracted/
 ```
 
 The eval framework treats the extractor as a black box. It imports only `app.models.*` and the `ExtractorProtocol` — see [`ARCHITECTURE.md`](./ARCHITECTURE.md#eval-framework).
@@ -284,7 +284,7 @@ The acceptance tests in `tests/integration/test_acceptance_extensibility.py` enf
 | `MissingAPIKey: ANTHROPIC_API_KEY is not set` | `.env` missing or key blank | `cp .env.example .env` and fill in your key |
 | `/extract` returns 500 | Look at the response body and api logs (`make logs`) — usually a tool/agent exception |
 | Tests in `tests/integration/` all skipped | `TNA_RUN_LIVE_TESTS` not set | `set -a && . ./.env && set +a && TNA_RUN_LIVE_TESTS=1 pytest -m live` |
-| `make eval` says no labels found | `../dataset/extracted/` doesn't exist | Confirm the repo root has `dataset/extracted/*.json` |
+| `make eval` says no labels found | `dataset/extracted/` doesn't exist inside `tna-service/` | This dir ships with the corpus; if missing, re-clone or restore from git |
 | Prometheus says target down | api container not yet healthy | `docker compose logs api` |
 
 For any extraction-quality regression, the path is: run `make eval`, open `evals/runs/<timestamp>.json`, compare to a prior run. The `source_cells` and `warnings` arrays on each PLI tell you exactly where each value came from and what the validators flagged.
