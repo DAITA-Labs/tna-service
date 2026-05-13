@@ -9,6 +9,9 @@ import functools
 import time as _time
 from typing import Callable
 from app.core.telemetry import tool_calls_total, tool_duration_seconds, tool_errors_total
+from app.core.logs import get_logger
+
+_tool_log = get_logger("app.workbook_tools")
 
 
 class ToolRegistry:
@@ -26,9 +29,12 @@ class ToolRegistry:
             def _counted(*args, **kwargs):
                 tool_calls_total.labels(tool_name=name).inc()
                 _t0 = _time.monotonic()
+                _tool_log.debug("tool_call_start", tool_name=name)
                 try:
-                    return fn(*args, **kwargs)
-                except Exception:
+                    result = fn(*args, **kwargs)
+                    return result
+                except Exception as exc:
+                    _tool_log.warning("tool_call_failed", tool_name=name, error=str(exc))
                     tool_errors_total.labels(tool_name=name).inc()
                     raise
                 finally:

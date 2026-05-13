@@ -9,6 +9,9 @@ from openpyxl.utils import column_index_from_string, get_column_letter
 from openpyxl.utils.cell import coordinate_from_string
 from app.models.workbook import WorkbookCtx
 from app.models.artifacts import SheetSignals, KVAnchor
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 
 def detect_kv_anchors(
@@ -40,4 +43,5 @@ def detect_kv_anchors(
                 value_cell=f"{get_column_letter(col)}{row + 1}",
                 field=label,
             ))
+    log.info("kv_anchors_detected", sheet=sheet, count=len(out))
     return out

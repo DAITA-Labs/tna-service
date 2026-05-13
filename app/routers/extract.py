@@ -14,6 +14,8 @@ router = APIRouter()
 @router.post("/extract", response_model=ExtractResponse, tags=["extract"])
 async def extract_endpoint(file: UploadFile) -> ExtractResponse:
     """Extract structured PLI / Stage JSON from an uploaded TNA xlsx."""
+    log.info("extract_request_received", filename=file.filename,
+             content_type=file.content_type)
     if not file.filename or not file.filename.lower().endswith(".xlsx"):
         raise HTTPException(status_code=400, detail="expected an .xlsx upload")
 
@@ -30,4 +32,6 @@ async def extract_endpoint(file: UploadFile) -> ExtractResponse:
     finally:
         tmp_path.unlink(missing_ok=True)
 
+    log.info("extract_request_complete", filename=file.filename,
+             pli_count=len(result.plis), warning_count=len(result.warnings))
     return ExtractResponse(**result.model_dump())

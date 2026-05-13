@@ -5,6 +5,9 @@ from app.models.extraction import ExtractionResult
 from app.models.artifacts import ValidationFinding, ValidationFindings
 from app.enums.validation_severity import ValidationSeverity
 from app.core.telemetry import validator_findings_total
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 
 _FIELDS_TO_TRACK = ("io_number", "style_code", "color_code",
@@ -20,17 +23,20 @@ class FieldDropoutVerifier:
     def run(self, extraction: ExtractionResult) -> dict:
         findings: list[ValidationFinding] = []
         n = len(extraction.plis) or 1
-        for field in _FIELDS_TO_TRACK:
-            populated = sum(1 for p in extraction.plis
-                            if getattr(p, field, None) not in (None, ""))
-            ratio = populated / n
+        for f in _FIELDS_TO_TRACK:
+            p = sum(1 for pli in extraction.plis
+                    if getattr(pli, f, None) not in (None, ""))
+            t = n
+            ratio = p / t
             if ratio < self.floor:
+                log.warning("field_dropout_warn", field=f, populated=p,
+                            total=t, ratio=round(ratio, 4))
                 findings.append(ValidationFinding(
                     check="field_dropout",
                     severity=ValidationSeverity.WARN,
-                    message=(f"{field!r} populated in {populated}/{n} PLIs "
+                    message=(f"{f!r} populated in {p}/{t} PLIs "
                             f"(ratio {ratio:.2f} < floor {self.floor})"),
-                    field=field,
+                    field=f,
                 ))
                 validator_findings_total.labels(check="field_dropout",
                                                severity="warn").inc()

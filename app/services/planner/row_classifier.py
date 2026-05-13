@@ -14,6 +14,9 @@ from openpyxl.utils import column_index_from_string
 from app.models.workbook import WorkbookCtx
 from app.models.artifacts import SheetSignals, RowSpec
 from app.enums.row_role import RowRole
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 
 def _norm(v: object) -> str:
@@ -127,4 +130,9 @@ def classify_rows(
 
         rows.append(RowSpec(idx=r, role=RowRole.BLANK))
 
+    anchors = sum(1 for r in rows if r.role.value == "anchor")
+    children = sum(1 for r in rows if r.role.value == "child")
+    totals = sum(1 for r in rows if r.role.value in ("total", "grand_total"))
+    log.info("rows_classified", sheet=sheet, anchors=anchors, children=children,
+             totals=totals, total_rows=len(rows))
     return rows

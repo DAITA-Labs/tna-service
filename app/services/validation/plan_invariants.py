@@ -7,6 +7,9 @@ from __future__ import annotations
 from app.models.artifacts import SheetPlan, ValidationFinding
 from app.enums.row_role import RowRole
 from app.enums.validation_severity import ValidationSeverity
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 
 def _e(check: str, msg: str) -> ValidationFinding:
@@ -68,4 +71,8 @@ def validate_invariants(plan: SheetPlan) -> list[ValidationFinding]:
             out.append(_w("sub_row_consistency",
                           f"group {gid} mixes sub_row_role set + unset"))
 
+    if out:
+        log.info("plan_invariants_findings", sheet=plan.sheet,
+                 error_count=sum(1 for f in out if f.severity == ValidationSeverity.ERROR),
+                 warn_count=sum(1 for f in out if f.severity == ValidationSeverity.WARN))
     return out

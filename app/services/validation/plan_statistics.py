@@ -9,6 +9,9 @@ from app.models.workbook import WorkbookCtx
 from app.models.artifacts import SheetPlan, ValidationFinding
 from app.enums.row_role import RowRole
 from app.enums.validation_severity import ValidationSeverity
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 
 def _w(check: str, msg: str) -> ValidationFinding:
@@ -76,4 +79,7 @@ def validate_statistics(ctx: WorkbookCtx, plan: SheetPlan) -> list[ValidationFin
             out.append(_w("date_band_density",
                           f"stage band '{band.name}' is only {dates}/{total} date-typed"))
 
+    if out:
+        log.info("plan_statistics_warns", sheet=plan.sheet, count=len(out),
+                 checks=[f.check for f in out])
     return out

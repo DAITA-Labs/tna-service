@@ -6,6 +6,9 @@ from datetime import date, datetime
 from openpyxl.utils import get_column_letter
 from app.models.workbook import WorkbookCtx
 from app.models.artifacts import SheetSignals
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 
 _IDENTITY_VOCAB = (
@@ -85,7 +88,7 @@ def survey_sheet(ctx: WorkbookCtx, sheet: str) -> SheetSignals:
         if seen >= 2 and date_count / seen >= 0.5:
             date_typed_cols.append(get_column_letter(c))
 
-    return SheetSignals(
+    signals = SheetSignals(
         sheet=sheet, max_row=max_row, max_col=max_col,
         merges=merges,
         identity_col_candidates=identity_col_candidates,
@@ -94,3 +97,8 @@ def survey_sheet(ctx: WorkbookCtx, sheet: str) -> SheetSignals:
         blank_run_gaps=blank_run_gaps,
         kv_label_hits=kv_label_hits,
     )
+    log.info("survey_complete", sheet=sheet, max_row=signals.max_row, max_col=signals.max_col,
+             merges=len(signals.merges), identity_candidates=signals.identity_col_candidates,
+             kv_hits=len(signals.kv_label_hits), blank_gaps=len(signals.blank_run_gaps),
+             date_cols=signals.date_typed_cols)
+    return signals

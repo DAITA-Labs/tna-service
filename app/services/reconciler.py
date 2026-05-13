@@ -8,6 +8,9 @@ from __future__ import annotations
 from app.models.extraction import ExtractionResult, Warning
 from app.models.artifacts import ValidationFindings, ValidationFinding
 from app.enums.validation_severity import ValidationSeverity
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 
 def _finding_to_warning(f: ValidationFinding) -> Warning:
@@ -44,4 +47,7 @@ def reconcile(workflow_out: ExtractionResult,
     for f in validation_out.findings:
         result.warnings.append(_finding_to_warning(f))
     result.extraction_confidence = aggregate_confidence(workflow_out, validation_out)
+    log.info("reconcile_complete", pli_count=len(result.plis),
+             warning_count=len(result.warnings),
+             confidence=result.extraction_confidence)
     return result

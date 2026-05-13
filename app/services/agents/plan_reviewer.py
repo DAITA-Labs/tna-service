@@ -12,6 +12,9 @@ from app.models.artifacts import PlanVerdict, SheetPlan, ValidationFinding
 from app.services.llm_provider import LLMProvider
 from app.repositories.workbook_tools._registry import TOOL_REGISTRY
 from app.core.prompt_loader import load_prompt
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 _PROMPT_DIR = Path(__file__).resolve().parents[2] / "prompts"
 
@@ -61,5 +64,6 @@ class PlanReviewer:
         result = self.runner.run(workbook_ctx,
                                  {"plan": plan, "findings": findings or []})
         if isinstance(result, AgentRunFailure):
+            log.warning("agent_fallback_used", agent="plan_reviewer")
             return {"verdict": PlanVerdict(verdict="looks_correct", confidence=0.0)}
         return {"verdict": result}

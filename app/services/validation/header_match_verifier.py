@@ -9,6 +9,9 @@ from app.models.artifacts import ValidationFinding, ValidationFindings
 from app.models.workbook import WorkbookCtx
 from app.enums.validation_severity import ValidationSeverity
 from app.core.telemetry import validator_findings_total
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 
 _VOCAB = {
@@ -31,15 +34,15 @@ class HeaderMatchVerifier:
         findings: list[ValidationFinding] = []
         seen: set[tuple] = set()
         for i, pli in enumerate(extraction.plis):
-            for field, addr in pli.source_cells.items():
-                if field not in _VOCAB or not pli.source_sheet:
+            for field, addr in pli.source.cells.items():
+                if field not in _VOCAB or not pli.source.sheet:
                     continue
                 col, _ = coordinate_from_string(addr)
-                key = (pli.source_sheet, col, field)
+                key = (pli.source.sheet, col, field)
                 if key in seen:
                     continue
                 seen.add(key)
-                ws = self.ctx.wb[pli.source_sheet]
+                ws = self.ctx.wb[pli.source.sheet]
                 col_idx = column_index_from_string(col)
                 header_text = " ".join(
                     str(ws.cell(row=r, column=col_idx).value or "").lower()
@@ -47,6 +50,8 @@ class HeaderMatchVerifier:
                 )
                 vocab = _VOCAB[field]
                 if not any(term in header_text for term in vocab):
+                    log.warning("header_match_warn", field=field, col=col,
+                                header=header_text[:40])
                     findings.append(ValidationFinding(
                         check="header_match",
                         severity=ValidationSeverity.WARN,

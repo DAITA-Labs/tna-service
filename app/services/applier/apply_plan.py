@@ -14,6 +14,9 @@ from app.models.artifacts import (
 )
 from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 
 _DATA_ROLES = {RowRole.ANCHOR, RowRole.CHILD}
@@ -213,10 +216,14 @@ def _apply_sheet_is_pli(ctx: WorkbookCtx, plan: SheetPlan,
 def apply_plan(ctx: WorkbookCtx, plan: SheetPlan,
                name_map: CanonicalNameMap) -> list[PLI]:
     """Dispatch on pli_mode. Pure function — no LLM calls."""
+    log.info("apply_plan_start", sheet=plan.sheet, pli_mode=plan.pli_mode.value)
     if plan.pli_mode is PliMode.ROW_PER_PLI:
-        return _apply_row_per_pli(ctx, plan, name_map)
-    if plan.pli_mode is PliMode.SECTION_PER_PLI:
-        return _apply_section_per_pli(ctx, plan, name_map)
-    if plan.pli_mode is PliMode.SHEET_IS_PLI:
-        return _apply_sheet_is_pli(ctx, plan, name_map)
-    raise ValueError(f"unknown pli_mode: {plan.pli_mode}")
+        result = _apply_row_per_pli(ctx, plan, name_map)
+    elif plan.pli_mode is PliMode.SECTION_PER_PLI:
+        result = _apply_section_per_pli(ctx, plan, name_map)
+    elif plan.pli_mode is PliMode.SHEET_IS_PLI:
+        result = _apply_sheet_is_pli(ctx, plan, name_map)
+    else:
+        raise ValueError(f"unknown pli_mode: {plan.pli_mode}")
+    log.info("apply_plan_complete", sheet=plan.sheet, pli_count=len(result))
+    return result

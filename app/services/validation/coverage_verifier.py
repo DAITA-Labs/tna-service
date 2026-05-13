@@ -11,6 +11,9 @@ from app.models.artifacts import (
 )
 from app.enums.validation_severity import ValidationSeverity
 from app.core.telemetry import validator_findings_total
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 
 @component
@@ -32,12 +35,15 @@ class CoverageVerifier:
             total_candidate_rows += (b.data_end_row - b.data_start_row + 1)
         if total_candidate_rows == 0:
             return {"findings": ValidationFindings(findings=findings)}
-        ratio = len(extraction.plis) / total_candidate_rows
+        pli_count = len(extraction.plis)
+        ratio = pli_count / total_candidate_rows
         if ratio < self.floor:
+            log.warning("coverage_warn", pli_count=pli_count,
+                        candidate_rows=total_candidate_rows, ratio=round(ratio, 4))
             findings.append(ValidationFinding(
                 check="coverage",
                 severity=ValidationSeverity.WARN,
-                message=(f"extracted {len(extraction.plis)} PLIs from "
+                message=(f"extracted {pli_count} PLIs from "
                         f"{total_candidate_rows} candidate rows "
                         f"(ratio {ratio:.2f} < floor {self.floor})"),
             ))

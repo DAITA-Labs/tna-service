@@ -12,6 +12,9 @@ from datetime import date, datetime
 from openpyxl.utils import get_column_letter
 from app.models.workbook import WorkbookCtx
 from app.models.artifacts import SheetSignals, StageBandSpec
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 
 _SUB_ROW_LABELS = {"plan": "plan", "action": "action",
@@ -119,4 +122,5 @@ def detect_stage_bands(
             layout_mode=layout_mode,
         ))
 
+    log.info("stage_bands_detected", sheet=sheet, count=len(bands))
     return bands

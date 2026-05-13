@@ -18,6 +18,9 @@ from app.services.planner.row_classifier import classify_rows
 from app.services.planner.kv_anchor_detector import detect_kv_anchors
 from app.services.planner.stage_band_detector import detect_stage_bands
 from app.services.planner.block_segmenter import segment_blocks
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 
 def _decide_pli_mode(signals: SheetSignals) -> PliMode:
@@ -97,11 +100,14 @@ class SheetRowPlanner:
 
     @component.output_types(plan=SheetPlan)
     def run(self, workbook_ctx: Any, sheet: str) -> dict:
+        log.info("planner_start", sheet=sheet)
         signals = survey_sheet(workbook_ctx, sheet)
         pli_mode = _decide_pli_mode(signals)
         identity_column = (
             _pick_identity_column(signals) if pli_mode is not PliMode.SHEET_IS_PLI else None
         )
+        log.info("planner_mode_decided", sheet=sheet,
+                 pli_mode=pli_mode.value, identity_column=identity_column)
 
         stage_bands = detect_stage_bands(workbook_ctx, sheet, signals)
         kv_anchors = detect_kv_anchors(workbook_ctx, sheet, signals)
@@ -144,4 +150,8 @@ class SheetRowPlanner:
             stage_scope=stage_scope,
             confidence=confidence,
         )
+        log.info("planner_complete", sheet=sheet, pli_mode=plan.pli_mode.value,
+                 rows=len(plan.rows), blocks=len(plan.pli_blocks),
+                 kv=len(plan.kv_anchors), bands=len(plan.stage_bands),
+                 confidence=plan.confidence)
         return {"plan": plan}

@@ -7,6 +7,9 @@ from pydantic import BaseModel, ConfigDict, Field
 from app.services.agents._base import AgentSpec, AgentRunner, AgentRunFailure
 from app.services.llm_provider import LLMProvider
 from app.core.prompt_loader import load_prompt
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 _PROMPT_DIR = Path(__file__).resolve().parents[2] / "prompts"
 
@@ -50,6 +53,7 @@ class SheetClassifier:
     def run(self, workbook_ctx, workbook_summary) -> dict:
         result = self.runner.run(workbook_ctx, {"workbook_summary": workbook_summary})
         if isinstance(result, AgentRunFailure):
+            log.warning("agent_fallback_used", agent="sheet_classifier")
             # Fallback: include all sheets — false positives are cheap.
             return {"relevant_sheets": list(workbook_summary.sheet_names)}
         return {"relevant_sheets": result.relevant_sheets}

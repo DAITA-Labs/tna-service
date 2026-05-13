@@ -67,12 +67,25 @@ def _plan_for_sheet(ctx, sheet: str, llm):
     with _phase("planner"):
         plan: SheetPlan = planner.run(workbook_ctx=ctx, sheet=sheet)["plan"]
 
+    log.info("plan_emitted",
+             sheet=sheet, pli_mode=plan.pli_mode.value,
+             confidence=plan.confidence,
+             anchor_count=len([r for r in plan.rows if r.role.value == "anchor"]),
+             block_count=len(plan.pli_blocks),
+             kv_count=len(plan.kv_anchors),
+             band_count=len(plan.stage_bands))
+
     with _phase("plan_validate"):
         findings_t1 = validate_invariants(plan)
         findings_t2 = validate_statistics(ctx, plan)
         findings = findings_t1 + findings_t2
         errors = [f for f in findings if f.severity == ValidationSeverity.ERROR]
         warns = [f for f in findings if f.severity == ValidationSeverity.WARN]
+
+    log.info("plan_validation_complete", sheet=sheet,
+             tier1_errors=sum(1 for f in findings_t1 if f.severity == ValidationSeverity.ERROR),
+             tier1_warns=sum(1 for f in findings_t1 if f.severity == ValidationSeverity.WARN),
+             tier2_warns=len(findings_t2))
 
     needs_reviewer = (
         bool(warns)
@@ -81,11 +94,14 @@ def _plan_for_sheet(ctx, sheet: str, llm):
     )
 
     if errors:
+        log.info("layout_hinter_invoked", sheet=sheet, identity_suggestion=None)
         hinter = LayoutHinter(llm=llm)
         signals = survey_sheet(ctx, sheet)
         hints: LayoutHints = hinter.run(
             workbook_ctx=ctx, sheet=sheet, signals=signals,
         )["hints"]
+        log.info("layout_hinter_invoked", sheet=sheet,
+                 identity_suggestion=hints.identity_column_suggestion)
         if hints.identity_column_suggestion:
             plan = plan.model_copy(update={"identity_column": hints.identity_column_suggestion})
         findings_t1 = validate_invariants(plan)
@@ -94,6 +110,8 @@ def _plan_for_sheet(ctx, sheet: str, llm):
             warnings.append(Warning(message=f"{f.check}: {f.message}", severity="warning"))
 
     if needs_reviewer:
+        log.info("plan_reviewer_invoked", sheet=sheet,
+                 reason="warnings" if warns else "low_confidence" if plan.confidence < _CONFIDENCE_GATE else "non_row_mode")
         with _phase("plan_reviewer"):
             reviewer = PlanReviewer(llm=llm)
             verdict: PlanVerdict = reviewer.run(
@@ -115,6 +133,10 @@ def _plan_for_sheet(ctx, sheet: str, llm):
         namer = FieldNamer(llm=llm)
         name_map: CanonicalNameMap = namer.run(workbook_ctx=ctx, plan=plan)["name_map"]
 
+    log.info("name_map_received", sheet=sheet,
+             field_count=len(name_map.field_labels),
+             stage_count=len(name_map.stage_names))
+
     return plan, name_map, warnings
 
 
@@ -123,18 +145,21 @@ def extract(workbook_path: Path | str, *, llm=None) -> ExtractionResult:
     ctx = register_workbook(workbook_path)
     llm = llm or AnthropicProvider.from_env()
 
+    log.info("extract_start", file=str(ctx.path))
     try:
         with _phase("sheet_classifier"):
             summary = TOOL_REGISTRY.get("workbook_summary")(ctx)
             sc = SheetClassifier(llm=llm)
             relevant = sc.run(workbook_ctx=ctx, workbook_summary=summary)["relevant_sheets"]
         if not relevant:
+            log.info("no_relevant_sheets", file=str(ctx.path))
             extractions_total.labels(status="empty").inc()
             return ExtractionResult(
                 plis=[], source_file=str(ctx.path),
                 warnings=[Warning(message="No relevant sheets identified", severity="warning")],
             )
 
+        log.info("relevant_sheets_selected", sheets=relevant, count=len(relevant))
         all_plis: list[PLI] = []
         all_warnings: list[Warning] = []
         format_detected: str | None = None
@@ -147,6 +172,7 @@ def extract(workbook_path: Path | str, *, llm=None) -> ExtractionResult:
             for pli in plis:
                 if not pli.source.sheet:
                     pli.source.sheet = sheet
+            log.info("plis_emitted", sheet=sheet, pli_count=len(plis))
             all_plis.extend(plis)
             if format_detected is None:
                 format_detected = plan.pli_mode.value
@@ -165,6 +191,8 @@ def extract(workbook_path: Path | str, *, llm=None) -> ExtractionResult:
         ))
         with _phase("reconciler"):
             final = reconcile(workflow_out=result, validation_out=all_findings)
+        log.info("extract_complete", file=ctx.path.name, total_plis=len(final.plis),
+                 warnings=len(final.warnings), format=final.format_detected)
         extraction_duration_seconds.labels(
             format_detected=final.format_detected or "unknown"
         ).observe(time.monotonic() - t0)

@@ -8,6 +8,9 @@ from app.models.artifacts import LayoutHints, SheetSignals
 from app.services.llm_provider import LLMProvider
 from app.repositories.workbook_tools._registry import TOOL_REGISTRY
 from app.core.prompt_loader import load_prompt
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 _PROMPT_DIR = Path(__file__).resolve().parents[2] / "prompts"
 
@@ -52,5 +55,6 @@ class LayoutHinter:
     def run(self, workbook_ctx: Any, sheet: str, signals: SheetSignals) -> dict:
         result = self.runner.run(workbook_ctx, {"sheet": sheet, "signals": signals})
         if isinstance(result, AgentRunFailure):
+            log.warning("agent_fallback_used", agent="layout_hinter")
             return {"hints": LayoutHints()}
         return {"hints": result}

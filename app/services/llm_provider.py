@@ -134,13 +134,17 @@ class AnthropicProvider:
         )
         llm_calls_total.labels(model=self.model, status="success").inc()
         usage = getattr(resp, "usage", None)
+        inp_tokens: int | None = None
+        out_tokens: int | None = None
         if usage is not None:
-            inp = getattr(usage, "input_tokens", None)
-            out = getattr(usage, "output_tokens", None)
-            if isinstance(inp, int):
-                agent_tokens_input.labels(agent=agent_name, model=self.model).inc(inp)
-            if isinstance(out, int):
-                agent_tokens_output.labels(agent=agent_name, model=self.model).inc(out)
+            inp_tokens = getattr(usage, "input_tokens", None)
+            out_tokens = getattr(usage, "output_tokens", None)
+            if isinstance(inp_tokens, int):
+                agent_tokens_input.labels(agent=agent_name, model=self.model).inc(inp_tokens)
+            if isinstance(out_tokens, int):
+                agent_tokens_output.labels(agent=agent_name, model=self.model).inc(out_tokens)
+        log.info("llm_call_complete", model=self.model, agent=agent_name,
+                 input_tokens=inp_tokens, output_tokens=out_tokens)
 
         for block in resp.content:
             if getattr(block, "type", None) == "tool_use" and block.name == tool_name:

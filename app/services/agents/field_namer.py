@@ -7,6 +7,9 @@ from app.services.agents._base import AgentSpec, AgentRunner, AgentRunFailure
 from app.models.artifacts import CanonicalNameMap, SheetPlan
 from app.services.llm_provider import LLMProvider
 from app.core.prompt_loader import load_prompt
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 _PROMPT_DIR = Path(__file__).resolve().parents[2] / "prompts"
 
@@ -55,5 +58,6 @@ class FieldNamer:
     def run(self, workbook_ctx: Any, plan: SheetPlan) -> dict:
         result = self.runner.run(workbook_ctx, {"plan": plan})
         if isinstance(result, AgentRunFailure):
+            log.warning("agent_fallback_used", agent="field_namer")
             return {"name_map": CanonicalNameMap()}
         return {"name_map": result}

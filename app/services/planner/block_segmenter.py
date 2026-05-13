@@ -7,6 +7,9 @@ from __future__ import annotations
 from app.models.artifacts import RowSpec, KVAnchor, PliBlock, StageBandSpec
 from app.enums.row_role import RowRole
 from openpyxl.utils.cell import coordinate_from_string
+from app.core.logs import get_logger
+
+log = get_logger(__name__)
 
 
 def _row_of(addr: str) -> int:
@@ -51,4 +54,5 @@ def segment_blocks(
             identity=block_kvs, stage_bands=block_bands,
         ))
         block_id += 1
+    log.info("blocks_segmented", count=len(blocks))
     return blocks
