@@ -54,6 +54,10 @@ class Stage(BaseModel):
     section: str | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)
     confidence: float = Field(ge=0.0, le=1.0, default=1.0)
+    # Per-field A1 traceability for this stage, e.g.
+    # {"planned_date": "C10", "actual": "C11", "qty": "AD4"}.
+    # `planned_date` is always recorded; sub_column keys mirror Stage.metadata keys.
+    source_cells: dict[str, str] = Field(default_factory=dict)
 
 
 class PLI(BaseModel):

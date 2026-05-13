@@ -12,7 +12,7 @@ dropped — the orchestrator calls this before invoking the field applier.
 from __future__ import annotations
 import logging
 from typing import Any
-from openpyxl.utils import column_index_from_string
+from openpyxl.utils import column_index_from_string, get_column_letter
 from pydantic import ValidationError
 from app.models.extraction import Stage
 from app.models.workbook import WorkbookCtx
@@ -66,36 +66,43 @@ def _build_stage_tolerantly(values: dict) -> Stage:
     return Stage(name=values.get("name", "<unnamed>"))
 
 
-def _read_cell(ws, row: int, col_idx: int, propagate: bool) -> Any:
+def _read_cell(ws, row: int, col_idx: int, propagate: bool) -> tuple[Any, str]:
+    """Return (value, source A1 address) — with merge propagation when asked."""
     if propagate:
         for mr in ws.merged_cells.ranges:
             if (mr.min_row <= row <= mr.max_row
                     and mr.min_col <= col_idx <= mr.max_col):
-                return ws.cell(row=mr.min_row, column=mr.min_col).value
-    return ws.cell(row=row, column=col_idx).value
+                addr = f"{get_column_letter(mr.min_col)}{mr.min_row}"
+                return ws.cell(row=mr.min_row, column=mr.min_col).value, addr
+    return (ws.cell(row=row, column=col_idx).value,
+            f"{get_column_letter(col_idx)}{row}")
 
 
 def _read_stage_wide(ws, band: StageBand, sc: StageColumn,
                      pli_row: int, propagate: bool) -> Stage:
     primary_idx = column_index_from_string(sc.primary_col)
-    planned = _read_cell(ws, pli_row, primary_idx, propagate)
+    planned, planned_addr = _read_cell(ws, pli_row, primary_idx, propagate)
     metadata: dict[str, Any] = {}
+    source_cells: dict[str, str] = {"planned_date": planned_addr}
     for key, col_letter in sc.sub_columns.items():
-        v = _read_cell(ws, pli_row, column_index_from_string(col_letter), propagate)
+        v, addr = _read_cell(ws, pli_row, column_index_from_string(col_letter), propagate)
         if v is not None:
             metadata[key] = v
+            source_cells[key] = addr
     return _build_stage_tolerantly(dict(
         name=sc.name, planned_date=planned, section=band.section_name,
-        metadata=metadata, confidence=band.confidence,
+        metadata=metadata, source_cells=source_cells, confidence=band.confidence,
     ))
 
 
 def _read_stage_tall(ws, band: StageBand, sc: StageColumn) -> Stage:
     primary_idx = column_index_from_string(sc.primary_col)
+    primary_letter = get_column_letter(primary_idx)
     plan_row = (band.sub_rows.get("Plan") or band.sub_rows.get("plan")
                 or band.name_row + 1)
     planned = ws.cell(row=plan_row, column=primary_idx).value
     metadata: dict[str, Any] = {}
+    source_cells: dict[str, str] = {"planned_date": f"{primary_letter}{plan_row}"}
     for key, row_idx in band.sub_rows.items():
         if key.lower() == "plan":
             continue
@@ -103,9 +110,10 @@ def _read_stage_tall(ws, band: StageBand, sc: StageColumn) -> Stage:
         if v is not None:
             clean = key.lower().replace(" ", "_").replace("if_any", "").rstrip("_")
             metadata[clean] = v
+            source_cells[clean] = f"{primary_letter}{row_idx}"
     return _build_stage_tolerantly(dict(
         name=sc.name, planned_date=planned, section=band.section_name,
-        metadata=metadata, confidence=band.confidence,
+        metadata=metadata, source_cells=source_cells, confidence=band.confidence,
     ))
 
 

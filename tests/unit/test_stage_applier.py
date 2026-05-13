@@ -40,6 +40,10 @@ def test_apply_wide_sub_columns(tmp_path):
     assert out[0][0].name == "Trims Inhouse"
     assert out[0][0].planned_date == datetime(2026, 3, 25).date()
     assert out[0][0].metadata["actual"] == datetime(2026, 3, 26)
+    # source_cells records where each stage value came from for downstream
+    # verification (parallel to PLI.source_cells).
+    assert out[0][0].source_cells["planned_date"] == "R4"
+    assert out[0][0].source_cells["actual"] == "S4"
 
 
 def test_strip_stage_columns_drops_overlap():
