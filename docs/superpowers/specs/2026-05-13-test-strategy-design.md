@@ -1,7 +1,7 @@
 # Test strategy — design
 
 **Date:** 2026-05-13
-**Status:** Approved, ready for implementation plan
+**Status:** Implemented
 
 ## Problem
 
