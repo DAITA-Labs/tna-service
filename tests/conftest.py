@@ -2,6 +2,9 @@
 from pathlib import Path
 import pytest
 
+# Re-export the fixture loader so any tier can use @fixture_case.
+from tests.fixtures.conftest import fixture  # noqa: F401
+
 
 # Dataset ships inside tna-service/ so the microservice is self-contained.
 # tests/conftest.py → tests → tna-service → dataset
