@@ -21,11 +21,28 @@ from app.core.telemetry import (
     agent_tokens_output,
     llm_calls_total,
 )
-from app.core.tracing import get_tracer
 
 T = TypeVar("T", bound=BaseModel)
 log = get_logger(__name__)
-_tracer = get_tracer(__name__)
+
+
+def _get_tracer():
+    try:
+        from app.core.tracing import get_tracer
+        return get_tracer(__name__)
+    except Exception:
+        return _NoopTracer()
+
+
+class _NoopSpan:
+    def set_attribute(self, *a, **kw): pass
+    def __enter__(self): return self
+    def __exit__(self, *a): pass
+
+
+class _NoopTracer:
+    def start_as_current_span(self, name, **kw):
+        return _NoopSpan()
 
 
 class MissingAPIKey(RuntimeError):
@@ -118,7 +135,7 @@ class AnthropicProvider:
         log.debug("llm_call_start", model=self.model, tool=tool_name,
                   system_chars=len(system), user_chars=len(user))
         t0 = time.monotonic()
-        with _tracer.start_as_current_span("llm.complete") as span:
+        with _get_tracer().start_as_current_span("llm.complete") as span:
             span.set_attribute("llm.model", self.model)
             span.set_attribute("llm.agent", agent_name)
             try:

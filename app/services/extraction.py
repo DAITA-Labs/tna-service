@@ -43,12 +43,21 @@ import app.repositories.workbook_tools.search  # noqa: F401
 
 log = get_logger(__name__)
 
+from app.services.llm_provider import _NoopTracer
+
+
+def _get_tracer():
+    try:
+        from app.core.tracing import get_tracer
+        return get_tracer(__name__)
+    except Exception:
+        return _NoopTracer()
+
 
 @contextlib.contextmanager
 def _phase(name: str, **attrs):
     """Time a phase + open an OTel span + bind phase to log context."""
-    from app.core.tracing import get_tracer
-    tracer = get_tracer(__name__)
+    tracer = _get_tracer()
     structlog.contextvars.bind_contextvars(phase=name)
     t0 = time.monotonic()
     with tracer.start_as_current_span(f"phase.{name}") as span:
@@ -147,8 +156,7 @@ def _plan_for_sheet(ctx, sheet: str, llm):
 
 
 def extract(workbook_path: Path | str, *, llm=None) -> ExtractionResult:
-    from app.core.tracing import get_tracer
-    tracer = get_tracer(__name__)
+    tracer = _get_tracer()
     t0 = time.monotonic()
     ctx = register_workbook(workbook_path)
     llm = llm or AnthropicProvider.from_env()
