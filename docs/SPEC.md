@@ -2,8 +2,8 @@
 
 > **Spec 1 of 2.** Covers the brain of a new microservice (`tna-service/`) that extracts structured PLI/Stage JSON from any TNA xlsx, plus the eval framework that gates every change to it. **Spec 2** (deferred) covers the service surface (FastAPI shape, the xlsx-upload UI with top/bottom JSON view, expanded ops tooling).
 
-**Date:** 2026-05-12
-**Status:** Draft for review
+**Date:** 2026-05-13
+**Status:** Updated — SheetRowPlanner pipeline (supersedes 2026-05-12 draft)
 **Supersedes:** Tactical iteration on `tna_parser/` (kept alive as fallback during V1 rollout)
 
 ---
@@ -21,69 +21,67 @@ Extract every PLI and its stages from any TNA xlsx — regardless of supplier fo
 ```
                               ┌──────────────────┐
                               │   Orchestrator   │
-                              │ (Haystack Pipe)  │
                               └────────┬─────────┘
                                        │
-                          ┌────────────┴────────────┐
-                          ▼                         ▼
-                  ┌───────────────┐         ┌───────────────┐
-                  │   Workflow    │         │  Validation   │
-                  │   (DAG)       │         │  (DAG)        │
-                  ├───────────────┤         ├───────────────┤
-                  │ SheetClassifr │         │ SourceCellVer │
-                  │ LayoutFingerp │         │ HeaderMatchVer│
-                  │ BoundaryFindr │         │ CoverageVer   │
-                  │ IdentityLoc.  │         │ DropoutVer    │
-                  │ QtyDateLocatr │         │               │
-                  │ StageLocator  │         │ (deterministic)│
-                  │ Applier       │         │               │
-                  └───────┬───────┘         └───────┬───────┘
-                          │                         │
-                          └────────────┬────────────┘
-                                       ▼
-                                ┌──────────────┐
-                                │  Reconciler  │
-                                │ (lenient v1) │
-                                └──────┬───────┘
-                                       ▼
-                               ExtractionResult
-                              + Warnings
-                              + per-PLI source_cells
+                    ┌──────────────────┼──────────────────┐
+                    ▼                  ▼                   ▼
+           ┌──────────────┐   ┌───────────────┐   ┌───────────────┐
+           │  Per-sheet   │   │  Per-sheet    │   │  Workbook-    │
+           │  Planning    │   │  Extraction   │   │  level valid. │
+           ├──────────────┤   ├───────────────┤   ├───────────────┤
+           │ SheetSurveyor│   │ FieldNamer    │   │ SourceCellVer │
+           │ SheetRowPlanr│   │ apply_plan    │   │ HeaderMatchVer│
+           │ validate_plan│   │ (100% det,    │   │ CoverageVer   │
+           │ LayoutHinter │   │  LLM-free)    │   │ DropoutVer    │
+           │ (cond.)      │   │               │   │               │
+           │ PlanReviewer │   │               │   │ (deterministic)│
+           │ (cond.)      │   │               │   │               │
+           └──────┬───────┘   └───────┬───────┘   └───────┬───────┘
+                  │                   │                    │
+                  └───────────────────┼────────────────────┘
+                                      ▼
+                               ┌──────────────┐
+                               │  Reconciler  │
+                               │ (lenient v1) │
+                               └──────┬───────┘
+                                      ▼
+                              ExtractionResult
+                             + Warnings
+                             + per-PLI source_cells
 ```
 
-The two arms run in parallel against the same workbook. **Workflow** induces locations and applies them. **Validation** independently asks "does this extraction match what the workbook actually says?" — all deterministic in V1. The **Reconciler** merges the two: workflow output passes through, validator findings attach as warnings. Nothing is auto-dropped in V1 — strict mode lives behind a future config flag.
+The pipeline separates planning from extraction. **SheetRowPlanner** (deterministic) emits a `SheetPlan` artifact describing the full row/column structure; optional LLM agents (`LayoutHinter`, `PlanReviewer`) review and correct the plan when signals are ambiguous. **FieldNamer** (LLM) maps header labels to canonical field names. **apply_plan** (100% deterministic, zero LLM calls) resolves PLIs from the plan. **4 extraction validators** run workbook-level after all sheets are aggregated. The **Reconciler** merges everything. Nothing is auto-dropped in V1 — strict mode lives behind a future config flag.
 
 ### 2.2 Orchestration phases (detailed)
 
-The orchestrator drives seven phases. Each phase has a domain-anchored purpose; the failure modes we've already seen in the dataset shape what each phase emits and how it falls back.
+The orchestrator drives eight phases (0–7). Each phase has a domain-anchored purpose; the per-sheet planning loop (phases 2–5) runs per relevant sheet.
 
-**Phase 0 — Ingest** *(deterministic)*. Open xlsx via openpyxl into a cached `WorkbookCtx`. Compute initial workbook summary (sheet names, dims, file size).
+**Phase 0 — Workbook summary** *(deterministic tool)*. Open xlsx via openpyxl into a cached `WorkbookCtx`. `workbook_summary()` computes sheet names, dims, and file size.
 
-**Phase 1 — Sheet Classification** *(LLM, parallel across sheets)*. For each sheet, `SheetClassifier` decides "TNA-relevant or noise?". Catches GUESS-style summary/lab/log sheets. Output: `relevant_sheets: list[str]`.
+**Phase 1 — Sheet Classification** *(LLM)*. `SheetClassifier` decides "TNA-relevant or noise?" for each sheet. Catches GUESS-style summary/lab/log sheets. Output: `relevant_sheets: list[str]`.
 
-**Fast-path branch.** After Phase 2 on the first relevant sheet, if the fingerprint signals `sheets_appear_parallel`, the orchestrator runs `BoundaryFinder` to confirm pattern = `one_sheet_per_pli`. If so, Phases 2–5 run **once** on the representative sheet and the Applier iterates `sheet_iter` (cross-sheet handled inside the applier). This is the structural fix for the NEW.xlsx 5×5=25-PLI duplication class — no post-hoc break needed.
+**Per-sheet loop (Phases 2–5):**
 
-**Per-sheet loop (or once, if one_sheet_per_pli):**
+**Phase 2 — Survey** *(deterministic)*. `SheetSurveyor` reads merged regions, sample rows, and structure signals, emitting `SheetSignals` — a compact structured summary of the sheet's observable features (merge map, header candidates, non-empty row density, vocabulary overlap counts). No LLM call.
 
-**Phase 2 — Fingerprint** *(LLM, per sheet)*. `LayoutFingerprinter` emits `StructuralFingerprint` (9 booleans + `stage_layout_mode` + `sample_evidence`). Retry once with error context on schema failure. Hard fail → halt this sheet with a warning.
+**Phase 3 — Plan** *(deterministic core + conditional LLM review)*. Three sub-phases:
 
-**Phase 3 — Boundary** *(LLM, per sheet, depends on fingerprint)*. `BoundaryFinder` emits `PLIBoundaries` (pattern ∈ {`one_row_per_pli`, `one_sheet_per_pli`, `vertical_merge`, `data_then_total`} + data range + grouping columns + optional total-row indicator). The agent sees the **full** merged-regions list (50-cap), a top-10 peek, and mid+last sample rows. Domain rule: when multiple merge groups exist in the grouping column, `data_end_row` spans **all** of them (this is the CHRISTIAN BERG fix). Retry 1× with error context; on hard fail → default `one_row_per_pli` boundary + warn.
+- **3 — `SheetRowPlanner`** *(deterministic)*: consumes `SheetSignals` and emits a draft `SheetPlan` — the unified artifact describing every row's role, PLI organization mode, stage band geometry, and KV anchors. The planner dispatches across three orthogonal axes: `pli_mode` ∈ {`ROW_PER_PLI`, `SECTION_PER_PLI`, `SHEET_IS_PLI`}, `stage_scope` ∈ {`SHEET_LEVEL`, `SECTION_LOCAL`, `PLI_LOCAL`}, and per-row `sub_row_role` ∈ {`PLAN`, `ACTION`, `ACTUAL`, `DEVIATION`}.
 
-**Phase 4 — Locators** *(LLM, parallel within sheet — 3-wide)*. All three locators consume `PLIBoundaries` only; they're independent. Run in parallel:
-- `IdentityLocator` — io_number, style_code, color_code, fabric_code. Header-text rules (header text wins, not column position; "Buyer Po No" → io_number; corrupted headers don't shift alignment). This is the MOPD FW26 fix.
-- `QuantityDateLocator` — quantity, delivery_date. For `vertical_merge`, sees merge-witness rows so it can pick the split (per-PLI) quantity column over the aggregate column. This is the Compass Pro multi-color fix.
-- `StageLocator` — `StageBandSet` with sub_columns canonicalization (`L/D send` + `L/D appl` → one `L/D` stage), multi-band emission (Pre-Production / Fabric / Production for 63261-style).
+- **3a — `validate_plan` (Tier 1 + Tier 2)** *(deterministic, mandatory)*: Tier 1 checks structural invariants (reference integrity, row uniqueness, header contiguity, block non-overlap, coverage partition, sub-row consistency). Tier 2 checks statistical sanity (sequence match, total arithmetic, date band density, KV anchor adjacency, PLI count sanity, identity column coverage, vocabulary overlap). Errors trigger re-plan with hints; warnings surface to Tier 3.
 
-Field/Stage maps merge and metadata is **deduplicated** against stage sub_columns (so `Sewing Qty` doesn't appear in both `Stage.metadata.qty` AND `PLI.metadata.sewing_qty`). Per-agent retry 1×; partial failure → empty FieldMap part → Applier handles gracefully.
+- **3b — `LayoutHinter`** *(LLM, conditional)*: fires only when the planner signals ambiguous layout regions. Consumes `SheetSignals` + ambiguity markers; emits `LayoutHints` (mode suggestion + rationale). Input to a re-plan pass if needed.
 
-**Phase 5 — Apply** *(deterministic)*. Pattern-dispatched via registry (`one_row_per_pli` → iterate `[start..end]`; `data_then_total` → iterate + drop indicator-matching rows; `vertical_merge` → iterate all rows + propagate merge anchors; `one_sheet_per_pli` → iterate `sheet_iter`, cross-sheet inside the applier).
+- **3c — `PlanReviewer`** *(LLM judge, conditional)*: fires when Tier 1/2 produced warnings, `plan.confidence` < 0.85, or `pli_mode ∈ {SECTION_PER_PLI, SHEET_IS_PLI}`. Receives the plan summary + 3-5 sample rows + Tier 2 warnings; emits `PlanVerdict` (`looks_correct` | `needs_fix`). If `needs_fix`, row corrections are applied and the plan re-validates. Det signal wins on disagreement — reviewer is advisory.
 
-Pre-loop: collect `header_values_above_data` per canonical-field column (this is the NORTHERN REFLECTIONS fix for stacked sub-tables). Per row: read fields (with merge propagation when `vertical_merge`); if any field value equals a known header label → strip identity; construct PLI tolerantly (drop fields that fail `FlexibleDate`). Filter: `is_real_pli` (canonical identity required). Stages applied against the same row list with merge propagation. Emit `source_cells: {field → A1 address}` on every PLI.
+**Phase 4 — Field naming** *(LLM)*. `FieldNamer` receives the `SheetPlan`'s header labels and stage column names; emits `CanonicalNameMap` mapping raw labels to canonical field names (io_number, style_code, etc.). One LLM call per sheet; no row iteration.
 
-**Phase 6 — Validation** *(deterministic, 4 checks in parallel)*. Once all sheets are aggregated:
+**Phase 5 — Apply** *(deterministic, 100% LLM-free)*. `apply_plan(ctx, plan, name_map)` resolves every PLI from `SheetPlan + CanonicalNameMap`. Dispatches on `pli_mode`, `stage_scope`, and `RowSpec.role`/`sub_row_role` — no string-keyed heuristics, no supplier-name logic. If a plan reference is missing in the workbook, raises a typed error (orchestrator logs + emits Warning). Emits `source_cells: {field → A1 address}` on every PLI. A static analysis check enforces that `apply_plan` and its callees do not import `agents` or `llm_provider`.
+
+**Phase 6 — Extraction Validation** *(deterministic, 4 checks in parallel)*. After all sheets are aggregated:
 - `SourceCellVerifier` — for each PLI, does the cell at `source_cells[field]` still contain the extracted value?
 - `HeaderMatchVerifier` — for each canonical field's source column, does the header text contain canonical-field vocabulary?
-- `CoverageVerifier` — extracted PLI count vs candidate-row count in the boundary range; flags below 80% (this would have caught MAIN FALL KIDS #1's 80 → 2 silent loss).
+- `CoverageVerifier` — extracted PLI count vs candidate-row count; flags below 80%.
 - `FieldDropoutVerifier` — canonical fields populated in <50% of PLIs.
 
 Output: `list[ValidationFinding]` with severity `info | warn`.
@@ -95,14 +93,14 @@ Output: `list[ValidationFinding]` with severity `info | warn`.
 | # | Decision | Locked choice | Rationale |
 |---|---|---|---|
 | D1 | Per-sheet parallelism in Phases 2–5 | **Sequential V1**, max-concurrency knob deferred | Most labeled files are 1–3 sheets; Anthropic rate-limit risk; simpler error handling |
-| D2 | Within-sheet locator parallelism | **All 3 locators in parallel** | All three consume `PLIBoundaries` only; independent outputs; ~3× faster Phase 4 |
-| D3 | Fast-path for `one_sheet_per_pli` | **Yes, branch after fingerprint** when `sheets_appear_parallel=True` | Eliminates NEW.xlsx duplication class structurally |
-| D4 | Validation timing | **After all sheets aggregated** (Phase 6) | Cross-sheet context available to verifiers; simpler than per-sheet validation merge |
-| D5 | Retry policy | **1 retry with error context**, uniform across LLM agents | DKN session showed retry-with-context fixes Anthropic's JSON-as-string artifact reliably |
-| D6 | Agent failure handling | **Tiered**: Fingerprinter fail → halt sheet; Boundary fail → default + warn; Locator fail → empty + warn; Applier fail → never (log if it does) | Matches `tna_parser/pipeline.py` patterns; partial output is more useful than no output |
-| D7 | Adaptive routing on fingerprint | **No skip-list V1** — all 6 workflow agents always run | Today's agents are universal; skip-optimisation deferred until eval shows waste |
+| D2 | LLM responsibility split | **LLM does vocabulary (FieldNamer) and judgment (PlanReviewer); det does row arithmetic (SheetRowPlanner)** | Row arithmetic is where LLMs fail; vocabulary mapping is where they excel |
+| D3 | `apply_plan` determinism | **Zero LLM calls in apply_plan, enforced by static analysis test** | Guarantees identical output on every run for same SheetPlan; debugging isolated to planning phase |
+| D4 | Validation timing for extraction validators | **After all sheets aggregated** (Phase 6) | Cross-sheet context available to verifiers; simpler than per-sheet validation merge |
+| D5 | Retry policy | **1 retry with error context**, uniform across LLM agents | Retry-with-context fixes JSON-as-string artifacts reliably |
+| D6 | Plan validation tiers | **Tier 1 (structural) + Tier 2 (statistical) mandatory det; Tier 3 (PlanReviewer) conditional LLM** | Det catches the most common planning errors fast; LLM reviewer fires only when there's real ambiguity |
+| D7 | `PlanReviewer` firing condition | **Confidence < 0.85 OR Tier 1/2 warnings OR rare pli_mode** | Keeps median case at 1 LLM call per sheet (FieldNamer only); reviewer adds a second call only when warranted |
 | D8 | Cross-sheet PLI aggregation | **Concatenate**, preserve `source_sheet` on every PLI, no dedup | Different sheets genuinely hold different PLIs (GUESS master files); dedup would mask data |
-| D9 | Phase 5 determinism gates | **Both** `is_real_pli` AND repeat-header detection | Each catches a different class of false-PLI (NORTHERN REFLECTIONS + totals-row) |
+| D9 | SheetPlan 3-axis design | **pli_mode × stage_scope × sub_row_role are orthogonal** | Every observed layout family is a point in this space; new families add rules, not new enum cases |
 | D10 | Telemetry granularity | **Per-phase + per-agent histograms; per-validator counters; per-file gauges** (PLI count, retry count, cost) | Lets us correlate prompt changes to specific agent/phase behavior in Grafana |
 
 These ten are locked by review; revisiting any of them requires an ADR.
@@ -113,22 +111,22 @@ This is the headline NFR. Every axis a new TNA family can differ along has a ded
 
 | New thing arrives | What you change | What you do NOT touch |
 |---|---|---|
-| New layout shape (e.g. `horizontal_merge`, `multi_section`) | Add entry to `BoundaryPattern` enum + one handler in `applier/patterns/<name>.py` (registry-dispatched) | All agents, validators, eval, orchestrator |
-| New canonical field on `PLI` | Add Pydantic field + one line in `IdentityLocator` or new sibling locator agent | All existing extraction; eval auto-picks the field up if labels include it |
-| New non-PLI row pattern | Add a deterministic check in `agents/validation/` | Workflow agents |
-| New supplier header vocabulary | Add term to a data-only vocab table (not code) | All agents |
-| New tool | One `@tool`-decorated function in `tools/` | Agents that don't need it |
-| New agent | One file in `agents/workflow/` or `agents/validation/` + one `connect()` line in pipeline YAML | All other agents; orchestrator code |
+| New layout shape (e.g. diagonal KV, nested multi-section) | Add rules in `planner/row_classifier.py` or `planner/block_segmenter.py`; add `RowSpec.role` enum value if needed | LLM agents, validators, eval, orchestrator, `apply_plan` dispatch (add one branch) |
+| New canonical field on `PLI` | Add Pydantic field; add vocabulary to `FieldNamer` prompt | All existing extraction; eval auto-picks the field up if labels include it |
+| New non-PLI row pattern | Add a `RowSpec.role` value + detection rule in `row_classifier`; add branch in `apply_plan` | All other roles |
+| New supplier header vocabulary | Add term to FieldNamer prompt's vocab section (data-only) | Planner, applier, all other agents |
+| New tool | One `@tool`-decorated function in `workbook_tools/` | All existing components |
+| New extraction validator | One file in `validation/` | Workflow pipeline; other validators |
 | New labeled file with no rules changed | Drop JSON in `dataset/extracted/` | Anything else |
 
 A PR that touches more than two columns above gets a yellow flag in code review.
 
 **Enforcement primitives:**
-- Pattern dispatch via registry (decorator-based)
-- Haystack Pipelines defined in YAML, not Python `if` chains
-- `tools/` are pure functions, `@tool`-registered
+- `apply_plan` dispatches on `pli_mode`, `stage_scope`, `RowSpec.role`, `sub_row_role` enums — no string-keyed logic
+- `tools/` are pure functions, `@tool`-registered into a process-wide `TOOL_REGISTRY`; det components and LLM agents share the same registry
 - Pydantic models use `extra="ignore"` so additive schema changes don't break old labels
 - Eval runner discovers labeled files at runtime
+- Static analysis test enforces the LLM-free boundary around `apply_plan`
 
 ## 4. Directory layout
 
@@ -136,7 +134,7 @@ New microservice at `F:\DAITA\ARENA\TNA\tna-service\` (greenfield — `tna_parse
 
 ```
 tna-service/
-├── pyproject.toml              uv-managed; haystack-ai, fastapi, pydantic, anthropic, openpyxl,
+├── pyproject.toml              uv-managed; fastapi, pydantic, anthropic, openpyxl,
 │                               pydantic-settings, structlog, prometheus-client, starlette-prometheus
 ├── Makefile                    make eval / test / serve / build / lint / fmt
 ├── Dockerfile
@@ -144,81 +142,71 @@ tna-service/
 ├── .env.example                ANTHROPIC_API_KEY, ANTHROPIC_MODEL, APP_ENV, LOG_LEVEL, ...
 ├── .python-version
 │
-├── src/tna_service/
-│   ├── config/
-│   │   └── settings.py         pydantic-settings; env-layered .env.{APP_ENV}.local > .env.{APP_ENV} > .env
+├── app/
+│   ├── core/                   cross-cutting: logging, telemetry, prompt loader
 │   │
-│   ├── core/                   pure domain — no I/O, no LLM
-│   │   ├── models.py           PLI, Stage, ExtractionResult, Warning
+│   ├── enums/                  PliMode, RowRole, SubRowRole, StageScope, StageLayoutMode
+│   │
+│   ├── models/
+│   │   ├── extraction.py       PLI, Stage, ExtractionResult, Source (unchanged output schema)
 │   │   ├── workbook.py         WorkbookCtx, Cell, MergedRegion
-│   │   └── artifacts.py        bridge schemas — FieldMap, FieldLocation,
-│   │                           PLIBoundaries, StageBandSet, ValidationFindings
+│   │   └── artifacts.py        SheetSignals, RowSpec, KVAnchor, StageBandSpec, PliBlock,
+│   │                           SheetPlan, CanonicalNameMap, LayoutHints, PlanVerdict,
+│   │                           ValidationFindings
 │   │
-│   ├── tools/                  Haystack-compatible tool functions, grouped by purpose
-│   │   ├── _registry.py        @tool decorator + registry
-│   │   ├── survey.py           list_sheets, workbook_summary
-│   │   ├── bulk_read.py        peek_sheet, sample_rows, read_range
-│   │   ├── targeted.py         read_row, read_relative, get_cell_at
-│   │   ├── structure.py        get_merged_regions, count_non_empty_rows_in_column
-│   │   └── search.py           find_value
-│   │
-│   ├── agents/
-│   │   ├── _base.py            AgentSpec, RetryPolicy, shared types
-│   │   ├── prompts/            all prompts as .md, loaded by helpers
-│   │   │   ├── workflow/       sheet_classifier.md, layout_fingerprinter.md, boundary_finder.md,
-│   │   │   │                   identity_locator.md, quantity_date_locator.md, stage_locator.md
-│   │   │   └── _shared.md      glossary + faithful-extraction principles
-│   │   ├── workflow/
-│   │   │   ├── sheet_classifier.py        TNA-relevant vs noise
-│   │   │   ├── layout_fingerprinter.py    StructuralFingerprint
-│   │   │   ├── boundary_finder.py         PLIBoundaries (pattern + range/segments)
-│   │   │   ├── identity_locator.py        io_number, style_code, color_code, fabric_code
-│   │   │   ├── quantity_date_locator.py   quantity, delivery_date
-│   │   │   └── stage_locator.py           StageBandSet
-│   │   └── validation/         all deterministic in V1
-│   │       ├── source_cell_verifier.py    cell at source_cells[field] still contains the value
-│   │       ├── header_match_verifier.py   column header contains canonical-field-related text
-│   │       ├── coverage_verifier.py       PLI count vs row count in boundary; flags low coverage
-│   │       └── field_dropout_verifier.py  <50% population for a canonical field
-│   │
-│   ├── pipelines/
-│   │   ├── workflow.yaml       DAG: SheetClassifier → LayoutFingerprinter → BoundaryFinder →
-│   │   │                       (IdentityLocator ‖ QuantityDateLocator ‖ StageLocator) → Applier
-│   │   ├── validation.yaml     DAG: 4 verifiers run in parallel on the workflow output
-│   │   └── orchestrator.py     composes both arms; calls Reconciler
-│   │
-│   ├── reconciler/
-│   │   └── reconciler.py       merges workflow + validation outputs (lenient in V1)
-│   │
-│   ├── applier/
-│   │   ├── _registry.py        BoundaryPattern → handler registry
-│   │   ├── field_applier.py    apply_field_map (deterministic)
-│   │   ├── stage_applier.py    apply_stage_band_set (deterministic)
-│   │   └── patterns/           one file per pattern handler
-│   │       ├── one_row_per_pli.py
-│   │       ├── one_sheet_per_pli.py
-│   │       ├── vertical_merge.py
-│   │       └── data_then_total.py
+│   ├── repositories/
+│   │   ├── workbook_repo.py    WorkbookCtx lifecycle
+│   │   └── workbook_tools/     10 @tool functions + TOOL_REGISTRY
+│   │       ├── _registry.py    @tool decorator + process-wide registry
+│   │       ├── survey.py       list_sheets, workbook_summary
+│   │       ├── bulk_read.py    peek_sheet, sample_rows, read_range
+│   │       ├── targeted.py     read_row, read_relative, get_cell_at
+│   │       ├── structure.py    get_merged_regions, count_non_empty_rows_in_column
+│   │       └── search.py       find_value
 │   │
 │   ├── services/
-│   │   └── llm_provider.py     LLMProvider Protocol + AnthropicProvider (single-provider V1)
+│   │   ├── llm_provider.py     LLMProvider Protocol + AnthropicProvider
+│   │   ├── agents/
+│   │   │   ├── _base.py        AgentSpec, AgentRunner, RetryPolicy
+│   │   │   ├── sheet_classifier.py   TNA-relevant vs noise → relevant_sheets[]
+│   │   │   ├── layout_hinter.py      (NEW) conditional layout hint agent → LayoutHints
+│   │   │   ├── plan_reviewer.py      (NEW) LLM-as-judge → PlanVerdict
+│   │   │   └── field_namer.py        (NEW) header labels → CanonicalNameMap
+│   │   ├── planner/            (NEW subsystem — all deterministic)
+│   │   │   ├── surveyor.py          SheetSurveyor → SheetSignals
+│   │   │   ├── row_classifier.py    classify each row → RowSpec.role
+│   │   │   ├── block_segmenter.py   detect PliBlock sections
+│   │   │   ├── kv_anchor_detector.py find KVAnchor pairs
+│   │   │   ├── stage_band_detector.py detect StageBandSpec geometry
+│   │   │   └── plan.py              SheetRowPlanner — orchestrates above → SheetPlan
+│   │   ├── applier/
+│   │   │   └── apply_plan.py        (NEW) SheetPlan + CanonicalNameMap → list[PLI]
+│   │   │                            100% deterministic, zero LLM calls (enforced by static test)
+│   │   ├── validation/
+│   │   │   ├── plan_invariants.py   (NEW) Tier 1 structural checks on SheetPlan
+│   │   │   ├── plan_statistics.py   (NEW) Tier 2 statistical checks on SheetPlan
+│   │   │   ├── source_cell_verifier.py    extraction validator (unchanged)
+│   │   │   ├── header_match_verifier.py   extraction validator (unchanged)
+│   │   │   ├── coverage_verifier.py       extraction validator (unchanged)
+│   │   │   └── field_dropout_verifier.py  extraction validator (unchanged)
+│   │   └── reconciler.py        merges workflow + validation outputs (lenient in V1)
 │   │
-│   ├── interface/              FastAPI surface (lean in Spec 1; thicker in Spec 2)
-│   │   ├── router.py           POST /extract, GET /health, GET /metrics
-│   │   ├── interaction.py      request/response shapes
-│   │   └── deps.py             provider injection
+│   ├── prompts/
+│   │   ├── _shared.md           glossary + faithful-extraction principles
+│   │   └── workflow/
+│   │       ├── sheet_classifier.md  (unchanged)
+│   │       ├── layout_hinter.md     (NEW)
+│   │       ├── plan_reviewer.md     (NEW)
+│   │       └── field_namer.md       (NEW)
 │   │
-│   ├── system/                 cross-cutting
-│   │   ├── logs.py             structured logging (structlog) — JSON output with run_id correlation
-│   │   ├── telemetry.py        Prometheus collectors + setup_metrics(app)
-│   │   ├── middleware.py       request id, structured access log
-│   │   └── rate_limit.py       slot only — full impl in Spec 2
+│   ├── schemas/                 JSON schemas for LLM tool calls
 │   │
-│   └── utils/
-│       ├── pipeline_loader.py  load Haystack Pipeline from YAML
-│       └── prompt_loader.py    load .md prompt with frontmatter
+│   └── interface/              FastAPI surface (lean in Spec 1; thicker in Spec 2)
+│       ├── router.py           POST /extract, GET /health, GET /metrics
+│       ├── interaction.py      request/response shapes
+│       └── deps.py             provider injection
 │
-├── evals/                      ── INDEPENDENT — imports only core/models + ExtractorProtocol ──
+├── evals/                      ── INDEPENDENT — imports only models + ExtractorProtocol ──
 │   ├── interface.py            ExtractorProtocol(workbook_path) -> ExtractionResult
 │   ├── runner.py               run extractor over labeled corpus, collect per-file scores
 │   ├── evaluator.py            per-file evaluation orchestration
@@ -235,7 +223,8 @@ tna-service/
 │   └── runs/                   per-run JSON history
 │
 ├── tests/
-│   ├── unit/                   per-agent, mocked LLM — sub-second, run on every commit
+│   ├── unit/                   per-component, mocked LLM — sub-second, run on every commit
+│   │                           includes apply_plan 3-axis cube tests + planner sub-component tests
 │   ├── tools/                  per-tool with real workbook fixtures
 │   └── integration/            end-to-end with real LLM, gated by TNA_RUN_LIVE_TESTS=1
 │
@@ -258,35 +247,47 @@ tna-service/
     └── runbook.md
 ```
 
-## 5. Agent inventory
+## 5. Agent and component inventory
 
-### 5.1 Workflow arm (6 agents)
+### 5.1 Planning pipeline (per sheet)
 
-| Agent | Single decision | Output |
-|---|---|---|
-| `SheetClassifier` | Which sheets are TNA-relevant? | `relevant_sheets: list[str]` |
-| `LayoutFingerprinter` | What structural patterns describe each sheet? | `StructuralFingerprint` |
-| `BoundaryFinder` | What's the PLI organization for this sheet? | `PLIBoundaries` (pattern + data range + optional skip_segments) |
-| `IdentityLocator` | Which columns hold io_number / style_code / color_code / fabric_code? | `FieldMap.locations[identity]` |
-| `QuantityDateLocator` | Which columns hold quantity and delivery_date? | `FieldMap.locations[qty,date]` + metadata_locations |
-| `StageLocator` | Which columns form stage bands, canonical names, sub_columns? | `StageBandSet` |
+| Component | Kind | Single responsibility | Output |
+|---|---|---|---|
+| `SheetSurveyor` | deterministic | Collect observable sheet features | `SheetSignals` |
+| `SheetRowPlanner` | deterministic | Classify every row; detect PLI mode, stage bands, KV anchors | `SheetPlan` (draft) |
+| `validate_plan` T1 | deterministic | Structural invariants on SheetPlan | `Findings` (errors → re-plan) |
+| `validate_plan` T2 | deterministic | Statistical sanity on SheetPlan | `Findings` (warnings → PlanReviewer) |
+| `LayoutHinter` | LLM (conditional) | Resolve ambiguous layout regions | `LayoutHints` |
+| `PlanReviewer` | LLM judge (conditional) | Accept or correct the SheetPlan | `PlanVerdict` |
+| `FieldNamer` | LLM | Map raw header labels to canonical field names | `CanonicalNameMap` |
+| `apply_plan` | deterministic | Resolve PLIs from SheetPlan + CanonicalNameMap | `list[PLI]` |
 
-All workflow agents are Haystack Components. Prompt lives in `agents/prompts/workflow/<name>.md`. Output is a Pydantic artifact (no free-form text). Retry-with-error-context (1 retry max) on validation failures.
+`SheetRowPlanner`, `SheetSurveyor`, `validate_plan`, and `apply_plan` are deterministic Python components. LLM agents (`LayoutHinter`, `PlanReviewer`, `FieldNamer`) follow `AgentSpec + AgentRunner`; prompts live in `app/prompts/workflow/<name>.md`. All LLM output is a Pydantic artifact (no free-form text). Retry-with-error-context (1 retry max) on validation failures.
 
-### 5.2 Validation arm (4 deterministic checks)
+**`apply_plan` determinism lock:** `apply_plan` and all its callees must not import `app.services.agents` or `app.services.llm_provider`. A static analysis test enforces this on every commit.
+
+### 5.2 Workbook-level agents
+
+| Component | Kind | Single responsibility | Output |
+|---|---|---|---|
+| `SheetClassifier` | LLM | Which sheets are TNA-relevant vs noise? | `relevant_sheets: list[str]` |
+
+### 5.3 Extraction validation arm (4 deterministic checks)
 
 | Check | Asks | V1 severity |
 |---|---|---|
 | `SourceCellVerifier` | For each PLI, does the cell at `source_cells[field]` actually contain the extracted value? | warn |
 | `HeaderMatchVerifier` | For each canonical field's source column, does the header row contain text related to that field's vocabulary? | warn |
-| `CoverageVerifier` | PLI count vs candidate-row count in the boundary range — flag when extracted < 80% of candidate-row count (configurable) | warn (this would have caught MAIN FALL KIDS #1's 80 → 2 silent loss) |
+| `CoverageVerifier` | PLI count vs candidate-row count — flag when extracted < 80% of candidate-row count (configurable) | warn |
 | `FieldDropoutVerifier` | Is any canonical field populated in <50% of PLIs? | warn |
 
 All four are pure Python; no LLM. Each emits zero-or-more `ValidationFinding` records.
 
-### 5.3 Not in V1
+### 5.4 Removed in SheetRowPlanner migration
 
-- `FieldReviewer` (LLM-based second opinion). Skipped until deterministic checks demonstrably leave gaps. Documented in `docs/adr/` as a deferred decision.
+The following agents existed in the previous architecture and have been deleted:
+`LayoutFingerprinter`, `BoundaryFinder`, `IdentityLocator`, `QuantityDateLocator`, `StageLocator`.
+Their responsibilities are replaced by the deterministic `SheetRowPlanner` subsystem + the `FieldNamer` LLM agent.
 
 ## 6. Tool library
 
@@ -302,32 +303,46 @@ Adding a tool is one file in `tools/<group>.py` with the decorator. Adding a too
 
 ## 7. Pipeline definitions
 
-Both arms are Haystack Pipelines declared in YAML. Example shape (illustrative — real YAML follows Haystack 2.x format):
+The orchestrator (`app/services/extraction.py`) drives the pipeline in Python rather than a YAML DAG, because the conditional LLM-review branches (3b LayoutHinter, 3c PlanReviewer) and the validation-tier reaction loop are more naturally expressed as imperative code.
 
-```yaml
-# pipelines/workflow.yaml
-components:
-  sheet_classifier:      { type: SheetClassifier }
-  layout_fingerprinter:  { type: LayoutFingerprinter }
-  boundary_finder:       { type: BoundaryFinder }
-  identity_locator:      { type: IdentityLocator }
-  quantity_date_locator: { type: QuantityDateLocator }
-  stage_locator:         { type: StageLocator }
-  applier:               { type: Applier }
-connections:
-  - { from: sheet_classifier.relevant_sheets, to: layout_fingerprinter.sheets }
-  - { from: layout_fingerprinter.fingerprint, to: boundary_finder.fingerprint }
-  - { from: boundary_finder.boundaries,       to: identity_locator.boundaries }
-  - { from: boundary_finder.boundaries,       to: quantity_date_locator.boundaries }
-  - { from: boundary_finder.boundaries,       to: stage_locator.boundaries }
-  - { from: identity_locator.field_map,       to: applier.field_map_parts }
-  - { from: quantity_date_locator.field_map,  to: applier.field_map_parts }
-  - { from: stage_locator.stage_band_set,     to: applier.stage_band_set }
+Per-sheet flow (pseudocode):
+
+```python
+signals   = SheetSurveyor(ctx, sheet)
+plan      = SheetRowPlanner(signals)
+findings  = validate_plan(plan, ctx)           # Tier 1 + Tier 2
+if findings.has_errors:
+    plan = SheetRowPlanner(signals, hints=findings.hints)   # re-plan
+if needs_llm_review(plan, findings):
+    hints   = LayoutHinter(signals)            # conditional LLM
+    verdict = PlanReviewer(plan, hints, ctx)   # conditional LLM judge
+    if verdict.needs_fix:
+        plan = apply_corrections(plan, verdict)
+name_map  = FieldNamer(plan)                   # LLM — 1 call per sheet
+plis      = apply_plan(ctx, plan, name_map)    # 100% deterministic
 ```
 
-`orchestrator.py` loads both pipelines, runs them, hands results to the reconciler. Adding an agent = new file + 1-2 connection lines.
+Workbook-level aggregation then runs the 4 extraction validators over all sheets' PLIs and feeds the Reconciler.
 
-## 8. Reconciler logic (V1: lenient)
+Adding a new pipeline component = one file under `app/services/planner/` or `app/services/agents/`. No framework registration required.
+
+## 8. Primary artifacts
+
+| Artifact | Produced by | Consumed by | Shape |
+|---|---|---|---|
+| `SheetSignals` | `SheetSurveyor` | `SheetRowPlanner`, `LayoutHinter` | Merge map, header candidates, row density, vocab overlap |
+| `RowSpec` | `SheetRowPlanner` | `validate_plan`, `apply_plan` | `idx`, `role`, `anchor_idx`, `group_id`, `sub_row_role` |
+| `KVAnchor` | `SheetRowPlanner` | `apply_plan` | `label_cell`, `value_cell`, `field` |
+| `StageBandSpec` | `SheetRowPlanner` | `apply_plan` | `name`, `sub_header_row`, `stage_cols`, `layout_mode` |
+| `PliBlock` | `SheetRowPlanner` | `apply_plan` | `id`, `bbox`, `identity`, `stage_bands` |
+| `SheetPlan` | `SheetRowPlanner` (+ reviewer corrections) | `validate_plan`, `FieldNamer`, `apply_plan` | `pli_mode`, `stage_scope`, `rows`, `pli_blocks`, `kv_anchors`, `stage_bands`, `confidence` |
+| `LayoutHints` | `LayoutHinter` (conditional) | Re-plan pass | Mode suggestion + rationale |
+| `PlanVerdict` | `PlanReviewer` (conditional) | Orchestrator correction loop | `verdict`, row corrections, warnings, confidence |
+| `CanonicalNameMap` | `FieldNamer` | `apply_plan` | `{raw_label → canonical_field_name}` |
+
+**Retired artifacts** (existed in prior architecture, no longer central): `StructuralFingerprint`, `PLIBoundaries`, `FieldMap`, `StageBandSet` (old shape with `BoundaryPattern` enum).
+
+## 9. Reconciler logic (V1: lenient)
 
 ```python
 def reconcile(workflow_out: WorkflowOutput,
@@ -349,9 +364,9 @@ def reconcile(workflow_out: WorkflowOutput,
 
 Strict mode (drop on validator failure) is a future config flag; not in V1.
 
-## 9. Eval framework
+## 10. Eval framework
 
-### 9.1 Independent by contract
+### 10.1 Independent by contract
 
 The eval module imports only `core/models.py` and an `ExtractorProtocol`:
 
@@ -362,7 +377,7 @@ class ExtractorProtocol(Protocol):
 
 Any extractor that satisfies this — old `tna_parser/`, the new service, future rewrites — plugs in. Eval never knows which agents ran.
 
-### 9.2 Scoring
+### 10.2 Scoring
 
 For every labeled file in `dataset/extracted/`, runner computes:
 
@@ -377,20 +392,20 @@ For every labeled file in `dataset/extracted/`, runner computes:
 
 Output is `evals/runs/<utc-timestamp>.json` and a console matrix (numbers only — no diff column).
 
-### 9.3 Golden snapshots
+### 10.3 Golden snapshots
 
 Every workflow agent emits its output for each labeled file. Snapshots are committed under `evals/golden_snapshots/<file>/<agent>.json`. Tests compare current run to frozen snapshot; any drift surfaces *before* the full pipeline runs, isolating which agent changed.
 
 Updating a snapshot is `make refresh-golden` (deliberate, reviewable).
 
-### 9.4 Repeatability
+### 10.4 Repeatability
 
 - LLM temperature pinned at 0 for all workflow agents
 - Snapshot tests are exact-match (Pydantic dump JSON, sorted keys, normalized whitespace)
 - End-to-end eval over real LLM is rate-limited via `services/llm_provider.py` and budget-bounded per run
 - Workbook reads are deterministic by construction
 
-## 10. Telemetry (Spec 1, not deferred)
+## 11. Telemetry (Spec 1, not deferred)
 
 Per the decision to build telemetry from day 1:
 
@@ -408,7 +423,7 @@ Per the decision to build telemetry from day 1:
 
 All telemetry config is in `docker-compose.yml` from V1.
 
-## 11. Config
+## 12. Config
 
 `config/settings.py` uses `pydantic-settings`. Env files are layered:
 - `.env.{APP_ENV}.local` (highest priority, gitignored)
@@ -420,26 +435,34 @@ Required: `ANTHROPIC_API_KEY`, `ANTHROPIC_MODEL`, `APP_ENV`. Optional: `LOG_LEVE
 
 Environment values: `development | staging | production | test`. Environment-aware behavior baked in (e.g., production logs to stdout JSON, development logs human-readable).
 
-## 12. Testing strategy
+## 13. Testing strategy
 
 | Layer | What | When it runs |
 |---|---|---|
-| Unit (per-agent) | Each agent in isolation with mocked LLM; assert artifact shape and decision logic on canned inputs | Every commit, <2s total |
+| Unit (planner sub-components) | `row_classifier`, `block_segmenter`, `kv_anchor_detector`, `stage_band_detector` on synthetic fixtures covering all 6 observed layout families | Every commit, <2s total |
+| Unit (plan validators) | Tier 1 + Tier 2 validators, both passing and failing cases for each invariant/statistic | Every commit |
+| Unit (apply_plan 3-axis cube) | One test per `(pli_mode × stage_scope)` combination + sub_row_role variants; uses synthetic `SheetPlan` fixtures, no real LLM | Every commit |
+| Unit (LLM agents) | `SheetClassifier`, `FieldNamer`, `LayoutHinter`, `PlanReviewer` with mocked LLM; assert artifact shape and decision logic | Every commit |
+| Static analysis (apply_plan) | Assert `apply_plan` and callees do not import `agents` or `llm_provider` | Every commit |
 | Tool tests | Each tool against real xlsx fixtures | Every commit |
 | Snapshot tests | Per-agent golden snapshots compared to current | Every commit (when fixtures change → flagged) |
+| Regression tests | CHRISTIAN BERG (3 → 7 PLIs) + new job-TNA (scattered KV + stacked sub-rows) must produce correct PLIs | Every commit |
 | Integration | End-to-end with real LLM; gated by `TNA_RUN_LIVE_TESTS=1` | On demand / pre-merge |
-| Eval | Full labeled corpus through real pipeline | Before merging any prompt change |
+| Eval | Full labeled corpus through real pipeline | Before merging any prompt or planner change |
 
 The eval matrix is the gate that says "this change improves or regresses extraction".
 
-## 13. What's in V1 vs deferred
+## 14. What's in V1 vs deferred
 
-**V1 (Spec 1):**
-- 6 workflow agents + 4 deterministic validators + reconciler (lenient)
-- Haystack pipeline orchestration via YAML
+**V1 (Spec 1 — SheetRowPlanner pipeline):**
+- Deterministic planning subsystem: `SheetSurveyor` + `SheetRowPlanner` + `validate_plan` (T1 + T2)
+- Conditional LLM review: `LayoutHinter` + `PlanReviewer` (LLM-as-judge)
+- `FieldNamer` LLM agent (vocabulary mapping)
+- `apply_plan` — 100% deterministic, zero LLM calls, enforced by static analysis test
+- `SheetClassifier` LLM agent (unchanged)
+- 4 extraction validators + Reconciler (lenient)
 - Full eval framework with label-driven scoring, golden snapshots, history JSONs
-- Tools reorganized into 5 groups
-- Applier with pattern registry (one_row_per_pli, one_sheet_per_pli, vertical_merge, data_then_total)
+- 10 workbook tools in shared TOOL_REGISTRY
 - Telemetry stack live (Prometheus + Grafana from `docker-compose up`)
 - Structured logging
 - FastAPI thin shell: POST /extract, GET /health, GET /metrics
@@ -449,37 +472,41 @@ The eval matrix is the gate that says "this change improves or regresses extract
 - UI (xlsx upload + top/bottom JSON tabular view)
 - Auth / rate-limiting full impl
 - LLM circular fallback registry
-- `FieldReviewer` LLM agent
 - Strict-mode reconciler
+- `FieldNamer` output caching across sheets within a workbook / across same-supplier workbooks
 
 **Deferred to V2+ as needed:**
 - DB persistence / memory
-- New canonical fields / new layout patterns (as new TNA families surface)
+- New canonical fields / new layout patterns (additive — rules in `planner/` sub-components, no new enum cases required)
 - Async/concurrent multi-file extraction
 
-## 14. Migration plan
+## 15. Migration plan
 
 `tna_parser/` stays alive during V1 build. The new `tna-service/` is greenfield; no code moved from `tna_parser/` (only learnings and the labelled dataset are reused). When the eval matrix shows `tna-service` ≥ `tna_parser` on every labeled file, `tna_parser/` is archived.
 
-## 15. Risks & open questions
+## 16. Risks & open questions
 
 | Risk | Mitigation |
 |---|---|
-| Haystack 2.x Pipeline expressiveness for our DAG | Prototype the workflow pipeline first; fall back to Python-composed components if YAML proves limiting |
+| Planner heuristics wrong on a new unseen layout | Tier 1+2 validators + PlanReviewer catch planning errors before apply_plan; telemetry surfaces which planner rules fire most often |
+| PlanReviewer fires too aggressively / drives up LLM cost | Tune confidence threshold via telemetry; current default 0.85 — reduce if median LLM calls/sheet stays acceptable |
 | Snapshot tests too brittle when LLM output drifts despite temp=0 | Use semantic comparisons (Pydantic-aware) for tolerable drift; exact match only for structural fields |
 | Telemetry adds dev-environment friction | Make Prometheus/Grafana opt-in via `make serve-with-telemetry`; default `make serve` is api-only |
 | Eval becomes too slow once we have many labeled files | Parallelize the eval runner; cache LLM responses per (prompt-hash, model) for repeatability runs |
 
 **V1 confidence aggregation:** simple weighted mean — `0.7 * mean(workflow_per_field_confidence) + 0.3 * (1 - validator_warn_rate)`. Calibration tuning is deferred to a V2 ADR once we have eval data showing whether the workflow's self-reported confidence correlates with correctness.
 
-## 16. Success criteria
+## 17. Success criteria
 
 Spec 1 ships when:
 1. `make eval` runs the full labeled corpus through the new service and prints the scoreboard matrix.
 2. On the labeled subset of `dataset/extracted/` files, the new service matches or beats `tna_parser/` on `pli_recall`, `field_recall`, and `stage_recall`.
-3. `docker compose up` brings up api + prometheus + grafana; the bootstrap dashboard shows live metrics during an extraction.
-4. Adding a synthetic new agent (e.g., a `NotesExtractor` that captures the `Remarks` column) requires only: one file in `agents/workflow/`, one prompt in `agents/prompts/workflow/`, and one connection line in `pipelines/workflow.yaml` — no other code touched. This is the incremental-adaptability acceptance test.
-5. Adding a synthetic new boundary pattern (e.g., `horizontal_merge`) requires only: one enum value + one handler file under `applier/patterns/` — no other code touched.
+3. CHRISTIAN BERG regression test passes: 7 PLIs emitted with correct anchor/child structure.
+4. new job-TNA regression test passes: 5 sheets each emit 1 PLI with full identity + 3 stage bands.
+5. `docker compose up` brings up api + prometheus + grafana; the bootstrap dashboard shows live metrics during an extraction.
+6. Adding a synthetic new field extractor (e.g., a `NotesExtractor` that captures the `Remarks` column) requires only: one file in `app/services/agents/`, one prompt in `app/prompts/workflow/` — no orchestrator changes.
+7. Adding a synthetic new layout rule (e.g., diagonal KV anchors) requires only: rules in `planner/kv_anchor_detector.py` + one enum value if a new RowRole is needed — no changes to `apply_plan` or LLM agents.
+8. `apply_plan` static analysis test passes: no imports of `agents` or `llm_provider` anywhere in the apply_plan call tree.
 
 ---
 
