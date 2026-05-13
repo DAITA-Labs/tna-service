@@ -50,6 +50,7 @@ class SourceCellVerifier:
                                 f"!= extracted {extracted!r}"),
                         pli_index=i, field=field,
                     ))
-                    validator_findings_total.labels(check="source_cell",
-                                                   severity="warn").inc()
+                    validator_findings_total.add(
+                        1, {"check": "source_cell", "severity": "warn"}
+                    )
         return {"findings": ValidationFindings(findings=findings)}

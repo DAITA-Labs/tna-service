@@ -47,5 +47,5 @@ class CoverageVerifier:
                         f"{total_candidate_rows} candidate rows "
                         f"(ratio {ratio:.2f} < floor {self.floor})"),
             ))
-            validator_findings_total.labels(check="coverage", severity="warn").inc()
+            validator_findings_total.add(1, {"check": "coverage", "severity": "warn"})
         return {"findings": ValidationFindings(findings=findings)}

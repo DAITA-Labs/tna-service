@@ -1,118 +1,139 @@
-"""Prometheus collectors for the TNA service.
+"""Prometheus-style telemetry collectors, implemented on the OTel Metrics SDK.
 
-Per the spec's decision D10: per-phase + per-agent histograms; per-validator
-counters; per-file gauges (PLI count, retry count, cost).
+Every collector name is preserved from the prometheus_client era. Labels are
+now passed at call time as the `attributes` dict, e.g.:
 
-Imported by agents (services/agents/_base.py), applier (services/applier/),
-validators (services/validation/), and the HTTP layer. The /metrics endpoint
-exposes the default registry via starlette-prometheus.
+    extractions_total.add(1, {"status": "success"})
+    agent_duration_seconds.record(0.45, {"agent": "field_namer", "status": "success"})
+
+The OTel MeterProvider is initialised in app/core/tracing.py and exports to
+the configured OTLP endpoint every 15s. When the OTel SDK is not installed
+(local dev), the noop fallback below makes every collector a silent no-op.
 """
-from prometheus_client import Counter, Histogram, Gauge
+from __future__ import annotations
 
 
-# Per-file extraction
-extraction_duration_seconds = Histogram(
-    "extraction_duration_seconds",
-    "End-to-end extraction time for one workbook",
-    labelnames=("format_detected",),
-    buckets=(1.0, 5.0, 15.0, 30.0, 60.0, 120.0, 300.0),
-)
+def _meter():
+    try:
+        from opentelemetry import metrics
+        return metrics.get_meter(__name__)
+    except ImportError:
+        return _NoopMeter()
 
-extraction_pli_count = Gauge(
-    "extraction_pli_count",
-    "Number of PLIs extracted in the last run of this file",
-    labelnames=("source_file",),
-)
 
-# Per-agent
-agent_duration_seconds = Histogram(
-    "agent_duration_seconds",
-    "Wall-clock time spent inside one agent's LLM call",
-    labelnames=("agent", "status"),
-    buckets=(0.5, 1.0, 2.5, 5.0, 10.0, 20.0, 60.0),
-)
+class _NoopInstrument:
+    def add(self, *_args, **_kwargs): pass
+    def record(self, *_args, **_kwargs): pass
 
-agent_retry_count = Counter(
-    "agent_retry_count",
-    "Number of retries an agent performed",
-    labelnames=("agent", "reason"),
-)
 
-agent_tokens_input = Counter(
-    "agent_tokens_input",
-    "Total input tokens consumed per agent + model",
-    labelnames=("agent", "model"),
-)
+class _NoopMeter:
+    def create_counter(self, *_args, **_kwargs): return _NoopInstrument()
+    def create_histogram(self, *_args, **_kwargs): return _NoopInstrument()
+    def create_up_down_counter(self, *_args, **_kwargs): return _NoopInstrument()
+    def create_observable_gauge(self, *_args, **_kwargs): return _NoopInstrument()
 
-agent_tokens_output = Counter(
-    "agent_tokens_output",
-    "Total output tokens emitted per agent + model",
-    labelnames=("agent", "model"),
-)
 
-# Per-validator
-validator_findings_total = Counter(
-    "validator_findings",
-    "Validator findings emitted, by check and severity",
-    labelnames=("check", "severity"),
-)
+_m = _meter()
 
-# Per-phase extraction timing
-extraction_phase_duration_seconds = Histogram(
-    "extraction_phase_duration_seconds",
-    "Per-phase latency within a single extraction request.",
-    labelnames=("phase",),
-)
 
-# Per-tool
-tool_calls_total = Counter(
-    "tool_calls_total",
-    "Total invocations of @tool-registered workbook tools.",
-    labelnames=("tool_name",),
-)
+# --- Extractions ---
 
-tool_duration_seconds = Histogram(
-    "tool_duration_seconds",
-    "Per-tool latency.",
-    labelnames=("tool_name",),
-)
-
-tool_errors_total = Counter(
-    "tool_errors_total",
-    "Per-tool error count.",
-    labelnames=("tool_name",),
-)
-
-# LLM-level invocation counter
-llm_calls_total = Counter(
-    "llm_calls_total",
-    "Total LLM API invocations.",
-    labelnames=("model", "status"),  # success | failure
-)
-
-# Agent-level invocation counter
-agent_calls_total = Counter(
-    "agent_calls_total",
-    "Total agent invocations.",
-    labelnames=("agent", "status"),  # success | failure
-)
-
-# Extraction-level outcome counter
-extractions_total = Counter(
+extractions_total = _m.create_counter(
     "extractions_total",
-    "Total invocations of the extract() orchestrator.",
-    labelnames=("status",),  # success | empty | failure
+    description="Total invocations of the extract() orchestrator.",
 )
 
-# LLM provider — isolates network time from agent loop time
-llm_inference_duration_seconds = Histogram(
-    "llm_inference_duration_seconds",
-    "Time spent inside the LLM provider call (not including agent retry loop)",
-    labelnames=("model",),
-    buckets=(0.5, 1.0, 2.5, 5.0, 10.0, 20.0, 60.0),
+extraction_duration_seconds = _m.create_histogram(
+    "extraction_duration_seconds",
+    description="End-to-end extract() duration.",
+    unit="s",
 )
 
-plis_extracted_total = Counter(
+extraction_pli_count = _m.create_up_down_counter(
+    "extraction_pli_count",
+    description="PLI count emitted per file.",
+)
+
+plis_extracted_total = _m.create_counter(
     "plis_extracted_total",
-    "Cumulative count of PLI rows emitted across all extractions.",
+    description="Cumulative PLI rows emitted across all extractions.",
 )
+
+extraction_phase_duration_seconds = _m.create_histogram(
+    "extraction_phase_duration_seconds",
+    description="Per-phase latency within a single extraction request.",
+    unit="s",
+)
+
+
+# --- Agents ---
+
+agent_calls_total = _m.create_counter(
+    "agent_calls_total",
+    description="Total agent invocations.",
+)
+
+agent_duration_seconds = _m.create_histogram(
+    "agent_duration_seconds",
+    description="Per-agent run duration.",
+    unit="s",
+)
+
+agent_retry_count = _m.create_counter(
+    "agent_retry_count",
+    description="Per-agent retry occurrences.",
+)
+
+agent_tokens_input = _m.create_counter(
+    "agent_tokens_input",
+    description="Cumulative input tokens consumed by agents.",
+)
+
+agent_tokens_output = _m.create_counter(
+    "agent_tokens_output",
+    description="Cumulative output tokens produced by LLM responses.",
+)
+
+
+# --- LLM provider ---
+
+llm_calls_total = _m.create_counter(
+    "llm_calls_total",
+    description="Total LLM API invocations.",
+)
+
+llm_inference_duration_seconds = _m.create_histogram(
+    "llm_inference_duration_seconds",
+    description="Per-LLM-call duration.",
+    unit="s",
+)
+
+
+# --- Tools ---
+
+tool_calls_total = _m.create_counter(
+    "tool_calls_total",
+    description="Total @tool-registered workbook tool invocations.",
+)
+
+tool_duration_seconds = _m.create_histogram(
+    "tool_duration_seconds",
+    description="Per-tool latency.",
+    unit="s",
+)
+
+tool_errors_total = _m.create_counter(
+    "tool_errors_total",
+    description="Per-tool error count.",
+)
+
+
+# --- Validators ---
+
+validator_findings_total = _m.create_counter(
+    "validator_findings_total",
+    description="Validation findings emitted, by check + severity.",
+)
+
+# Back-compat alias — to be removed in Task 9 once validators are ported
+validator_findings = validator_findings_total

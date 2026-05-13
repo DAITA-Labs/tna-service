@@ -38,6 +38,7 @@ class FieldDropoutVerifier:
                             f"(ratio {ratio:.2f} < floor {self.floor})"),
                     field=f,
                 ))
-                validator_findings_total.labels(check="field_dropout",
-                                               severity="warn").inc()
+                validator_findings_total.add(
+                    1, {"check": "field_dropout", "severity": "warn"}
+                )
         return {"findings": ValidationFindings(findings=findings)}

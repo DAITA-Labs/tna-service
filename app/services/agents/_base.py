@@ -82,21 +82,22 @@ class AgentRunner:
                         tool_name=tool_name,
                         agent_name=self.spec.name,
                     )
-                    agent_duration_seconds.labels(
-                        agent=self.spec.name, status="success"
-                    ).observe(time.monotonic() - t0)
-                    agent_calls_total.labels(
-                        agent=self.spec.name, status="success"
-                    ).inc()
+                    agent_duration_seconds.record(
+                        time.monotonic() - t0,
+                        {"agent": self.spec.name, "status": "success"},
+                    )
+                    agent_calls_total.add(
+                        1, {"agent": self.spec.name, "status": "success"}
+                    )
                     log.info("agent_run_success", agent=self.spec.name,
                              attempt=attempt)
                     span.set_attribute("agent.status", "success")
                     return out
                 except ValidationError as e:
                     last_error = str(e)
-                    agent_retry_count.labels(
-                        agent=self.spec.name, reason="schema_validation"
-                    ).inc()
+                    agent_retry_count.add(
+                        1, {"agent": self.spec.name, "reason": "schema_validation"}
+                    )
                     log.warning("agent_run_schema_validation_failed",
                                 agent=self.spec.name, attempt=attempt, error=last_error)
                     if attempt > self.spec.retry.max_retries:
@@ -114,12 +115,13 @@ class AgentRunner:
                     if attempt > self.spec.retry.max_retries:
                         break
 
-            agent_duration_seconds.labels(
-                agent=self.spec.name, status="failure"
-            ).observe(time.monotonic() - run_t0)
-            agent_calls_total.labels(
-                agent=self.spec.name, status="failure"
-            ).inc()
+            agent_duration_seconds.record(
+                time.monotonic() - run_t0,
+                {"agent": self.spec.name, "status": "failure"},
+            )
+            agent_calls_total.add(
+                1, {"agent": self.spec.name, "status": "failure"}
+            )
             span.set_attribute("agent.status", "failure")
             span.set_attribute("agent.error", str(last_error)[:200])
             return AgentRunFailure(

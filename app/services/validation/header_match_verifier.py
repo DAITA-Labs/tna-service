@@ -59,6 +59,7 @@ class HeaderMatchVerifier:
                                 f"but header text {header_text!r} contains none of {vocab}"),
                         pli_index=i, field=field,
                     ))
-                    validator_findings_total.labels(check="header_match",
-                                                   severity="warn").inc()
+                    validator_findings_total.add(
+                        1, {"check": "header_match", "severity": "warn"}
+                    )
         return {"findings": ValidationFindings(findings=findings)}

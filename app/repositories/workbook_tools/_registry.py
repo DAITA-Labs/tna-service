@@ -27,7 +27,7 @@ class ToolRegistry:
 
             @functools.wraps(fn)
             def _counted(*args, **kwargs):
-                tool_calls_total.labels(tool_name=name).inc()
+                tool_calls_total.add(1, {"tool_name": name})
                 _t0 = _time.monotonic()
                 _tool_log.debug("tool_call_start", tool_name=name)
                 try:
@@ -35,11 +35,11 @@ class ToolRegistry:
                     return result
                 except Exception as exc:
                     _tool_log.warning("tool_call_failed", tool_name=name, error=str(exc))
-                    tool_errors_total.labels(tool_name=name).inc()
+                    tool_errors_total.add(1, {"tool_name": name})
                     raise
                 finally:
-                    tool_duration_seconds.labels(tool_name=name).observe(
-                        _time.monotonic() - _t0
+                    tool_duration_seconds.record(
+                        _time.monotonic() - _t0, {"tool_name": name}
                     )
 
             self._tools[name] = _counted

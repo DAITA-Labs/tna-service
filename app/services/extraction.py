@@ -69,7 +69,7 @@ def _phase(name: str, **attrs):
         try:
             yield span
         finally:
-            extraction_phase_duration_seconds.labels(phase=name).observe(time.monotonic() - t0)
+            extraction_phase_duration_seconds.record(time.monotonic() - t0, {"phase": name})
             structlog.contextvars.unbind_contextvars("phase")
 
 _CONFIDENCE_GATE = 0.85
@@ -171,7 +171,7 @@ def extract(workbook_path: Path | str, *, llm=None) -> ExtractionResult:
                 relevant = sc.run(workbook_ctx=ctx, workbook_summary=summary)["relevant_sheets"]
             if not relevant:
                 log.info("no_relevant_sheets", file=str(ctx.path))
-                extractions_total.labels(status="empty").inc()
+                extractions_total.add(1, {"status": "empty"})
                 return ExtractionResult(
                     plis=[], source_file=str(ctx.path),
                     warnings=[Warning(message="No relevant sheets identified", severity="warning")],
@@ -211,16 +211,19 @@ def extract(workbook_path: Path | str, *, llm=None) -> ExtractionResult:
                 final = reconcile(workflow_out=result, validation_out=all_findings)
             log.info("extract_complete", file=ctx.path.name, total_plis=len(final.plis),
                      warnings=len(final.warnings), format=final.format_detected)
-            extraction_duration_seconds.labels(
-                format_detected=final.format_detected or "unknown"
-            ).observe(time.monotonic() - t0)
-            extraction_pli_count.labels(source_file=ctx.path.name).set(len(final.plis))
+            extraction_duration_seconds.record(
+                time.monotonic() - t0,
+                {"format_detected": final.format_detected or "unknown"},
+            )
+            extraction_pli_count.add(
+                len(final.plis), {"source_file": ctx.path.name}
+            )
             if len(final.plis) == 0:
-                extractions_total.labels(status="empty").inc()
+                extractions_total.add(1, {"status": "empty"})
             else:
-                extractions_total.labels(status="success").inc()
-            plis_extracted_total.inc(len(final.plis))
+                extractions_total.add(1, {"status": "success"})
+            plis_extracted_total.add(len(final.plis))
             return final
         except Exception:
-            extractions_total.labels(status="failure").inc()
+            extractions_total.add(1, {"status": "failure"})
             raise

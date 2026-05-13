@@ -149,12 +149,12 @@ class AnthropicProvider:
                     tool_choice={"type": "tool", "name": tool_name},
                 )
             except Exception:
-                llm_calls_total.labels(model=self.model, status="failure").inc()
+                llm_calls_total.add(1, {"model": self.model, "status": "failure"})
                 raise
-            llm_inference_duration_seconds.labels(model=self.model).observe(
-                time.monotonic() - t0
+            llm_inference_duration_seconds.record(
+                time.monotonic() - t0, {"model": self.model}
             )
-            llm_calls_total.labels(model=self.model, status="success").inc()
+            llm_calls_total.add(1, {"model": self.model, "status": "success"})
             usage = getattr(resp, "usage", None)
             inp_tokens: int | None = None
             out_tokens: int | None = None
@@ -162,10 +162,14 @@ class AnthropicProvider:
                 inp_tokens = getattr(usage, "input_tokens", None)
                 out_tokens = getattr(usage, "output_tokens", None)
                 if isinstance(inp_tokens, int):
-                    agent_tokens_input.labels(agent=agent_name, model=self.model).inc(inp_tokens)
+                    agent_tokens_input.add(
+                        inp_tokens, {"agent": agent_name, "model": self.model}
+                    )
                     span.set_attribute("llm.input_tokens", inp_tokens)
                 if isinstance(out_tokens, int):
-                    agent_tokens_output.labels(agent=agent_name, model=self.model).inc(out_tokens)
+                    agent_tokens_output.add(
+                        out_tokens, {"agent": agent_name, "model": self.model}
+                    )
                     span.set_attribute("llm.output_tokens", out_tokens)
             log.info("llm_call_complete", model=self.model, agent=agent_name,
                      input_tokens=inp_tokens, output_tokens=out_tokens)
