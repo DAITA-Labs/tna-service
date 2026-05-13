@@ -164,7 +164,7 @@ tna-service/
 ├── app/                              ── all runtime code ──
 │   ├── main.py                       FastAPI app: wires routers, middleware, telemetry
 │   ├── config/settings.py            pydantic-settings + env layering
-│   ├── enums/                        every Literal/Enum (Environment, CellDtype, BoundaryPattern, ...)
+│   ├── enums/                        every Literal/Enum (Environment, CellDtype, PliMode, RowRole, StageScope, ...)
 │   ├── models/                       pure domain — no I/O, no LLM
 │   │   ├── workbook.py               Cell, MergedRegion, CellGrid, SheetMeta, WorkbookCtx
 │   │   ├── extraction.py             PLI, Stage, ExtractionResult, Warning, FlexibleDate
@@ -180,27 +180,29 @@ tna-service/
 │   │       ├── structure.py          get_merged_regions, count_non_empty_rows_in_column
 │   │       └── search.py             find_value
 │   ├── services/                     business logic
-│   │   ├── extraction.py             top-level orchestrator (Phases 0–7)
+│   │   ├── extraction.py             top-level orchestrator
 │   │   ├── llm_provider.py           LLMProvider Protocol + AnthropicProvider
 │   │   ├── reconciler.py             lenient V1 merge (workflow + validation findings)
-│   │   ├── agents/                   one file per workflow agent
+│   │   ├── planner/                  deterministic SheetRowPlanner pipeline
+│   │   │   ├── sheet_surveyor.py     raw structural signals from the sheet
+│   │   │   ├── row_classifier.py     per-row role assignment (HEADER/DATA/TOTAL/…)
+│   │   │   ├── kv_anchor_detector.py key-value block identification (SHEET_IS_PLI layouts)
+│   │   │   ├── stage_band_detector.py horizontal stage-band ranges
+│   │   │   ├── block_segmenter.py    PLI block boundaries from classified rows
+│   │   │   └── sheet_row_planner.py  assembles SheetPlan artifact
+│   │   ├── agents/                   LLM agents — judge/label roles only
 │   │   │   ├── _base.py              AgentSpec, AgentRunner, RetryPolicy, AgentRunFailure
 │   │   │   ├── sheet_classifier.py
-│   │   │   ├── layout_fingerprinter.py
-│   │   │   ├── boundary_finder.py
-│   │   │   ├── identity_locator.py
-│   │   │   ├── quantity_date_locator.py
-│   │   │   └── stage_locator.py
+│   │   │   ├── layout_hinter.py      hints for the planner (LLM-as-advisor)
+│   │   │   ├── plan_reviewer.py      LLM-as-judge: validates SheetPlan before apply
+│   │   │   └── field_namer.py        maps supplier column headers → canonical field names
 │   │   ├── validation/               4 deterministic checks (no LLM)
 │   │   │   ├── source_cell_verifier.py
 │   │   │   ├── header_match_verifier.py
 │   │   │   ├── coverage_verifier.py     (80% floor)
 │   │   │   └── field_dropout_verifier.py  (50% floor)
-│   │   └── applier/                  deterministic — applies artifacts to workbook
-│   │       ├── _registry.py          BoundaryPattern → handler registry
-│   │       ├── field_applier.py      apply_field_map (incl. merge-prop + repeat-header strip)
-│   │       ├── stage_applier.py      apply_stage_band_set + strip_stage_columns_from_metadata
-│   │       └── patterns/             one file per BoundaryPattern handler
+│   │   └── applier/                  deterministic — applies SheetPlan to workbook
+│   │       └── apply_plan.py         apply_plan: ROW_PER_PLI / SHEET_IS_PLI / SECTION_PER_PLI
 │   ├── prompts/                      .md prompts loaded by services/agents/
 │   │   ├── _shared.md                glossary + faithful-extraction principles
 │   │   └── workflow/                 one .md per workflow agent
@@ -266,8 +268,8 @@ For the full collector list (and which code path emits each one), see [`ARCHITEC
 
 Every common extension is a small contained change — typically one file plus one or two re-exports. See the [Extension points table in ARCHITECTURE.md](./ARCHITECTURE.md#extension-points) for the full matrix. Quick examples:
 
-- **New workbook layout** → one enum entry in `app/enums/boundary_pattern.py` + one handler in `app/services/applier/patterns/<name>.py`.
-- **New canonical field** → one field on `PLI` (Pydantic) + one line in `IdentityLocator` or a new sibling locator.
+- **New workbook layout** → the `SheetRowPlanner` + `apply_plan` handle all three `PliMode` axes (ROW_PER_PLI, SHEET_IS_PLI, SECTION_PER_PLI) without new code; tweak `LayoutHinter` prompt if hinting is needed.
+- **New canonical field** → one field on `PLI` (Pydantic) + one entry in the `FieldNamer` prompt vocabulary.
 - **New agent** → one file under `app/services/agents/` + one prompt file under `app/prompts/workflow/`.
 - **New validator** → one file under `app/services/validation/`.
 - **New tool** → one `@tool`-decorated function under `app/repositories/workbook_tools/`.
