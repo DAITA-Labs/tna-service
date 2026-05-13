@@ -71,6 +71,18 @@ tool_calls_total = Counter(
     labelnames=("tool_name",),
 )
 
+tool_duration_seconds = Histogram(
+    "tool_duration_seconds",
+    "Per-tool latency.",
+    labelnames=("tool_name",),
+)
+
+tool_errors_total = Counter(
+    "tool_errors_total",
+    "Per-tool error count.",
+    labelnames=("tool_name",),
+)
+
 # LLM-level invocation counter
 llm_calls_total = Counter(
     "llm_calls_total",

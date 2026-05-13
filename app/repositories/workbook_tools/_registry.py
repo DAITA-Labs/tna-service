@@ -6,8 +6,9 @@ decorator; no other place to wire it up.
 """
 from __future__ import annotations
 import functools
+import time as _time
 from typing import Callable
-from app.core.telemetry import tool_calls_total
+from app.core.telemetry import tool_calls_total, tool_duration_seconds, tool_errors_total
 
 
 class ToolRegistry:
@@ -24,7 +25,16 @@ class ToolRegistry:
             @functools.wraps(fn)
             def _counted(*args, **kwargs):
                 tool_calls_total.labels(tool_name=name).inc()
-                return fn(*args, **kwargs)
+                _t0 = _time.monotonic()
+                try:
+                    return fn(*args, **kwargs)
+                except Exception:
+                    tool_errors_total.labels(tool_name=name).inc()
+                    raise
+                finally:
+                    tool_duration_seconds.labels(tool_name=name).observe(
+                        _time.monotonic() - _t0
+                    )
 
             self._tools[name] = _counted
             return fn
