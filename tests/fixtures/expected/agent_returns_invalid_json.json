@@ -1,0 +1,16 @@
+{
+  "fixture": "agent_returns_invalid_json",
+  "description": "Tabular sheet with a FakeLLM that simulates agent failure for FieldNamer.",
+  "layer_expectations": {
+    "agent": {
+      "field_namer": {
+        "canned_response_invalid": true,
+        "expected_fallback_name_map": {"field_labels": {}, "stage_names": {}}
+      }
+    }
+  },
+  "failure_expectations": {
+    "category": "agent_failure",
+    "graceful_degradation": true
+  }
+}

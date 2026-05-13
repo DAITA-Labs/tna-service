@@ -1,0 +1,21 @@
+{
+  "fixture": "apply_name_map_missing_required",
+  "description": "Tabular sheet processed with an empty CanonicalNameMap.",
+  "layer_expectations": {
+    "e2e": {
+      "fake_llm_responses": {
+        "SheetClassifierOutput": {"relevant_sheets": ["S"]},
+        "CanonicalNameMap": {"field_labels": {}, "stage_names": {}},
+        "LayoutHints": {},
+        "PlanVerdict": {"verdict": "looks_correct"}
+      },
+      "pli_count_min": 0,
+      "pli_count_max": 1
+    }
+  },
+  "failure_expectations": {
+    "category": "apply_mismatch",
+    "graceful_degradation": true,
+    "io_number_field_must_be_none_or_unset": true
+  }
+}

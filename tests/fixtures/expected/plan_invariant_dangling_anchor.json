@@ -1,0 +1,14 @@
+{
+  "fixture": "plan_invariant_dangling_anchor",
+  "description": "SheetPlan with CHILD pointing at non-existent ANCHOR — corrupt graph.",
+  "layer_expectations": {
+    "flow": {
+      "plan_invariants_must_contain_error": "reference_integrity"
+    }
+  },
+  "failure_expectations": {
+    "category": "plan_invariant",
+    "expected_invariant_violation": "reference_integrity",
+    "expected_severity": "error"
+  }
+}
