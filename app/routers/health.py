@@ -1,6 +1,5 @@
-"""Health check + metrics router."""
+"""Health check router."""
 from fastapi import APIRouter
-from starlette_prometheus import metrics
 from app.schemas.health import HealthResponse
 from app.core.logs import get_logger
 

@@ -12,14 +12,11 @@ def test_health_returns_ok():
     assert r.json()["status"] == "healthy"
 
 
-def test_metrics_endpoint_serves_prometheus():
-    client = TestClient(app)
-    r = client.get("/metrics")
-    assert r.status_code == 200
-    # Default Prometheus exposition format — at least one of our collectors
-    # must appear (extraction_duration_seconds is registered at import time
-    # via app.core.telemetry).
-    assert "extraction_duration_seconds" in r.text
+def test_metrics_endpoint_removed():
+    import pytest
+    # The /metrics endpoint was removed in SigNoz migration.
+    # Metrics now flow over OTLP gRPC to the OTLP collector.
+    pytest.skip("/metrics route removed; metrics exported via OTLP")
 
 
 def test_extract_endpoint_calls_orchestrator(tmp_path):
