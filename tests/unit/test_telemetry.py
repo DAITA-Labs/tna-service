@@ -21,7 +21,7 @@ def test_all_collectors_registered():
 
 
 def test_agent_duration_labels_per_agent():
-    agent_duration_seconds.labels(agent="boundary_finder").observe(0.5)
+    agent_duration_seconds.labels(agent="boundary_finder", status="success").observe(0.5)
     samples = [s for m in REGISTRY.collect() if m.name == "agent_duration_seconds"
                for s in m.samples]
     assert any(s.labels.get("agent") == "boundary_finder" for s in samples)

@@ -28,7 +28,7 @@ extraction_pli_count = Gauge(
 agent_duration_seconds = Histogram(
     "agent_duration_seconds",
     "Wall-clock time spent inside one agent's LLM call",
-    labelnames=("agent",),
+    labelnames=("agent", "status"),
     buckets=(0.5, 1.0, 2.5, 5.0, 10.0, 20.0, 60.0),
 )
 

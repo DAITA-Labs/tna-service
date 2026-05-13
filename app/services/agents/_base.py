@@ -56,6 +56,7 @@ class AgentRunner:
         user = self.spec.build_user_input(ctx, inputs)
         attempt = 0
         last_error = ""
+        run_t0 = time.monotonic()
         log.info("agent_run_start", agent=self.spec.name,
                  input_keys=sorted(inputs.keys()))
 
@@ -70,9 +71,9 @@ class AgentRunner:
                     tool_name=tool_name,
                     agent_name=self.spec.name,
                 )
-                agent_duration_seconds.labels(agent=self.spec.name).observe(
-                    time.monotonic() - t0
-                )
+                agent_duration_seconds.labels(
+                    agent=self.spec.name, status="success"
+                ).observe(time.monotonic() - t0)
                 log.info("agent_run_success", agent=self.spec.name,
                          attempt=attempt)
                 return out
@@ -98,6 +99,9 @@ class AgentRunner:
                 if attempt > self.spec.retry.max_retries:
                     break
 
+        agent_duration_seconds.labels(
+            agent=self.spec.name, status="failure"
+        ).observe(time.monotonic() - run_t0)
         return AgentRunFailure(
             agent_name=self.spec.name,
             attempt_count=attempt,
