@@ -34,8 +34,7 @@ def test_workflow_agents_each_in_own_module():
     agents = {p.stem for p in agents_dir.glob("*.py")
               if p.name not in ("__init__.py", "_base.py")}
     assert agents == {
-        "sheet_classifier", "layout_fingerprinter", "boundary_finder",
-        "identity_locator", "quantity_date_locator", "stage_locator",
+        "sheet_classifier", "layout_hinter", "plan_reviewer", "field_namer",
     }
 
 
