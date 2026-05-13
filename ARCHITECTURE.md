@@ -10,11 +10,11 @@
 2. [Design principles](#design-principles)
 3. [Layered structure](#layered-structure)
 4. [High-level topology](#high-level-topology)
-5. [The seven phases](#the-seven-phases)
+5. [The pipeline phases](#the-pipeline-phases)
 6. [Bridge artifacts (data flow)](#bridge-artifacts-data-flow)
 7. [Agent inventory](#agent-inventory)
 8. [Validation arm](#validation-arm)
-9. [Applier & pattern registry](#applier--pattern-registry)
+9. [SheetRowPlanner & apply_plan](#sheetrowplanner--apply_plan)
 10. [Reconciler](#reconciler)
 11. [Eval framework](#eval-framework)
 12. [Telemetry](#telemetry)
@@ -32,9 +32,12 @@
 | **PLI** | Production Line Item — one unique combination of style + color + fabric in a TNA. Each PLI carries an `io_number`, identity fields, a delivery date, a quantity, and a list of stages. |
 | **IO Number** | Internal Order number. A single TNA file can hold many PLI rows, each with its own IO. |
 | **Stage** | A production milestone (e.g. *Trims Inhouse*, *Sewing*, *Inspection*) with a planned date and optional sub-fields (actual, end, qty). |
-| **Boundary Pattern** | How PLIs are laid out in a sheet — one of `one_row_per_pli`, `one_sheet_per_pli`, `vertical_merge`, `data_then_total`. Drives applier dispatch. |
-| **Stage Layout Mode** | How a stage's sub-fields appear — `wide_sub_columns` (Plan/Actual to the right) or `tall_sub_rows` (Plan/Action/Deviation stacked beneath). |
-| **Bridge Artifact** | Pydantic data class that flows between LLM agents and deterministic Python. Inspector emits a `StructuralFingerprint`, BoundaryFinder emits `PLIBoundaries`, etc. |
+| **PLI scope** | How PLIs are laid out in a sheet — one of `ROW_PER_PLI`, `SECTION_PER_PLI`, or `SHEET_IS_PLI`. |
+| **Stage scope** | Where stage band definitions live — `SHEET_LEVEL` (shared across all PLIs), `SECTION_LOCAL` (per PliBlock), or `PLI_LOCAL` (embedded inside a SHEET_IS_PLI block). |
+| **PLI height** | Whether each PLI occupies a single data row (`SINGLE_ROW`) or multiple stacked sub-rows (`MULTI_ROW`) with roles PLAN / ACTION / ACTUAL / DEVIATION. |
+| **SheetPlan** | The unified artifact produced by SheetRowPlanner and consumed verbatim by `apply_plan`. Encodes all three axes above plus row-level `RowSpec` classifications. |
+| **SheetSignals** | Raw structural signals emitted by SheetSurveyor — merged regions, row-type distribution, header vocabulary, dtype profiles — passed to SheetRowPlanner. |
+| **Bridge Artifact** | Pydantic data class that flows between LLM agents and deterministic Python. SheetRowPlanner emits `SheetPlan`; FieldNamer emits `CanonicalNameMap`. |
 | **Source cells** | Per-PLI traceability map: `{"io_number": "K4", "delivery_date": "P4"}`. Lets a reviewer open the workbook and verify any extracted value at its origin. |
 
 ---
@@ -72,9 +75,10 @@ flowchart TB
     subgraph SVC["services/ — business logic"]
       direction TB
       O["extraction.py<br/>(orchestrator)"]
-      AG["agents/<br/>(6 workflow agents + _base)"]
-      VL["validation/<br/>(4 deterministic verifiers)"]
-      AP["applier/<br/>(pattern registry + 4 handlers + field/stage)"]
+      AG["agents/<br/>(3 LLM agents + _base)"]
+      PL["planner/<br/>(SheetSurveyor + SheetRowPlanner<br/>+ sub-detectors)"]
+      AP["applier/<br/>(apply_plan — 100% deterministic)"]
+      VL["validation/<br/>(plan invariants + plan statistics<br/>+ 4 extraction verifiers)"]
       RC["reconciler.py"]
       LL["llm_provider.py"]
     end
@@ -91,10 +95,10 @@ flowchart TB
     end
 
     subgraph EN["enums/"]
-      E1["BoundaryPattern"]
+      E1["PliMode"]
       E2["CellDtype"]
-      E3["StageLayoutMode"]
-      E4["LocationPattern"]
+      E3["RowRole / SubRowRole"]
+      E4["StageScope"]
       E5["ValidationSeverity"]
       E6["Environment"]
     end
@@ -108,7 +112,7 @@ flowchart TB
 
     subgraph PROMPTS["prompts/ — .md files"]
       P1["_shared.md"]
-      P2["workflow/*.md (6 files)"]
+      P2["workflow/*.md (4 files: sheet_classifier,<br/>layout_hinter, plan_reviewer, field_namer)"]
     end
 
     HTTP --> SCH
@@ -128,32 +132,32 @@ flowchart TB
 
 ## High-level topology
 
-The orchestrator runs two arms in parallel — workflow extracts, validation checks — and the reconciler merges their outputs.
+The orchestrator runs the per-sheet pipeline (planner → apply_plan), then feeds all PLIs into a parallel validation arm; the reconciler merges the two.
 
 ```mermaid
 flowchart TB
     INPUT[xlsx upload]
     ORCH{Orchestrator<br/>services/extraction.py}
 
-    subgraph WF["Workflow arm"]
+    subgraph WF["Workflow arm (per sheet, parallel allowed)"]
       direction TB
-      W1[SheetClassifier]
-      W2[LayoutFingerprinter]
-      W3[BoundaryFinder]
-      W4a[IdentityLocator]
-      W4b[QuantityDateLocator]
-      W4c[StageLocator]
-      W5[Applier<br/>field_applier + stage_applier]
-      W1 --> W2 --> W3
-      W3 --> W4a
-      W3 --> W4b
-      W3 --> W4c
-      W4a --> W5
-      W4b --> W5
-      W4c --> W5
+      W1[SheetClassifier — LLM]
+      W2[SheetSurveyor — det]
+      W3[SheetRowPlanner — det]
+      W3a[validate_plan T1+T2 — det]
+      W3b[LayoutHinter — LLM, conditional]
+      W3c[PlanReviewer — LLM judge, conditional]
+      W4[FieldNamer — LLM]
+      W5[apply_plan — 100% det, zero LLM]
+      W1 --> W2 --> W3 --> W3a
+      W3a -- errors --> W3b --> W3
+      W3a -- warnings/low-conf/rare mode --> W3c --> W3
+      W3a -- clean --> W4
+      W3c -- looks_correct --> W4
+      W4 --> W5
     end
 
-    subgraph VL["Validation arm (deterministic)"]
+    subgraph VL["Validation arm (deterministic, post-aggregation)"]
       direction TB
       V1[SourceCellVerifier]
       V2[HeaderMatchVerifier]
@@ -161,7 +165,7 @@ flowchart TB
       V4[FieldDropoutVerifier<br/>50% floor]
     end
 
-    RECON[Reconciler<br/>lenient V1]
+    RECON[Reconciler<br/>lenient]
     OUT[ExtractionResult<br/>+ Warnings + source_cells + confidence]
 
     INPUT --> ORCH
@@ -172,54 +176,63 @@ flowchart TB
     RECON --> OUT
 ```
 
-**Two arms, one reconciler.** Workflow output flows to the reconciler unchanged. Validation findings attach as `Warning` entries. Extraction confidence is recomputed from a weighted blend (workflow's self-reported confidence + validation pass rate).
+**LLM-as-judge pattern.** Deterministic Python produces the `SheetPlan`; LLM agents critique it (`PlanReviewer`) and fill in vocabulary mapping (`FieldNamer`). Row arithmetic stays out of the LLM. In the median case only one LLM call occurs per sheet (`FieldNamer`); `LayoutHinter` and `PlanReviewer` are conditional on plan quality signals.
 
 ---
 
-## The seven phases
+## The pipeline phases
 
-The orchestrator's `extract(workbook_path)` runs these phases in order. Each phase has a deterministic contract: known inputs, known outputs, known failure handling.
+The orchestrator's `extract(workbook_path)` runs these phases. Phases 2–5 run once per TNA-relevant sheet (parallel across sheets is allowed). Phases 6–7 run once after all sheets are aggregated.
 
 ```mermaid
 flowchart TB
-    P0[Phase 0 — Ingest<br/>register_workbook → WorkbookCtx]
-    P1[Phase 1 — Sheet Classification<br/>SheetClassifier picks TNA-relevant sheets]
+    P0[Phase 0 — Ingest<br/>register_workbook → WorkbookCtx + workbook_summary tool]
+    P1[Phase 1 — Sheet Classification<br/>SheetClassifier → relevant_sheets]
     BR{any relevant sheets?}
     HALT[return empty + warning]
 
-    P2[Phase 2 — Fingerprint<br/>LayoutFingerprinter → StructuralFingerprint]
-    P3[Phase 3 — Boundary<br/>BoundaryFinder → PLIBoundaries]
-    P4P["Phase 4 — Locators (parallel, D2)<br/>IdentityLocator ‖ QuantityDateLocator ‖ StageLocator"]
-    DEDUP[strip_stage_columns_from_metadata]
-    P5[Phase 5 — Apply<br/>field_applier + stage_applier<br/>merge propagation + is_real_pli + repeat-header strip]
+    P2[Phase 2 — Survey<br/>SheetSurveyor → SheetSignals]
+    P3[Phase 3 — Plan<br/>SheetRowPlanner → SheetPlan draft]
+    P3a[Phase 3a — validate_plan T1+T2<br/>Tier 1 structural + Tier 2 statistical]
+    P3b[Phase 3b — LayoutHinter LLM<br/>conditional: only when Tier 1 errors]
+    P3c[Phase 3c — PlanReviewer LLM judge<br/>conditional: warnings / low conf / rare mode]
 
-    OSPB{one_sheet_per_pli?}
+    P4[Phase 4 — FieldNamer LLM<br/>→ CanonicalNameMap]
+    P5[Phase 5 — apply_plan<br/>100% deterministic, zero LLM → list of PLI]
+
     NEXT[next relevant sheet]
 
     P6[Phase 6 — Validation parallel x4<br/>SourceCell · HeaderMatch · Coverage · FieldDropout]
-    P7[Phase 7 — Reconcile<br/>workflow + findings → ExtractionResult]
+    P7[Phase 7 — Reconcile<br/>PLIs + findings → ExtractionResult]
 
     P0 --> P1 --> BR
     BR -- no --> HALT
     BR -- yes --> P2
-    P2 --> P3 --> P4P --> DEDUP --> P5 --> OSPB
-    OSPB -- yes, D3 fast-path break --> P6
-    OSPB -- no, more sheets --> NEXT --> P2
-    OSPB -- no, all done --> P6
+    P2 --> P3 --> P3a
+    P3a -- Tier 1 errors --> P3b --> P3
+    P3a -- warnings/low-conf/rare --> P3c --> P3a
+    P3a -- clean --> P4
+    P3c -- looks_correct --> P4
+    P4 --> P5
+    P5 -- more sheets --> NEXT --> P2
+    P5 -- all done --> P6
     P6 --> P7
 ```
 
-**Per-sheet loop semantics.** Phases 2–5 run once per TNA-relevant sheet. When BoundaryFinder emits `pattern == one_sheet_per_pli`, the applier already iterates `sheet_iter` internally — so we **break out of the outer loop** (decision D3) to avoid producing 5×5=25 duplicate PLIs.
+**Per-sheet loop semantics.** Phases 2–5 run once per TNA-relevant sheet. `apply_plan` dispatches on `pli_mode` (ROW_PER_PLI / SECTION_PER_PLI / SHEET_IS_PLI) — there is no special-case break for any particular mode; every mode handles its own sheet boundary naturally.
 
-**Failure handling per phase (D6 — tiered):**
+**Failure handling per phase:**
 
-| Phase | If the agent fails | What happens |
+| Phase | If the component/agent fails | What happens |
 |---|---|---|
 | 1 SheetClassifier | fallback | Include all sheets (false positives are cheap) |
-| 2 LayoutFingerprinter | fallback | Conservative default fingerprint, log warning |
-| 3 BoundaryFinder | fallback | Default `one_row_per_pli` boundary, log warning |
-| 4 any locator | fallback | Empty `FieldMap` / `StageBandSet`, log warning |
-| 5 Applier | never fails | Deterministic; if any field's `FlexibleDate` rejects a value, that field is dropped from the PLI (the PLI itself survives) |
+| 2 SheetSurveyor | fallback | Minimal SheetSignals, log warning |
+| 3 SheetRowPlanner | fallback | Default ROW_PER_PLI plan, log warning |
+| 3a validate_plan | never fails | Always returns findings (possibly empty) |
+| 3b LayoutHinter | skip | Proceed with original plan + re-plan attempt |
+| 3c PlanReviewer | skip, log telemetry | Proceed with plan as-is |
+| 4 FieldNamer | fallback | Empty CanonicalNameMap (identity fields still extractable) |
+| 5 apply_plan | never fails | If a referenced cell/row is absent, emits Warning and skips that PLI |
 | 6 any validator | skip that check | Other checks continue |
 
 ---
@@ -233,42 +246,41 @@ flowchart LR
     WK[WorkbookCtx]
 
     subgraph PHASE1["Phase 1"]
-      SC[SheetClassifier]
+      SC[SheetClassifier — LLM]
       WK --> SC
       SC --> RL[relevant_sheets: list str]
     end
 
-    subgraph PHASE2["Phase 2 — per sheet"]
-      LF[LayoutFingerprinter]
-      RL --> LF
-      LF --> SF[StructuralFingerprint]
+    subgraph PHASE23["Phases 2-3 — per sheet"]
+      SV[SheetSurveyor — det]
+      RP[SheetRowPlanner — det]
+      RL --> SV
+      SV --> SS[SheetSignals]
+      SS --> RP
+      RP --> SP[SheetPlan draft]
     end
 
-    subgraph PHASE3["Phase 3 — per sheet"]
-      BF[BoundaryFinder]
-      SF --> BF
-      BF --> PB[PLIBoundaries]
+    subgraph PHASE3ABC["Phase 3a-c — per sheet"]
+      VP[validate_plan T1+T2]
+      LH[LayoutHinter — LLM, conditional]
+      PR[PlanReviewer — LLM judge, conditional]
+      SP --> VP
+      VP -- errors --> LH --> RP
+      VP -- warnings/low-conf --> PR --> VP
     end
 
-    subgraph PHASE4["Phase 4 — per sheet, parallel"]
-      IL[IdentityLocator]
-      QDL[QuantityDateLocator]
-      SL[StageLocator]
-      PB --> IL
-      PB --> QDL
-      PB --> SL
-      IL --> FM1[FieldMap identity]
-      QDL --> FM2[FieldMap qty/date]
-      SL --> SBS[StageBandSet]
+    subgraph PHASE4["Phase 4 — per sheet"]
+      FN[FieldNamer — LLM]
+      VP -- clean --> FN
+      PR -- looks_correct --> FN
+      FN --> NM[CanonicalNameMap]
     end
 
     subgraph PHASE5["Phase 5 — apply"]
-      MERGE[merge field maps + dedup]
-      FM1 --> MERGE
-      FM2 --> MERGE
-      SBS --> MERGE
-      MERGE --> APPLY[Applier]
-      APPLY --> PLIs[list of PLI<br/>with stages + source_cells]
+      AP[apply_plan — 100% det]
+      SP --> AP
+      NM --> AP
+      AP --> PLIs[list of PLI<br/>with stages + source_cells]
     end
 
     subgraph PHASE6["Phase 6 — validate"]
@@ -294,13 +306,15 @@ flowchart LR
 | Artifact | Key fields |
 |---|---|
 | `WorkbookSummary` | `sheet_count`, `sheet_names`, `file_size_kb` |
-| `StructuralFingerprint` | 9 booleans (`sheets_appear_parallel`, `has_vertical_merges_in_data`, `multi_band_stages_per_pli`, ...) + `stage_layout_mode` + `sample_evidence` |
-| `PLIBoundaries` | `pattern: BoundaryPattern`, `data_start_row`, `data_end_row`, `grouping_columns`, `total_row_indicator_col/value`, `sheet_iter` |
-| `FieldLocation` | `field`, `pattern: LocationPattern`, `column` / `anchor_cell`+`value_offset_rc` |
-| `FieldMap` | `locations: list[FieldLocation]`, `metadata_locations: list[PLIMetadataLocation]` |
-| `StageColumn` | `name` (canonical), `primary_col`, `sub_columns: dict` |
-| `StageBand` | `section_name`, `layout_mode: StageLayoutMode`, `name_row`, `sub_header_row`/`sub_rows`, `stage_columns: list[StageColumn]` |
-| `StageBandSet` | `sheet`, `bands: list[StageBand]` |
+| `SheetSignals` | merged regions, row-type distribution, header vocabulary, dtype profiles, sample rows |
+| `RowSpec` | `idx`, `role: RowRole`, `anchor_idx`, `group_id`, `sub_row_role: SubRowRole \| None` |
+| `KVAnchor` | `label_cell`, `value_cell`, `field` |
+| `StageBandSpec` | `name`, `name_cell`, `sub_header_row`, `sub_rows: dict[role→row]`, `stage_cols: dict[name→col]`, `layout_mode` |
+| `PliBlock` | `id`, `bbox: (start_row, end_row)`, `identity: list[KVAnchor]`, `stage_bands: list[StageBandSpec]` |
+| `SheetPlan` | `sheet`, `pli_mode: PliMode`, `stage_scope: StageScope`, `header_rows`, `rows: list[RowSpec]`, `pli_blocks`, `kv_anchors`, `stage_bands`, `confidence` |
+| `CanonicalNameMap` | `field_aliases: dict[raw_label→canonical_field]`, `stage_name_map: dict[raw→canonical]` |
+| `LayoutHints` | hints from LayoutHinter to guide re-planning (identity_column, mode_lock, etc.) |
+| `PlanVerdict` | `verdict: looks_correct \| needs_fix`, row corrections, identity-column suggestion, warnings, confidence |
 | `ValidationFinding` | `check`, `severity: ValidationSeverity`, `message`, `pli_index`, `field` |
 | `ValidationFindings` | `findings: list[ValidationFinding]` + `warn_rate` property |
 
@@ -308,23 +322,30 @@ flowchart LR
 
 ## Agent inventory
 
-Six LLM-driven workflow agents. Each one is data-first: a frozen `AgentSpec` value (name, system prompt, output schema, `build_user_input` function) and a thin Haystack `@component` wrapper that delegates to `AgentRunner`. The runner handles retry-with-error-context on Pydantic validation failures.
+Three LLM-driven agents remain in the workflow; two are conditional. Each is data-first: a frozen `AgentSpec` value (name, system prompt, output schema, `build_user_input` function) and a component wrapper that delegates to `AgentRunner`. The runner handles retry-with-error-context on Pydantic validation failures.
 
-| # | Agent | Single decision | Output |
-|---|---|---|---|
-| 1 | **SheetClassifier** | Which sheets are TNA-relevant? | `relevant_sheets: list[str]` |
-| 2 | **LayoutFingerprinter** | What structural patterns describe this sheet? | `StructuralFingerprint` |
-| 3 | **BoundaryFinder** | How are PLIs organised? | `PLIBoundaries` |
-| 4 | **IdentityLocator** | Where do io / style / color / fabric live? | `FieldMap.locations[identity]` + metadata |
-| 5 | **QuantityDateLocator** | Where do quantity / delivery_date live? | `FieldMap.locations[qty,date]` + metadata |
-| 6 | **StageLocator** | What are the stage bands and their canonical names? | `StageBandSet` |
+| # | Agent | Role | Fires when | Output |
+|---|---|---|---|---|
+| 1 | **SheetClassifier** | Filter | always | `relevant_sheets: list[str]` |
+| 2 | **LayoutHinter** | Re-plan hint | Tier 1 errors in `validate_plan` | `LayoutHints` |
+| 3 | **PlanReviewer** | LLM judge | Tier 1/2 warnings, `confidence < 0.85`, or rare `pli_mode` | `PlanVerdict` |
+| 4 | **FieldNamer** | Vocabulary mapping | after plan is accepted | `CanonicalNameMap` |
 
-**Retry semantics (D5):** every agent retries once on Pydantic `ValidationError`, with the validation error message appended to the user prompt as context. After the retry, `AgentRunFailure` is *returned* (not raised) — the orchestrator decides whether to use a fallback or halt.
+**Retry semantics:** every agent retries once on Pydantic `ValidationError`, with the error message appended to the user prompt as context. After the retry, `AgentRunFailure` is *returned* (not raised) — the orchestrator decides whether to use a fallback or halt.
 
-**Why these six (and not more):**
-- Identity, qty/date, stage cuts at natural prompt boundaries — each agent has one decision and a focused vocabulary.
-- Splitting *more* (e.g. one agent per canonical field) bloats orchestration without sharpening any single prompt.
-- We considered an LLM `FieldReviewer` (second opinion on disputed columns) — **explicitly deferred to V2** until the deterministic validators demonstrably leave gaps.
+**Why four agents (and not more):**
+- Row arithmetic and structural classification belong in deterministic Python (`SheetRowPlanner`) — LLMs are unreliable for integer offsets and set-partition problems.
+- Vocabulary mapping (raw header labels → canonical field names) and plan critique are exactly where LLM judgment adds value.
+- `LayoutHinter` and `PlanReviewer` are advisory — deterministic signals win on disagreement; discrepancies are logged for prompt improvement.
+
+**Deterministic components** (not agents — no LLM calls):
+
+| Component | Role | Output |
+|---|---|---|
+| **SheetSurveyor** | Structural signal extraction | `SheetSignals` |
+| **SheetRowPlanner** | Plan induction from signals | `SheetPlan` |
+| **validate_plan** (T1+T2) | Invariant + statistical checks | `ValidationFindings` |
+| **apply_plan** | 100% LLM-free PLI emission | `list[PLI]` |
 
 ---
 
@@ -365,46 +386,74 @@ Findings flow into the reconciler as `Warning` entries on the final result — V
 
 ---
 
-## Applier & pattern registry
+## SheetRowPlanner & apply_plan
 
-The applier is pure deterministic Python. Pattern dispatch is registry-based — adding a new boundary pattern is one file in `app/services/applier/patterns/` plus a `@pattern_handler` decorator.
+### Three orthogonal axes
+
+`SheetPlan` encodes three independent dimensions of layout variation. Any combination is valid; future families extend by adding rules to the deterministic planner, not new prompts.
+
+| Axis | Values |
+|---|---|
+| PLI scope | `ROW_PER_PLI` · `SECTION_PER_PLI` · `SHEET_IS_PLI` |
+| Stage scope | `SHEET_LEVEL` · `SECTION_LOCAL` · `PLI_LOCAL` |
+| PLI height | `SINGLE_ROW` · `MULTI_ROW` (sub-row roles: PLAN / ACTION / ACTUAL / DEVIATION) |
+
+### SheetRowPlanner sub-components
 
 ```mermaid
 flowchart TB
-    FA[apply_field_map<br/>FieldMap + PLIBoundaries → list of PLI]
-    PR{Pattern registry<br/>get_pattern_handler}
-    H1[one_row_per_pli<br/>iterate start..end]
-    H2[data_then_total<br/>iterate + drop indicator-matching rows]
-    H3[vertical_merge<br/>iterate every row<br/>merge propagation in field_applier]
-    H4[one_sheet_per_pli<br/>returns empty<br/>field_applier branches on sheet_iter]
+    SS[SheetSignals]
+    RC[row_classifier<br/>ANCHOR / CHILD / TOTAL /<br/>HEADER / BLANK / SEPARATOR / …]
+    KV[kv_anchor_detector<br/>label→value cell pairs]
+    SB[stage_band_detector<br/>StageBandSpec per band]
+    BK[block_segmenter<br/>PliBlock list for SECTION_PER_PLI]
+    PL[plan.py — SheetRowPlanner<br/>orchestrates sub-components]
+    SP[SheetPlan draft]
 
-    FA --> PR
-    PR --> H1
-    PR --> H2
-    PR --> H3
-    PR --> H4
-
-    H1 --> ITER[per-row read fields<br/>+ source_cells + repeat-header strip<br/>+ tolerant Pydantic build]
-    H2 --> ITER
-    H3 --> ITER
-    H4 --> ITER
-
-    ITER --> FILTER[is_real_pli filter<br/>requires at least one of<br/>io/style/color/fabric]
-    FILTER --> OUT[list of PLI]
+    SS --> RC --> PL
+    SS --> KV --> PL
+    SS --> SB --> PL
+    SS --> BK --> PL
+    PL --> SP
 ```
 
-**Defensive layers built into the applier:**
+### validate_plan tiers
 
-| Layer | What it does | Pattern bug it caught |
-|---|---|---|
-| Pattern registry | Dispatches row iteration per `BoundaryPattern` | clean separation; no `if/elif` chains |
-| Merge propagation | For `vertical_merge`, a sub-row inherits its identity from the merge anchor | Multi-color sub-rows in Compass Pro |
-| Repeat-header strip | If a row's canonical field value matches a known header label, identity is cleared | Stacked sub-tables in NORTHERN REFLECTIONS |
-| `is_real_pli` filter | Drops rows with no canonical identity at all | Totals rows, banners, blank rows |
-| Tolerant Pydantic build | Drops fields that fail validation; preserves the rest of the PLI | DD-MMM-YYYY dates that fail FlexibleDate |
-| `source_cells` recording | A1 address per field, for downstream verification | Foundation of `SourceCellVerifier` |
+**Tier 1 — Structural invariants (mandatory, always run):** ReferenceIntegrity, RowUniqueness, HeaderContiguity, PliBlockNonOverlap, StageBandFit, CoveragePartition, SubRowConsistency.
 
-**Stage dedup helper:** `strip_stage_columns_from_metadata(field_map, stage_set)` removes any PLI-metadata location whose column is already claimed by a `StageColumn.primary_col` or `sub_columns`. Prevents `Sewing Qty` from appearing as both `Stage.metadata.qty` *and* `PLI.metadata.sewing_qty`.
+**Tier 2 — Statistical sanity (mandatory, always run):** SequenceMatch, TotalArithmetic, DateBandDensity, KvAnchorAdjacency, PliCountSanity, IdentityColumnCoverage, VocabularyOverlap.
+
+Tier 1 errors trigger a re-plan loop with `LayoutHinter` hints (identity_column override, mode lock). Tier 1/2 warnings (not errors) trigger `PlanReviewer`. If the reviewer says `needs_fix`, corrections are applied and validation reruns.
+
+### apply_plan — locked contract
+
+`apply_plan` is the pure resolver from `SheetPlan + CanonicalNameMap → list[PLI]`.
+
+```mermaid
+flowchart TB
+    IN[SheetPlan + CanonicalNameMap]
+    M{dispatch on pli_mode}
+    R[_apply_row_per_pli<br/>group by group_id<br/>SINGLE_ROW or MULTI_ROW fold]
+    S[_apply_section_per_pli<br/>per PliBlock → recurse as row-per-pli]
+    K[_apply_sheet_is_pli<br/>KV anchors → one PLI per sheet]
+    OUT[list of PLI with stages + source_cells]
+
+    IN --> M
+    M --> R --> OUT
+    M --> S --> OUT
+    M --> K --> OUT
+```
+
+**Locked invariants on `apply_plan`:**
+
+| Invariant | Rule |
+|---|---|
+| 100% deterministic | Same inputs → identical outputs on every run |
+| Zero LLM calls | Not directly, not indirectly, not via fallback paths |
+| No silent fallbacks | Missing cell/row → typed error → Warning on ExtractionResult (PLI skipped) |
+| Enum-only dispatch | Switches on `pli_mode`, `stage_scope`, `RowSpec.role`, `sub_row_role`; no string matching |
+| One pass, no agent loop | Correctness is the planner's responsibility; apply_plan trusts the plan |
+| source_cells recorded | A1 address per field on every PLI, foundation of `SourceCellVerifier` |
 
 ---
 
@@ -499,14 +548,14 @@ These were nailed down during the brainstorming session. Re-opening any of them 
 | # | Decision | Locked | Rationale |
 |---|---|---|---|
 | **D1** | Per-sheet parallelism in Phases 2–5 | sequential V1 | Most labeled files are 1–3 sheets; rate-limit risk; simpler error handling |
-| **D2** | Within-sheet locator parallelism | all 3 in parallel | All 3 consume `PLIBoundaries` only; independent shards; ~3× faster Phase 4 |
-| **D3** | Fast-path for `one_sheet_per_pli` | yes, branch after fingerprint | Eliminates 5×5=25-duplicate class structurally |
-| **D4** | Validation timing | after all sheets aggregated | Cross-sheet context; simpler than per-sheet merge |
-| **D5** | Retry policy | 1 retry with error context | Empirically fixes most JSON-as-string artifacts on first retry |
-| **D6** | Agent failure handling | tiered (halt on fingerprint, fallback on others) | Partial output is more useful than no output |
-| **D7** | Adaptive routing on fingerprint | no skip-list V1 | Today's agents are universal; skip-optimisation is YAGNI |
+| **D2** | LLM-as-judge pattern | det produces plan; LLM critiques + maps vocab | Row arithmetic is exactly what LLMs are unreliable at; vocabulary mapping is exactly what they excel at |
+| **D3** | `apply_plan` zero-LLM invariant | enforced by static analysis + test | Correctness is the planner's responsibility; apply_plan must never reach back to an agent |
+| **D4** | Extraction validator timing | after all sheets aggregated | Cross-sheet context; simpler than per-sheet merge |
+| **D5** | Agent retry policy | 1 retry with error context | Empirically fixes most JSON-as-string artifacts on first retry |
+| **D6** | Agent failure handling | tiered (skip conditional agents, fallback on FieldNamer) | Partial output is more useful than no output |
+| **D7** | Deterministic signals win on disagreement | PlanReviewer is advisory; log discrepancies | Telemetry drives prompt improvement rather than overriding hard arithmetic |
 | **D8** | Cross-sheet PLI aggregation | concatenate, preserve `source_sheet`, no dedup | Different sheets genuinely hold different PLIs |
-| **D9** | Phase 5 determinism gates | both `is_real_pli` AND repeat-header detection | Each catches a different class of false-PLI |
+| **D9** | Three-axis plan encoding | PLI scope × Stage scope × PLI height are orthogonal | Covers all observed families + future families without new enum cases |
 | **D10** | Telemetry granularity | per-phase + per-agent + per-validator | Lets us correlate prompt changes to behaviour |
 
 ---
@@ -517,36 +566,37 @@ Adding new things should be small contained changes. This matrix is enforced by 
 
 | New thing arrives | Files you touch | Files you do **not** touch |
 |---|---|---|
-| **New layout shape** (e.g. `horizontal_merge`, `multi_section`) | 1× enum entry in `app/enums/boundary_pattern.py` + 1× file in `app/services/applier/patterns/<name>.py` | all agents, validators, eval, orchestrator |
-| **New canonical field** on `PLI` | 1× field on `PLI` Pydantic + 1× line in `IdentityLocator` (or new sibling locator) | all existing extraction; eval auto-picks the field up |
-| **New non-PLI row pattern** | 1× deterministic check under `app/services/validation/` | workflow agents |
+| **New layout family** | Rules in `app/services/planner/row_classifier.py` (and/or sibling detectors) | agents, validators, eval, orchestrator, apply_plan |
+| **New PLI scope / stage scope value** | 1× enum entry + 1× branch in `apply_plan` dispatch table | planner sub-components, agents, validators |
+| **New canonical field** on `PLI` | 1× field on `PLI` Pydantic + `field_namer.md` vocab hint | all existing extraction; eval auto-picks the field up |
+| **New non-PLI row role** | 1× `RowRole` enum entry + rule in `row_classifier.py` | apply_plan (unknown roles produce a deterministic warning) |
 | **New supplier header vocabulary** | 1× term in the validator's `_VOCAB` dict | all agents |
-| **New tool** | 1× `@tool`-decorated function under `app/repositories/workbook_tools/` | agents that don't need it |
-| **New agent** | 1× file under `app/services/agents/` + 1× prompt in `app/prompts/workflow/` | other agents; orchestrator hard-coded list (just one connection to add) |
-| **New validator** | 1× file under `app/services/validation/` + 1× wire-up in orchestrator | workflow side; reconciler |
-| **New labeled file (no rule change)** | drop JSON in `dataset/extracted/` + the matching xlsx in `dataset/` | nothing else — eval auto-picks it up |
+| **New tool** | 1× `@tool`-decorated function under `app/repositories/workbook_tools/` | agents/components that don't need it |
+| **New LLM agent** | 1× file under `app/services/agents/` + 1× prompt in `app/prompts/workflow/` | other agents; orchestrator (one connection to add) |
+| **New extraction validator** | 1× file under `app/services/validation/` + 1× wire-up in orchestrator | workflow side; reconciler |
+| **New labeled file (no rule change)** | drop JSON in `dataset/extracted/` + matching xlsx in `dataset/` | nothing else — eval auto-picks it up |
 
 ```mermaid
 flowchart LR
-    subgraph AGENTS["Add a new agent"]
+    subgraph LAYOUT["Add a new layout family"]
+      L1[1\. planner/row_classifier.py: +rules]
+      L2[2\. planner/stage_band_detector.py: +rules if needed]
+    end
+
+    subgraph AGENTS["Add a new LLM agent"]
       A1[1\. agents/new_agent.py]
       A2[2\. prompts/workflow/new_agent.md]
       A3[3\. extraction.py: 1 line]
     end
 
-    subgraph PATTERNS["Add a new boundary pattern"]
-      P1[1\. enums/boundary_pattern.py: +1 entry]
-      P2[2\. applier/patterns/new_pattern.py]
-    end
-
-    subgraph VALIDATORS["Add a new validator"]
+    subgraph VALIDATORS["Add a new extraction validator"]
       V1[1\. validation/new_check.py]
       V2[2\. extraction.py: 1 line]
     end
 
     subgraph FIELDS["Add a new canonical field"]
       F1[1\. models/extraction.py: +1 field on PLI]
-      F2[2\. IdentityLocator: header in vocab]
+      F2[2\. prompts/workflow/field_namer.md: +vocab]
     end
 ```
 
@@ -559,6 +609,7 @@ If a PR touches more than two columns of the matrix above, that's a yellow flag 
 1. [`README.md`](./README.md) — install + run + API + Make targets
 2. This file — sections 1–6 (definitions, principles, layered structure, topology, phases, artifacts)
 3. `app/services/extraction.py` — the orchestrator, top-to-bottom
-4. One workflow agent in full: `app/services/agents/identity_locator.py` + `app/prompts/workflow/identity_locator.md`
-5. `app/services/applier/field_applier.py` — the deterministic side
-6. `tests/integration/test_acceptance_extensibility.py` — the structural contract
+4. `app/services/planner/plan.py` — SheetRowPlanner, then its sub-components (`row_classifier.py`, `stage_band_detector.py`)
+5. `app/services/applier/apply_plan.py` — the deterministic apply step; note the enum dispatch table
+6. One LLM agent in full: `app/services/agents/field_namer.py` + `app/prompts/workflow/field_namer.md`
+7. `tests/integration/test_acceptance_extensibility.py` — the structural contract
