@@ -25,7 +25,7 @@
     <cluster>
       <shard>
         <replica>
-          <host>localhost</host>
+          <host>clickhouse</host>
           <port>9000</port>
         </replica>
       </shard>
