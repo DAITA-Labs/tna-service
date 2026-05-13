@@ -9,9 +9,8 @@ in the codebase can:
         span.set_attribute("sheet", "S1")
         ...
 
-Spans automatically carry trace_id/span_id; the structlog processor in
-configure_logging picks those up and attaches them to every log line, so
-Loki <-> Tempo correlation works without manual wiring.
+Spans carry trace_id/span_id; the structlog processor in configure_logging
+picks those up and attaches them to every log line for log-trace correlation.
 
 All OTel imports are lazy (inside functions) so this module is safe to import
 in environments where opentelemetry isn't installed (local dev outside
@@ -22,55 +21,78 @@ import os
 
 
 def configure_tracing(service_name: str = "tna-service",
-                     otlp_endpoint: str | None = None) -> None:
-    """Initialise OTel SDK with OTLP gRPC export to Tempo + W3C/B3 propagation.
+                     otlp_endpoint: str | None = None):
+    """Set up TracerProvider + MeterProvider + LoggerProvider with OTLP export.
 
-    Propagators: W3C TraceContext (default for browsers, FastAPI, most SDKs) +
-    B3 multi-format (used by some legacy backends). Composite propagator
-    accepts traceparent / X-B3-* headers on incoming requests and emits
-    traceparent on outgoing calls.
+    Returns the LoggerProvider for the caller to attach a stdlib handler.
+    Returns None if OTel packages aren't available.
 
-    Outgoing HTTP calls via httpx (which the Anthropic SDK uses) are
-    auto-instrumented so they inherit the current span and inject
-    traceparent on the wire.
-
-    Endpoint defaults to TEMPO_OTLP_ENDPOINT env var, then to tempo:4317.
-    Idempotent — repeated calls do nothing.
+    Propagators: W3C TraceContext + B3 multi-format (composite).
+    Outgoing httpx calls are auto-instrumented.
+    Endpoint resolved from: argument → OTEL_EXPORTER_OTLP_ENDPOINT →
+    TEMPO_OTLP_ENDPOINT (back-compat) → http://otel-collector:4317.
+    Idempotent — repeated calls return the existing LoggerProvider.
     """
     try:
-        from opentelemetry import trace
+        from opentelemetry import trace, metrics, _logs
         from opentelemetry.sdk.resources import Resource
         from opentelemetry.sdk.trace import TracerProvider
         from opentelemetry.sdk.trace.export import BatchSpanProcessor
+        from opentelemetry.sdk.metrics import MeterProvider
+        from opentelemetry.sdk.metrics.export import PeriodicExportingMetricReader
+        from opentelemetry.sdk._logs import LoggerProvider
+        from opentelemetry.sdk._logs.export import BatchLogRecordProcessor
         from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
+        from opentelemetry.exporter.otlp.proto.grpc.metric_exporter import OTLPMetricExporter
+        from opentelemetry.exporter.otlp.proto.grpc._log_exporter import OTLPLogExporter
     except ImportError:
-        return
+        return None
 
+    # Idempotent — if already initialised, return existing logger provider
     if trace.get_tracer_provider().__class__.__name__ != "ProxyTracerProvider":
-        # already configured
-        return
+        return _logs.get_logger_provider()
 
-    endpoint = (otlp_endpoint or os.environ.get("TEMPO_OTLP_ENDPOINT") or
-                "http://tempo:4317")
+    endpoint = (otlp_endpoint
+                or os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT")
+                or os.environ.get("TEMPO_OTLP_ENDPOINT")  # back-compat during migration
+                or "http://otel-collector:4317")
     resource = Resource.create({"service.name": service_name})
-    provider = TracerProvider(resource=resource)
-    provider.add_span_processor(BatchSpanProcessor(
+
+    # Traces
+    tracer_provider = TracerProvider(resource=resource)
+    tracer_provider.add_span_processor(BatchSpanProcessor(
         OTLPSpanExporter(endpoint=endpoint, insecure=True)
     ))
-    trace.set_tracer_provider(provider)
+    trace.set_tracer_provider(tracer_provider)
 
-    # Set up composite propagator: W3C TraceContext + B3 multi-format
+    # Metrics
+    metric_reader = PeriodicExportingMetricReader(
+        OTLPMetricExporter(endpoint=endpoint, insecure=True),
+        export_interval_millis=15_000,
+    )
+    metrics.set_meter_provider(MeterProvider(
+        resource=resource,
+        metric_readers=[metric_reader],
+    ))
+
+    # Logs
+    logger_provider = LoggerProvider(resource=resource)
+    logger_provider.add_log_record_processor(BatchLogRecordProcessor(
+        OTLPLogExporter(endpoint=endpoint, insecure=True)
+    ))
+    _logs.set_logger_provider(logger_provider)
+
+    # Propagators (W3C + B3)
     try:
         from opentelemetry.propagate import set_global_textmap
         from opentelemetry.propagators.composite import CompositePropagator
         from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
         from opentelemetry.propagators.b3 import B3MultiFormat
         set_global_textmap(CompositePropagator([
-            TraceContextTextMapPropagator(),  # W3C — incoming traceparent
-            B3MultiFormat(),                  # B3 X-B3-* headers
+            TraceContextTextMapPropagator(),
+            B3MultiFormat(),
         ]))
     except ImportError:
-        # B3 propagator package optional; fall back to W3C only
         pass
 
     # Auto-instrument httpx so outgoing Anthropic SDK calls propagate trace context
@@ -79,6 +101,8 @@ def configure_tracing(service_name: str = "tna-service",
         HTTPXClientInstrumentor().instrument()
     except ImportError:
         pass
+
+    return logger_provider
 
 
 def get_tracer(name: str = "tna_service"):
