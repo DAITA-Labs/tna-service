@@ -8,7 +8,12 @@
       "anchor_count": 3,
       "child_count": 0,
       "repeat_header_count": 1,
-      "header_rows": [1]
+      "header_rows": [1],
+      "must_not": {
+        "pli_mode_in": ["sheet_is_pli", "section_per_pli"],
+        "has_kv_anchors": false,
+        "has_pli_blocks": false
+      }
     },
     "e2e": {
       "fake_llm_responses": {

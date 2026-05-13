@@ -5,7 +5,12 @@
     "flow": {
       "pli_mode": "sheet_is_pli",
       "kv_anchor_count_per_sheet": [2, 2, 2],
-      "stage_band_count_per_sheet": [1, 1, 1]
+      "stage_band_count_per_sheet": [1, 1, 1],
+      "must_not": {
+        "pli_mode_in": ["row_per_pli", "section_per_pli"],
+        "has_rows": false,
+        "has_pli_blocks": false
+      }
     },
     "e2e": {
       "fake_llm_responses": {
