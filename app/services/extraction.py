@@ -1,7 +1,9 @@
 """Top-level orchestration with the new SheetRowPlanner-based pipeline."""
 from __future__ import annotations
+import contextlib
 import time
 from pathlib import Path
+import structlog.contextvars
 from app.repositories.workbook_repo import register_workbook
 from app.models.extraction import ExtractionResult, PLI, Warning
 from app.models.artifacts import (
@@ -26,7 +28,11 @@ from app.services.validation.field_dropout_verifier import FieldDropoutVerifier
 from app.services.reconciler import reconcile
 from app.repositories.workbook_tools._registry import TOOL_REGISTRY
 from app.core.logs import get_logger
-from app.core.telemetry import extraction_duration_seconds, extraction_pli_count
+from app.core.telemetry import (
+    extraction_duration_seconds,
+    extraction_pli_count,
+    extraction_phase_duration_seconds,
+)
 import app.repositories.workbook_tools.survey  # noqa: F401
 import app.repositories.workbook_tools.bulk_read  # noqa: F401
 import app.repositories.workbook_tools.targeted  # noqa: F401
@@ -35,19 +41,36 @@ import app.repositories.workbook_tools.search  # noqa: F401
 
 log = get_logger(__name__)
 
+
+@contextlib.contextmanager
+def _phase(name: str):
+    """Time a named phase and bind it to the structlog context."""
+    structlog.contextvars.bind_contextvars(phase=name)
+    t0 = time.monotonic()
+    try:
+        yield
+    finally:
+        extraction_phase_duration_seconds.labels(phase=name).observe(
+            time.monotonic() - t0
+        )
+        structlog.contextvars.unbind_contextvars("phase")
+
 _CONFIDENCE_GATE = 0.85
 
 
 def _plan_for_sheet(ctx, sheet: str, llm):
     warnings: list[Warning] = []
     planner = SheetRowPlanner()
-    plan: SheetPlan = planner.run(workbook_ctx=ctx, sheet=sheet)["plan"]
 
-    findings_t1 = validate_invariants(plan)
-    findings_t2 = validate_statistics(ctx, plan)
-    findings = findings_t1 + findings_t2
-    errors = [f for f in findings if f.severity == ValidationSeverity.ERROR]
-    warns = [f for f in findings if f.severity == ValidationSeverity.WARN]
+    with _phase("planner"):
+        plan: SheetPlan = planner.run(workbook_ctx=ctx, sheet=sheet)["plan"]
+
+    with _phase("plan_validate"):
+        findings_t1 = validate_invariants(plan)
+        findings_t2 = validate_statistics(ctx, plan)
+        findings = findings_t1 + findings_t2
+        errors = [f for f in findings if f.severity == ValidationSeverity.ERROR]
+        warns = [f for f in findings if f.severity == ValidationSeverity.WARN]
 
     needs_reviewer = (
         bool(warns)
@@ -69,10 +92,11 @@ def _plan_for_sheet(ctx, sheet: str, llm):
             warnings.append(Warning(message=f"{f.check}: {f.message}", severity="warning"))
 
     if needs_reviewer:
-        reviewer = PlanReviewer(llm=llm)
-        verdict: PlanVerdict = reviewer.run(
-            workbook_ctx=ctx, plan=plan, findings=findings,
-        )["verdict"]
+        with _phase("plan_reviewer"):
+            reviewer = PlanReviewer(llm=llm)
+            verdict: PlanVerdict = reviewer.run(
+                workbook_ctx=ctx, plan=plan, findings=findings,
+            )["verdict"]
         if verdict.verdict == "needs_fix":
             new_rows = list(plan.rows)
             for corr in verdict.row_corrections:
@@ -85,8 +109,9 @@ def _plan_for_sheet(ctx, sheet: str, llm):
                         break
             plan = plan.model_copy(update={"rows": new_rows})
 
-    namer = FieldNamer(llm=llm)
-    name_map: CanonicalNameMap = namer.run(workbook_ctx=ctx, plan=plan)["name_map"]
+    with _phase("field_namer"):
+        namer = FieldNamer(llm=llm)
+        name_map: CanonicalNameMap = namer.run(workbook_ctx=ctx, plan=plan)["name_map"]
 
     return plan, name_map, warnings
 
@@ -96,9 +121,10 @@ def extract(workbook_path: Path | str, *, llm=None) -> ExtractionResult:
     ctx = register_workbook(workbook_path)
     llm = llm or AnthropicProvider.from_env()
 
-    summary = TOOL_REGISTRY.get("workbook_summary")(ctx)
-    sc = SheetClassifier(llm=llm)
-    relevant = sc.run(workbook_ctx=ctx, workbook_summary=summary)["relevant_sheets"]
+    with _phase("sheet_classifier"):
+        summary = TOOL_REGISTRY.get("workbook_summary")(ctx)
+        sc = SheetClassifier(llm=llm)
+        relevant = sc.run(workbook_ctx=ctx, workbook_summary=summary)["relevant_sheets"]
     if not relevant:
         return ExtractionResult(
             plis=[], source_file=str(ctx.path),
@@ -112,7 +138,8 @@ def extract(workbook_path: Path | str, *, llm=None) -> ExtractionResult:
     for sheet in relevant:
         plan, name_map, warns = _plan_for_sheet(ctx, sheet, llm)
         all_warnings.extend(warns)
-        plis = apply_plan(ctx, plan, name_map)
+        with _phase("apply_plan"):
+            plis = apply_plan(ctx, plan, name_map)
         for pli in plis:
             if not pli.source.sheet:
                 pli.source.sheet = sheet
@@ -124,14 +151,16 @@ def extract(workbook_path: Path | str, *, llm=None) -> ExtractionResult:
         plis=all_plis, warnings=all_warnings,
         format_detected=format_detected, source_file=str(ctx.path),
     )
-    src_v = SourceCellVerifier(workbook_ctx=ctx).run(extraction=result)["findings"]
-    hdr_v = HeaderMatchVerifier(workbook_ctx=ctx).run(extraction=result)["findings"]
-    cov_v = CoverageVerifier(boundaries=[]).run(extraction=result)["findings"]
-    drop_v = FieldDropoutVerifier().run(extraction=result)["findings"]
+    with _phase("validators"):
+        src_v = SourceCellVerifier(workbook_ctx=ctx).run(extraction=result)["findings"]
+        hdr_v = HeaderMatchVerifier(workbook_ctx=ctx).run(extraction=result)["findings"]
+        cov_v = CoverageVerifier(boundaries=[]).run(extraction=result)["findings"]
+        drop_v = FieldDropoutVerifier().run(extraction=result)["findings"]
     all_findings = ValidationFindings(findings=(
         src_v.findings + hdr_v.findings + cov_v.findings + drop_v.findings
     ))
-    final = reconcile(workflow_out=result, validation_out=all_findings)
+    with _phase("reconciler"):
+        final = reconcile(workflow_out=result, validation_out=all_findings)
     extraction_duration_seconds.labels(
         format_detected=final.format_detected or "unknown"
     ).observe(time.monotonic() - t0)

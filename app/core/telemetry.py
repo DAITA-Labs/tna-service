@@ -57,6 +57,13 @@ validator_findings_total = Counter(
     labelnames=("check", "severity"),
 )
 
+# Per-phase extraction timing
+extraction_phase_duration_seconds = Histogram(
+    "extraction_phase_duration_seconds",
+    "Per-phase latency within a single extraction request.",
+    labelnames=("phase",),
+)
+
 # Per-tool
 tool_calls_total = Counter(
     "tool_calls_total",
