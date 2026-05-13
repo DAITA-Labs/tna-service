@@ -1,4 +1,5 @@
 """FastAPI app entry point — wires routers + telemetry + structured logging."""
+import os
 from fastapi import FastAPI
 from starlette_prometheus import metrics, PrometheusMiddleware
 from app.config.settings import get_settings
@@ -11,9 +12,13 @@ from app.enums.environment import Environment
 
 
 _settings = get_settings()
+# JSON logs whenever we run inside a container (Loki / log-aggregator readable)
+# OR whenever APP_ENV is non-development. Local `make serve` outside a container
+# still gets the human-readable ConsoleRenderer.
+_in_container = os.path.exists("/.dockerenv") or os.environ.get("LOG_FORMAT") == "json"
 configure_logging(
     level=_settings.log_level,
-    json_output=_settings.app_env != Environment.DEVELOPMENT,
+    json_output=_in_container or _settings.app_env != Environment.DEVELOPMENT,
 )
 
 

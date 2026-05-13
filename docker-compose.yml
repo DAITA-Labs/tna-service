@@ -9,7 +9,9 @@ services:
     env_file:
       - .env
     environment:
-      - APP_ENV=${APP_ENV:-development}
+      # Default to production inside the container so structlog emits JSON
+      # (which Promtail can parse). Override by exporting APP_ENV before `make up`.
+      - APP_ENV=${APP_ENV:-production}
     volumes:
       # Mount the local labeled dataset for `make eval` from inside the container.
       - ./dataset:/app/dataset:ro
