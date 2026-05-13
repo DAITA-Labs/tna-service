@@ -452,6 +452,9 @@ Environment values: `development | staging | production | test`. Environment-awa
 
 The eval matrix is the gate that says "this change improves or regresses extraction".
 
+For the full testing conventions — tiers, fixtures, failure-case patterns,
+and the cookbook for adding new layouts — see [docs/TESTING.md](TESTING.md).
+
 ## 14. What's in V1 vs deferred
 
 **V1 (Spec 1 — SheetRowPlanner pipeline):**
