@@ -139,7 +139,7 @@ class SheetRowPlanner:
             header_rows=header_rows,
             rows=rows,
             pli_blocks=blocks,
-            kv_anchors=kv_anchors if pli_mode != PliMode.SECTION_PER_PLI else [],
+            kv_anchors=kv_anchors if pli_mode is PliMode.SHEET_IS_PLI else [],
             stage_bands=stage_bands_sheet,
             stage_scope=stage_scope,
             confidence=confidence,

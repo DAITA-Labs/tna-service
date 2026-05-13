@@ -70,3 +70,21 @@ def test_plan_christian_berg_like(tmp_path):
     assert len(anchors) == 2
     assert len(children) == 5
     assert len(totals) == 2
+
+
+def test_plan_row_per_pli_does_not_emit_kv_anchors(tmp_path):
+    """KV anchors are reserved for SHEET_IS_PLI. Column-header labels like
+    'STYLE' / 'COLOR' / 'ORDER QTY' must not leak into kv_anchors for a
+    tabular sheet — otherwise the applier overwrites real column reads with
+    adjacent-cell garbage (e.g., quantity := 'PLAN QTY')."""
+    clear_cache()
+    def fill(ws):
+        ws["A1"] = "S NO"; ws["B1"] = "IO NO"; ws["F1"] = "STYLE"
+        ws["K1"] = "COLOR"; ws["L1"] = "ORDER QTY"; ws["M1"] = "PLAN QTY"
+        ws["A2"] = 1; ws["B2"] = 1063; ws["F2"] = "DWJE"
+        ws["K2"] = "MAGENTA"; ws["L2"] = 2356; ws["M2"] = 2482
+    p = _save(tmp_path, fill)
+    ctx = register_workbook(p)
+    plan = SheetRowPlanner().run(workbook_ctx=ctx, sheet="S")["plan"]
+    assert plan.pli_mode is PliMode.ROW_PER_PLI
+    assert plan.kv_anchors == []
