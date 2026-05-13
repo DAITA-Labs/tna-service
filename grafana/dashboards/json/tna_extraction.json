@@ -203,7 +203,7 @@
       "datasource": { "type": "loki", "uid": "loki" },
       "targets": [{
         "datasource": { "type": "loki", "uid": "loki" },
-        "expr": "{job=\"tna-service\"} | json | __error__=\"\" | request_id=~\"${request_id:regex}\" | line_format \"[{{.level}}] {{.event}}{{if .agent}} agent={{.agent}}{{end}}{{if .phase}} phase={{.phase}}{{end}}{{if .tool_name}} tool={{.tool_name}}{{end}}{{if .request_id}} req={{.request_id}}{{end}}\"",
+        "expr": "{job=\"tna-service\"} | json | __error__=\"\" | request_id=~\"${request_id}\" | line_format \"[{{.level}}] {{.event}}{{if .agent}} agent={{.agent}}{{end}}{{if .phase}} phase={{.phase}}{{end}}{{if .tool_name}} tool={{.tool_name}}{{end}}{{if .request_id}} req={{.request_id}}{{end}}\"",
         "refId": "A"
       }],
       "options": {

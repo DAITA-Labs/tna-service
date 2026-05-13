@@ -243,7 +243,7 @@
       "targets": [
         {
           "datasource": { "type": "loki", "uid": "loki" },
-          "expr": "{job=\"tna-service\"} | json | __error__=\"\" | level=~\"${level:regex}\" | phase=~\"${phase:regex}\" | agent=~\"${agent:regex}\" | request_id=~\"${request_id:regex}\" | line_format \"[{{.level}}] {{.event}}{{if .agent}} agent={{.agent}}{{end}}{{if .phase}} phase={{.phase}}{{end}}{{if .tool_name}} tool={{.tool_name}}{{end}}{{if .request_id}} req={{.request_id}}{{end}}{{if .duration_ms}} dur={{.duration_ms}}ms{{end}}\"",
+          "expr": "{job=\"tna-service\"} | json | __error__=\"\" | level=~\"${level:pipe}\" | phase=~\"${phase:pipe}\" | agent=~\"${agent:pipe}\" | request_id=~\"${request_id}\" | line_format \"[{{.level}}] {{.event}}{{if .agent}} agent={{.agent}}{{end}}{{if .phase}} phase={{.phase}}{{end}}{{if .tool_name}} tool={{.tool_name}}{{end}}{{if .request_id}} req={{.request_id}}{{end}}{{if .duration_ms}} dur={{.duration_ms}}ms{{end}}\"",
           "refId": "A"
         }
       ],
