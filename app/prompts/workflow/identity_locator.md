@@ -31,9 +31,38 @@ YOU DO NOT READ VALUES.
 
 ## Patterns to emit
 
-- `column` — most common.
-- `anchor` — scattered KV layouts: anchor_cell + value_offset_rc.
+- `column` — most common. `column` letter + `data_start_row` / `data_end_row`.
+- `anchor` — scattered KV layouts (Orders Plan family). `anchor_cell` (the
+  LABEL cell, e.g. `A4`="Job No") + `value_offset_rc` (offset from label to
+  value, e.g. `(0, 1)` for one column to the right). The applier reads at
+  `anchor_cell + value_offset_rc` on EACH sheet from `sheet_iter`.
 - `merged_propagating` — vertical-merge layouts (applier walks merge anchor).
+
+## Worked example — scattered KV (one_sheet_per_pli)
+
+When `boundaries.pattern == one_sheet_per_pli`, the workbook has multiple
+parallel sheets, each one a single PLI laid out as labels + values. There
+is no row-based data range — fields live at fixed offsets from their labels.
+
+A typical Orders Plan rep sheet looks like:
+```
+  A4 [str]: "Job No"          B4 [int]: 63261
+  A5 [str]: "Quantity"        B5 [int]: 16200
+  D3 [str]: "Delivery date"   E3 [date]: 2026-05-17
+```
+
+The right emission:
+```
+FieldLocation(field="io_number",     pattern="anchor",
+              anchor_cell="A4", value_offset_rc=(0, 1), confidence=0.95)
+FieldLocation(field="quantity",      pattern="anchor",
+              anchor_cell="A5", value_offset_rc=(0, 1), confidence=0.95)
+FieldLocation(field="delivery_date", pattern="anchor",
+              anchor_cell="D3", value_offset_rc=(0, 1), confidence=0.9)
+```
+
+Look at the dumped cells for label/value pairs. Use `find_value` if you
+need to locate a label across the sheet.
 
 ## Output
 

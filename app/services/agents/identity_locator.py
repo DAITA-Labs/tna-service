@@ -75,6 +75,16 @@ def _build_user_input(ctx: Any, inputs: dict) -> str:
             for r in witness:
                 for c in read_row(ctx, sheet, r, col_range=(1, max_col)):
                     lines.append(f"  {c.address} [{c.dtype}]: {c.value!r}")
+    else:
+        # Fallback for scattered-KV layouts (`one_sheet_per_pli`): no row-based
+        # data range exists. Dump the top-left grid so the agent can see where
+        # Job No / Quantity / Delivery labels sit and emit `pattern=anchor`
+        # locations with anchor_cell + value_offset_rc.
+        rows_to_show = min(sheet_meta.max_row or 20, 25)
+        lines.append(f"## Full top-left dump (rows 1..{rows_to_show}, cols 1..{max_col}):")
+        for r in range(1, rows_to_show + 1):
+            for c in read_row(ctx, sheet, r, col_range=(1, max_col)):
+                lines.append(f"  {c.address} [{c.dtype}]: {c.value!r}")
     lines.append("")
     lines.append("## Merged regions (first 15):")
     for m in merges(ctx, sheet)[:15]:
