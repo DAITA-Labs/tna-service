@@ -3,6 +3,7 @@ from fastapi import FastAPI
 from starlette_prometheus import metrics, PrometheusMiddleware
 from app.config.settings import get_settings
 from app.core.logs import configure_logging
+from app.core.middleware import RequestIdMiddleware
 from app.core.telemetry import extraction_duration_seconds  # noqa: F401 — register
 from app.routers.extract import router as extract_router
 from app.routers.health import router as health_router
@@ -18,6 +19,7 @@ configure_logging(
 
 app = FastAPI(title="TNA Service", version="0.1.0")
 app.add_middleware(PrometheusMiddleware)
+app.add_middleware(RequestIdMiddleware)
 app.add_route("/metrics", metrics)
 app.include_router(extract_router)
 app.include_router(health_router)
