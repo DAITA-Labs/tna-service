@@ -47,6 +47,7 @@ def test_validators_each_in_own_module():
     assert vals == {
         "source_cell_verifier", "header_match_verifier",
         "coverage_verifier", "field_dropout_verifier",
+        "plan_invariants", "plan_statistics",
     }
 
 
