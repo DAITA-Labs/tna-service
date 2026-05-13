@@ -48,3 +48,25 @@ def configure_logging(level: str = "INFO", json_output: bool = True) -> None:
 
 def get_logger(name: str = "tna_service") -> structlog.stdlib.BoundLogger:
     return structlog.get_logger(name)
+
+
+def attach_otel_log_handler(logger_provider) -> None:
+    """Attach an OTel LoggingHandler to the stdlib root logger.
+
+    structlog routes through `logging.getLogger(name)`, so any handler on the
+    root logger receives every event. The OTel handler converts each LogRecord
+    into an OTel-format record and ships it via OTLP. trace_id and span_id
+    from the current span are attached automatically by the OTel SDK.
+
+    No-op when the OTel SDK isn't installed (logger_provider is None).
+    """
+    if logger_provider is None:
+        return
+    try:
+        import logging
+        from opentelemetry.sdk._logs import LoggingHandler
+        handler = LoggingHandler(level=logging.INFO,
+                                 logger_provider=logger_provider)
+        logging.getLogger().addHandler(handler)
+    except ImportError:
+        pass
