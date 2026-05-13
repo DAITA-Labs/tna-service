@@ -1,6 +1,7 @@
 """Tabular sheet whose header row has no IO/JOB/PO column.
 
 Triggers planner ambiguity: no identity_col_candidates.
+Has 10+ rows to trigger pli_count_sanity check (large sheet, 0 PLIs).
 """
 from openpyxl import Workbook
 
@@ -10,5 +11,7 @@ def build(wb: Workbook) -> None:
         del wb["Sheet"]
     ws = wb.create_sheet("S")
     ws["A1"] = "NAME"; ws["B1"] = "DESCRIPTION"; ws["C1"] = "NOTES"
-    ws["A2"] = "thing1"; ws["B2"] = "first thing"; ws["C2"] = "no notes"
-    ws["A3"] = "thing2"; ws["B3"] = "second thing"; ws["C3"] = "more notes"
+    for i in range(1, 11):
+        ws[f"A{i+1}"] = f"thing{i}"
+        ws[f"B{i+1}"] = f"description for thing {i}"
+        ws[f"C{i+1}"] = f"notes for thing {i}"
