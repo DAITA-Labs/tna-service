@@ -1,0 +1,29 @@
+{
+  "fixture": "tabular_simple",
+  "description": "Flat tabular layout — 3 PLIs, no merges, no totals.",
+  "layer_expectations": {
+    "flow": {
+      "pli_mode": "row_per_pli",
+      "identity_column": "A",
+      "anchor_count": 3,
+      "child_count": 0,
+      "total_count": 0,
+      "kv_anchor_count": 0,
+      "header_rows": [1]
+    },
+    "e2e": {
+      "fake_llm_responses": {
+        "SheetClassifierOutput": {"relevant_sheets": ["S"]},
+        "CanonicalNameMap": {
+          "field_labels": {"IO NO": "io_number", "STYLE": "style_code", "ORDER QTY": "quantity"},
+          "stage_names": {}
+        },
+        "LayoutHints": {},
+        "PlanVerdict": {"verdict": "looks_correct"}
+      },
+      "pli_count": 3,
+      "io_numbers": ["1063", "1064", "1065"]
+    }
+  },
+  "failure_expectations": null
+}

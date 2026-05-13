@@ -1,0 +1,29 @@
+{
+  "fixture": "tabular_with_totals",
+  "description": "Vertical merge + interleaved totals, 2 IOs.",
+  "layer_expectations": {
+    "flow": {
+      "pli_mode": "row_per_pli",
+      "identity_column": "B",
+      "anchor_count": 2,
+      "child_count": 1,
+      "total_count": 2,
+      "kv_anchor_count": 0,
+      "header_rows": [1]
+    },
+    "e2e": {
+      "fake_llm_responses": {
+        "SheetClassifierOutput": {"relevant_sheets": ["S"]},
+        "CanonicalNameMap": {
+          "field_labels": {"IO NO": "io_number", "COLOR": "color_code", "ORDER QTY": "quantity"},
+          "stage_names": {}
+        },
+        "LayoutHints": {},
+        "PlanVerdict": {"verdict": "looks_correct"}
+      },
+      "pli_count": 3,
+      "io_numbers": ["1063", "1063", "1064"]
+    }
+  },
+  "failure_expectations": null
+}
