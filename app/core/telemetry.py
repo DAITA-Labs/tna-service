@@ -71,6 +71,13 @@ tool_calls_total = Counter(
     labelnames=("tool_name",),
 )
 
+# Agent-level invocation counter
+agent_calls_total = Counter(
+    "agent_calls_total",
+    "Total agent invocations.",
+    labelnames=("agent", "status"),  # success | failure
+)
+
 # Extraction-level outcome counter
 extractions_total = Counter(
     "extractions_total",

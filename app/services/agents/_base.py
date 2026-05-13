@@ -13,7 +13,7 @@ from typing import Any, Callable
 from pydantic import BaseModel, ValidationError
 from app.services.llm_provider import LLMProvider
 from app.core.logs import get_logger
-from app.core.telemetry import agent_duration_seconds, agent_retry_count
+from app.core.telemetry import agent_duration_seconds, agent_retry_count, agent_calls_total
 
 log = get_logger(__name__)
 
@@ -74,6 +74,9 @@ class AgentRunner:
                 agent_duration_seconds.labels(
                     agent=self.spec.name, status="success"
                 ).observe(time.monotonic() - t0)
+                agent_calls_total.labels(
+                    agent=self.spec.name, status="success"
+                ).inc()
                 log.info("agent_run_success", agent=self.spec.name,
                          attempt=attempt)
                 return out
@@ -102,6 +105,9 @@ class AgentRunner:
         agent_duration_seconds.labels(
             agent=self.spec.name, status="failure"
         ).observe(time.monotonic() - run_t0)
+        agent_calls_total.labels(
+            agent=self.spec.name, status="failure"
+        ).inc()
         return AgentRunFailure(
             agent_name=self.spec.name,
             attempt_count=attempt,
