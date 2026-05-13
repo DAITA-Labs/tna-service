@@ -1,0 +1,54 @@
+"""Segment a sheet into PliBlocks for SECTION_PER_PLI layouts.
+
+Each block is bounded by blank-run gaps. Identity (KV anchors falling inside
+the block's bbox) and stage bands (also inside the bbox) are attached.
+"""
+from __future__ import annotations
+from app.models.artifacts import RowSpec, KVAnchor, PliBlock, StageBandSpec
+from app.enums.row_role import RowRole
+from openpyxl.utils.cell import coordinate_from_string
+
+
+def _row_of(addr: str) -> int:
+    _, r = coordinate_from_string(addr)
+    return r
+
+
+def segment_blocks(
+    rows: list[RowSpec],
+    kv_anchors: list[KVAnchor],
+    blank_run_gaps: list[tuple[int, int]],
+    stage_bands: list[StageBandSpec] | None = None,
+) -> list[PliBlock]:
+    stage_bands = stage_bands or []
+    anchors = [r for r in rows if r.role is RowRole.ANCHOR]
+    if not anchors:
+        return []
+
+    sorted_gaps = sorted(blank_run_gaps)
+    blocks: list[PliBlock] = []
+    block_id = 0
+    for i, anc in enumerate(anchors):
+        start = anc.idx
+        end = anchors[i + 1].idx - 1 if i + 1 < len(anchors) else None
+        for g_start, g_end in sorted_gaps:
+            if g_start >= start and (end is None or g_start <= end):
+                end = g_start - 1
+                break
+        if end is None:
+            end = start
+
+        block_kvs = [
+            kv for kv in kv_anchors
+            if start <= _row_of(kv.label_cell) <= end
+        ]
+        block_bands = [
+            sb for sb in stage_bands
+            if start <= _row_of(sb.name_cell) <= end
+        ]
+        blocks.append(PliBlock(
+            id=block_id, bbox=(start, end),
+            identity=block_kvs, stage_bands=block_bands,
+        ))
+        block_id += 1
+    return blocks
