@@ -161,6 +161,8 @@ class ValidationFindings(BaseModel):
 # ===== SheetRowPlanner artifacts =====
 
 from app.enums.row_role import RowRole, SubRowRole
+from app.enums.pli_mode import PliMode
+from app.enums.stage_scope import StageScope
 
 
 class SheetSignals(BaseModel):
@@ -191,3 +193,48 @@ class KVAnchor(BaseModel):
     label_cell: str
     value_cell: str
     field: str
+
+
+class StageBandSpec(BaseModel):
+    """Where one stage band lives on a sheet.
+
+    `sub_rows` keys are SubRowRole values (str); `stage_cols` maps a stage's
+    display name to its column letter.
+    """
+    model_config = ConfigDict(extra="ignore")
+    name: str
+    name_cell: str
+    sub_header_row: int
+    sub_rows: dict[str, int] = Field(default_factory=dict)
+    stage_cols: dict[str, str] = Field(default_factory=dict)
+    layout_mode: str = "wide_sub_columns"
+
+
+class PliBlock(BaseModel):
+    """A sub-rectangle of a sheet representing one PLI in SECTION_PER_PLI mode."""
+    model_config = ConfigDict(extra="ignore")
+    id: int
+    bbox: tuple[int, int]
+    identity: list[KVAnchor] = Field(default_factory=list)
+    stage_bands: list[StageBandSpec] = Field(default_factory=list)
+
+
+class SheetPlan(BaseModel):
+    """The unified plan produced by SheetRowPlanner.
+
+    `rows` is populated when pli_mode = ROW_PER_PLI.
+    `pli_blocks` is populated when pli_mode = SECTION_PER_PLI.
+    `kv_anchors` is populated when pli_mode = SHEET_IS_PLI (and also on hybrid
+    sheets where workbook-header KV applies to every PLI emitted from `rows`).
+    """
+    model_config = ConfigDict(extra="ignore")
+    sheet: str
+    pli_mode: PliMode
+    identity_column: str | None = None
+    header_rows: list[int] = Field(default_factory=list)
+    rows: list[RowSpec] = Field(default_factory=list)
+    pli_blocks: list[PliBlock] = Field(default_factory=list)
+    kv_anchors: list[KVAnchor] = Field(default_factory=list)
+    stage_bands: list[StageBandSpec] = Field(default_factory=list)
+    stage_scope: StageScope = StageScope.SHEET_LEVEL
+    confidence: float = 1.0
