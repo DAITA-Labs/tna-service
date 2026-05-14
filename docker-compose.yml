@@ -1,3 +1,7 @@
+
+include:
+  - path: ./deploy/docker/docker-compose.yaml
+
 services:
   api:
     build:
@@ -23,6 +27,6 @@ services:
       retries: 3
     networks: [signoz-net]
 
-networks:
-  signoz-net:
-    external: true
+# networks:
+#   signoz-net:
+#     external: true
