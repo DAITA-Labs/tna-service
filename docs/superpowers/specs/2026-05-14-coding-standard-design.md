@@ -1,7 +1,7 @@
 # Coding Standard + tna-service/app/ refactor — design
 
 **Date:** 2026-05-14
-**Status:** Approved, ready for implementation plan
+**Status:** Implemented (2026-05-14)
 
 ## Problem
 
