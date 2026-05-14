@@ -2,8 +2,9 @@
 
 Usage:
     make eval
-or directly:
-    .venv/Scripts/python.exe scripts/run_eval.py
+or directly, after activating the venv (`.venv/Scripts/activate` on Windows
+or `source .venv/bin/activate` on macOS/Linux):
+    python scripts/run_eval.py
 """
 from __future__ import annotations
 import sys

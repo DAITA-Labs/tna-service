@@ -56,6 +56,49 @@ make up
 # OTLP HTTP → localhost:4318  (collector)
 ```
 
+## Setting up on a fresh machine
+
+Use this when cloning the repo onto a new laptop (e.g., a brand-new MacBook). For a returning environment, the Quick start above is enough.
+
+### Prerequisites
+
+- **Python 3.12** (Homebrew on macOS: `brew install python@3.12`; on Windows: the official installer).
+- **Docker Desktop** (or any Docker engine that ships `docker compose`). On macOS: `brew install --cask docker`. Open the app once and let it finish first-time setup before running `make up`.
+- **Git** + an `ANTHROPIC_API_KEY` (live tests and `/extract` need it).
+- **GNU Make** — present on macOS by default; on Windows install via Git Bash / MSYS2 / Chocolatey.
+
+### Steps
+
+```bash
+# 1. Clone + cd
+git clone <repo-url> tna-service && cd tna-service
+
+# 2. Create + activate the venv
+python3.12 -m venv .venv
+source .venv/bin/activate            # macOS / Linux
+# or: .venv\Scripts\activate         # Windows (PowerShell)
+
+# 3. Install deps (Makefile auto-detects the platform's venv layout)
+make install
+
+# 4. Configure environment
+cp .env.example .env
+# Edit .env and fill in ANTHROPIC_API_KEY at minimum.
+
+# 5. Bring up the full stack (api + vendored SigNoz under deploy/)
+make up
+
+# 6. Verify
+curl -s http://localhost:8000/health    # api healthy → 200
+open http://localhost:8080              # SigNoz UI (Linux: xdg-open; Windows: start)
+curl -F "file=@dataset/CHRISTIAN BERG- T&A.xlsx" http://localhost:8000/extract | jq .
+# Wait ~30s, refresh SigNoz UI → Services tab → "tna-service" should appear.
+```
+
+### Optional — rehydrate Claude Code auto-memory
+
+The repo ships a frozen snapshot of per-project auto-memory at [`docs/memory-snapshot/`](./docs/memory-snapshot/README.md) (rules, principles, dataset observations, baseline metrics — the opinionated layer Claude Code accumulates over a session). To re-import it into a fresh Claude Code install on the new machine, follow the slug-resolution instructions in that README. The repo-committed `CLAUDE.md` + `docs/JOURNEY.md` + `docs/PRINCIPLES.md` + `docs/adrs/` cover the same material in curated form, so this step is optional.
+
 ## Environment variables
 
 All driven by `.env`. See [`.env.example`](./.env.example).
@@ -250,9 +293,9 @@ layouts — read [`docs/TESTING.md`](./docs/TESTING.md).**
 | `tests/live/` | Real Anthropic API against real `dataset/*.xlsx` — marked `@pytest.mark.live` | real | real dataset files |
 
 ```bash
-make test                                              # everything except live (~3s)
-.venv/Scripts/python.exe -m pytest tests -m live -q    # live tier — needs ANTHROPIC_API_KEY
-make eval                                              # full label scoreboard
+make test                       # everything except live (~3s)
+pytest tests -m live -q         # live tier — needs ANTHROPIC_API_KEY, run from an activated venv
+make eval                       # full label scoreboard
 ```
 
 ### Adding a new test scenario
@@ -323,10 +366,10 @@ The structural-layout acceptance tests in `tests/unit/structure/test_layout.py` 
 
 | Symptom | Likely cause | Fix |
 |---|---|---|
-| `ModuleNotFoundError: app` | Not running from `tna-service/` or venv not activated | `cd tna-service && .venv/Scripts/activate` (Windows) / `source .venv/bin/activate` (Linux) |
+| `ModuleNotFoundError: app` | Not running from `tna-service/` or venv not activated | `cd tna-service` then activate the venv (`.venv\Scripts\activate` on Windows, `source .venv/bin/activate` on macOS/Linux) |
 | `MissingAPIKey: ANTHROPIC_API_KEY is not set` | `.env` missing or key blank | `cp .env.example .env` and fill in your key |
 | `/extract` returns 500 | Look at the response body and api logs (`make logs`) — usually a tool/agent exception |
-| Tests in `tests/live/` all skipped | Default deselects `@pytest.mark.live` | `.venv/Scripts/python.exe -m pytest tests -m live -q` (with `ANTHROPIC_API_KEY` set) |
+| Tests in `tests/live/` all skipped | Default deselects `@pytest.mark.live` | `pytest tests -m live -q` from an activated venv (with `ANTHROPIC_API_KEY` set) |
 | `make eval` says no labels found | `dataset/extracted/` doesn't exist inside `tna-service/` | This dir ships with the corpus; if missing, re-clone or restore from git |
 | SigNoz UI empty after `/extract` | OTel batch processor flushes every ~15s; wait a moment, then refresh the Services or Traces view | —
 | ClickHouse won't start | `signoz-net` is set up by the vendored compose include; check `docker compose logs clickhouse` for init errors | —
