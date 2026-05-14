@@ -1,7 +1,8 @@
 """Prometheus-style telemetry collectors, implemented on the OTel Metrics SDK.
 
-Every collector name is preserved from the prometheus_client era. Labels are
-now passed at call time as the `attributes` dict, e.g.:
+Every collector name is preserved from the prometheus_client era so the OTel
+migration kept the observable surface stable. Labels are now passed at call
+time as the `attributes` dict, e.g.:
 
     extractions_total.add(1, {"status": "success"})
     agent_duration_seconds.record(0.45, {"agent": "field_namer", "status": "success"})
@@ -14,19 +15,24 @@ from __future__ import annotations
 
 
 def _meter():
+    """Return a real OTel meter, or a _NoopMeter when the SDK is not installed."""
     try:
-        from opentelemetry import metrics
+        from opentelemetry import metrics  # optional dependency
         return metrics.get_meter(__name__)
     except ImportError:
         return _NoopMeter()
 
 
 class _NoopInstrument:
+    """Stand-in for an OTel instrument when the SDK is not installed; methods are no-ops."""
+
     def add(self, *_args, **_kwargs): pass
     def record(self, *_args, **_kwargs): pass
 
 
 class _NoopMeter:
+    """Stand-in for an OTel Meter when the SDK is not installed; methods are no-ops."""
+
     def create_counter(self, *_args, **_kwargs): return _NoopInstrument()
     def create_histogram(self, *_args, **_kwargs): return _NoopInstrument()
     def create_up_down_counter(self, *_args, **_kwargs): return _NoopInstrument()
@@ -135,5 +141,5 @@ validator_findings_total = _m.create_counter(
     description="Validation findings emitted, by check + severity.",
 )
 
-# Back-compat alias — to be removed in Task 9 once validators are ported
+# back-compat alias — remove once all validators use validator_findings_total directly
 validator_findings = validator_findings_total
