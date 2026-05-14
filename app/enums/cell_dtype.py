@@ -3,8 +3,7 @@ from enum import Enum
 
 
 class CellDtype(str, Enum):
-    """Cell value classification. Anything not matching falls back to STR
-    at the tool layer."""
+    """Cell value classification; unmatched values fall back to STR at tool layer."""
 
     STR = "str"
     INT = "int"
