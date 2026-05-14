@@ -2,11 +2,14 @@
 that downstream planner components consume.
 """
 from __future__ import annotations
+
 from datetime import date, datetime
+
 from openpyxl.utils import get_column_letter
-from app.models.workbook import WorkbookCtx
-from app.models.artifacts import SheetSignals
+
 from app.core.logs import get_logger
+from app.models.artifacts import SheetSignals
+from app.models.workbook import WorkbookCtx
 
 log = get_logger(__name__)
 
@@ -28,19 +31,17 @@ _KV_LABEL_VOCAB = (
 
 
 def _norm(s: str) -> str:
+    """Normalise a string to lowercase collapsed whitespace."""
     return " ".join(str(s).strip().lower().split())
 
 
-def survey_sheet(ctx: WorkbookCtx, sheet: str) -> SheetSignals:
-    ws = ctx.wb[sheet]
-    max_row = ws.max_row or 0
-    max_col = ws.max_column or 0
+def _collect_header_signals(
+    ws: object, max_row: int, max_col: int
+) -> tuple[dict[str, list[str]], list[tuple[str, str]]]:
+    """Scan the first 15 rows for identity-vocab and KV-label vocabulary hits.
 
-    merges: list[tuple[int, int, int, int]] = [
-        (mr.min_row, mr.min_col, mr.max_row, mr.max_col)
-        for mr in ws.merged_cells.ranges
-    ]
-
+    Returns (header_vocab_hits, kv_label_hits).
+    """
     header_vocab_hits: dict[str, list[str]] = {}
     kv_label_hits: list[tuple[str, str]] = []
     for r in range(1, min(max_row, 15) + 1):
@@ -55,9 +56,11 @@ def survey_sheet(ctx: WorkbookCtx, sheet: str) -> SheetSignals:
             if any(term == v_norm or v_norm.endswith(term) or v_norm.startswith(term)
                    for term in _KV_LABEL_VOCAB):
                 kv_label_hits.append((v, f"{col_letter}{r}"))
+    return header_vocab_hits, kv_label_hits
 
-    identity_col_candidates = list(header_vocab_hits.keys())
 
+def _collect_blank_run_gaps(ws: object, max_row: int, max_col: int) -> list[tuple[int, int]]:
+    """Return contiguous runs of fully-empty rows as (start, end) pairs."""
     blank_run_gaps: list[tuple[int, int]] = []
     run_start: int | None = None
     for r in range(1, max_row + 1):
@@ -73,7 +76,11 @@ def survey_sheet(ctx: WorkbookCtx, sheet: str) -> SheetSignals:
             run_start = None
     if run_start is not None and max_row >= run_start:
         blank_run_gaps.append((run_start, max_row))
+    return blank_run_gaps
 
+
+def _collect_date_typed_cols(ws: object, max_row: int, max_col: int) -> list[str]:
+    """Return column letters where at least half the non-empty cells are date-typed."""
     date_typed_cols: list[str] = []
     for c in range(1, max_col + 1):
         seen = 0
@@ -87,6 +94,25 @@ def survey_sheet(ctx: WorkbookCtx, sheet: str) -> SheetSignals:
                 date_count += 1
         if seen >= 2 and date_count / seen >= 0.5:
             date_typed_cols.append(get_column_letter(c))
+    return date_typed_cols
+
+
+def survey_sheet(ctx: WorkbookCtx, sheet: str) -> SheetSignals:
+    """Survey `sheet` and return a SheetSignals bundle for downstream planners."""
+    ws = ctx.wb[sheet]
+    max_row = ws.max_row or 0
+    max_col = ws.max_column or 0
+
+    merges: list[tuple[int, int, int, int]] = [
+        (mr.min_row, mr.min_col, mr.max_row, mr.max_col)
+        for mr in ws.merged_cells.ranges
+    ]
+
+    header_vocab_hits, kv_label_hits = _collect_header_signals(ws, max_row, max_col)
+    blank_run_gaps = _collect_blank_run_gaps(ws, max_row, max_col)
+    date_typed_cols = _collect_date_typed_cols(ws, max_row, max_col)
+
+    identity_col_candidates = list(header_vocab_hits.keys())
 
     signals = SheetSignals(
         sheet=sheet, max_row=max_row, max_col=max_col,

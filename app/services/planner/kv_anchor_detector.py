@@ -5,11 +5,13 @@ For each label cell flagged by SheetSurveyor, look at (row, col+1) and
 are non-empty but the offset+1 cell is clearly a value), prefer (0,+1).
 """
 from __future__ import annotations
+
 from openpyxl.utils import column_index_from_string, get_column_letter
 from openpyxl.utils.cell import coordinate_from_string
-from app.models.workbook import WorkbookCtx
-from app.models.artifacts import SheetSignals, KVAnchor
+
 from app.core.logs import get_logger
+from app.models.artifacts import KVAnchor, SheetSignals
+from app.models.workbook import WorkbookCtx
 
 log = get_logger(__name__)
 
@@ -17,6 +19,12 @@ log = get_logger(__name__)
 def detect_kv_anchors(
     ctx: WorkbookCtx, sheet: str, signals: SheetSignals,
 ) -> list[KVAnchor]:
+    """Resolve each KV label hit into a KVAnchor with a value cell address.
+
+    Prefers the cell to the right of the label; falls back to the cell below
+    when the right cell is absent or already occupied by a string value and
+    a below value exists.
+    """
     ws = ctx.wb[sheet]
     out: list[KVAnchor] = []
     for label, addr in signals.kv_label_hits:
