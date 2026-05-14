@@ -4,26 +4,29 @@
 Catches silent under-extraction (e.g. MAIN FALL KIDS #1: extracted 2 PLIs
 from a sheet whose boundary range had ~85 candidate rows)."""
 from __future__ import annotations
+
 from haystack import component
-from app.models.extraction import ExtractionResult
-from app.models.artifacts import (
-    PLIBoundaries, ValidationFinding, ValidationFindings,
-)
-from app.enums.validation_severity import ValidationSeverity
-from app.core.telemetry import validator_findings_total
+
 from app.core.logs import get_logger
+from app.core.telemetry import validator_findings_total
+from app.enums.validation_severity import ValidationSeverity
+from app.models.artifacts import PLIBoundaries, ValidationFinding, ValidationFindings
+from app.models.extraction import ExtractionResult
 
 log = get_logger(__name__)
 
 
 @component
 class CoverageVerifier:
+    """Validates PLI count against candidate-row count; emits a finding when the ratio falls below `floor`."""
+
     def __init__(self, boundaries: list[PLIBoundaries], floor: float = 0.8):
         self.boundaries = boundaries
         self.floor = floor
 
     @component.output_types(findings=ValidationFindings)
     def run(self, extraction: ExtractionResult) -> dict:
+        """Run coverage check and return findings keyed by 'findings'."""
         findings: list[ValidationFinding] = []
         total_candidate_rows = 0
         for b in self.boundaries:

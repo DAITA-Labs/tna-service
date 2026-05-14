@@ -1,15 +1,17 @@
 """HeaderMatchVerifier — for each canonical-field's source column, the header
 row should contain text related to the canonical vocabulary."""
 from __future__ import annotations
+
 from haystack import component
 from openpyxl.utils import column_index_from_string
 from openpyxl.utils.cell import coordinate_from_string
-from app.models.extraction import ExtractionResult
-from app.models.artifacts import ValidationFinding, ValidationFindings
-from app.models.workbook import WorkbookCtx
-from app.enums.validation_severity import ValidationSeverity
-from app.core.telemetry import validator_findings_total
+
 from app.core.logs import get_logger
+from app.core.telemetry import validator_findings_total
+from app.enums.validation_severity import ValidationSeverity
+from app.models.artifacts import ValidationFinding, ValidationFindings
+from app.models.extraction import ExtractionResult
+from app.models.workbook import WorkbookCtx
 
 log = get_logger(__name__)
 
@@ -26,11 +28,14 @@ _VOCAB = {
 
 @component
 class HeaderMatchVerifier:
+    """Validates that each PLI field's source column has a recognisable header; emits a finding when no vocab term matches."""
+
     def __init__(self, workbook_ctx: WorkbookCtx):
         self.ctx = workbook_ctx
 
     @component.output_types(findings=ValidationFindings)
     def run(self, extraction: ExtractionResult) -> dict:
+        """Check header text against vocabulary for each sourced field and return findings keyed by 'findings'."""
         findings: list[ValidationFinding] = []
         seen: set[tuple] = set()
         for i, pli in enumerate(extraction.plis):
