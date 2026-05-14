@@ -1,13 +1,24 @@
-"""Bridge artifact schemas — typed contracts between agents and Python.
+"""Artifact catalogue for the TNA multi-agent pipeline.
 
-Each artifact is produced by an agent (Inspector / BoundaryFinder /
-Locators / Validators) or consumed by the appliers / reconciler.
-extra="ignore" everywhere so envelope additions stay backward-compatible.
+Every Pydantic type produced by a deterministic planner stage (Inspector,
+BoundaryFinder, FieldLocator, StageLocator, SheetRowPlanner) or consumed by
+``apply_plan`` / the reconciler lives here.  ``extra="ignore"`` on every model
+keeps envelope additions backward-compatible.
+
+This file exceeds the ~200-line S8 soft checkpoint because it holds one
+cohesive concept — the complete artifact schema for the pipeline — and
+splitting it would scatter a single contract across multiple modules.
 """
 from __future__ import annotations
+
 from typing import Any
+
 from pydantic import BaseModel, ConfigDict, Field
+
 from app.enums.location_pattern import LocationPattern
+from app.enums.pli_mode import PliMode
+from app.enums.row_role import RowRole, SubRowRole
+from app.enums.stage_scope import StageScope
 from app.enums.validation_severity import ValidationSeverity
 
 
@@ -15,6 +26,8 @@ from app.enums.validation_severity import ValidationSeverity
 
 
 class WorkbookSummary(BaseModel):
+    """Top-level metrics for a workbook: sheet count, names, and file size."""
+
     model_config = ConfigDict(extra="ignore")
     sheet_count: int
     sheet_names: list[str]
@@ -22,6 +35,8 @@ class WorkbookSummary(BaseModel):
 
 
 class StructuralFingerprint(BaseModel):
+    """Boolean structural signals that characterise a workbook's layout family."""
+
     model_config = ConfigDict(extra="ignore")
     sheets_appear_parallel: bool
     has_scattered_metadata: bool
@@ -36,6 +51,8 @@ class StructuralFingerprint(BaseModel):
 
 
 class InspectorReport(BaseModel):
+    """Inspector agent's full output — fingerprint + candidate sheets for downstream stages."""
+
     model_config = ConfigDict(extra="ignore")
     workbook_summary: WorkbookSummary
     fingerprint: StructuralFingerprint
@@ -47,6 +64,8 @@ class InspectorReport(BaseModel):
 
 
 class PLIBoundaries(BaseModel):
+    """Row-range boundaries for PLI data on a single sheet, with grouping metadata."""
+
     model_config = ConfigDict(extra="ignore")
     sheet: str
     pattern: str
@@ -64,6 +83,8 @@ class PLIBoundaries(BaseModel):
 
 
 class FieldLocation(BaseModel):
+    """Location descriptor for a single canonical PLI field on a sheet."""
+
     model_config = ConfigDict(extra="ignore")
     field: str
     pattern: LocationPattern
@@ -77,6 +98,8 @@ class FieldLocation(BaseModel):
 
 
 class PLIMetadataLocation(BaseModel):
+    """Location descriptor for a single PLI-level metadata key (non-canonical field)."""
+
     model_config = ConfigDict(extra="ignore")
     key: str
     pattern: LocationPattern
@@ -89,6 +112,8 @@ class PLIMetadataLocation(BaseModel):
 
 
 class FieldMap(BaseModel):
+    """FieldLocator's complete output for a sheet — all canonical and metadata locations."""
+
     model_config = ConfigDict(extra="ignore")
     sheet: str
     locations: list[FieldLocation] = Field(default_factory=list)
@@ -100,6 +125,8 @@ class FieldMap(BaseModel):
 
 
 class StageColumn(BaseModel):
+    """A single stage column on a sheet, with its name cell and optional sub-columns."""
+
     model_config = ConfigDict(extra="ignore")
     name: str
     name_cell: str
@@ -108,6 +135,8 @@ class StageColumn(BaseModel):
 
 
 class StageBand(BaseModel):
+    """A horizontal band of stage columns sharing a common header row on a sheet."""
+
     model_config = ConfigDict(extra="ignore")
     section_name: str | None = None
     section_anchor_cell: str | None = None
@@ -122,6 +151,8 @@ class StageBand(BaseModel):
 
 
 class StageBandSet(BaseModel):
+    """StageLocator's complete output for a sheet — all detected stage bands."""
+
     model_config = ConfigDict(extra="ignore")
     sheet: str
     bands: list[StageBand] = Field(default_factory=list)
@@ -133,6 +164,8 @@ class StageBandSet(BaseModel):
 
 
 class ValidationFinding(BaseModel):
+    """A single structured finding from a validation check — its severity, check id, and message."""
+
     model_config = ConfigDict(extra="ignore")
     check: str
     severity: ValidationSeverity
@@ -142,6 +175,8 @@ class ValidationFinding(BaseModel):
 
 
 class ValidationFindings(BaseModel):
+    """Aggregated validation output for a plan — a list of findings with a computed warn rate."""
+
     model_config = ConfigDict(extra="ignore")
     findings: list[ValidationFinding] = Field(default_factory=list)
 
@@ -158,13 +193,10 @@ class ValidationFindings(BaseModel):
 
 # ===== SheetRowPlanner artifacts =====
 
-from app.enums.row_role import RowRole, SubRowRole
-from app.enums.pli_mode import PliMode
-from app.enums.stage_scope import StageScope
-
 
 class SheetSignals(BaseModel):
     """Raw structural signals collected by SheetSurveyor for a sheet."""
+
     model_config = ConfigDict(extra="ignore")
     sheet: str
     max_row: int
@@ -178,6 +210,8 @@ class SheetSignals(BaseModel):
 
 
 class RowSpec(BaseModel):
+    """Classification of a single sheet row — its role, its anchor link, and optional sub-row metadata."""
+
     model_config = ConfigDict(extra="ignore")
     idx: int
     role: RowRole
@@ -187,6 +221,8 @@ class RowSpec(BaseModel):
 
 
 class KVAnchor(BaseModel):
+    """A label→value cell pair extracted from a key-value region of a sheet."""
+
     model_config = ConfigDict(extra="ignore")
     label_cell: str
     value_cell: str
@@ -196,9 +232,10 @@ class KVAnchor(BaseModel):
 class StageBandSpec(BaseModel):
     """Where one stage band lives on a sheet.
 
-    `sub_rows` keys are SubRowRole values (str); `stage_cols` maps a stage's
+    ``sub_rows`` keys are SubRowRole values (str); ``stage_cols`` maps a stage's
     display name to its column letter.
     """
+
     model_config = ConfigDict(extra="ignore")
     name: str
     name_cell: str
@@ -209,7 +246,8 @@ class StageBandSpec(BaseModel):
 
 
 class PliBlock(BaseModel):
-    """A sub-rectangle of a sheet representing one PLI in SECTION_PER_PLI mode."""
+    """A rectangular region of the sheet covering one PLI's data; identified by bbox + role span."""
+
     model_config = ConfigDict(extra="ignore")
     id: int
     bbox: tuple[int, int]
@@ -218,13 +256,14 @@ class PliBlock(BaseModel):
 
 
 class SheetPlan(BaseModel):
-    """The unified plan produced by SheetRowPlanner.
+    """The planner's complete description of a sheet — header rows, row classifications, KV anchors, stage bands, PLI blocks, and pli_mode.
 
-    `rows` is populated when pli_mode = ROW_PER_PLI.
-    `pli_blocks` is populated when pli_mode = SECTION_PER_PLI.
-    `kv_anchors` is populated when pli_mode = SHEET_IS_PLI (and also on hybrid
-    sheets where workbook-header KV applies to every PLI emitted from `rows`).
+    ``rows`` is populated when pli_mode = ROW_PER_PLI.
+    ``pli_blocks`` is populated when pli_mode = SECTION_PER_PLI.
+    ``kv_anchors`` is populated when pli_mode = SHEET_IS_PLI (and also on hybrid
+    sheets where workbook-header KV applies to every PLI emitted from ``rows``).
     """
+
     model_config = ConfigDict(extra="ignore")
     sheet: str
     pli_mode: PliMode
@@ -239,7 +278,8 @@ class SheetPlan(BaseModel):
 
 
 class CanonicalNameMap(BaseModel):
-    """FieldNamer's output — map detected labels to canonical names."""
+    """FieldNamer's output — map detected labels to canonical field and stage names."""
+
     model_config = ConfigDict(extra="ignore")
     field_labels: dict[str, str] = Field(default_factory=dict)
     stage_names: dict[str, str] = Field(default_factory=dict)
@@ -247,6 +287,7 @@ class CanonicalNameMap(BaseModel):
 
 class LayoutHints(BaseModel):
     """LayoutHinter's output — disambiguation hints for the planner."""
+
     model_config = ConfigDict(extra="ignore")
     identity_column_suggestion: str | None = None
     mode_suggestion: str | None = None
@@ -254,7 +295,8 @@ class LayoutHints(BaseModel):
 
 
 class PlanVerdict(BaseModel):
-    """PlanReviewer's output — judging a draft SheetPlan."""
+    """PlanReviewer's output — a verdict on a draft SheetPlan with optional row corrections."""
+
     model_config = ConfigDict(extra="ignore")
     verdict: str = "looks_correct"
     row_corrections: list[dict] = Field(default_factory=list)
