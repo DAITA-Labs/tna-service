@@ -1,13 +1,16 @@
 """Bulk-read tools — bounded windows over the sheet."""
 from __future__ import annotations
 from datetime import date, datetime
+
 from openpyxl.utils import get_column_letter
+
 from app.enums.cell_dtype import CellDtype
-from app.models.workbook import WorkbookCtx, Cell, CellGrid
+from app.models.workbook import Cell, CellGrid, WorkbookCtx
 from app.repositories.workbook_tools._registry import tool
 
 
-def _infer_dtype(v) -> CellDtype:
+def _infer_dtype(v: object) -> CellDtype:
+    """Map a raw openpyxl cell value to its CellDtype tag."""
     if v is None:
         return CellDtype.EMPTY
     if isinstance(v, bool):

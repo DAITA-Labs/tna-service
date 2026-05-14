@@ -7,9 +7,10 @@ decorator; no other place to wire it up.
 from __future__ import annotations
 import functools
 import time as _time
-from typing import Callable
-from app.core.telemetry import tool_calls_total, tool_duration_seconds, tool_errors_total
+from collections.abc import Callable
+
 from app.core.logs import get_logger
+from app.core.telemetry import tool_calls_total, tool_duration_seconds, tool_errors_total
 
 _tool_log = get_logger("app.workbook_tools")
 
@@ -21,6 +22,7 @@ class ToolRegistry:
         self._tools: dict[str, Callable] = {}
 
     def register(self, name: str) -> Callable:
+        """Return a decorator that wraps `fn` with OTel instrumentation and stores it under `name`."""
         def decorator(fn: Callable) -> Callable:
             if name in self._tools:
                 raise ValueError(f"tool {name!r} already registered")
@@ -47,11 +49,13 @@ class ToolRegistry:
         return decorator
 
     def get(self, name: str) -> Callable:
+        """Return the instrumented callable for `name`, raising KeyError if absent."""
         if name not in self._tools:
             raise KeyError(f"tool {name!r} not registered")
         return self._tools[name]
 
     def names(self) -> list[str]:
+        """Return all registered tool names in sorted order."""
         return sorted(self._tools.keys())
 
 
@@ -64,8 +68,10 @@ def tool(name: str) -> Callable:
 
 
 def get_tool(name: str) -> Callable:
+    """Look up a registered tool by name, raising KeyError if absent."""
     return TOOL_REGISTRY.get(name)
 
 
 def list_tools() -> list[str]:
+    """Return all registered tool names in sorted order."""
     return TOOL_REGISTRY.names()
