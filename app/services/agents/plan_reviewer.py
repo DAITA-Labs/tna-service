@@ -1,25 +1,32 @@
-"""PlanReviewer — LLM judge of SheetPlan correctness.
+"""PlanReviewer agent — LLM judge of SheetPlan correctness.
 
 Fires only when Tier 1/2 validators warned, plan confidence is low, or mode
 is one of the rarer modes (SECTION_PER_PLI / SHEET_IS_PLI).
 """
 from __future__ import annotations
+
 from pathlib import Path
-from typing import Any
+
 from haystack import component
-from app.services.agents._base import AgentSpec, AgentRunner, AgentRunFailure
-from app.models.artifacts import PlanVerdict, SheetPlan, ValidationFinding
-from app.services.llm_provider import LLMProvider
-from app.repositories.workbook_tools._registry import TOOL_REGISTRY
-from app.core.prompt_loader import load_prompt
+
 from app.core.logs import get_logger
+from app.core.prompt_loader import load_prompt
+from app.models.artifacts import PlanVerdict, SheetPlan, ValidationFinding
+from app.repositories.workbook_tools._registry import TOOL_REGISTRY
+from app.services.agents._base import AgentRunFailure, AgentRunner, AgentSpec
+from app.services.llm_provider import LLMProvider
 
 log = get_logger(__name__)
 
 _PROMPT_DIR = Path(__file__).resolve().parents[2] / "prompts"
 
 
-def _build_user_input(ctx: Any, inputs: dict) -> str:
+def _build_user_input(ctx: object, inputs: dict) -> str:
+    """Assemble the LLM prompt body from a SheetPlan, validator findings, and a cell peek.
+
+    Serialises the plan summary and Tier 1/2 warning findings, then appends a
+    20-row × 15-col sheet peek so the LLM can verify the plan against raw data.
+    """
     plan: SheetPlan = inputs["plan"]
     findings: list[ValidationFinding] = inputs.get("findings", [])
     sheet = plan.sheet
@@ -55,12 +62,24 @@ SPEC = AgentSpec(
 
 @component
 class PlanReviewer:
-    def __init__(self, llm: LLMProvider):
+    """Haystack component that reviews a SheetPlan for correctness and returns a verdict.
+
+    Accepts a SheetPlan and optional validator findings; produces a PlanVerdict
+    indicating whether the plan looks correct and at what confidence level.
+    """
+
+    def __init__(self, llm: LLMProvider) -> None:
+        """Wire up the underlying AgentRunner with the plan_reviewer spec."""
         self.runner = AgentRunner(SPEC, llm)
 
     @component.output_types(verdict=PlanVerdict)
-    def run(self, workbook_ctx: Any, plan: SheetPlan,
+    def run(self, workbook_ctx: object, plan: SheetPlan,
             findings: list[ValidationFinding] | None = None) -> dict:
+        """Run the plan-reviewer agent and return a correctness verdict.
+
+        Falls back to a low-confidence looks_correct verdict on agent failure
+        so the pipeline can continue without blocking on LLM unavailability.
+        """
         result = self.runner.run(workbook_ctx,
                                  {"plan": plan, "findings": findings or []})
         if isinstance(result, AgentRunFailure):

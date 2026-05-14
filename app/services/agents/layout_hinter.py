@@ -1,21 +1,29 @@
-"""LayoutHinter — LLM disambiguator for identity_column / pli_mode."""
+"""LayoutHinter agent — LLM disambiguator for identity_column and pli_mode layout signals."""
 from __future__ import annotations
+
 from pathlib import Path
-from typing import Any
+
 from haystack import component
-from app.services.agents._base import AgentSpec, AgentRunner, AgentRunFailure
-from app.models.artifacts import LayoutHints, SheetSignals
-from app.services.llm_provider import LLMProvider
-from app.repositories.workbook_tools._registry import TOOL_REGISTRY
-from app.core.prompt_loader import load_prompt
+
 from app.core.logs import get_logger
+from app.core.prompt_loader import load_prompt
+from app.models.artifacts import LayoutHints, SheetSignals
+from app.repositories.workbook_tools._registry import TOOL_REGISTRY
+from app.services.agents._base import AgentRunFailure, AgentRunner, AgentSpec
+from app.services.llm_provider import LLMProvider
 
 log = get_logger(__name__)
 
 _PROMPT_DIR = Path(__file__).resolve().parents[2] / "prompts"
 
 
-def _build_user_input(ctx: Any, inputs: dict) -> str:
+def _build_user_input(ctx: object, inputs: dict) -> str:
+    """Assemble the LLM prompt body from sheet signals and a top-left cell peek.
+
+    Fetches the top-left 10×15 grid via the peek_sheet tool and formats it
+    together with the SheetSignals model-dump so the LLM can disambiguate
+    identity_column and pli_mode from concrete evidence.
+    """
     sig: SheetSignals = inputs["signals"]
     sheet = inputs["sheet"]
     peek = TOOL_REGISTRY.get("peek_sheet")
@@ -46,13 +54,23 @@ SPEC = AgentSpec(
 
 @component
 class LayoutHinter:
-    """Haystack Component wrapper around the LayoutHinter agent."""
+    """Haystack component that resolves ambiguous layout signals into LayoutHints.
 
-    def __init__(self, llm: LLMProvider):
+    Accepts sheet signals and a workbook context; produces LayoutHints used by
+    downstream deterministic planners to select the correct parsing strategy.
+    """
+
+    def __init__(self, llm: LLMProvider) -> None:
+        """Wire up the underlying AgentRunner with the layout_hinter spec."""
         self.runner = AgentRunner(SPEC, llm)
 
     @component.output_types(hints=LayoutHints)
-    def run(self, workbook_ctx: Any, sheet: str, signals: SheetSignals) -> dict:
+    def run(self, workbook_ctx: object, sheet: str, signals: SheetSignals) -> dict:
+        """Run the layout-hinter agent and return resolved layout hints.
+
+        Falls back to an empty LayoutHints (all fields None) on agent failure
+        so the pipeline can continue with deterministic defaults.
+        """
         result = self.runner.run(workbook_ctx, {"sheet": sheet, "signals": signals})
         if isinstance(result, AgentRunFailure):
             log.warning("agent_fallback_used", agent="layout_hinter")
