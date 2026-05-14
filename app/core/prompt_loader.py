@@ -9,8 +9,11 @@ from pathlib import Path
 
 
 def load_prompt(path: Path | str, shared_fragment: Path | str | None = None) -> str:
-    """Read `path` as utf-8; if `shared_fragment` is given, splice it where
-    the prompt contains `{{SHARED}}`."""
+    """Read `path` as utf-8 and return its text, splicing in `shared_fragment` if given.
+
+    If `shared_fragment` is provided, replaces every `{{SHARED}}` placeholder in
+    the prompt text with the fragment's contents.
+    """
     text = Path(path).read_text(encoding="utf-8")
     if shared_fragment is not None:
         shared = Path(shared_fragment).read_text(encoding="utf-8")

@@ -6,11 +6,14 @@ Env files are layered (highest priority first):
 `get_settings()` returns a cached singleton — call from anywhere in the service.
 """
 from __future__ import annotations
+
 import os
 from functools import lru_cache
 from pathlib import Path
+
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 from app.enums.environment import Environment
 
 
@@ -29,7 +32,7 @@ def _candidate_env_files() -> list[str]:
 
 
 class Settings(BaseSettings):
-    """Typed config. Read once via `get_settings()`."""
+    """Runtime configuration loaded from environment variables and layered .env files."""
 
     model_config = SettingsConfigDict(
         env_file=_candidate_env_files(),
@@ -50,4 +53,5 @@ class Settings(BaseSettings):
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
+    """Return the cached application settings singleton."""
     return Settings()

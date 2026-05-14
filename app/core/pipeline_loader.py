@@ -5,11 +5,14 @@ Pipeline using the spec. Kept separate from Haystack-specific construction
 so the spec format stays inspectable and hand-editable.
 """
 from __future__ import annotations
+
 from pathlib import Path
+
 import yaml
 
 
 def load_pipeline_yaml(path: Path | str) -> dict:
+    """Read a YAML pipeline spec from `path` and return it as a raw dict."""
     return yaml.safe_load(Path(path).read_text(encoding="utf-8"))
 
 

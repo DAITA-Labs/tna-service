@@ -10,6 +10,7 @@ JSON output in production, key=value in development. Initialized once via
 """
 import logging
 import sys
+
 import structlog
 
 from app.core.tracing import add_trace_context_to_log, emit_to_otel_logs
@@ -48,6 +49,7 @@ def configure_logging(level: str = "INFO", json_output: bool = True) -> None:
 
 
 def get_logger(name: str = "tna_service") -> structlog.stdlib.BoundLogger:
+    """Return a structlog bound logger for the given name."""
     return structlog.get_logger(name)
 
 
