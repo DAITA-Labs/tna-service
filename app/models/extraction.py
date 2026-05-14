@@ -23,7 +23,14 @@ _DATE_FORMATS_TO_TRY = (
 
 
 def _parse_flexible_date(value: Any) -> Any:
-    """Coerce supplier date formats to date; pass through unknown values."""
+    """Coerce a raw cell value to ``date`` using supplier-specific formats.
+
+    Accepted formats: DD-MMM-YYYY, DD-MMM-YY, DD MMM YYYY, DD/MM/YYYY,
+    DD/MM/YY, DD.MM.YYYY, DD-MM-YYYY (all entries in ``_DATE_FORMATS_TO_TRY``).
+    ``datetime`` is truncated to ``date``; ``None`` and empty strings return
+    ``None``; values that match no format are returned unchanged so Pydantic
+    can surface a validation error with the original input.
+    """
     if value is None:
         return None
     if isinstance(value, datetime):
@@ -59,6 +66,8 @@ class Source(BaseModel):
 
 
 class Stage(BaseModel):
+    """One production stage within a PLI — name, planned date, quantity, and traceability."""
+
     model_config = ConfigDict(extra="ignore")
     name: str
     planned_date: FlexibleDate = None
@@ -73,6 +82,8 @@ class Stage(BaseModel):
 
 
 class PLI(BaseModel):
+    """A single Product Line Item — identity fields, delivery date, stages, and traceability."""
+
     model_config = ConfigDict(extra="ignore")
 
     @model_validator(mode="before")
@@ -105,6 +116,8 @@ class PLI(BaseModel):
 
 
 class Warning(BaseModel):
+    """A non-fatal extraction notice — severity, affected PLI index, field, and check name."""
+
     model_config = ConfigDict(extra="ignore")
     message: str
     severity: Literal["info", "warning", "error"] = "warning"
@@ -114,6 +127,8 @@ class Warning(BaseModel):
 
 
 class ExtractionResult(BaseModel):
+    """Top-level extraction output — extracted PLIs, warnings, detected format, and confidence."""
+
     model_config = ConfigDict(extra="ignore")
 
     @model_validator(mode="before")

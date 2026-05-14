@@ -12,6 +12,8 @@ from app.enums.cell_dtype import CellDtype
 
 
 class Cell(BaseModel):
+    """One spreadsheet cell — position, address, typed value, and merge membership."""
+
     model_config = ConfigDict(extra="ignore")
     row: int = Field(ge=1)
     col: int = Field(ge=1)
@@ -23,6 +25,8 @@ class Cell(BaseModel):
 
 
 class MergedRegion(BaseModel):
+    """A contiguous merged-cell block, anchored to its top-left cell address."""
+
     model_config = ConfigDict(extra="ignore")
     cell_range: str
     anchor: str
@@ -30,6 +34,8 @@ class MergedRegion(BaseModel):
 
 
 class CellGrid(BaseModel):
+    """A rectangular slice of one sheet — all cells within a named range."""
+
     model_config = ConfigDict(extra="ignore")
     sheet: str
     cell_range: str
@@ -37,6 +43,8 @@ class CellGrid(BaseModel):
 
 
 class SheetMeta(BaseModel):
+    """Structural metadata for one worksheet — name, extent, and Excel dimension string."""
+
     model_config = ConfigDict(extra="ignore")
     name: str
     max_row: int = Field(ge=0)
