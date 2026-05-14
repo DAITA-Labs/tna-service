@@ -9,6 +9,7 @@ from enum import Enum
 
 
 class RowRole(str, Enum):
+    """Classify a row's role in the sheet (data, header, total, etc.)."""
     TITLE = "title"
     HEADER = "header"
     ANCHOR = "anchor"
@@ -21,6 +22,7 @@ class RowRole(str, Enum):
 
 
 class SubRowRole(str, Enum):
+    """Identify the value layer within a multi-row PLI (plan, action, actual, or deviation)."""
     PLAN = "plan"
     ACTION = "action"
     ACTUAL = "actual"
