@@ -9,6 +9,7 @@ router = APIRouter()
 
 @router.get("/health", response_model=HealthResponse, tags=["health"])
 def health() -> HealthResponse:
+    """Return 200 with service status and version."""
     log.info("health_check")
     return HealthResponse(status="healthy", version="0.1.0")
 

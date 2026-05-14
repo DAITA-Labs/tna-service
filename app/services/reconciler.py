@@ -5,10 +5,11 @@ Warnings; extraction_confidence is recomputed from the spec's V1 formula:
   0.7 * mean(workflow_per_field_confidence) + 0.3 * (1 - validator_warn_rate)
 """
 from __future__ import annotations
-from app.models.extraction import ExtractionResult, Warning
-from app.models.artifacts import ValidationFindings, ValidationFinding
-from app.enums.validation_severity import ValidationSeverity
+
 from app.core.logs import get_logger
+from app.enums.validation_severity import ValidationSeverity
+from app.models.artifacts import ValidationFinding, ValidationFindings
+from app.models.extraction import ExtractionResult, Warning
 
 log = get_logger(__name__)
 

@@ -2,10 +2,12 @@
 from __future__ import annotations
 import tempfile
 from pathlib import Path
-from fastapi import APIRouter, UploadFile, HTTPException
+
+from fastapi import APIRouter, HTTPException, UploadFile
+
+from app.core.logs import get_logger
 from app.schemas.extract import ExtractResponse
 from app.services.extraction import extract
-from app.core.logs import get_logger
 
 log = get_logger(__name__)
 router = APIRouter()

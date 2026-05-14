@@ -1,13 +1,15 @@
 """FastAPI app entry point — wires routers + telemetry + structured logging."""
 import os
+
 from fastapi import FastAPI
+
 from app.config.settings import get_settings
 from app.core.logs import configure_logging
 from app.core.middleware import RequestIdMiddleware
 from app.core.telemetry import extractions_total  # noqa: F401 — register collectors
+from app.enums.environment import Environment
 from app.routers.extract import router as extract_router
 from app.routers.health import router as health_router
-from app.enums.environment import Environment
 
 
 _settings = get_settings()
@@ -38,7 +40,7 @@ if _tracing_enabled:
         from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
         FastAPIInstrumentor.instrument_app(app)
     except ImportError:
-        pass
+        pass  # best-effort: OTel instrumentation is optional; traces degrade gracefully
 
 app.add_middleware(RequestIdMiddleware)
 app.include_router(extract_router)
