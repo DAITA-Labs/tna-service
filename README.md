@@ -360,6 +360,10 @@ Every common extension is a small contained change — typically one file plus o
 
 The structural-layout acceptance tests in `tests/unit/structure/test_layout.py` enforce these conventions (one file per agent / validator / enum / tool group).
 
+### Coding bar
+
+All new code in `tna-service/app/` follows [`docs/CODING_STANDARD.md`](./docs/CODING_STANDARD.md) — the project's standard for naming, docstrings, function decomposition, types, error handling, and module organisation. AI agents and human contributors run the master checklist in Section 10 of that file before each commit.
+
 ---
 
 ## Troubleshooting
