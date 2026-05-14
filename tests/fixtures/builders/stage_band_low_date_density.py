@@ -16,5 +16,11 @@ def build(wb: Workbook) -> None:
     # Stage band with mostly non-date values
     ws["C5"] = "Pre-Prod"
     ws["D5"] = "L/D send"; ws["E5"] = "Fit send"
-    ws["D6"] = "pending"; ws["E6"] = datetime(2026, 3, 5)
-    ws["D7"] = "pending"; ws["E7"] = "tbd"
+    # Row 6 has two date cells to trigger detection (acts as sub_header_row)
+    ws["D6"] = datetime(2026, 3, 5); ws["E6"] = datetime(2026, 3, 5)
+    # Add sub-row labels to trigger tall_sub_rows detection
+    ws["A7"] = "Plan"; ws["D7"] = "pending"; ws["E7"] = "tbd"
+    ws["A8"] = "Action"; ws["D8"] = "pending"; ws["E8"] = "pending"
+    ws["A9"] = "Actual"; ws["D9"] = "approved"; ws["E9"] = "pending"
+    # With sub_rows being [7, 8, 9], total cells = 3 rows * 2 cols = 6, dates = 0
+    # Density = 0/6 = 0.0 < 0.5 triggers warning
