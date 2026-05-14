@@ -1,7 +1,8 @@
-"""Request / response shapes for /extract."""
+"""Response shape for /extract endpoint."""
 from __future__ import annotations
+
 from app.models.extraction import ExtractionResult
 
 
 class ExtractResponse(ExtractionResult):
-    """Same shape as ExtractionResult — surfaces source, warnings, etc."""
+    """Extraction result with metadata: source document and validation warnings."""
