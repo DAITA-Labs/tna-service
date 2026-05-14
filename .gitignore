@@ -12,3 +12,5 @@ evals/golden_snapshots/_tmp/
 .superpowers/
 *.egg-info/
 app/__pycache__/
+build/
+dist/
