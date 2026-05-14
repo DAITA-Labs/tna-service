@@ -17,7 +17,19 @@ in environments where opentelemetry isn't installed (local dev outside
 containers). Functions degrade gracefully to no-ops when OTel is absent.
 """
 from __future__ import annotations
+
 import os
+
+
+_OTEL_SEVERITY = {
+    "debug":     (5, "DEBUG"),
+    "info":      (9, "INFO"),
+    "warning":   (13, "WARN"),
+    "warn":      (13, "WARN"),
+    "error":     (17, "ERROR"),
+    "exception": (17, "ERROR"),
+    "critical":  (21, "FATAL"),
+}
 
 
 def configure_tracing(service_name: str = "tna-service",
@@ -29,11 +41,12 @@ def configure_tracing(service_name: str = "tna-service",
 
     Propagators: W3C TraceContext + B3 multi-format (composite).
     Outgoing httpx calls are auto-instrumented.
-    Endpoint resolved from: argument → OTEL_EXPORTER_OTLP_ENDPOINT →
-    TEMPO_OTLP_ENDPOINT (back-compat) → http://otel-collector:4317.
+    Endpoint resolved from: argument -> OTEL_EXPORTER_OTLP_ENDPOINT ->
+    TEMPO_OTLP_ENDPOINT (back-compat) -> http://otel-collector:4317.
     Idempotent — repeated calls return the existing LoggerProvider.
     """
     try:
+        # lazy: opentelemetry is optional in local dev outside containers
         from opentelemetry import trace, metrics, _logs
         from opentelemetry.sdk.resources import Resource
         from opentelemetry.sdk.trace import TracerProvider
@@ -48,73 +61,108 @@ def configure_tracing(service_name: str = "tna-service",
     except ImportError:
         return None
 
-    # Idempotent — if already initialised, return existing logger provider
     if trace.get_tracer_provider().__class__.__name__ != "ProxyTracerProvider":
         return _logs.get_logger_provider()
 
-    endpoint = (otlp_endpoint
-                or os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT")
-                or os.environ.get("TEMPO_OTLP_ENDPOINT")  # back-compat during migration
-                or "http://otel-collector:4317")
+    endpoint = _resolve_otlp_endpoint(otlp_endpoint)
     resource = Resource.create({"service.name": service_name})
 
-    # Traces
+    _build_tracer_provider(
+        endpoint, resource, trace, TracerProvider, BatchSpanProcessor, OTLPSpanExporter,
+    )
+    _build_meter_provider(
+        endpoint, resource, metrics, MeterProvider, PeriodicExportingMetricReader, OTLPMetricExporter,
+    )
+    logger_provider = _build_logger_provider(
+        endpoint, resource, _logs, LoggerProvider, BatchLogRecordProcessor, OTLPLogExporter,
+    )
+    _install_propagators()
+    _install_httpx_instrumentation()
+    return logger_provider
+
+
+def _resolve_otlp_endpoint(arg: str | None) -> str:
+    """Resolve the OTLP endpoint from arg, env, or the container default."""
+    return (arg
+            or os.environ.get("OTEL_EXPORTER_OTLP_ENDPOINT")
+            or os.environ.get("TEMPO_OTLP_ENDPOINT")  # back-compat during SigNoz migration
+            or "http://otel-collector:4317")
+
+
+def _build_tracer_provider(endpoint, resource, trace, TracerProvider,
+                           BatchSpanProcessor, OTLPSpanExporter):
+    """Create a TracerProvider with a BatchSpanProcessor and register it globally."""
     tracer_provider = TracerProvider(resource=resource)
     tracer_provider.add_span_processor(BatchSpanProcessor(
         OTLPSpanExporter(endpoint=endpoint, insecure=True)
     ))
     trace.set_tracer_provider(tracer_provider)
+    return tracer_provider
 
-    # Metrics
+
+def _build_meter_provider(endpoint, resource, metrics, MeterProvider,
+                          PeriodicExportingMetricReader, OTLPMetricExporter):
+    """Create a MeterProvider with a periodic OTLP exporter and register it globally."""
     metric_reader = PeriodicExportingMetricReader(
         OTLPMetricExporter(endpoint=endpoint, insecure=True),
         export_interval_millis=15_000,
     )
-    metrics.set_meter_provider(MeterProvider(
+    meter_provider = MeterProvider(
         resource=resource,
         metric_readers=[metric_reader],
-    ))
+    )
+    metrics.set_meter_provider(meter_provider)
+    return meter_provider
 
-    # Logs
+
+def _build_logger_provider(endpoint, resource, _logs, LoggerProvider,
+                           BatchLogRecordProcessor, OTLPLogExporter):
+    """Create a LoggerProvider with a BatchLogRecordProcessor and register it globally."""
     logger_provider = LoggerProvider(resource=resource)
     logger_provider.add_log_record_processor(BatchLogRecordProcessor(
         OTLPLogExporter(endpoint=endpoint, insecure=True)
     ))
     _logs.set_logger_provider(logger_provider)
+    return logger_provider
 
-    # Propagators (W3C + B3)
+
+def _install_propagators() -> None:
+    """Install the composite W3C TraceContext + B3 multi-format propagator."""
     try:
+        # lazy: propagator packages are optional alongside the core SDK
         from opentelemetry.propagate import set_global_textmap
         from opentelemetry.propagators.composite import CompositePropagator
         from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
         from opentelemetry.propagators.b3 import B3MultiFormat
-        set_global_textmap(CompositePropagator([
-            TraceContextTextMapPropagator(),
-            B3MultiFormat(),
-        ]))
     except ImportError:
-        pass
+        return
+    set_global_textmap(CompositePropagator([
+        TraceContextTextMapPropagator(),
+        B3MultiFormat(),
+    ]))
 
-    # Auto-instrument httpx so outgoing Anthropic SDK calls propagate trace context
+
+def _install_httpx_instrumentation() -> None:
+    """Auto-instrument httpx so outgoing Anthropic SDK calls propagate trace context."""
     try:
+        # lazy: httpx instrumentation is an optional add-on
         from opentelemetry.instrumentation.httpx import HTTPXClientInstrumentor
-        HTTPXClientInstrumentor().instrument()
     except ImportError:
-        pass
-
-    return logger_provider
+        return
+    HTTPXClientInstrumentor().instrument()
 
 
 def get_tracer(name: str = "tna_service"):
+    """Return an OTel tracer, or a no-op stand-in when OTel isn't installed."""
     try:
         from opentelemetry import trace
-        return trace.get_tracer(name)
     except ImportError:
         return _NoopTracer()
+    return trace.get_tracer(name)
 
 
 class _NoopTracer:
-    """Minimal stand-in when opentelemetry isn't installed."""
+    """Stand-in for an OTel Tracer when the SDK is not installed."""
 
     def start_as_current_span(self, name, **kwargs):
         return _NoopSpanCtx()
@@ -124,6 +172,8 @@ class _NoopTracer:
 
 
 class _NoopSpanCtx:
+    """Stand-in for an OTel span context manager when the SDK is not installed."""
+
     def __enter__(self):
         return _NoopSpan()
 
@@ -132,6 +182,8 @@ class _NoopSpanCtx:
 
 
 class _NoopSpan:
+    """Stand-in for an OTel Span when the SDK is not installed."""
+
     def set_attribute(self, key, value):
         pass
 
@@ -143,17 +195,6 @@ class _NoopSpan:
 
     def end(self):
         pass
-
-
-_OTEL_SEVERITY = {
-    "debug":     (5, "DEBUG"),
-    "info":      (9, "INFO"),
-    "warning":   (13, "WARN"),
-    "warn":      (13, "WARN"),
-    "error":     (17, "ERROR"),
-    "exception": (17, "ERROR"),
-    "critical":  (21, "FATAL"),
-}
 
 
 def emit_to_otel_logs(logger, method_name, event_dict):
@@ -187,13 +228,13 @@ def emit_to_otel_logs(logger, method_name, event_dict):
             attributes=attributes,
         ))
     except Exception:
-        pass
+        pass  # best-effort: structlog must never crash if OTel emit fails
     return event_dict
 
 
 def add_trace_context_to_log(logger, method_name, event_dict):
     """Structlog processor that injects current span's trace_id / span_id
-    into every log record so Grafana Loki <-> Tempo correlation works.
+    into every log record so log <-> trace correlation works in SigNoz.
 
     Lazy-imports opentelemetry so this module is safe to import in
     environments where OTel isn't installed (local dev outside containers).
@@ -210,5 +251,5 @@ def add_trace_context_to_log(logger, method_name, event_dict):
         event_dict["trace_id"] = format(ctx.trace_id, "032x")
         event_dict["span_id"] = format(ctx.span_id, "016x")
     except Exception:
-        pass
+        pass  # best-effort: structlog must never crash if trace lookup fails
     return event_dict
