@@ -24,30 +24,10 @@ from app.core.telemetry import (
     llm_calls_total,
     llm_inference_duration_seconds,
 )
+from app.core.tracing import get_tracer
 
 T = TypeVar("T", bound=BaseModel)
 log = get_logger(__name__)
-
-
-def _get_tracer():
-    """Return an OTel tracer, or a no-op stand-in when tracing is unavailable."""
-    try:
-        from app.core.tracing import get_tracer  # optional dependency
-        return get_tracer(__name__)
-    except Exception:
-        log.debug("tracing_unavailable", reason="could not import app.core.tracing")
-        return _NoopTracer()
-
-
-class _NoopSpan:
-    def set_attribute(self, *a, **kw): pass
-    def __enter__(self): return self
-    def __exit__(self, *a): pass
-
-
-class _NoopTracer:
-    def start_as_current_span(self, name, **kw):
-        return _NoopSpan()
 
 
 class MissingAPIKey(RuntimeError):
@@ -139,7 +119,7 @@ class AnthropicProvider:
         log.debug("llm_call_start", model=self.model, tool=tool_name,
                   system_chars=len(system), user_chars=len(user))
         t0 = time.monotonic()
-        with _get_tracer().start_as_current_span("llm.complete") as span:
+        with get_tracer(__name__).start_as_current_span("llm.complete") as span:
             span.set_attribute("llm.model", self.model)
             span.set_attribute("llm.agent", agent_name)
             resp = self._call_sdk(system=system, user=user, tool=tool, tool_name=tool_name)

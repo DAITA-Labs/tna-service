@@ -17,19 +17,10 @@ from pydantic import BaseModel, ValidationError
 
 from app.core.logs import get_logger
 from app.core.telemetry import agent_calls_total, agent_duration_seconds, agent_retry_count
-from app.services.llm_provider import LLMProvider, _NoopTracer
+from app.core.tracing import get_tracer
+from app.services.llm_provider import LLMProvider
 
 log = get_logger(__name__)
-
-
-def _get_tracer() -> object:
-    """Return an OTel tracer, or a no-op stand-in when tracing is unavailable."""
-    try:
-        from app.core.tracing import get_tracer  # lazy: optional OTel dependency
-        return get_tracer(__name__)
-    except Exception:
-        log.debug("_get_tracer_unavailable", reason="tracing package not installed or not configured")
-        return _NoopTracer()
 
 
 @dataclass(frozen=True)
@@ -77,7 +68,7 @@ class AgentRunner:
         run_t0 = time.monotonic()
         log.info("agent_run_start", agent=self.spec.name, input_keys=sorted(inputs.keys()))
 
-        with _get_tracer().start_as_current_span(f"agent.{self.spec.name}") as span:
+        with get_tracer(__name__).start_as_current_span(f"agent.{self.spec.name}") as span:
             span.set_attribute("agent.name", self.spec.name)
 
             while attempt <= self.spec.retry.max_retries:

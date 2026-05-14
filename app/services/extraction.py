@@ -48,7 +48,8 @@ from app.services.agents.layout_hinter import LayoutHinter
 from app.services.agents.plan_reviewer import PlanReviewer
 from app.services.agents.sheet_classifier import SheetClassifier
 from app.services.applier.apply_plan import apply_plan
-from app.services.llm_provider import AnthropicProvider, _NoopTracer
+from app.core.tracing import get_tracer
+from app.services.llm_provider import AnthropicProvider
 from app.services.planner.plan import SheetRowPlanner
 from app.services.planner.surveyor import survey_sheet
 from app.services.reconciler import reconcile
@@ -64,23 +65,12 @@ log = get_logger(__name__)
 _CONFIDENCE_GATE = 0.85
 
 
-def _get_tracer() -> Any:
-    """Return the module tracer, or a no-op stand-in if OTel isn't wired."""
-    try:
-        from app.core.tracing import get_tracer
-        return get_tracer(__name__)
-    except Exception:
-        # best-effort: tracing is an optional side channel; fall back silently
-        return _NoopTracer()
-
-
 @contextlib.contextmanager
 def _phase(name: str, **attrs: Any) -> Iterator[Any]:
     """Time a phase + open an OTel span + bind phase to log context."""
-    tracer = _get_tracer()
     structlog.contextvars.bind_contextvars(phase=name)
     t0 = time.monotonic()
-    with tracer.start_as_current_span(f"phase.{name}") as span:
+    with get_tracer(__name__).start_as_current_span(f"phase.{name}") as span:
         for k, v in attrs.items():
             try:
                 span.set_attribute(k, v)
@@ -202,13 +192,12 @@ def _plan_for_sheet(
 
 def extract(workbook_path: Path | str, *, llm: Any = None) -> ExtractionResult:
     """Extract structured PLIs from a TNA workbook, end-to-end."""
-    tracer = _get_tracer()
     t0 = time.monotonic()
     ctx = register_workbook(workbook_path)
     llm = llm or AnthropicProvider.from_env()
 
     log.info("extract_start", file=str(ctx.path))
-    with tracer.start_as_current_span("extract") as root_span:
+    with get_tracer(__name__).start_as_current_span("extract") as root_span:
         root_span.set_attribute("file", str(ctx.path))
         try:
             with _phase("sheet_classifier"):
