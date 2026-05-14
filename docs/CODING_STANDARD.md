@@ -35,6 +35,10 @@ beats clever.
 - Single-letter names are allowed only for tightly-scoped loop variables (`for i in range(n)`, `for c in row`). Never for module-level helpers.
 - No version suffixes (`process_v2`), no generic `_helper`/`_util` in names, no abbreviations a newcomer wouldn't recognise (`mgr`, `cfg` are fine; `pcl_xfm` is not).
 
+**Edge cases for callables:**
+- **Properties** are accessed as nouns; their names are noun-form (`sheet_name`, not `get_sheet_name`). They are the one exception to the verb-first rule for callables.
+- **`@classmethod` / `@staticmethod`** follow the same naming rules as regular methods. Prefer `@classmethod` when the method needs the class but not an instance; use `@staticmethod` sparingly and only for genuinely class-affiliated utility logic.
+
 **Example (from `plan_invariants.py`):**
 ```python
 # Before — saves four characters at the cost of readability at every call site
@@ -47,11 +51,11 @@ def _warn(check: str, msg: str) -> ValidationFinding: ...
 ```
 
 **Checklist:**
-- [ ] Functions are verb-first; classes are noun-first.
+- [ ] Functions are verb-first (properties excepted); classes are noun-first.
 - [ ] Private helpers have a leading `_`; nothing public does.
 - [ ] No version suffixes (`_v2`), no `_helper`/`_util` filler.
 - [ ] No single-letter names outside tight loops.
-- [ ] Domain vocabulary matches the rest of the codebase.
+- [ ] No domain term is abbreviated or paraphrased when the canonical form (e.g. `PLI`, `Stage`, `ANCHOR`, `CHILD`) is already present in this file's imports, type hints, or comments.
 
 ## 2. Functions
 
@@ -65,6 +69,7 @@ terms. If the only honest helper name is `_part_two`, leave the function alone.
 - Prefer pure functions. When mutation is required, name the function so the reader expects it (`_apply_*`, `_record_*`, `_register_*`).
 - Decomposition heuristic: if helpers can be named in domain terms, extract. If they can only be named structurally (`_first_loop`), don't.
 - Don't over-decompose. A 10-line function that reads top-to-bottom is better than three 3-line helpers.
+- `async def` is treated identically to `def` for length, decomposition, naming, and docstring rules. Coroutines that orchestrate concurrent work should decompose into sequential helpers as readily as sync functions.
 
 **Example (real, from `plan_invariants.py`):**
 ```python
@@ -106,10 +111,11 @@ the signature already tells the story, the summary line is enough.
 
 **Rules:**
 - Required on every public function (no leading `_`), every class, and every module.
-- Required on private functions longer than 10 lines or with non-obvious behaviour.
+- Required on private functions longer than 10 lines, or whose body contains any of: an exception raise, a side effect (I/O, mutation of an argument, global write), or more than one return point.
 - Format: one-line summary in imperative mood (≤80 chars), ending with a period. If `Args/Returns/Raises` add information the signature doesn't, add a blank line and then those sections in plain prose.
 - Module docstring: one paragraph stating the module's responsibility.
 - Class docstring: one sentence stating the invariant the class promises (what an instance of this class guarantees).
+- Dataclasses and Pydantic models follow the same class-docstring rule: a one-line statement of the invariant. Field-level docstrings are unnecessary unless the field's contract isn't obvious from name + type. Models do not need method docstrings on auto-generated dunders.
 - Use `"""triple double-quotes"""`. Never restate the signature in prose.
 
 **Example:**
@@ -137,7 +143,7 @@ enough: `"""Read every non-empty cell in `row` within [col_range] inclusive."""`
 
 **Checklist:**
 - [ ] Every public function, class, and module has a docstring.
-- [ ] Private functions >10 lines or with non-obvious behaviour have one too.
+- [ ] Private functions >10 lines, or that raise, have side effects, or have multiple returns, have one too.
 - [ ] Summary lines are ≤80 chars, imperative mood, end in a period.
 - [ ] `Args/Returns/Raises` appear only when they add information beyond the signature.
 - [ ] No docstring restates the signature in prose.
@@ -212,7 +218,7 @@ def read_row(ctx: WorkbookCtx, sheet: str, row: int,
 **Checklist:**
 - [ ] Every public function signature is fully annotated.
 - [ ] No `Optional`, `List`, `Dict`, `Tuple`, `Union` imports from `typing`.
-- [ ] No bare `Any` without a comment explaining why.
+- [ ] No `Any` in the file (or, if unavoidable for an external API, it's accompanied by a one-line comment explaining why a narrower type isn't possible).
 - [ ] `Protocol` is used where duck-typed swapping is intentional.
 - [ ] Compound types used in 2+ places are aliased.
 
@@ -252,7 +258,7 @@ def get_tracer(name: str = "tna_service"):
 
 **Checklist:**
 - [ ] No bare `except:` in the file.
-- [ ] Every `except Exception:` either re-raises or returns a documented fallback, and logs the cause.
+- [ ] Every `except Exception:` logs the cause and then either re-raises OR falls back to a documented default.
 - [ ] Returning `None` for "not found" is documented in the docstring.
 - [ ] Custom exceptions inherit from a meaningful standard base.
 - [ ] Input validation is at the boundary, not scattered through internals.
@@ -300,7 +306,7 @@ picks up a second job.
 **Rules:**
 - One clear responsibility per file. If you'd write two distinct module docstrings, split.
 - Public API at the top, private helpers below. Within a section, prefer narrative order: callers before callees where it doesn't force forward declarations.
-- Soft size signal: a file approaching ~200 lines is a prompt to ask "is this still one concept?" — not a hard cap, but a checkpoint.
+- Soft size signal: a file approaching 200 lines is a prompt to ask "is this still one concept?" — not a hard cap, but a checkpoint.
 - `__init__.py` files re-export the package's public API. Put no logic in `__init__.py`.
 - Avoid module-level mutable state. If config must persist, encapsulate it in a class or a `Settings` object.
 - Constants and type aliases used across the module live at the top, after imports, before the first function.
@@ -363,21 +369,20 @@ Run this against every file before commit. If any box is unchecked and there
 is no `# allow-*` override with a reason, fix the file before committing.
 
 **Naming (S1):**
-- [ ] Function names are verb-first; class names are noun-first.
+- [ ] Function names are verb-first (properties excepted); class names are noun-first.
 - [ ] Private helpers have a leading `_`; nothing public has one.
 - [ ] No version suffixes (`_v2`), no `_helper`/`_util` filler.
 - [ ] No single-letter names outside tight loops.
-- [ ] Domain vocabulary matches the rest of the codebase.
+- [ ] No domain term is abbreviated or paraphrased when the canonical form (e.g. `PLI`, `Stage`, `ANCHOR`, `CHILD`) is already present in this file's imports, type hints, or comments.
 
 **Functions (S2):**
 - [ ] No body exceeds 40 lines, or carries `# allow-long: <reason>`.
-- [ ] Each function does one nameable thing.
 - [ ] Extracted helpers have concrete domain names, not structural ones.
 - [ ] No hidden mutation where the name implies purity.
 
 **Docstrings (S3):**
 - [ ] Every public function, class, and module has a docstring.
-- [ ] Private functions >10 lines or with non-obvious behaviour have one too.
+- [ ] Private functions >10 lines, or that raise, have side effects, or have multiple returns, have one too.
 - [ ] Summary line is ≤80 chars, imperative mood, ends in a period.
 - [ ] No docstring restates the signature.
 
@@ -389,11 +394,11 @@ is no `# allow-*` override with a reason, fix the file before committing.
 **Types (S5):**
 - [ ] Every public signature is fully annotated.
 - [ ] Modern syntax: `list[X]`, `X | None`, `X | Y`. No `Optional/List/Dict/Tuple/Union` from `typing`.
-- [ ] No bare `Any` without a comment.
+- [ ] No `Any` in the file (or, if unavoidable for an external API, it's accompanied by a one-line comment explaining why a narrower type isn't possible).
 
 **Errors (S6):**
 - [ ] No bare `except:`.
-- [ ] Every `except Exception:` logs the cause AND re-raises or falls back to a documented default.
+- [ ] Every `except Exception:` logs the cause and then either re-raises OR falls back to a documented default.
 - [ ] `None`-as-not-found is documented where used.
 
 **Imports (S7):**
@@ -407,6 +412,7 @@ is no `# allow-*` override with a reason, fix the file before committing.
 - [ ] Constants at the top, after imports.
 - [ ] No module-level mutable state outside a settings object.
 - [ ] `__init__.py` is re-exports only.
+- [ ] File size is under ~200 lines OR the file holds a single cohesive concept (and is documented as such in its module docstring).
 
 **Tests (S9):**
 - [ ] No `if TESTING:` branch and no test-only kwargs.
