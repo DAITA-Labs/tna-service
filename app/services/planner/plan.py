@@ -1,29 +1,44 @@
-"""SheetRowPlanner — deterministic component producing a SheetPlan per sheet.
+"""Orchestrates deterministic detectors to produce a SheetPlan per sheet.
 
-Composes SheetSurveyor, row_classifier, kv_anchor_detector, stage_band_detector,
-and block_segmenter. Decides pli_mode from the collected signals.
+SheetRowPlanner is the top of the planner pipeline: it surveys the sheet,
+decides PLI mode from structural signals, detects stage bands and KV anchors,
+classifies rows, segments PLI blocks when applicable, and assembles the final
+SheetPlan artifact returned to the Haystack pipeline.
 """
 from __future__ import annotations
+
 from typing import Any
-from openpyxl.utils import get_column_letter
+
 from haystack import component
-from app.models.artifacts import (
-    SheetPlan, SheetSignals, RowSpec, KVAnchor, StageBandSpec, PliBlock,
-)
+from openpyxl.utils import get_column_letter
+
+from app.core.logs import get_logger
 from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
 from app.enums.stage_scope import StageScope
-from app.services.planner.surveyor import survey_sheet
-from app.services.planner.row_classifier import classify_rows
-from app.services.planner.kv_anchor_detector import detect_kv_anchors
-from app.services.planner.stage_band_detector import detect_stage_bands
+from app.models.artifacts import (
+    KVAnchor,
+    PliBlock,
+    SheetPlan,
+    SheetSignals,
+    StageBandSpec,
+    RowSpec,
+)
 from app.services.planner.block_segmenter import segment_blocks
-from app.core.logs import get_logger
+from app.services.planner.kv_anchor_detector import detect_kv_anchors
+from app.services.planner.row_classifier import classify_rows
+from app.services.planner.stage_band_detector import detect_stage_bands
+from app.services.planner.surveyor import survey_sheet
 
 log = get_logger(__name__)
 
 
 def _decide_pli_mode(signals: SheetSignals) -> PliMode:
+    """Decide PLI mode from structural sheet signals.
+
+    Distinguishes ROW_PER_PLI, SHEET_IS_PLI, and SECTION_PER_PLI by examining
+    identity column candidates against KV label hit positions and blank-run gaps.
+    """
     # Collect the cell addresses of all KV label hits so we can check whether
     # an identity column candidate is a column header (row 1-2) or a KV label
     # embedded in the sheet body (row > 2).
@@ -32,7 +47,7 @@ def _decide_pli_mode(signals: SheetSignals) -> PliMode:
     # An identity candidate column is "real" (tabular header) when the hit
     # lives in the first two rows.  If every hit for that column only appears
     # as a KV label deeper in the body, it is not a true column identity.
-    from openpyxl.utils.cell import coordinate_from_string
+    from openpyxl.utils.cell import coordinate_from_string  # lazy: avoid circular import risk
     real_identity_cols: list[str] = []
     for col in signals.identity_col_candidates:
         col_hits = signals.header_vocab_hits.get(col, [])
@@ -72,6 +87,7 @@ def _decide_pli_mode(signals: SheetSignals) -> PliMode:
 
 
 def _pick_identity_column(signals: SheetSignals) -> str | None:
+    """Return the best identity column letter from candidates, or None."""
     if not signals.identity_col_candidates:
         return None
     for col in signals.identity_col_candidates:
@@ -83,6 +99,7 @@ def _pick_identity_column(signals: SheetSignals) -> str | None:
 
 
 def _pick_quantity_column(workbook_ctx: Any, sheet: str, signals: SheetSignals) -> str | None:
+    """Scan the first ten rows for a quantity-header cell and return its column letter."""
     ws = workbook_ctx.wb[sheet]
     for c in range(1, signals.max_col + 1):
         for r in range(1, min(signals.max_row, 10) + 1):
@@ -94,13 +111,59 @@ def _pick_quantity_column(workbook_ctx: Any, sheet: str, signals: SheetSignals) 
     return None
 
 
+def _classify_sheet_rows(
+    workbook_ctx: Any,
+    sheet: str,
+    signals: SheetSignals,
+    pli_mode: PliMode,
+    identity_column: str | None,
+) -> list[RowSpec]:
+    """Classify sheet rows into RowSpec entries, or return empty for SHEET_IS_PLI."""
+    if pli_mode is PliMode.SHEET_IS_PLI:
+        return []
+    qty_col = _pick_quantity_column(workbook_ctx, sheet, signals)
+    return classify_rows(
+        workbook_ctx, sheet, signals,
+        identity_column=identity_column,
+        quantity_column_hint=qty_col,
+    )
+
+
+def _segment_pli_blocks_if_applicable(
+    rows: list[RowSpec],
+    kv_anchors: list[KVAnchor],
+    signals: SheetSignals,
+    stage_bands: list[StageBandSpec],
+    pli_mode: PliMode,
+) -> tuple[list[PliBlock], list[StageBandSpec], StageScope]:
+    """Segment PLI blocks when mode is SECTION_PER_PLI; otherwise pass bands through.
+
+    Returns (pli_blocks, sheet_stage_bands, stage_scope). For SECTION_PER_PLI the
+    stage bands are consumed into block-local scope; for all other modes they remain
+    at sheet level.
+    """
+    if pli_mode is PliMode.SECTION_PER_PLI:
+        blocks = segment_blocks(rows, kv_anchors, signals.blank_run_gaps, stage_bands)
+        return blocks, [], StageScope.PLI_LOCAL
+    return [], stage_bands, StageScope.SHEET_LEVEL
+
+
+def _compute_confidence(pli_mode: PliMode, kv_anchors: list[KVAnchor]) -> float:
+    """Return a confidence score for the produced SheetPlan."""
+    if pli_mode is PliMode.SHEET_IS_PLI:
+        return 0.92 if len(kv_anchors) >= 3 else 0.85
+    return 0.9
+
+
 @component
 class SheetRowPlanner:
-    """Haystack component — emits a SheetPlan for one sheet."""
+    """Orchestrates deterministic detectors to produce a SheetPlan from a WorkbookCtx and a sheet name."""
 
     @component.output_types(plan=SheetPlan)
     def run(self, workbook_ctx: Any, sheet: str) -> dict:
+        """Run the full planner pipeline for one sheet and return a SheetPlan."""
         log.info("planner_start", sheet=sheet)
+
         signals = survey_sheet(workbook_ctx, sheet)
         pli_mode = _decide_pli_mode(signals)
         identity_column = (
@@ -112,31 +175,12 @@ class SheetRowPlanner:
         stage_bands = detect_stage_bands(workbook_ctx, sheet, signals)
         kv_anchors = detect_kv_anchors(workbook_ctx, sheet, signals)
 
-        rows: list[RowSpec] = []
-        blocks: list[PliBlock] = []
-        if pli_mode is PliMode.SHEET_IS_PLI:
-            rows = []
-        else:
-            qty_col = _pick_quantity_column(workbook_ctx, sheet, signals)
-            rows = classify_rows(
-                workbook_ctx, sheet, signals,
-                identity_column=identity_column,
-                quantity_column_hint=qty_col,
-            )
-
+        rows = _classify_sheet_rows(workbook_ctx, sheet, signals, pli_mode, identity_column)
         header_rows = [r.idx for r in rows if r.role is RowRole.HEADER] if rows else []
 
-        if pli_mode is PliMode.SECTION_PER_PLI:
-            blocks = segment_blocks(rows, kv_anchors, signals.blank_run_gaps, stage_bands)
-            stage_bands_sheet: list[StageBandSpec] = []
-            stage_scope = StageScope.PLI_LOCAL
-        else:
-            stage_bands_sheet = stage_bands
-            stage_scope = StageScope.SHEET_LEVEL
-
-        confidence = 0.9 if pli_mode is not PliMode.SHEET_IS_PLI else 0.85
-        if pli_mode is PliMode.SHEET_IS_PLI and len(kv_anchors) >= 3:
-            confidence = 0.92
+        blocks, stage_bands_sheet, stage_scope = _segment_pli_blocks_if_applicable(
+            rows, kv_anchors, signals, stage_bands, pli_mode
+        )
 
         plan = SheetPlan(
             sheet=sheet,
@@ -148,7 +192,7 @@ class SheetRowPlanner:
             kv_anchors=kv_anchors if pli_mode is PliMode.SHEET_IS_PLI else [],
             stage_bands=stage_bands_sheet,
             stage_scope=stage_scope,
-            confidence=confidence,
+            confidence=_compute_confidence(pli_mode, kv_anchors),
         )
         log.info("planner_complete", sheet=sheet, pli_mode=plan.pli_mode.value,
                  rows=len(plan.rows), blocks=len(plan.pli_blocks),
