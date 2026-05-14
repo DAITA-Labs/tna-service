@@ -5,7 +5,11 @@ spread across survey.py, bulk_read.py, targeted.py, structure.py, search.py
 — each file self-registers its tools via the @tool decorator on import.
 """
 from app.repositories.workbook_tools._registry import (
-    tool, get_tool, list_tools, ToolRegistry, TOOL_REGISTRY,
+    TOOL_REGISTRY,
+    ToolRegistry,
+    get_tool,
+    list_tools,
+    tool,
 )
 
-__all__ = ["tool", "get_tool", "list_tools", "ToolRegistry", "TOOL_REGISTRY"]
+__all__ = ["TOOL_REGISTRY", "ToolRegistry", "get_tool", "list_tools", "tool"]
