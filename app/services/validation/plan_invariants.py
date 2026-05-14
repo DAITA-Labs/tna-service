@@ -8,18 +8,16 @@ from __future__ import annotations
 from app.core.logs import get_logger
 from app.enums.row_role import RowRole
 from app.enums.validation_severity import ValidationSeverity
-from app.models.artifacts import SheetPlan, ValidationFinding
+from app.models.artifacts import RowSpec, SheetPlan, ValidationFinding
 
 log = get_logger(__name__)
 
 
 def _error(check: str, msg: str) -> ValidationFinding:
-    """Build an ERROR finding for the given check."""
     return ValidationFinding(check=check, severity=ValidationSeverity.ERROR, message=msg)
 
 
 def _warn(check: str, msg: str) -> ValidationFinding:
-    """Build a WARN finding for the given check."""
     return ValidationFinding(check=check, severity=ValidationSeverity.WARN, message=msg)
 
 
@@ -69,8 +67,8 @@ def _check_header_contiguity(plan: SheetPlan) -> list[ValidationFinding]:
     return out
 
 
-def _check_pli_block_non_overlap(plan: SheetPlan) -> list[ValidationFinding]:
-    """Sorted by bbox start, no two pli_blocks may overlap."""
+def _check_pli_blocks_disjoint(plan: SheetPlan) -> list[ValidationFinding]:
+    """PLI blocks must be disjoint; emit an ERROR for each overlapping pair."""
     out: list[ValidationFinding] = []
     blocks = sorted(plan.pli_blocks, key=lambda b: b.bbox[0])
     for i in range(len(blocks) - 1):
@@ -84,7 +82,7 @@ def _check_pli_block_non_overlap(plan: SheetPlan) -> list[ValidationFinding]:
 def _check_sub_row_consistency(plan: SheetPlan) -> list[ValidationFinding]:
     """Within a group, all members must agree on whether sub_row_role is set."""
     out: list[ValidationFinding] = []
-    by_group: dict[int, list] = {}
+    by_group: dict[int, list[RowSpec]] = {}
     for r in plan.rows:
         if r.group_id is not None:
             by_group.setdefault(r.group_id, []).append(r)
@@ -106,7 +104,7 @@ def validate_invariants(plan: SheetPlan) -> list[ValidationFinding]:
         *_check_reference_integrity(plan),
         *_check_row_uniqueness(plan),
         *_check_header_contiguity(plan),
-        *_check_pli_block_non_overlap(plan),
+        *_check_pli_blocks_disjoint(plan),
         *_check_sub_row_consistency(plan),
     ]
     if findings:
