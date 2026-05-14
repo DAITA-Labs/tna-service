@@ -58,6 +58,12 @@
 
 ---
 
+## Coding standard
+
+The codebase follows `docs/CODING_STANDARD.md` — Python-specific rules for naming, docstrings, function decomposition, type hints, error handling, imports, and module organisation. Section 10 of that document is the master checklist a reviewer or AI agent runs against any changed file before commit.
+
+---
+
 ## Layered structure
 
 ```mermaid
