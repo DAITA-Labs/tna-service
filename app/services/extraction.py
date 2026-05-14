@@ -1,61 +1,81 @@
-"""Top-level orchestration with the new SheetRowPlanner-based pipeline."""
+"""Top-level orchestration for TNA workbook extraction.
+
+This module owns the end-to-end extraction flow: classify relevant sheets,
+build a `SheetPlan` per sheet via the SheetRowPlanner pipeline (surveyor +
+row_classifier + kv_anchor_detector + stage_band_detector + block_segmenter),
+validate the plan, conditionally invoke `LayoutHinter` and `PlanReviewer`,
+name fields, apply the plan deterministically, and run cross-cutting
+validators + reconciliation. Per-sheet failures are isolated from the
+workbook-level extraction by the validators-and-reconciler stage.
+"""
 from __future__ import annotations
+
 import contextlib
 import time
+from collections.abc import Iterator
 from pathlib import Path
+from typing import Any
+
 import structlog.contextvars
-from app.repositories.workbook_repo import register_workbook
-from app.models.extraction import ExtractionResult, PLI, Warning
-from app.models.artifacts import (
-    SheetPlan, CanonicalNameMap, LayoutHints, PlanVerdict, ValidationFindings,
-)
-from app.enums.pli_mode import PliMode
-from app.enums.validation_severity import ValidationSeverity
-from app.services.llm_provider import AnthropicProvider
-from app.services.agents.sheet_classifier import SheetClassifier
-from app.services.agents.layout_hinter import LayoutHinter
-from app.services.agents.plan_reviewer import PlanReviewer
-from app.services.agents.field_namer import FieldNamer
-from app.services.planner.plan import SheetRowPlanner
-from app.services.planner.surveyor import survey_sheet
-from app.services.validation.plan_invariants import validate_invariants
-from app.services.validation.plan_statistics import validate_statistics
-from app.services.applier.apply_plan import apply_plan
-from app.services.validation.source_cell_verifier import SourceCellVerifier
-from app.services.validation.header_match_verifier import HeaderMatchVerifier
-from app.services.validation.coverage_verifier import CoverageVerifier
-from app.services.validation.field_dropout_verifier import FieldDropoutVerifier
-from app.services.reconciler import reconcile
-from app.repositories.workbook_tools._registry import TOOL_REGISTRY
+
+import app.repositories.workbook_tools.bulk_read  # noqa: F401
+import app.repositories.workbook_tools.search  # noqa: F401
+import app.repositories.workbook_tools.structure  # noqa: F401
+import app.repositories.workbook_tools.survey  # noqa: F401
+import app.repositories.workbook_tools.targeted  # noqa: F401
 from app.core.logs import get_logger
 from app.core.telemetry import (
     extraction_duration_seconds,
-    extraction_pli_count,
     extraction_phase_duration_seconds,
+    extraction_pli_count,
     extractions_total,
     plis_extracted_total,
 )
-import app.repositories.workbook_tools.survey  # noqa: F401
-import app.repositories.workbook_tools.bulk_read  # noqa: F401
-import app.repositories.workbook_tools.targeted  # noqa: F401
-import app.repositories.workbook_tools.structure  # noqa: F401
-import app.repositories.workbook_tools.search  # noqa: F401
+from app.enums.pli_mode import PliMode
+from app.enums.validation_severity import ValidationSeverity
+from app.models.artifacts import (
+    CanonicalNameMap,
+    LayoutHints,
+    PlanVerdict,
+    SheetPlan,
+    ValidationFindings,
+)
+from app.models.extraction import ExtractionResult, PLI, Warning
+from app.repositories.workbook_repo import register_workbook
+from app.repositories.workbook_tools._registry import TOOL_REGISTRY
+from app.services.agents.field_namer import FieldNamer
+from app.services.agents.layout_hinter import LayoutHinter
+from app.services.agents.plan_reviewer import PlanReviewer
+from app.services.agents.sheet_classifier import SheetClassifier
+from app.services.applier.apply_plan import apply_plan
+from app.services.llm_provider import AnthropicProvider, _NoopTracer
+from app.services.planner.plan import SheetRowPlanner
+from app.services.planner.surveyor import survey_sheet
+from app.services.reconciler import reconcile
+from app.services.validation.coverage_verifier import CoverageVerifier
+from app.services.validation.field_dropout_verifier import FieldDropoutVerifier
+from app.services.validation.header_match_verifier import HeaderMatchVerifier
+from app.services.validation.plan_invariants import validate_invariants
+from app.services.validation.plan_statistics import validate_statistics
+from app.services.validation.source_cell_verifier import SourceCellVerifier
 
 log = get_logger(__name__)
 
-from app.services.llm_provider import _NoopTracer
+_CONFIDENCE_GATE = 0.85
 
 
-def _get_tracer():
+def _get_tracer() -> Any:
+    """Return the module tracer, or a no-op stand-in if OTel isn't wired."""
     try:
         from app.core.tracing import get_tracer
         return get_tracer(__name__)
     except Exception:
+        # best-effort: tracing is an optional side channel; fall back silently
         return _NoopTracer()
 
 
 @contextlib.contextmanager
-def _phase(name: str, **attrs):
+def _phase(name: str, **attrs: Any) -> Iterator[Any]:
     """Time a phase + open an OTel span + bind phase to log context."""
     tracer = _get_tracer()
     structlog.contextvars.bind_contextvars(phase=name)
@@ -65,6 +85,7 @@ def _phase(name: str, **attrs):
             try:
                 span.set_attribute(k, v)
             except Exception:
+                # best-effort: span attribute is telemetry-only, never block work
                 pass
         try:
             yield span
@@ -72,16 +93,12 @@ def _phase(name: str, **attrs):
             extraction_phase_duration_seconds.record(time.monotonic() - t0, {"phase": name})
             structlog.contextvars.unbind_contextvars("phase")
 
-_CONFIDENCE_GATE = 0.85
 
-
-def _plan_for_sheet(ctx, sheet: str, llm):
-    warnings: list[Warning] = []
+def _run_planner(ctx: Any, sheet: str) -> SheetPlan:
+    """Run the deterministic SheetRowPlanner pipeline and return the plan."""
     planner = SheetRowPlanner()
-
     with _phase("planner"):
         plan: SheetPlan = planner.run(workbook_ctx=ctx, sheet=sheet)["plan"]
-
     log.info("plan_emitted",
              sheet=sheet, pli_mode=plan.pli_mode.value,
              confidence=plan.confidence,
@@ -89,65 +106,93 @@ def _plan_for_sheet(ctx, sheet: str, llm):
              block_count=len(plan.pli_blocks),
              kv_count=len(plan.kv_anchors),
              band_count=len(plan.stage_bands))
+    return plan
 
+
+def _validate_plan(ctx: Any, plan: SheetPlan, sheet: str) -> tuple[list, list, list]:
+    """Run tier-1 invariants + tier-2 statistics; return (all, errors, warns)."""
     with _phase("plan_validate"):
         findings_t1 = validate_invariants(plan)
         findings_t2 = validate_statistics(ctx, plan)
         findings = findings_t1 + findings_t2
         errors = [f for f in findings if f.severity == ValidationSeverity.ERROR]
         warns = [f for f in findings if f.severity == ValidationSeverity.WARN]
-
     log.info("plan_validation_complete", sheet=sheet,
              tier1_errors=sum(1 for f in findings_t1 if f.severity == ValidationSeverity.ERROR),
              tier1_warns=sum(1 for f in findings_t1 if f.severity == ValidationSeverity.WARN),
              tier2_warns=len(findings_t2))
+    return findings, errors, warns
 
+
+def _apply_layout_hints_if_needed(
+    ctx: Any, sheet: str, plan: SheetPlan, errors: list, llm: Any, warnings: list[Warning],
+) -> SheetPlan:
+    """Call LayoutHinter when tier-1 validation has errors; possibly update plan."""
+    if not errors:
+        return plan
+    log.info("layout_hinter_invoked", sheet=sheet, identity_suggestion=None)
+    hinter = LayoutHinter(llm=llm)
+    signals = survey_sheet(ctx, sheet)
+    hints: LayoutHints = hinter.run(
+        workbook_ctx=ctx, sheet=sheet, signals=signals,
+    )["hints"]
+    log.info("layout_hinter_invoked", sheet=sheet,
+             identity_suggestion=hints.identity_column_suggestion)
+    if hints.identity_column_suggestion:
+        plan = plan.model_copy(update={"identity_column": hints.identity_column_suggestion})
+    findings_t1 = validate_invariants(plan)
+    findings_t2 = validate_statistics(ctx, plan)
+    for f in findings_t1 + findings_t2:
+        warnings.append(Warning(message=f"{f.check}: {f.message}", severity="warning"))
+    return plan
+
+
+def _apply_plan_review_if_needed(
+    ctx: Any, sheet: str, plan: SheetPlan, findings: list, warns: list, llm: Any,
+) -> SheetPlan:
+    """Call PlanReviewer on warnings, low confidence, or non-row mode; apply fixes."""
     needs_reviewer = (
         bool(warns)
         or plan.confidence < _CONFIDENCE_GATE
         or plan.pli_mode is not PliMode.ROW_PER_PLI
     )
+    if not needs_reviewer:
+        return plan
+    log.info("plan_reviewer_invoked", sheet=sheet,
+             reason="warnings" if warns else "low_confidence" if plan.confidence < _CONFIDENCE_GATE else "non_row_mode")
+    with _phase("plan_reviewer"):
+        reviewer = PlanReviewer(llm=llm)
+        verdict: PlanVerdict = reviewer.run(
+            workbook_ctx=ctx, plan=plan, findings=findings,
+        )["verdict"]
+    if verdict.verdict == "needs_fix":
+        new_rows = list(plan.rows)
+        for corr in verdict.row_corrections:
+            for i, r in enumerate(new_rows):
+                if r.idx == corr.get("row"):
+                    new_rows[i] = r.model_copy(update={
+                        "role": corr.get("suggested_role", r.role),
+                        "anchor_idx": corr.get("anchor_idx", r.anchor_idx),
+                    })
+                    break
+        plan = plan.model_copy(update={"rows": new_rows})
+    return plan
 
-    if errors:
-        log.info("layout_hinter_invoked", sheet=sheet, identity_suggestion=None)
-        hinter = LayoutHinter(llm=llm)
-        signals = survey_sheet(ctx, sheet)
-        hints: LayoutHints = hinter.run(
-            workbook_ctx=ctx, sheet=sheet, signals=signals,
-        )["hints"]
-        log.info("layout_hinter_invoked", sheet=sheet,
-                 identity_suggestion=hints.identity_column_suggestion)
-        if hints.identity_column_suggestion:
-            plan = plan.model_copy(update={"identity_column": hints.identity_column_suggestion})
-        findings_t1 = validate_invariants(plan)
-        findings_t2 = validate_statistics(ctx, plan)
-        for f in findings_t1 + findings_t2:
-            warnings.append(Warning(message=f"{f.check}: {f.message}", severity="warning"))
 
-    if needs_reviewer:
-        log.info("plan_reviewer_invoked", sheet=sheet,
-                 reason="warnings" if warns else "low_confidence" if plan.confidence < _CONFIDENCE_GATE else "non_row_mode")
-        with _phase("plan_reviewer"):
-            reviewer = PlanReviewer(llm=llm)
-            verdict: PlanVerdict = reviewer.run(
-                workbook_ctx=ctx, plan=plan, findings=findings,
-            )["verdict"]
-        if verdict.verdict == "needs_fix":
-            new_rows = list(plan.rows)
-            for corr in verdict.row_corrections:
-                for i, r in enumerate(new_rows):
-                    if r.idx == corr.get("row"):
-                        new_rows[i] = r.model_copy(update={
-                            "role": corr.get("suggested_role", r.role),
-                            "anchor_idx": corr.get("anchor_idx", r.anchor_idx),
-                        })
-                        break
-            plan = plan.model_copy(update={"rows": new_rows})
+def _plan_for_sheet(
+    ctx: Any, sheet: str, llm: Any,
+) -> tuple[SheetPlan, CanonicalNameMap, list[Warning]]:
+    """Plan one sheet: run planner, validate, optionally refine, name fields."""
+    warnings: list[Warning] = []
+
+    plan = _run_planner(ctx, sheet)
+    findings, errors, warns = _validate_plan(ctx, plan, sheet)
+    plan = _apply_layout_hints_if_needed(ctx, sheet, plan, errors, llm, warnings)
+    plan = _apply_plan_review_if_needed(ctx, sheet, plan, findings, warns, llm)
 
     with _phase("field_namer"):
         namer = FieldNamer(llm=llm)
         name_map: CanonicalNameMap = namer.run(workbook_ctx=ctx, plan=plan)["name_map"]
-
     log.info("name_map_received", sheet=sheet,
              field_count=len(name_map.field_labels),
              stage_count=len(name_map.stage_names))
@@ -155,7 +200,8 @@ def _plan_for_sheet(ctx, sheet: str, llm):
     return plan, name_map, warnings
 
 
-def extract(workbook_path: Path | str, *, llm=None) -> ExtractionResult:
+def extract(workbook_path: Path | str, *, llm: Any = None) -> ExtractionResult:
+    """Extract structured PLIs from a TNA workbook, end-to-end."""
     tracer = _get_tracer()
     t0 = time.monotonic()
     ctx = register_workbook(workbook_path)
@@ -225,5 +271,6 @@ def extract(workbook_path: Path | str, *, llm=None) -> ExtractionResult:
             plis_extracted_total.add(len(final.plis))
             return final
         except Exception:
+            # log+re-raise: count the failure for observability, surface to caller
             extractions_total.add(1, {"status": "failure"})
             raise
