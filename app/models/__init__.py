@@ -1,27 +1,71 @@
 """Pure domain models — no I/O, no LLM."""
-from app.models.workbook import Cell, MergedRegion, CellGrid, SheetMeta, WorkbookCtx
-from app.models.extraction import (
-    PLI, Stage, ExtractionResult, Warning, FlexibleDate, Source,
-)
 from app.models.artifacts import (
-    WorkbookSummary, StructuralFingerprint, InspectorReport,
-    PLIBoundaries, FieldLocation, PLIMetadataLocation, FieldMap,
-    StageColumn, StageBand, StageBandSet,
-    ValidationFinding, ValidationFindings,
-    SheetSignals, RowSpec, KVAnchor, StageBandSpec, PliBlock, SheetPlan,
-    CanonicalNameMap, LayoutHints, PlanVerdict,
+    CanonicalNameMap,
+    FieldLocation,
+    FieldMap,
+    InspectorReport,
+    KVAnchor,
+    LayoutHints,
+    PLIBoundaries,
+    PLIMetadataLocation,
+    PlanVerdict,
+    PliBlock,
+    RowSpec,
+    SheetPlan,
+    SheetSignals,
+    StageBand,
+    StageBandSet,
+    StageBandSpec,
+    StageColumn,
+    StructuralFingerprint,
+    ValidationFinding,
+    ValidationFindings,
+    WorkbookSummary,
 )
+from app.models.extraction import (
+    ExtractionResult,
+    FlexibleDate,
+    PLI,
+    Source,
+    Stage,
+    Warning,
+)
+from app.models.workbook import Cell, CellGrid, MergedRegion, SheetMeta, WorkbookCtx
 
 __all__ = [
-    # workbook
-    "Cell", "MergedRegion", "CellGrid", "SheetMeta", "WorkbookCtx",
-    # extraction
-    "PLI", "Stage", "ExtractionResult", "Warning", "FlexibleDate", "Source",
     # artifacts
-    "WorkbookSummary", "StructuralFingerprint", "InspectorReport",
-    "PLIBoundaries", "FieldLocation", "PLIMetadataLocation", "FieldMap",
-    "StageColumn", "StageBand", "StageBandSet",
-    "ValidationFinding", "ValidationFindings",
-    "SheetSignals", "RowSpec", "KVAnchor", "StageBandSpec", "PliBlock", "SheetPlan",
-    "CanonicalNameMap", "LayoutHints", "PlanVerdict",
+    "CanonicalNameMap",
+    "FieldLocation",
+    "FieldMap",
+    "InspectorReport",
+    "KVAnchor",
+    "LayoutHints",
+    "PLIBoundaries",
+    "PLIMetadataLocation",
+    "PlanVerdict",
+    "PliBlock",
+    "RowSpec",
+    "SheetPlan",
+    "SheetSignals",
+    "StageBand",
+    "StageBandSet",
+    "StageBandSpec",
+    "StageColumn",
+    "StructuralFingerprint",
+    "ValidationFinding",
+    "ValidationFindings",
+    "WorkbookSummary",
+    # extraction
+    "ExtractionResult",
+    "FlexibleDate",
+    "PLI",
+    "Source",
+    "Stage",
+    "Warning",
+    # workbook
+    "Cell",
+    "CellGrid",
+    "MergedRegion",
+    "SheetMeta",
+    "WorkbookCtx",
 ]
