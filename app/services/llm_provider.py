@@ -1,25 +1,28 @@
 """LLM provider abstraction.
 
-Defines the LLMProvider Protocol and the V1 AnthropicProvider implementation.
-Single provider in V1 (per spec D5 / Q1 lock). Adding a fallback registry
-later means a new file in app/services/ — no Protocol change.
+Defines the LLMProvider Protocol and the AnthropicProvider implementation.
+The Protocol allows agents to accept any conforming provider; the Anthropic
+implementation is the only concrete provider in this service.
 
 Key responsibility: schema_to_tool inlines $defs / $ref before sending,
 because Anthropic tool-use otherwise emits nested objects as JSON-encoded
 strings and Pydantic rejects them.
 """
 from __future__ import annotations
+
 import time
-from typing import Any, Protocol, TypeVar, runtime_checkable
+from typing import Protocol, TypeVar, runtime_checkable
+
 from anthropic import Anthropic
 from pydantic import BaseModel
+
 from app.config.settings import get_settings
 from app.core.logs import get_logger
 from app.core.telemetry import (
-    llm_inference_duration_seconds,
     agent_tokens_input,
     agent_tokens_output,
     llm_calls_total,
+    llm_inference_duration_seconds,
 )
 
 T = TypeVar("T", bound=BaseModel)
@@ -27,10 +30,12 @@ log = get_logger(__name__)
 
 
 def _get_tracer():
+    """Return an OTel tracer, or a no-op stand-in when tracing is unavailable."""
     try:
-        from app.core.tracing import get_tracer
+        from app.core.tracing import get_tracer  # optional dependency
         return get_tracer(__name__)
     except Exception:
+        log.debug("tracing_unavailable", reason="could not import app.core.tracing")
         return _NoopTracer()
 
 
@@ -88,7 +93,8 @@ def schema_to_tool(name: str, model: type[BaseModel]) -> dict:
 
 @runtime_checkable
 class LLMProvider(Protocol):
-    """Protocol — any provider that can do schema-constrained completion."""
+    """Interface for an LLM provider that can complete with a Pydantic schema as output."""
+
     model: str
 
     def complete_with_schema(
@@ -99,11 +105,7 @@ class LLMProvider(Protocol):
 
 
 class AnthropicProvider:
-    """V1 provider — Anthropic only.
-
-    Caller passes system prompt, user message, and Pydantic schema.
-    We wrap the schema in a tool definition and force the model to call it.
-    """
+    """Anthropic SDK wrapper that drives schema-constrained tool-use completions."""
 
     def __init__(self, client: Anthropic, model: str,
                  max_tokens: int = 4096, temperature: float = 0.0):
@@ -114,6 +116,7 @@ class AnthropicProvider:
 
     @classmethod
     def from_env(cls, api_key: str | None = None) -> "AnthropicProvider":
+        """Construct an AnthropicProvider from environment settings."""
         s = get_settings()
         key = api_key or s.anthropic_api_key
         if not key:
@@ -131,6 +134,7 @@ class AnthropicProvider:
         output_schema: type[T], tool_name: str,
         agent_name: str = "unknown",
     ) -> T:
+        """Call the Anthropic API and parse the response into output_schema."""
         tool = schema_to_tool(tool_name, output_schema)
         log.debug("llm_call_start", model=self.model, tool=tool_name,
                   system_chars=len(system), user_chars=len(user))
@@ -138,46 +142,62 @@ class AnthropicProvider:
         with _get_tracer().start_as_current_span("llm.complete") as span:
             span.set_attribute("llm.model", self.model)
             span.set_attribute("llm.agent", agent_name)
-            try:
-                resp = self.client.messages.create(
-                    model=self.model,
-                    max_tokens=self.max_tokens,
-                    temperature=self.temperature,
-                    system=system,
-                    messages=[{"role": "user", "content": user}],
-                    tools=[tool],
-                    tool_choice={"type": "tool", "name": tool_name},
-                )
-            except Exception:
-                llm_calls_total.add(1, {"model": self.model, "status": "failure"})
-                raise
+            resp = self._call_sdk(system=system, user=user, tool=tool, tool_name=tool_name)
             llm_inference_duration_seconds.record(
                 time.monotonic() - t0, {"model": self.model}
             )
             llm_calls_total.add(1, {"model": self.model, "status": "success"})
-            usage = getattr(resp, "usage", None)
-            inp_tokens: int | None = None
-            out_tokens: int | None = None
-            if usage is not None:
-                inp_tokens = getattr(usage, "input_tokens", None)
-                out_tokens = getattr(usage, "output_tokens", None)
-                if isinstance(inp_tokens, int):
-                    agent_tokens_input.add(
-                        inp_tokens, {"agent": agent_name, "model": self.model}
-                    )
-                    span.set_attribute("llm.input_tokens", inp_tokens)
-                if isinstance(out_tokens, int):
-                    agent_tokens_output.add(
-                        out_tokens, {"agent": agent_name, "model": self.model}
-                    )
-                    span.set_attribute("llm.output_tokens", out_tokens)
-            log.info("llm_call_complete", model=self.model, agent=agent_name,
-                     input_tokens=inp_tokens, output_tokens=out_tokens)
+            self._record_usage(span=span, resp=resp, agent_name=agent_name)
+            return self._parse_tool_response(resp=resp, tool_name=tool_name, output_schema=output_schema)
 
-            for block in resp.content:
-                if getattr(block, "type", None) == "tool_use" and block.name == tool_name:
-                    return output_schema(**block.input)
+    def _call_sdk(self, *, system: str, user: str, tool: dict, tool_name: str):
+        """Submit the completion request to the Anthropic API.
 
+        Records a failure counter and re-raises on any SDK error.
+        """
+        try:
+            return self.client.messages.create(
+                model=self.model,
+                max_tokens=self.max_tokens,
+                temperature=self.temperature,
+                system=system,
+                messages=[{"role": "user", "content": user}],
+                tools=[tool],
+                tool_choice={"type": "tool", "name": tool_name},
+            )
+        except Exception:
+            llm_calls_total.add(1, {"model": self.model, "status": "failure"})
+            raise
+
+    def _record_usage(self, *, span, resp, agent_name: str) -> None:
+        """Emit token-count metrics and span attributes from the response usage block."""
+        usage = getattr(resp, "usage", None)
+        inp_tokens: int | None = None
+        out_tokens: int | None = None
+        if usage is not None:
+            inp_tokens = getattr(usage, "input_tokens", None)
+            out_tokens = getattr(usage, "output_tokens", None)
+            if isinstance(inp_tokens, int):
+                agent_tokens_input.add(
+                    inp_tokens, {"agent": agent_name, "model": self.model}
+                )
+                span.set_attribute("llm.input_tokens", inp_tokens)
+            if isinstance(out_tokens, int):
+                agent_tokens_output.add(
+                    out_tokens, {"agent": agent_name, "model": self.model}
+                )
+                span.set_attribute("llm.output_tokens", out_tokens)
+        log.info("llm_call_complete", model=self.model, agent=agent_name,
+                 input_tokens=inp_tokens, output_tokens=out_tokens)
+
+    def _parse_tool_response(self, *, resp, tool_name: str, output_schema: type[T]) -> T:
+        """Extract the tool_use block from the response and instantiate output_schema.
+
+        Raises RuntimeError if the model did not return a tool_use block.
+        """
+        for block in resp.content:
+            if getattr(block, "type", None) == "tool_use" and block.name == tool_name:
+                return output_schema(**block.input)
         raise RuntimeError(
             f"Anthropic returned no tool_use block for {tool_name!r}. "
             f"stop_reason={resp.stop_reason}; content={resp.content!r}"
