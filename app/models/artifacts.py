@@ -299,7 +299,7 @@ class PlanVerdict(BaseModel):
 
     model_config = ConfigDict(extra="ignore")
     verdict: str = "looks_correct"
-    row_corrections: list[dict] = Field(default_factory=list)
+    row_corrections: list[dict[str, Any]] = Field(default_factory=list)
     identity_column_suggestion: str | None = None
     warnings: list[str] = Field(default_factory=list)
     confidence: float = 1.0
