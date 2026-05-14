@@ -1,7 +1,7 @@
 # SigNoz migration — design
 
 **Date:** 2026-05-13
-**Status:** Approved, ready for implementation plan
+**Status:** Implemented (2026-05-14). See deviations note at end.
 
 ## Problem
 
@@ -171,3 +171,13 @@ Each phase is a clean `git revert` away. Phase 2 + 3 revert restores the entire 
 - Whether to keep the Grafana JSON dashboards in `docs/superpowers/` as historical artifacts or delete them entirely. Plan defaults to deletion (clean repo); user can override.
 - Custom SigNoz dashboards to recreate later (TNA Overview-style 5-row layout). Deferred — see if SigNoz defaults suffice first.
 - SigNoz alerting rules (email/Slack/PagerDuty integration) — out of scope for v1.
+
+## Deviations from the implemented design
+
+The implementation diverged from this design in three ways, all driven by reality:
+
+1. **SigNoz architecture model.** This design was written against pre-v0.113 SigNoz (separate `query-service` and `frontend` images, separate `signoz-schema-migrator`). SigNoz v0.113.0 (2026-02-25) deprecated the schema-migrator and replaced query-service + frontend with a single unified `signoz/signoz` binary on port 8080. The implementation uses the post-0.113 architecture by vendoring SigNoz's upstream `deploy/docker/docker-compose.yaml` and pulling it in via `include:`. UI port is **8080**, not the 3301 quoted in this doc.
+
+2. **Log pipeline shape.** The design proposed an OTel `LoggingHandler` attached to the stdlib root logger. This silently no-oped in practice — structlog uses `PrintLoggerFactory` which bypasses stdlib entirely, so stdlib handlers never see structlog events. The fix: a custom structlog processor `emit_to_otel_logs` (in `app/core/tracing.py`) that pushes each event directly through the OTel SDK's global LoggerProvider. Stdout JSON output is unchanged.
+
+3. **SigNoz stack ownership.** The design proposed authoring our own `signoz/` config dir (clickhouse-config, otel-collector-config, etc.). The implementation instead vendors the SigNoz upstream `deploy/` tree under our repo and pulls it in via Docker Compose's `include:` directive. This avoids drift from SigNoz's reference setup and gets schema bootstrap (telemetrystore-migrator) for free.

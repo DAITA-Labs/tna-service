@@ -54,7 +54,7 @@
 
 5. **Incremental adaptability is the headline NFR.** Every axis along which a new TNA family can differ — layout shape, canonical field, header vocabulary, non-PLI row pattern — has its own additive extension point. See [Extension points](#extension-points).
 
-6. **Observable from day 1.** Prometheus collectors per agent, per validator, per phase. The Grafana dashboard ships with the service.
+6. **Observable from day 1.** Traces, metrics, and logs flow over OTLP into a SigNoz stack that comes up with `docker compose up`.
 
 ---
 
@@ -106,7 +106,7 @@ flowchart TB
     subgraph CFG["config/ + core/"]
       C1["config/settings.py<br/>(pydantic-settings)"]
       C2["core/logs.py<br/>(structlog)"]
-      C3["core/telemetry.py<br/>(prometheus)"]
+      C3["core/telemetry.py<br/>(OTel)"]
       C4["core/middleware.py<br/>(request_id)"]
     end
 
@@ -514,20 +514,37 @@ The matrix prints numbers only (no diff column) by design — diffs are computed
 
 ## Telemetry
 
-Eight Prometheus collectors expose runtime behaviour at `/metrics`.
+All observability flows over a single OTLP gRPC connection (`OTEL_EXPORTER_OTLP_ENDPOINT=http://signoz-otel-collector:4317`) into the vendored SigNoz stack under `deploy/`. The service name is `tna-service` (`OTEL_SERVICE_NAME=tna-service`).
 
-| Collector | Type | Labels | Emitted by |
-|---|---|---|---|
-| `extraction_duration_seconds` | Histogram | `format_detected` | orchestrator end-of-run |
-| `extraction_pli_count` | Gauge | `source_file` | orchestrator end-of-run |
-| `agent_duration_seconds` | Histogram | `agent` | `AgentRunner` per successful run |
-| `agent_retry_count` | Counter | `agent`, `reason` | `AgentRunner` per retry |
-| `agent_tokens_input` | Counter | `agent`, `model` | (reserved — wired through `AnthropicProvider` extension) |
-| `agent_tokens_output` | Counter | `agent`, `model` | (reserved — same) |
-| `validator_findings` | Counter | `check`, `severity` | each validator on every emitted finding |
-| `llm_inference_duration_seconds` | Histogram | `model` | `AnthropicProvider.complete_with_schema` |
+**What the app emits.** `app/core/tracing.py` configures three OTel providers on startup:
+- `TracerProvider` — auto-instruments FastAPI (via `FastAPIInstrumentor`) and httpx (via `HttpxClientInstrumentor`). Every `POST /extract` becomes a root span; agent calls, tool calls, and validator runs become child spans.
+- `MeterProvider` — `PeriodicExportingMetricReader` pushes metrics over OTLP every 15 s.
+- `LoggerProvider` — a custom structlog processor `emit_to_otel_logs` (defined in `tracing.py`) pushes each structlog event directly through the OTel SDK's global `LoggerProvider`. This side-channel exists because structlog uses `PrintLoggerFactory`, which bypasses stdlib logging entirely — the standard OTel `LoggingHandler` approach would silently no-op. Stdout JSON output is unchanged.
 
-The Grafana dashboard provisioned at startup uses these to show: extraction latency p95, agent retry rates, validator finding rates, PLIs-per-file time series.
+**Propagators.** W3C TraceContext + B3 multi-format are both registered, so `trace_id` and `span_id` propagate through outbound httpx calls and appear on every log line as native OTel attributes.
+
+**Metric names** (preserved from the prometheus_client era — same names, now OTel attributes instead of `.labels(...)` calls):
+
+| Metric | Type | Key attributes |
+|---|---|---|
+| `extractions_total` | Counter | `format_detected` |
+| `extraction_duration_seconds` | Histogram | `format_detected` |
+| `extraction_pli_count` | Gauge | `source_file` |
+| `agent_calls_total` | Counter | `agent`, `status` |
+| `agent_duration_seconds` | Histogram | `agent` |
+| `agent_retry_count` | Counter | `agent`, `reason` |
+| `agent_tokens_input` | Counter | `agent`, `model` |
+| `agent_tokens_output` | Counter | `agent`, `model` |
+| `llm_calls_total` | Counter | `model`, `status` |
+| `llm_inference_duration_seconds` | Histogram | `model` |
+| `tool_calls_total` | Counter | `tool`, `status` |
+| `tool_duration_seconds` | Histogram | `tool` |
+| `tool_errors_total` | Counter | `tool`, `error_type` |
+| `validator_findings_total` | Counter | `check`, `severity` |
+
+**SigNoz auto-generates** RED metrics (rate, error rate, duration percentiles), a service map, an exception tracker, a Logs Explorer, and a Trace Explorer — covering what the old TNA Overview dashboard provided.
+
+**Compose structure.** The root `docker-compose.yml` declares our `api` service plus `include: - path: ./deploy/docker/docker-compose.yaml`, which pulls in the full SigNoz stack (signoz-otel-collector, signoz, clickhouse, zookeeper, alertmanager). Both stacks share the `signoz-net` network defined by the included compose. SigNoz UI is at **http://localhost:8080** (post-v0.113 unified binary).
 
 ---
 

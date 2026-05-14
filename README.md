@@ -22,7 +22,7 @@ Given a TNA (Time-and-Action) workbook, the service identifies every Production 
 - **Stateless** — each xlsx is independent. No DB.
 - **Containerized** — `docker compose up` is the canonical run; the artifact is a Docker image, not a pip package.
 - **Layered** — router / service / repository / model / enum, classic FastAPI layout.
-- **Observable from day 1** — Prometheus collectors per agent and per validator; Grafana dashboard pre-provisioned.
+- **Observable from day 1** — OpenTelemetry traces, metrics, and logs all flow into SigNoz.
 
 For the architectural rationale and topology details, see [`ARCHITECTURE.md`](./ARCHITECTURE.md).
 
@@ -48,11 +48,12 @@ make serve
 # 4. In another shell — extract a workbook:
 curl -F "file=@path/to/your.xlsx" http://localhost:8000/extract | jq .
 
-# 5. Or run the full Docker stack (api + Prometheus + Grafana):
+# 5. Or run the full Docker stack (api + SigNoz):
 make up
-# api      → http://localhost:8000
-# prom     → http://localhost:9090
-# grafana  → http://localhost:3000   (anon viewer, "TNA Extraction" dashboard)
+# api       → http://localhost:8000
+# SigNoz UI → http://localhost:8080
+# OTLP gRPC → localhost:4317  (collector)
+# OTLP HTTP → localhost:4318  (collector)
 ```
 
 ## Environment variables
@@ -129,9 +130,6 @@ Liveness probe.
 { "status": "healthy", "version": "0.1.0" }
 ```
 
-### `GET /metrics`
-Prometheus exposition. See [`ARCHITECTURE.md`](./ARCHITECTURE.md#telemetry) for the collector list.
-
 ---
 
 ## Make targets
@@ -144,7 +142,7 @@ Prometheus exposition. See [`ARCHITECTURE.md`](./ARCHITECTURE.md#telemetry) for 
 | `make eval` | Runs the extractor over every labeled file in `dataset/extracted/`, prints scoreboard, writes a run JSON under `evals/runs/` |
 | `make serve` | `uvicorn app.main:app --reload` |
 | `make build` | `docker compose build` |
-| `make up` | `docker compose up -d` (api + Prometheus + Grafana) |
+| `make up` | `docker compose up -d` (api + SigNoz stack) |
 | `make down` | `docker compose down` |
 | `make logs` | `docker compose logs -f api` |
 | `make lint` | `ruff check app tests evals` |
@@ -210,7 +208,7 @@ tna-service/
 │   │   └── workflow/                 one .md per workflow agent
 │   └── core/                         cross-cutting
 │       ├── logs.py                   structlog (JSON in prod)
-│       ├── telemetry.py              Prometheus collectors
+│       ├── telemetry.py              OTel Metrics SDK (counters, histograms, gauges)
 │       ├── middleware.py             RequestIdMiddleware (binds request_id to log context)
 │       ├── prompt_loader.py
 │       └── pipeline_loader.py
@@ -230,9 +228,9 @@ tna-service/
 │   ├── live/                         real Anthropic API + real dataset (@pytest.mark.live)
 │   └── fixtures/                     builders/ + expected/ — one xlsx scenario per file
 │
-├── scripts/run_eval.py               `make eval` entrypoint
-├── prometheus/prometheus.yml
-└── grafana/{datasources,dashboards}  bootstrap dashboard provisioned at start
+├── deploy/docker/docker-compose.yaml   vendored SigNoz stack (pulled in via compose include:)
+├── deploy/common/                      SigNoz support configs (clickhouse, signoz)
+└── scripts/run_eval.py                 `make eval` entrypoint
 ```
 
 ---
@@ -294,25 +292,16 @@ black box, imports only `app.models.*` and the `ExtractorProtocol` — see
 
 ---
 
-## Logs (Loki)
+## Telemetry (SigNoz)
 
-Logs are emitted as structured JSON via structlog, shipped by Promtail to a local Loki container, and queried by Grafana via the "Loki" datasource. Open the dashboard, scroll to the "Logs" panel at the bottom, and pivot from any metric spike to the matching log lines by filtering on `request_id`, `phase`, or `agent`.
+After `make up`, open **http://localhost:8080** and find `tna-service` under Services. From there you can pivot between:
+- **Traces** — span tree per `/extract` call; click any span to see its attributes.
+- **Logs Explorer** — filter by `trace_id`, `request_id`, `phase`, or `span_id`. These are attached as native OTel attributes on every log line (not just embedded in the body), so they are searchable and indexable.
+- **Metrics** — RED metrics (rate, error rate, duration p50/p95/p99) are auto-generated from spans. The service map shows downstream call graphs.
 
-On Docker Desktop (Windows/Mac), if the Logs panel is empty, install the Loki Docker driver plugin and use `docker-compose.override.yml.example` (see Troubleshooting). On native Linux, the default config works as-is.
+SigNoz's built-in APM views cover what the old TNA Overview dashboard did (RED metrics, service map, exception tracker, log explorer, trace explorer). Custom dashboards can be authored later in SigNoz if needed.
 
-For the full collector + dashboard inventory, see [`ARCHITECTURE.md`](./ARCHITECTURE.md#telemetry).
-
----
-
-## Telemetry
-
-The api emits Prometheus metrics from `/metrics`. The pre-provisioned Grafana dashboard (TNA folder → "TNA Extraction — overview") shows:
-- **Extraction latency p95** by `format_detected`
-- **Agent retries** per minute by agent
-- **Validator findings** per minute by check + severity
-- **PLIs per file** time series
-
-For the full collector list (and which code path emits each one), see [`ARCHITECTURE.md`](./ARCHITECTURE.md#telemetry).
+For the full OTel pipeline details (TracerProvider + MeterProvider + LoggerProvider, metric names, propagator config), see [`ARCHITECTURE.md`](./ARCHITECTURE.md#telemetry).
 
 ---
 
@@ -339,8 +328,8 @@ The structural-layout acceptance tests in `tests/unit/structure/test_layout.py` 
 | `/extract` returns 500 | Look at the response body and api logs (`make logs`) — usually a tool/agent exception |
 | Tests in `tests/live/` all skipped | Default deselects `@pytest.mark.live` | `.venv/Scripts/python.exe -m pytest tests -m live -q` (with `ANTHROPIC_API_KEY` set) |
 | `make eval` says no labels found | `dataset/extracted/` doesn't exist inside `tna-service/` | This dir ships with the corpus; if missing, re-clone or restore from git |
-| Prometheus says target down | api container not yet healthy | `docker compose logs api` |
-| Logs panel in Grafana shows nothing on Docker Desktop | Promtail's file mount may not see the api container's log file inside Docker Desktop's VM | Install the Loki Docker driver plugin and use the override: `docker plugin install grafana/loki-docker-driver:latest --alias loki --grant-all-permissions && cp docker-compose.override.yml.example docker-compose.override.yml && docker compose down && docker compose up -d` |
+| SigNoz UI empty after `/extract` | OTel batch processor flushes every ~15s; wait a moment, then refresh the Services or Traces view | —
+| ClickHouse won't start | `signoz-net` is set up by the vendored compose include; check `docker compose logs clickhouse` for init errors | —
 
 For any extraction-quality regression, the path is: run `make eval`, open `evals/runs/<timestamp>.json`, compare to a prior run. The `source_cells` and `warnings` arrays on each PLI tell you exactly where each value came from and what the validators flagged.
 

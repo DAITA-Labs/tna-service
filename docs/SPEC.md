@@ -101,7 +101,7 @@ Output: `list[ValidationFinding]` with severity `info | warn`.
 | D7 | `PlanReviewer` firing condition | **Confidence < 0.85 OR Tier 1/2 warnings OR rare pli_mode** | Keeps median case at 1 LLM call per sheet (FieldNamer only); reviewer adds a second call only when warranted |
 | D8 | Cross-sheet PLI aggregation | **Concatenate**, preserve `source_sheet` on every PLI, no dedup | Different sheets genuinely hold different PLIs (GUESS master files); dedup would mask data |
 | D9 | SheetPlan 3-axis design | **pli_mode × stage_scope × sub_row_role are orthogonal** | Every observed layout family is a point in this space; new families add rules, not new enum cases |
-| D10 | Telemetry granularity | **Per-phase + per-agent histograms; per-validator counters; per-file gauges** (PLI count, retry count, cost) | Lets us correlate prompt changes to specific agent/phase behavior in Grafana |
+| D10 | Telemetry granularity | **Per-phase + per-agent histograms; per-validator counters; per-file gauges** (PLI count, retry count, cost) | Lets us correlate prompt changes to specific agent/phase behavior in SigNoz (Logs Explorer + Service Map + Traces views) |
 
 These ten are locked by review; revisiting any of them requires an ADR.
 
@@ -135,10 +135,11 @@ New microservice at `F:\DAITA\ARENA\TNA\tna-service\` (greenfield — `tna_parse
 ```
 tna-service/
 ├── pyproject.toml              uv-managed; fastapi, pydantic, anthropic, openpyxl,
-│                               pydantic-settings, structlog, prometheus-client, starlette-prometheus
+│                               pydantic-settings, structlog, opentelemetry-sdk, opentelemetry-exporter-otlp,
+│                               opentelemetry-instrumentation-fastapi, opentelemetry-instrumentation-httpx
 ├── Makefile                    make eval / test / serve / build / lint / fmt
 ├── Dockerfile
-├── docker-compose.yml          api + prometheus + grafana (telemetry from day 1)
+├── docker-compose.yml          api + SigNoz stack (via deploy/ include)
 ├── .env.example                ANTHROPIC_API_KEY, ANTHROPIC_MODEL, APP_ENV, LOG_LEVEL, ...
 ├── .python-version
 │
@@ -202,7 +203,7 @@ tna-service/
 │   ├── schemas/                 JSON schemas for LLM tool calls
 │   │
 │   └── interface/              FastAPI surface (lean in Spec 1; thicker in Spec 2)
-│       ├── router.py           POST /extract, GET /health, GET /metrics
+│       ├── router.py           POST /extract, GET /health
 │       ├── interaction.py      request/response shapes
 │       └── deps.py             provider injection
 │
@@ -233,13 +234,8 @@ tna-service/
 │   ├── refresh_golden.py       regenerate frozen agent snapshots
 │   └── build-docker.sh
 │
-├── prometheus/
-│   └── prometheus.yml          scrape config; targets api:8000/metrics
-│
-├── grafana/
-│   ├── dashboards/json/        tna_extraction.json (latency p95, retries, validator failures, pli/file)
-│   ├── dashboards/dashboards.yml
-│   └── datasources/datasources.yml
+├── deploy/
+│   └── docker/docker-compose.yaml   vendored SigNoz stack (otel-collector, signoz, clickhouse, zookeeper, alertmanager)
 │
 └── docs/
     ├── architecture.md
@@ -419,9 +415,7 @@ Per the decision to build telemetry from day 1:
 - `http_requests_total{method, endpoint, status}` — counter
 - `llm_inference_duration_seconds{model}` — histogram
 
-**Stack:** `prometheus_client` + `starlette-prometheus` middleware → `/metrics`. Prometheus scrapes the api service. Grafana ships a bootstrap dashboard with: extraction latency p95, retries per agent, validator failure rate, PLI count distribution, token cost per file.
-
-All telemetry config is in `docker-compose.yml` from V1.
+**Stack:** OTel SDK (`TracerProvider` + `MeterProvider` + `LoggerProvider`) pushes traces, metrics, and logs over a single OTLP gRPC connection to `signoz-otel-collector:4317`. The collector fans out to ClickHouse via ClickHouse exporters. The SigNoz binary (unified post-v0.113, port 8080) serves the UI, query API, and frontend. The full stack is vendored under `deploy/` and pulled in via Docker Compose's `include:` directive. Metric names are preserved from the prometheus_client era: `extractions_total`, `extraction_duration_seconds`, `extraction_pli_count`, `agent_calls_total`, `agent_duration_seconds`, `agent_retry_count`, `agent_tokens_input`, `agent_tokens_output`, `llm_calls_total`, `llm_inference_duration_seconds`, `tool_calls_total`, `tool_duration_seconds`, `tool_errors_total`, `validator_findings_total`.
 
 ## 12. Config
 
@@ -466,9 +460,9 @@ and the cookbook for adding new layouts — see [docs/TESTING.md](TESTING.md).
 - 4 extraction validators + Reconciler (lenient)
 - Full eval framework with label-driven scoring, golden snapshots, history JSONs
 - 10 workbook tools in shared TOOL_REGISTRY
-- Telemetry stack live (Prometheus + Grafana from `docker-compose up`)
+- Telemetry stack live (SigNoz vendored under `deploy/`, brought up by `docker compose up`)
 - Structured logging
-- FastAPI thin shell: POST /extract, GET /health, GET /metrics
+- FastAPI thin shell: POST /extract, GET /health
 - Single LLM provider (Anthropic)
 
 **Deferred to Spec 2:**
@@ -494,7 +488,7 @@ and the cookbook for adding new layouts — see [docs/TESTING.md](TESTING.md).
 | Planner heuristics wrong on a new unseen layout | Tier 1+2 validators + PlanReviewer catch planning errors before apply_plan; telemetry surfaces which planner rules fire most often |
 | PlanReviewer fires too aggressively / drives up LLM cost | Tune confidence threshold via telemetry; current default 0.85 — reduce if median LLM calls/sheet stays acceptable |
 | Snapshot tests too brittle when LLM output drifts despite temp=0 | Use semantic comparisons (Pydantic-aware) for tolerable drift; exact match only for structural fields |
-| Telemetry adds dev-environment friction | Make Prometheus/Grafana opt-in via `make serve-with-telemetry`; default `make serve` is api-only |
+| SigNoz cold-start latency | ClickHouse takes ~30s to initialize on first `docker compose up`; subsequent runs are fast. `make serve` (api-only) is unaffected. |
 | Eval becomes too slow once we have many labeled files | Parallelize the eval runner; cache LLM responses per (prompt-hash, model) for repeatability runs |
 
 **V1 confidence aggregation:** simple weighted mean — `0.7 * mean(workflow_per_field_confidence) + 0.3 * (1 - validator_warn_rate)`. Calibration tuning is deferred to a V2 ADR once we have eval data showing whether the workflow's self-reported confidence correlates with correctness.
@@ -506,7 +500,7 @@ Spec 1 ships when:
 2. On the labeled subset of `dataset/extracted/` files, the new service matches or beats `tna_parser/` on `pli_recall`, `field_recall`, and `stage_recall`.
 3. CHRISTIAN BERG regression test passes: 7 PLIs emitted with correct anchor/child structure.
 4. new job-TNA regression test passes: 5 sheets each emit 1 PLI with full identity + 3 stage bands.
-5. `docker compose up` brings up api + prometheus + grafana; the bootstrap dashboard shows live metrics during an extraction.
+5. `docker compose up` brings up api + the vendored SigNoz stack; SigNoz UI at http://localhost:8080 shows `tna-service` in the Services tab with live metrics, traces, and logs during an extraction.
 6. Adding a synthetic new field extractor (e.g., a `NotesExtractor` that captures the `Remarks` column) requires only: one file in `app/services/agents/`, one prompt in `app/prompts/workflow/` — no orchestrator changes.
 7. Adding a synthetic new layout rule (e.g., diagonal KV anchors) requires only: rules in `planner/kv_anchor_detector.py` + one enum value if a new RowRole is needed — no changes to `apply_plan` or LLM agents.
 8. `apply_plan` static analysis test passes: no imports of `agents` or `llm_provider` anywhere in the apply_plan call tree.
