@@ -189,7 +189,10 @@ endpoint = (otlp_endpoint
 
 Type hints are part of the API surface. They tell the reader and the type
 checker what a function accepts and returns. Modern syntax keeps the code
-short and avoids needless `typing` imports.
+short and avoids needless `typing` imports. The "no old-style" rules below
+are guardrails — this codebase already uses modern syntax throughout, so
+the cost during refactor is only adding hints where they are missing, not
+rewriting existing ones.
 
 **Rules:**
 - Every public function signature has parameter and return type hints.
@@ -232,7 +235,11 @@ module boundary; inside, trust your types.
 - Raise specific exceptions (`ValueError`, `KeyError`, custom subclass) for actual errors. Bare `raise Exception(...)` is a defect.
 - Return `None` only when "not found" is a legitimate result, and document that in the docstring.
 - No bare `except:`. Always name the exception type.
-- `except Exception:` is allowed only when (a) you log the exception and (b) you re-raise OR fall back to a documented default. Silent swallowing without either is a defect.
+- `except Exception:` is allowed only in one of three shapes:
+  - (a) log the exception and re-raise;
+  - (b) log the exception and fall back to a documented default;
+  - (c) silent swallow with a `# best-effort: <reason>` comment on the `pass` line — use ONLY when the catch protects a non-critical side channel from killing the main path (e.g. a logging emit, a metrics push). Don't reach for this to make a normal error go away.
+- Silent swallowing without either a log+action OR a `best-effort` marker is a defect.
 - Validate inputs at module boundaries (routers, public APIs, data load points). Inside a module, trust the types you declared.
 - Custom exception classes inherit from the closest standard exception (`ValueError`, `RuntimeError`, `LookupError`) and live in the module that raises them.
 
@@ -258,7 +265,8 @@ def get_tracer(name: str = "tna_service"):
 
 **Checklist:**
 - [ ] No bare `except:` in the file.
-- [ ] Every `except Exception:` logs the cause and then either re-raises OR falls back to a documented default.
+- [ ] Every `except Exception:` matches one of the three allowed shapes: log+re-raise, log+fallback, or silent pass with `# best-effort: <reason>`.
+- [ ] Each `# best-effort:` marker names a real side channel (logging, telemetry, etc.) — not a way to hide an error in the main path.
 - [ ] Returning `None` for "not found" is documented in the docstring.
 - [ ] Custom exceptions inherit from a meaningful standard base.
 - [ ] Input validation is at the boundary, not scattered through internals.
@@ -398,7 +406,8 @@ is no `# allow-*` override with a reason, fix the file before committing.
 
 **Errors (S6):**
 - [ ] No bare `except:`.
-- [ ] Every `except Exception:` logs the cause and then either re-raises OR falls back to a documented default.
+- [ ] Every `except Exception:` does one of: log+re-raise, log+documented-default, or silent `pass` with a `# best-effort: <reason>` comment.
+- [ ] `# best-effort:` markers are only on genuine side-channel catches (logging, telemetry, non-critical emits), not on main-path errors.
 - [ ] `None`-as-not-found is documented where used.
 
 **Imports (S7):**
