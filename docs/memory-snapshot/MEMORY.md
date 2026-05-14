@@ -1,0 +1,17 @@
+- [Project overview](project_overview.md) — where TNA AI Parser lives, which project docs to read first
+- [Architecture decision](architecture_decision.md) — three pillars (multi-agent + signal routing + induction-then-apply); ADR-003 proposed, supersedes ADR-002
+- [Routing principle](feedback_routing_principle.md) — orchestrator routes on structural signals, never format/supplier names
+- [Faithful extraction principle](faithful_extraction_principle.md) — TNA is source of truth; don't split cells; stages vs PLI metadata distinction
+- [Extensibility axes](extensibility_axes.md) — four orthogonal axes for absorbing new TNA patterns without rewrites
+- [Code style preferences](feedback_code_style.md) — venv usage, comments, function scope, TDD per tool — applies to every subagent
+- [No task refs in code](feedback_no_task_refs_in_code.md) — code comments/docstrings must not mention plan-task names (MA Task N, Task 5, etc.)
+- [Keep the code lean](feedback_keep_code_lean.md) — layout-iteration fixes should sharpen prompts first, add Python helpers only when prompts can't solve it
+- [No deadline pressure](feedback_no_deadline_experiment_first.md) — work fluently, prioritize architecture quality over original M0–M3 dates
+- [Labels location + schema](labels_location_and_schema.md) — `dataset/extracted/*.json`; canonical PLI/Stage shape (`quantity` not `order_quantity`)
+- [Experiment setup](experiment_setup.md) — Python venv at F:\DAITA\ARENA\TNA\.venv, deps in requirements.txt
+- [Dataset observations](dataset_observations.md) — six distinct TNA layout families (added Compass Pro 2026-05-08)
+- [M0 implementation complete](m0_implementation_complete.md) — what's built in tna_parser/, 72 tests passing, deferred follow-ups
+- [M0 baseline results](m0_baseline_results.md) — DKN baseline v1 (71% field) → v2 faithful extraction (100% field, 83% stage)
+- [LLM as judge pattern](llm_as_judge_pattern.md) — for SheetRowPlanner: det produces, LLM reviews; det wins on disagreement
+- [Update docs after impl](feedback_update_docs_after_impl.md) — after impl + tests + evals are green, update README/ARCHITECTURE/SPEC/design docs as a final step
+- [SigNoz migration model](signoz_migration_model.md) — post-v0.113.0 (2026-02-25): schema-migrator deprecated, migration commands now in signoz-otel-collector binary
