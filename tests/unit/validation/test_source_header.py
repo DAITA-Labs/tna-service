@@ -12,8 +12,8 @@ def test_source_cell_verifier_passes_when_values_match(tmp_path):
     ws["K4"] = "131673"
     p = tmp_path / "x.xlsx"; wb.save(p)
     ctx = register_workbook(p)
-    pli = PLI(io_number="131673", source_sheet="Sheet",
-              source_cells={"io_number": "K4"})
+    pli = PLI(io_number="131673",
+              source={"sheet": "Sheet", "cells": {"io_number": "K4"}})
     result = ExtractionResult(plis=[pli], source_file=str(p))
     v = SourceCellVerifier(workbook_ctx=ctx)
     out = v.run(extraction=result)
@@ -27,8 +27,8 @@ def test_source_cell_verifier_warns_on_mismatch(tmp_path):
     ws["K4"] = "DIFFERENT"
     p = tmp_path / "x.xlsx"; wb.save(p)
     ctx = register_workbook(p)
-    pli = PLI(io_number="131673", source_sheet="Sheet",
-              source_cells={"io_number": "K4"})
+    pli = PLI(io_number="131673",
+              source={"sheet": "Sheet", "cells": {"io_number": "K4"}})
     result = ExtractionResult(plis=[pli], source_file=str(p))
     v = SourceCellVerifier(workbook_ctx=ctx)
     fs = v.run(extraction=result)["findings"]
@@ -42,8 +42,8 @@ def test_header_match_verifier_passes(tmp_path):
     ws["K4"] = "131673"
     p = tmp_path / "x.xlsx"; wb.save(p)
     ctx = register_workbook(p)
-    pli = PLI(io_number="131673", source_sheet="Sheet",
-              source_cells={"io_number": "K4"})
+    pli = PLI(io_number="131673",
+              source={"sheet": "Sheet", "cells": {"io_number": "K4"}})
     result = ExtractionResult(plis=[pli], source_file=str(p))
     v = HeaderMatchVerifier(workbook_ctx=ctx)
     fs = v.run(extraction=result)["findings"]

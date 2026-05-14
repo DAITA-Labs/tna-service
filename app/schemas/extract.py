@@ -4,4 +4,4 @@ from app.models.extraction import ExtractionResult
 
 
 class ExtractResponse(ExtractionResult):
-    """Same shape as ExtractionResult — surfaces source_cells, warnings, etc."""
+    """Same shape as ExtractionResult — surfaces source, warnings, etc."""

@@ -1,4 +1,4 @@
-"""Source cell match — fraction of source_cells that resolve to the extracted value.
+"""Source cell match — fraction of source.cells that resolve to the extracted value.
 
 Independent of the label; only needs the extracted result + WorkbookCtx."""
 from __future__ import annotations
@@ -12,10 +12,10 @@ def score_source_cell_match(actual: ExtractionResult, ctx: WorkbookCtx) -> float
     total = 0
     matched = 0
     for pli in actual.plis:
-        if not pli.source_sheet:
+        if not pli.source.sheet:
             continue
-        ws = ctx.wb[pli.source_sheet]
-        for field, addr in pli.source_cells.items():
+        ws = ctx.wb[pli.source.sheet]
+        for field, addr in pli.source.cells.items():
             total += 1
             extracted = getattr(pli, field, None) or pli.metadata.get(field)
             if extracted is None:

@@ -4,10 +4,10 @@ Aligned with the user's hand-labeled ground truth in dataset/extracted/*.json.
 extra="ignore" everywhere so envelope additions stay backward-compatible.
 FlexibleDate handles supplier-specific formats (DD-MMM-YYYY, DD/MM/YYYY, etc).
 
-`PLI.source_cells` is per-field traceability: maps a canonical field name to
-the A1 address its value was read from. Lets a reviewer open the workbook and
-verify any extracted value at its source. Also drives the SourceCellVerifier
-validator in the validation arm.
+`PLI.source` and `Stage.source` are nested traceability (sheet/rows/cells):
+`source.cells` maps each canonical field / metadata key to the A1 address its
+value was read from. Lets a reviewer open the workbook and verify any extracted
+value at its source. Also drives the SourceCellVerifier validator.
 """
 from __future__ import annotations
 from datetime import date, datetime
@@ -46,6 +46,18 @@ def _parse_flexible_date(value: Any) -> Any:
 FlexibleDate = Annotated[date | None, BeforeValidator(_parse_flexible_date)]
 
 
+class Source(BaseModel):
+    """Per-field traceability — which sheet/row/cell each value was read from.
+
+    Shared by `PLI.source` and `Stage.source` so any extracted value can be
+    verified by opening the source workbook at `source.sheet` + `source.cells[field]`.
+    """
+    model_config = ConfigDict(extra="ignore")
+    sheet: str | None = None
+    rows: list[int] = Field(default_factory=list)
+    cells: dict[str, str] = Field(default_factory=dict)
+
+
 class Stage(BaseModel):
     model_config = ConfigDict(extra="ignore")
     name: str
@@ -54,10 +66,10 @@ class Stage(BaseModel):
     section: str | None = None
     metadata: dict[str, Any] = Field(default_factory=dict)
     confidence: float = Field(ge=0.0, le=1.0, default=1.0)
-    # Per-field A1 traceability for this stage, e.g.
-    # {"planned_date": "C10", "actual": "C11", "qty": "AD4"}.
-    # `planned_date` is always recorded; sub_column keys mirror Stage.metadata keys.
-    source_cells: dict[str, str] = Field(default_factory=dict)
+    # Per-stage traceability: source.sheet, source.rows (the row(s) this stage
+    # was read from on its parent PLI), source.cells maps "planned_date" +
+    # each Stage.metadata key to its A1 address.
+    source: Source = Field(default_factory=Source)
 
 
 class PLI(BaseModel):
@@ -86,10 +98,10 @@ class PLI(BaseModel):
     stages: list[Stage] = Field(default_factory=list)
     confidence: dict[str, float] = Field(default_factory=dict)
     metadata: dict[str, Any] = Field(default_factory=dict)
-    source_sheet: str | None = None
-    source_rows: list[int] = Field(default_factory=list)
-    # Per-field A1 traceability: {"io_number": "K4", "delivery_date": "P4"}.
-    source_cells: dict[str, str] = Field(default_factory=dict)
+    # Single nested traceability: source.sheet, source.rows, source.cells.
+    # `source.cells` maps every canonical field + every metadata key to its
+    # A1 origin (e.g. {"io_number": "K4", "delivery_date": "P4"}).
+    source: Source = Field(default_factory=Source)
 
 
 class Warning(BaseModel):

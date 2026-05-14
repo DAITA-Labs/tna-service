@@ -22,14 +22,14 @@ def score_header_match(actual: ExtractionResult, ctx: WorkbookCtx) -> float:
     matched = 0
     total = 0
     for pli in actual.plis:
-        if not pli.source_sheet:
+        if not pli.source.sheet:
             continue
-        ws = ctx.wb[pli.source_sheet]
-        for field, addr in pli.source_cells.items():
+        ws = ctx.wb[pli.source.sheet]
+        for field, addr in pli.source.cells.items():
             if field not in _VOCAB:
                 continue
             col, _ = coordinate_from_string(addr)
-            key = (pli.source_sheet, col, field)
+            key = (pli.source.sheet, col, field)
             if key in seen:
                 continue
             seen.add(key)

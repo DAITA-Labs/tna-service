@@ -26,9 +26,12 @@ def test_pli_delivery_date_coerces():
     assert p.delivery_date == date(2026, 5, 19)
 
 
-def test_pli_source_cells():
-    p = PLI(io_number="1", source_cells={"io_number": "K4"})
-    assert p.source_cells["io_number"] == "K4"
+def test_pli_source_nested():
+    p = PLI(io_number="1", source={"sheet": "Sheet", "rows": [4],
+                                   "cells": {"io_number": "K4"}})
+    assert p.source.sheet == "Sheet"
+    assert p.source.rows == [4]
+    assert p.source.cells["io_number"] == "K4"
 
 
 def test_stage_planned_date_coerces():
