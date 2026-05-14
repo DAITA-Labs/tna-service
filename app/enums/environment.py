@@ -1,10 +1,9 @@
-"""Service deployment environment."""
+"""Define the four deployment environments and their invariants."""
 from enum import Enum
 
 
 class Environment(str, Enum):
-    """The four valid app environments. Drives env-file layering and
-    environment-aware behavior (logging format, defaults, etc.)."""
+    """An enum of valid app deployment environments: development, staging, production, or test."""
 
     DEVELOPMENT = "development"
     STAGING = "staging"
