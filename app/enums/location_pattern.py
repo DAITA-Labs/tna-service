@@ -3,8 +3,7 @@ from enum import Enum
 
 
 class LocationPattern(str, Enum):
-    """column: read down a column. anchor: scattered-KV (label cell + offset).
-    merged_propagating: vertical-merge layouts — value walks down merge anchor."""
+    """Patterns describing how a FieldLocation reads values from the workbook."""
 
     COLUMN = "column"
     ANCHOR = "anchor"
