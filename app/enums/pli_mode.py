@@ -4,6 +4,8 @@ from enum import Enum
 
 
 class PliMode(str, Enum):
+    """Enumeration of how PLIs are distributed across a sheet."""
+
     ROW_PER_PLI = "row_per_pli"
     SECTION_PER_PLI = "section_per_pli"
     SHEET_IS_PLI = "sheet_is_pli"
