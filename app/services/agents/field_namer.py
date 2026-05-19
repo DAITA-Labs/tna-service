@@ -4,10 +4,12 @@ from __future__ import annotations
 from pathlib import Path
 
 from haystack import component
+from openpyxl.utils import column_index_from_string
 from openpyxl.utils.cell import coordinate_from_string
 
 from app.core.logs import get_logger
 from app.core.prompt_loader import load_prompt
+from app.enums.pli_mode import PliMode
 from app.models.artifacts import (
     CanonicalNameMap, KVAnchor, SheetPlan, StageBandSpec, StageColumn,
 )
@@ -94,8 +96,35 @@ def _format_markdown(sheet: str, identity: list[tuple[str, str]],
 
 def _sample_values(ws, plan: SheetPlan, identity: list[tuple[str, str]],
                    k: int = 3) -> dict[str, list[object]]:
-    """Placeholder; filled in Task 12."""
-    return {}
+    """Return up to `k` non-null sample values per identity label.
+
+    For ROW_PER_PLI: reads data rows from `plan.rows` (ANCHOR/CHILD).
+    For SHEET_IS_PLI / SECTION_PER_PLI: returns {} — KV labels carry their own
+    values, no sampling needed.
+    String values are truncated to 60 chars to keep prompt size bounded.
+    """
+    if plan.pli_mode is not PliMode.ROW_PER_PLI:
+        return {}
+    data_rows = [r.idx for r in plan.rows
+                 if r.role.value in {"anchor", "child"}]
+    if not data_rows:
+        return {}
+    out: dict[str, list[object]] = {}
+    for raw, col in identity:
+        col_idx = column_index_from_string(col)
+        seen: list[object] = []
+        for r in data_rows:
+            if len(seen) >= k:
+                break
+            v = ws.cell(row=r, column=col_idx).value
+            if v is None:
+                continue
+            if isinstance(v, str) and len(v) > 60:
+                v = v[:57] + "..."
+            seen.append(v)
+        if seen:
+            out[raw] = seen
+    return out
 
 
 SPEC = AgentSpec(
