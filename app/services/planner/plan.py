@@ -11,6 +11,7 @@ from typing import Any
 
 from haystack import component
 from openpyxl.utils import get_column_letter
+from openpyxl.utils.cell import coordinate_from_string
 
 from app.core.logs import get_logger
 from app.enums.pli_mode import PliMode
@@ -65,8 +66,19 @@ def _decide_pli_mode(signals: SheetSignals) -> PliMode:
     n_kv_hits = len(signals.kv_label_hits)
     n_blank_gaps = len(signals.blank_run_gaps)
 
+    # Count the number of distinct rows that contain KV label hits.  A tabular
+    # layout concentrates all its KV hits in the header row (1 distinct row);
+    # a SECTION_PER_PLI layout scatters KV labels across section boundaries
+    # (multiple distinct rows).  Requiring >= 2 distinct rows prevents TOTAL-
+    # footer sheets like FA26 — whose blank_run_gaps come from footer rows, not
+    # section separators — from being misclassified as SECTION_PER_PLI.
+    kv_hit_rows: set[int] = {
+        coordinate_from_string(addr)[1]
+        for _, addr in signals.kv_label_hits
+    }
+
     if has_identity_col:
-        if n_blank_gaps >= 2 and n_kv_hits >= 3:
+        if n_blank_gaps >= 2 and n_kv_hits >= 3 and len(kv_hit_rows) >= 2:
             return PliMode.SECTION_PER_PLI
         return PliMode.ROW_PER_PLI
     if n_kv_hits >= 2:
