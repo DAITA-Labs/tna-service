@@ -7,6 +7,7 @@ from tests.fixtures.case import fixture_case
 @fixture_case(
     "tabular_simple", "tabular_with_totals", "tabular_repeat_header",
     "sheet_per_pli_clean", "row_per_pli_with_merges",
+    "row_per_pli_wide_single_row_strip", "row_per_pli_wide_two_row_strip",
 )
 def test_planner_emits_expected_plan(fixture):
     plan = SheetRowPlanner().run(workbook_ctx=fixture.ctx, sheet=fixture.sheet)["plan"]
@@ -27,3 +28,36 @@ def test_planner_emits_expected_plan(fixture):
         assert len(plan.stage_bands) == flow["stage_band_count_per_sheet"][0]
     if "header_rows" in flow:
         assert plan.header_rows == flow["header_rows"]
+    if "header_labels_count_min" in flow:
+        assert len(plan.header_labels) >= flow["header_labels_count_min"], (
+            f"header_labels count {len(plan.header_labels)} < {flow['header_labels_count_min']}"
+        )
+    if "stage_bands_count" in flow:
+        assert len(plan.stage_bands) == flow["stage_bands_count"], (
+            f"stage_bands count {len(plan.stage_bands)} != {flow['stage_bands_count']}"
+        )
+    if "stage_columns_min" in flow:
+        total = sum(len(b.stage_columns) for b in plan.stage_bands)
+        assert total >= flow["stage_columns_min"], (
+            f"total stage_columns {total} < {flow['stage_columns_min']}"
+        )
+    if "first_stage_column" in flow:
+        spec = flow["first_stage_column"]
+        assert plan.stage_bands, "first_stage_column spec requires at least one stage band"
+        assert plan.stage_bands[0].stage_columns, (
+            "first_stage_column spec requires at least one stage column in first band"
+        )
+        sc = plan.stage_bands[0].stage_columns[0]
+        if "name" in spec:
+            assert sc.name == spec["name"], (
+                f"first stage column name {sc.name!r} != {spec['name']!r}"
+            )
+        if "primary_col" in spec:
+            assert sc.primary_col == spec["primary_col"], (
+                f"first stage column primary_col {sc.primary_col!r} != {spec['primary_col']!r}"
+            )
+        if "sub_columns_keys" in spec:
+            assert set(sc.sub_columns.keys()) >= set(spec["sub_columns_keys"]), (
+                f"first stage column sub_columns keys {set(sc.sub_columns.keys())} "
+                f"missing {set(spec['sub_columns_keys']) - set(sc.sub_columns.keys())}"
+            )

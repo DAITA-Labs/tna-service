@@ -40,39 +40,26 @@ def _decide_pli_mode(signals: SheetSignals) -> PliMode:
     Distinguishes ROW_PER_PLI, SHEET_IS_PLI, and SECTION_PER_PLI by examining
     identity column candidates against KV label hit positions and blank-run gaps.
     """
-    # Collect the cell addresses of all KV label hits so we can check whether
-    # an identity column candidate is a column header (row 1-2) or a KV label
-    # embedded in the sheet body (row > 2).
-    kv_cells: set[str] = {cell for _, cell in signals.kv_label_hits}
-
-    # An identity candidate column is "real" (tabular header) when the hit
-    # lives in the first two rows.  If every hit for that column only appears
-    # as a KV label deeper in the body, it is not a true column identity.
-    from openpyxl.utils.cell import coordinate_from_string  # lazy: avoid circular import risk
+    # A column is a real tabular identity column (header) when:
+    #  (a) all its KV hits fall on a single row (the header row), OR
+    #  (b) all its KV hits carry the same label text (repeat-header pattern).
+    # If hits span multiple distinct rows AND carry different labels, the column
+    # is a scattered KV-label column — a signal for SHEET_IS_PLI.
     real_identity_cols: list[str] = []
     for col in signals.identity_col_candidates:
-        col_hits = signals.header_vocab_hits.get(col, [])
-        for hit_text in col_hits:
-            matching_cells = [c for _, c in signals.kv_label_hits
-                              if c.startswith(col) and c[1:].isdigit()
-                              or (len(c) >= 2 and c[0] == col and c[1:].isdigit())]
-            # Check if any hit for this column is at a low row number (header band)
-            col_kv_rows = [
-                int(c[len(col):]) for _, c in signals.kv_label_hits
-                if c.startswith(col) and c[len(col):].isdigit()
-            ]
-            # A column is a real identity column when it has no KV hits in the
-            # header band, OR when its vocabulary hit IS a column header (row ≤ 2)
-        # Simpler: check if the column appears in kv_label_hits only at row > 2
-        low_row_kv = any(
-            int(c[len(col):]) <= 2
-            for _, c in signals.kv_label_hits
+        col_kv_hits: list[tuple[str, int]] = [
+            (label, int(c[len(col):]))
+            for label, c in signals.kv_label_hits
             if c.startswith(col) and c[len(col):].isdigit()
-        )
-        if not low_row_kv:
-            # All KV hits for this col are deep in the body — it's a label, not a header
+        ]
+        if not col_kv_hits:
             continue
-        real_identity_cols.append(col)
+        col_kv_rows = [row for _, row in col_kv_hits]
+        col_kv_labels = [label for label, _ in col_kv_hits]
+        # Single-row concentration OR repeated-header (same label at many rows) →
+        # tabular identity column.  Different labels at different rows → KV scatter.
+        if len(set(col_kv_rows)) == 1 or len(set(col_kv_labels)) == 1:
+            real_identity_cols.append(col)
 
     has_identity_col = len(real_identity_cols) >= 1
     n_kv_hits = len(signals.kv_label_hits)

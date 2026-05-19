@@ -183,10 +183,24 @@ def _collect_sub_columns(
         if following and c >= following[0]:
             continue
         v = ws.cell(row=sub_label_row, column=c).value
-        if isinstance(v, str) and v.strip():
+        # Only accept recognised sub-field vocabulary (Plan/Actual/Deviation …).
+        # Arbitrary strings at sub_label_row (e.g. data-row product names) are
+        # not sub-column labels and must be excluded.
+        if isinstance(v, str) and v.strip() and v.strip().lower() in _SUB_ROW_LABELS:
             result[owner_stage][v.strip()] = get_column_letter(c)
 
     return result
+
+
+def _merge_anchors_at_row(
+    merges: list[tuple[int, int, int, int]], row: int
+) -> set[int]:
+    """Return the set of column indices that start a multi-column merge at `row`."""
+    return {
+        min_col
+        for (min_row, min_col, max_row, max_col) in merges
+        if min_row == row == max_row and max_col > min_col
+    }
 
 
 def _build_stage_columns(
@@ -254,6 +268,20 @@ def detect_stage_bands(
                     sub_label_row=sub_label_row, max_col=signals.max_col,
                     stage_cols=stage_cols,
                 )
+            # When the sub_label_row carries real sub-field labels (i.e. at least
+            # one stage obtained sub_columns), exclude stage candidates that have
+            # neither sub-columns nor a multi-column merge anchor — those are
+            # identity date fields that happen to sit in the date-column band.
+            has_real_sub_labels = any(
+                bool(sub_columns_by_stage.get(name)) for name in stage_cols
+            )
+            if has_real_sub_labels:
+                merge_anchors = _merge_anchors_at_row(signals.merges, sub_header_row)
+                stage_cols = {
+                    name: col for name, col in stage_cols.items()
+                    if sub_columns_by_stage.get(name)
+                    or column_index_from_string(col) in merge_anchors
+                }
 
         bands.append(StageBandSpec(
             name=section_title,
