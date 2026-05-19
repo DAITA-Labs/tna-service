@@ -143,6 +143,7 @@ def _read_wide_stage_column(ws, band: StageBandSpec, stage_col: StageColumn,
         if canonical_sub in Stage.model_fields and canonical_sub not in {"name", "source"}:
             stage_fields[canonical_sub] = sv
         else:
+            # Normalize datetime to date — label schema stores bare dates in metadata
             metadata[canonical_sub] = sv.date() if isinstance(sv, datetime) else sv
         source_cells[canonical_sub] = sa
 
