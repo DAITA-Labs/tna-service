@@ -1,0 +1,48 @@
+{
+  "fixture": "row_per_pli_wide_single_row_strip",
+  "description": "CB-shape: single-row stage strip with identity cols + Fabric/Cutting/Sewing stages.",
+  "layer_expectations": {
+    "flow": {
+      "pli_mode": "row_per_pli",
+      "identity_column": "B",
+      "anchor_count": 2,
+      "header_rows": [3],
+      "header_labels_count_min": 5,
+      "stage_bands_count": 1,
+      "stage_columns_min": 3,
+      "must_not": {
+        "pli_mode_in": ["sheet_is_pli", "section_per_pli"],
+        "has_kv_anchors": false,
+        "has_pli_blocks": false
+      }
+    },
+    "e2e": {
+      "fake_llm_responses": {
+        "SheetClassifierOutput": {"relevant_sheets": ["CB"]},
+        "CanonicalNameMap": {
+          "field_labels": {
+            "S NO": "ignore",
+            "IO NO": "io_number",
+            "STYLE": "style_code",
+            "COLOR": "color_code",
+            "ORDER QTY": "quantity",
+            "EX FAC DATE": "delivery_date"
+          },
+          "stage_names": {
+            "FABRIC": "fabric",
+            "CUTTING": "cutting",
+            "SEWING": "sewing"
+          },
+          "stage_subfield_labels": {
+            "Actual": "actual_date"
+          }
+        },
+        "LayoutHints": {},
+        "PlanVerdict": {"verdict": "looks_correct"}
+      },
+      "pli_count": 2,
+      "io_numbers": ["1063", "1064"]
+    }
+  },
+  "failure_expectations": null
+}
