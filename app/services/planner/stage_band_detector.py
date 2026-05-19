@@ -14,7 +14,7 @@ from datetime import date, datetime
 from openpyxl.utils import get_column_letter
 
 from app.core.logs import get_logger
-from app.models.artifacts import SheetSignals, StageBandSpec
+from app.models.artifacts import SheetSignals, StageBandSpec, StageColumn
 from app.models.workbook import WorkbookCtx
 
 log = get_logger(__name__)
@@ -106,6 +106,24 @@ def _collect_sub_rows(ws: object, r: int, max_row: int) -> dict[str, int]:
     return sub_rows
 
 
+def _build_stage_columns(
+    stage_cols: dict[str, str], sub_header_row: int,
+) -> list[StageColumn]:
+    """Build a StageColumn per (stage_name, col) pair with empty sub_columns.
+
+    Structural-only mirror of `stage_cols`. Sub-columns are filled by
+    `_collect_sub_columns` in a subsequent step (wide_sub_columns code path).
+    """
+    return [
+        StageColumn(
+            name=name,
+            name_cell=f"{col_letter}{sub_header_row}",
+            primary_col=col_letter,
+        )
+        for name, col_letter in stage_cols.items()
+    ]
+
+
 def detect_stage_bands(
     ctx: WorkbookCtx, sheet: str, signals: SheetSignals,
 ) -> list[StageBandSpec]:
@@ -151,6 +169,7 @@ def detect_stage_bands(
             sub_header_row=sub_header_row,
             sub_rows=sub_rows,
             stage_cols=stage_cols,
+            stage_columns=_build_stage_columns(stage_cols, sub_header_row),
             layout_mode=layout_mode,
         ))
 
