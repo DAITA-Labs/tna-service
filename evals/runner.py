@@ -47,32 +47,17 @@ def _load_label(path: Path) -> ExtractionResult:
     return ExtractionResult(**json.loads(path.read_text(encoding="utf-8")))
 
 
-def run_one(
-    *, extractor: ExtractorProtocol,
-    workbook_path: Path, label_path: Path,
-    ctx: WorkbookCtx | None = None,
-    output_dir: Path | None = None,
+def _score_one(
+    *, label_path: Path, actual: ExtractionResult,
+    ctx: WorkbookCtx | None, duration_seconds: float,
 ) -> EvalRow:
+    """Score an already-loaded ExtractionResult against the label at label_path."""
     expected = _load_label(label_path)
-    t0 = time.monotonic()
-    actual = extractor.extract(workbook_path)
-
-    if output_dir is not None:
-        output_dir.mkdir(parents=True, exist_ok=True)
-        out_path = output_dir / f"{label_path.stem}.json"
-        out_path.write_text(
-            actual.model_dump_json(indent=2),
-            encoding="utf-8",
-        )
-
-    duration = time.monotonic() - t0
-
     pli_r = score_pli_recall(actual, expected)
     prec, rec = score_field_precision_recall(actual, expected)
     stg_r = score_stage_recall(actual, expected)
     src = score_source_cell_match(actual, ctx) if ctx else 0.0
     hdr = score_header_match(actual, ctx) if ctx else 0.0
-
     return EvalRow(
         file_name=label_path.stem,
         pli_recall=round(pli_r, 4),
@@ -81,5 +66,37 @@ def run_one(
         stage_recall=round(stg_r, 4),
         source_cell_match=round(src, 4),
         header_match=round(hdr, 4),
-        duration_seconds=round(duration, 1),
+        duration_seconds=round(duration_seconds, 1),
     )
+
+
+def run_one(
+    *, extractor: ExtractorProtocol,
+    workbook_path: Path, label_path: Path,
+    ctx: WorkbookCtx | None = None,
+    output_dir: Path | None = None,
+) -> EvalRow:
+    """Live run — extract, optionally archive, then score."""
+    t0 = time.monotonic()
+    actual = extractor.extract(workbook_path)
+    duration = time.monotonic() - t0
+
+    if output_dir is not None:
+        output_dir.mkdir(parents=True, exist_ok=True)
+        out_path = output_dir / f"{label_path.stem}.json"
+        out_path.write_text(actual.model_dump_json(indent=2), encoding="utf-8")
+
+    return _score_one(label_path=label_path, actual=actual,
+                      ctx=ctx, duration_seconds=duration)
+
+
+def replay_one(
+    *, frozen_output_path: Path, label_path: Path,
+    ctx: WorkbookCtx | None = None,
+) -> EvalRow:
+    """Replay run — load frozen ExtractionResult and score (no extractor invocation)."""
+    actual = ExtractionResult.model_validate_json(
+        frozen_output_path.read_text(encoding="utf-8")
+    )
+    return _score_one(label_path=label_path, actual=actual,
+                      ctx=ctx, duration_seconds=0.0)
