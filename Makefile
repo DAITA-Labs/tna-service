@@ -2,9 +2,9 @@
 
 # Activate-script path differs by platform (Windows: Scripts/, POSIX: bin/).
 ifeq ($(OS),Windows_NT)
-	VENV_ACTIVATE := . .venv/Scripts/activate
+VENV_ACTIVATE := . .venv/Scripts/activate
 else
-	VENV_ACTIVATE := . .venv/bin/activate
+VENV_ACTIVATE := . .venv/bin/activate
 endif
 
 install:
