@@ -5,8 +5,12 @@ Usage:
 or directly, after activating the venv (`.venv/Scripts/activate` on Windows
 or `source .venv/bin/activate` on macOS/Linux):
     python scripts/run_eval.py
+
+To re-score frozen outputs from a prior run without re-extracting:
+    python scripts/run_eval.py --replay evals/runs/<utc>/outputs/
 """
 from __future__ import annotations
+import argparse
 import sys
 from pathlib import Path
 
@@ -29,13 +33,29 @@ class TnaServiceExtractor:
 
 
 def main() -> int:
-    runs_dir = ROOT / "evals" / "runs"
-    rows = evaluate(
-        extractor=TnaServiceExtractor(),
-        labels_dir=LABELS_DIR,
-        workbooks_dir=WORKBOOKS_DIR,
-        runs_dir=runs_dir,
+    parser = argparse.ArgumentParser(description="Run TNA extractor eval.")
+    parser.add_argument(
+        "--replay", type=Path, default=None,
+        help="Path to a prior run's outputs/ directory. Re-scores against "
+             "frozen ExtractionResult JSONs; no live extraction.",
     )
+    args = parser.parse_args()
+
+    runs_dir = ROOT / "evals" / "runs"
+    if args.replay is not None:
+        from evals.evaluator import evaluate_replay
+        rows = evaluate_replay(
+            replay_outputs_dir=args.replay,
+            labels_dir=LABELS_DIR, workbooks_dir=WORKBOOKS_DIR,
+            runs_dir=runs_dir,
+        )
+    else:
+        rows = evaluate(
+            extractor=TnaServiceExtractor(),
+            labels_dir=LABELS_DIR,
+            workbooks_dir=WORKBOOKS_DIR,
+            runs_dir=runs_dir,
+        )
     print(render_matrix(rows))
     return 0
 
