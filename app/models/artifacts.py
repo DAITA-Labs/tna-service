@@ -34,6 +34,20 @@ class WorkbookSummary(BaseModel):
     file_size_kb: int
 
 
+class HeaderLabel(BaseModel):
+    """A column header label discovered in a sheet's header rows.
+
+    Used for ROW_PER_PLI mode to surface raw column-header strings into
+    the SheetPlan artifact, so FieldNamer can map them to canonical fields.
+    """
+
+    model_config = ConfigDict(extra="ignore")
+    raw: str
+    col: str
+    row: int
+    confidence: float = 0.85
+
+
 class StructuralFingerprint(BaseModel):
     """Boolean structural signals that characterise a workbook's layout family."""
 
@@ -227,13 +241,16 @@ class KVAnchor(BaseModel):
     label_cell: str
     value_cell: str
     field: str
+    confidence: float = 0.95
 
 
 class StageBandSpec(BaseModel):
     """Where one stage band lives on a sheet.
 
     ``sub_rows`` keys are SubRowRole values (str); ``stage_cols`` maps a stage's
-    display name to its column letter.
+    display name to its column letter. ``stage_columns`` is the structured
+    successor that also carries per-stage sub-columns for wide_sub_columns
+    layouts; ``stage_cols`` is kept as a deprecated alias for one release.
     """
 
     model_config = ConfigDict(extra="ignore")
@@ -242,6 +259,7 @@ class StageBandSpec(BaseModel):
     sub_header_row: int
     sub_rows: dict[str, int] = Field(default_factory=dict)
     stage_cols: dict[str, str] = Field(default_factory=dict)
+    stage_columns: list[StageColumn] = Field(default_factory=list)
     layout_mode: str = "wide_sub_columns"
 
 
@@ -262,6 +280,8 @@ class SheetPlan(BaseModel):
     ``pli_blocks`` is populated when pli_mode = SECTION_PER_PLI.
     ``kv_anchors`` is populated when pli_mode = SHEET_IS_PLI (and also on hybrid
     sheets where workbook-header KV applies to every PLI emitted from ``rows``).
+    ``header_labels`` is populated when pli_mode = ROW_PER_PLI — the identity
+    channel for that mode.
     """
 
     model_config = ConfigDict(extra="ignore")
@@ -272,17 +292,27 @@ class SheetPlan(BaseModel):
     rows: list[RowSpec] = Field(default_factory=list)
     pli_blocks: list[PliBlock] = Field(default_factory=list)
     kv_anchors: list[KVAnchor] = Field(default_factory=list)
+    header_labels: list[HeaderLabel] = Field(default_factory=list)
     stage_bands: list[StageBandSpec] = Field(default_factory=list)
     stage_scope: StageScope = StageScope.SHEET_LEVEL
     confidence: float = 1.0
 
 
 class CanonicalNameMap(BaseModel):
-    """FieldNamer's output — map detected labels to canonical field and stage names."""
+    """FieldNamer's output — map detected labels to canonical field and stage names.
+
+    Adds optional ``stage_subfield_labels`` for wide_sub_columns sub-columns,
+    plus ``field_confidence`` / ``stage_confidence`` so the LLM can self-report
+    per-label confidence. All four dicts default empty so existing FakeLLM canned
+    responses validate without change.
+    """
 
     model_config = ConfigDict(extra="ignore")
     field_labels: dict[str, str] = Field(default_factory=dict)
     stage_names: dict[str, str] = Field(default_factory=dict)
+    stage_subfield_labels: dict[str, str] = Field(default_factory=dict)
+    field_confidence: dict[str, float] = Field(default_factory=dict)
+    stage_confidence: dict[str, float] = Field(default_factory=dict)
 
 
 class LayoutHints(BaseModel):
