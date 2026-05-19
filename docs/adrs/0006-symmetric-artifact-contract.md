@@ -84,12 +84,24 @@ asserted; LLM-as-namer; det planner produces all row arithmetic.
 **What we gave up:**
 - The `stage_cols` flat representation; transitional alias period only.
 
+**Resolved in follow-up after merge of Phase 1:**
+- FA26 (Family 5, TOTAL-footers) was misclassified as SECTION_PER_PLI when
+  ROW_PER_PLI is correct, AND a second-order bug surfaced where the
+  title-row detector misfired when stage-band-claimed columns weren't
+  excluded from the populated-data-cols denominator. Both fixed in feature
+  branch `fix/fa26-mode-decision` (sub-PRs A1 + A2). The FA26 `xfail` in
+  the live regression suite has been removed; all 4 live regression tests
+  (CB, DKN, FA26, NR) now pass cleanly.
+
 **Known deferred items:**
-- FA26 (Family 5, TOTAL-footers): mode misclassified as SECTION_PER_PLI when
-  ROW_PER_PLI is correct. Currently `xfail` in the live regression suite. Fix
-  belongs to a follow-up that addresses planner mode-decision for tabular files
-  with TOTAL footers — related to the MOP Compass Pro "1 PLI" misclassification
-  deferred in ADR-0003.
+- MOP Compass Pro (Family 3, ~38-column tabular with multi-row header):
+  extracts 13 PLIs with 4 canonical fields (io_number, style, color,
+  stages) after Phase 1 + the FA26 fix-up. Still drops `quantity`,
+  `delivery_date`, `fabric_code`. Symptoms are consistent with a separate
+  KV-anchor / FieldNamer vocab gap rather than the mode-decision class of
+  bugs. Probe recorded in PR #3 of the FA26 fix-up; deferred to its own
+  follow-up after the labels round (`data/labels-unlabelled-families`)
+  unblocks `make eval` as a quality gate.
 
 ## Alternatives considered
 

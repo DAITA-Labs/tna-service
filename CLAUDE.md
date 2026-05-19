@@ -12,9 +12,10 @@ extended `SheetPlan` artifact contract (ADR-0006): `header_labels` for
 ROW_PER_PLI, `kv_anchors` for SHEET_IS_PLI, `pli_blocks[].identity` for
 SECTION_PER_PLI. `StageBandSpec.stage_columns` carries per-stage `sub_columns`
 for wide_sub_columns layouts. `apply_plan` writes per-field `PLI.confidence`.
-Test count: 248 passing (non-live). Live regression passes for Christian
-Berg, DKN, and Northern Reflections; FA26 (Family 5 TOTAL-footers) is xfailed
-pending a mode-decision follow-up.
+Test count: 252 passing (non-live). Live regression passes cleanly for all
+four broken-family targets (CB, DKN, FA26, NR) — FA26's two-stage fix
+(mode-decision + title-row-detector) closed the last Phase 1 deferred item.
+MOP Compass Pro is the only remaining partial-extraction file in the dataset.
 
 ## Orientation map
 
