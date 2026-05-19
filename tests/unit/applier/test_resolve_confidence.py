@@ -21,6 +21,12 @@ def test_header_label_default() -> None:
                                 raw="IO NO", canonical="io_number") == 0.85
 
 
+def test_stage_column_default() -> None:
+    nm = CanonicalNameMap()
+    assert _resolve_confidence(source="stage_column", name_map=nm,
+                                raw="CUTTING", canonical="cutting") == 0.85
+
+
 def test_stage_subfield_default() -> None:
     nm = CanonicalNameMap()
     assert _resolve_confidence(source="stage_subfield", name_map=nm,
