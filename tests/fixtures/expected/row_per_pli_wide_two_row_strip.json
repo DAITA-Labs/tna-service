@@ -1,0 +1,46 @@
+{
+  "fixture": "row_per_pli_wide_two_row_strip",
+  "description": "DKN-shape: two-row stage header — stage names row + Plan/Actual sub-label row.",
+  "layer_expectations": {
+    "flow": {
+      "pli_mode": "row_per_pli",
+      "header_labels_count_min": 3,
+      "stage_bands_count": 1,
+      "stage_columns_min": 2,
+      "first_stage_column": {
+        "name": "CUTTING",
+        "primary_col": "H",
+        "sub_columns_keys": ["Actual"]
+      },
+      "must_not": {
+        "pli_mode_in": ["sheet_is_pli", "section_per_pli"],
+        "has_kv_anchors": false,
+        "has_pli_blocks": false
+      }
+    },
+    "e2e": {
+      "fake_llm_responses": {
+        "SheetClassifierOutput": {"relevant_sheets": ["DKN"]},
+        "CanonicalNameMap": {
+          "field_labels": {
+            "Buyer Po No": "buyer_po_no",
+            "Color": "color_code",
+            "Order Qty": "quantity",
+            "Etd Ex factory as per P.O": "delivery_date"
+          },
+          "stage_names": {
+            "CUTTING": "cutting",
+            "SEWING": "sewing"
+          },
+          "stage_subfield_labels": {
+            "Actual": "actual_date"
+          }
+        },
+        "LayoutHints": {},
+        "PlanVerdict": {"verdict": "looks_correct"}
+      },
+      "pli_count": 1
+    }
+  },
+  "failure_expectations": null
+}
