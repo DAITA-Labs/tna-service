@@ -33,4 +33,10 @@ When you see sample values in parentheses after a label, use them to infer the
 canonical name when the label itself is ambiguous (e.g. a 4-digit integer column
 with values like 1063 is likely io_number even if the label is "Job #").
 
+Disambiguation rules:
+- "Buyer Po No", "Buyer PO", "PO No", "PO Number", "Order No", "Order Ref" →
+  prefer io_number when it is the primary per-row PLI identifier.
+  Use buyer_po_no only when a separate io_number field is also present.
+- "Style No", "Style Number", "Style Code", "Art No", "Article No" → style_code.
+
 {{SHARED}}

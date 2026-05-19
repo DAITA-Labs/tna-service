@@ -9,6 +9,7 @@ Two layout modes:
 """
 from __future__ import annotations
 
+import re
 from datetime import date, datetime
 
 from openpyxl.utils import column_index_from_string, get_column_letter
@@ -20,18 +21,41 @@ from app.models.workbook import WorkbookCtx
 log = get_logger(__name__)
 
 
-_SUB_ROW_LABELS = {"plan": "plan", "action": "action",
-                   "actual": "actual", "actl": "actual",
-                   "deviation": "deviation", "dev": "deviation"}
+_SUB_ROW_LABELS = {
+    "plan": "plan", "planned": "plan",
+    "action": "action",
+    "actual": "actual", "actl": "actual",
+    "deviation": "deviation", "dev": "deviation",
+}
+
+
+_DATE_STRING_RE = re.compile(
+    r"""
+    ^\s*(?:
+        \d{1,2}[-/]\w{3}[-/]\d{2,4}   |  # DD-MMM-YYYY or DD/MMM/YY
+        \d{4}[-/]\d{1,2}[-/]\d{1,2}   |  # YYYY-MM-DD
+        \d{1,2}[-/]\d{1,2}[-/]\d{2,4}    # DD/MM/YYYY or DD-MM-YYYY
+    )\s*$
+    """,
+    re.VERBOSE | re.IGNORECASE,
+)
 
 
 def _is_date(v: object) -> bool:
-    """Return True when `v` is a date or datetime instance."""
-    return isinstance(v, (date, datetime))
+    """Return True when `v` is a native date/datetime or a date-formatted string."""
+    if isinstance(v, (date, datetime)):
+        return True
+    if isinstance(v, str):
+        return bool(_DATE_STRING_RE.match(v))
+    return False
 
 
 def _find_date_cols(ws: object, r: int, max_col: int) -> list[int]:
-    """Return column indices where the cell in row `r` holds a date value."""
+    """Return column indices where the cell in row `r` holds a date value.
+
+    Accepts both native Excel date/datetime cells and string-formatted dates
+    (e.g. '29-APR-2026', '2026-05-06', '29/04/2026').
+    """
     return [c for c in range(1, max_col + 1) if _is_date(ws.cell(row=r, column=c).value)]
 
 
@@ -50,6 +74,19 @@ def _is_sub_label_only_row(ws: object, row: int, date_cols: list[int]) -> bool:
     )
 
 
+def _non_date_str_count(ws: object, row: int, date_cols: list[int]) -> int:
+    """Count cells in `row` at `date_cols` that are non-date strings.
+
+    A date-formatted string (e.g. '29-APR-2026') counts as a date, not a
+    label, so data rows don't masquerade as stage-header rows.
+    """
+    return sum(
+        1 for c in date_cols
+        if isinstance(ws.cell(row=row, column=c).value, str)
+        and not _is_date(ws.cell(row=row, column=c).value)
+    )
+
+
 # allow-long: dual-probe row scan with sub-label fallthrough is one nameable concept
 def _find_sub_header_row(ws: object, r: int, date_cols: list[int]) -> int | None:
     """Locate the nearest string-labelled row above `r` that aligns with date_cols.
@@ -58,6 +95,9 @@ def _find_sub_header_row(ws: object, r: int, date_cols: list[int]) -> int | None
     etc.), skips it and prefers r-2 as the true stage-name row, using a threshold
     of at least 1 non-sub-label string. Returns the row index, or None if no
     candidate found.
+
+    Rows where the cells at date_cols contain date-formatted strings (data rows)
+    are excluded from candidacy — only rows with non-date label strings qualify.
     """
     threshold = max(2, len(date_cols) // 2)
 
@@ -65,10 +105,7 @@ def _find_sub_header_row(ws: object, r: int, date_cols: list[int]) -> int | None
     if prev1 < 1:
         return None
 
-    str_count1 = sum(
-        1 for c in date_cols
-        if isinstance(ws.cell(row=prev1, column=c).value, str)
-    )
+    str_count1 = _non_date_str_count(ws, prev1, date_cols)
 
     if str_count1 >= threshold:
         # r-1 qualifies; check if it is entirely sub-field vocabulary.
@@ -76,10 +113,7 @@ def _find_sub_header_row(ws: object, r: int, date_cols: list[int]) -> int | None
             # Try r-2 with a relaxed threshold of 1 (stage name may span fewer cols).
             prev2 = r - 2
             if prev2 >= 1:
-                str_count2 = sum(
-                    1 for c in date_cols
-                    if isinstance(ws.cell(row=prev2, column=c).value, str)
-                )
+                str_count2 = _non_date_str_count(ws, prev2, date_cols)
                 if str_count2 >= 1:
                     return prev2
             # Fall through to returning r-1 if r-2 also has no strings.
@@ -88,10 +122,7 @@ def _find_sub_header_row(ws: object, r: int, date_cols: list[int]) -> int | None
     # r-1 below threshold; try r-2.
     prev2 = r - 2
     if prev2 >= 1:
-        str_count2 = sum(
-            1 for c in date_cols
-            if isinstance(ws.cell(row=prev2, column=c).value, str)
-        )
+        str_count2 = _non_date_str_count(ws, prev2, date_cols)
         if str_count2 >= threshold:
             return prev2
 

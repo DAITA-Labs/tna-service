@@ -32,6 +32,7 @@ from app.core.telemetry import (
     plis_extracted_total,
 )
 from app.enums.pli_mode import PliMode
+from app.enums.row_role import RowRole
 from app.enums.validation_severity import ValidationSeverity
 from app.models.artifacts import (
     CanonicalNameMap,
@@ -160,8 +161,15 @@ def _apply_plan_review_if_needed(
         for corr in verdict.row_corrections:
             for i, r in enumerate(new_rows):
                 if r.idx == corr.get("row"):
+                    suggested = corr.get("suggested_role", r.role)
+                    # Coerce string role values from LLM JSON responses to RowRole enum.
+                    if isinstance(suggested, str):
+                        try:
+                            suggested = RowRole(suggested)
+                        except ValueError:
+                            suggested = r.role
                     new_rows[i] = r.model_copy(update={
-                        "role": corr.get("suggested_role", r.role),
+                        "role": suggested,
                         "anchor_idx": corr.get("anchor_idx", r.anchor_idx),
                     })
                     break

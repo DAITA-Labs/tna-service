@@ -143,12 +143,67 @@ def _compute_confidence(pli_mode: PliMode, kv_anchors: list[KVAnchor]) -> float:
     return 0.9
 
 
+def _count_populated_data_cols(ws: object, plan: SheetPlan) -> int:
+    """Count columns that have at least one non-empty cell across ANCHOR/CHILD data rows.
+
+    Used to judge whether the labels collected from header_rows are sufficient.
+    Returns 0 when there are no classified data rows (e.g. plan has no rows yet).
+    """
+    data_rows = [
+        r.idx for r in plan.rows
+        if r.role.value in {"anchor", "child"}
+    ]
+    if not data_rows:
+        return 0
+    cols: set[int] = set()
+    for r in data_rows:
+        for c_idx in range(1, (ws.max_column or 0) + 1):
+            if ws.cell(row=r, column=c_idx).value is not None:
+                cols.add(c_idx)
+    return len(cols)
+
+
+def _detect_title_row_extra_header(ws: object, plan: SheetPlan) -> int | None:
+    """Return the row index of a hidden true-header row, or None.
+
+    When the labels harvested from plan.header_rows cover fewer than half the
+    populated data columns, the header_rows are pointing at a wide title row
+    rather than real column labels. In that case the row immediately after
+    max(header_rows) is the true header row — return its index so callers can
+    both extract labels from it AND reclassify it as HEADER in plan.rows.
+    """
+    if not plan.header_rows or plan.pli_mode is not PliMode.ROW_PER_PLI:
+        return None
+    claimed: set[str] = set()
+    for band in plan.stage_bands:
+        for sc in band.stage_columns:
+            claimed.add(sc.primary_col)
+            claimed.update(sc.sub_columns.values())
+    initial_labels_count = sum(
+        1 for c_idx in range(1, (ws.max_column or 0) + 1)
+        if get_column_letter(c_idx) not in claimed
+        and any(
+            isinstance(ws.cell(row=h_row, column=c_idx).value, str)
+            and ws.cell(row=h_row, column=c_idx).value.strip()
+            for h_row in plan.header_rows
+        )
+    )
+    populated = _count_populated_data_cols(ws, plan)
+    if populated > 0 and initial_labels_count < populated / 2:
+        return max(plan.header_rows) + 1
+    return None
+
+
 def _collect_header_labels(ws: object, plan: SheetPlan) -> list[HeaderLabel]:
     """Lift identity-column header strings from header_rows into the artifact.
 
     For each column NOT claimed by a stage band's primary_col or sub_columns,
     take the first non-empty string scanning header_rows top-to-bottom. Returns
     empty for non-ROW_PER_PLI modes.
+
+    When the title-row pattern has been detected by SheetRowPlanner.run() and the
+    plan's header_rows already include the true header row, this function simply
+    reads from the provided header_rows — no further detection is done here.
     """
     if plan.pli_mode is not PliMode.ROW_PER_PLI:
         return []
@@ -168,6 +223,32 @@ def _collect_header_labels(ws: object, plan: SheetPlan) -> list[HeaderLabel]:
                 labels.append(HeaderLabel(raw=v.strip(), col=col, row=h_row))
                 break
     return labels
+
+
+def _apply_extra_header_row(rows: list[RowSpec], extra_row: int) -> list[RowSpec]:
+    """Reclassify a data row as HEADER when the title-row pattern is detected.
+
+    When _detect_title_row_extra_header finds that the row immediately after the
+    classified header_rows is the true header row (not a data row), reclassify
+    it from ANCHOR/CHILD/BLANK to HEADER so apply_plan skips it correctly.
+    Also reclassify any CHILD rows whose anchor_idx pointed to extra_row, since
+    those rows are typically sub-header rows (e.g. stage sub-labels) that should
+    also be HEADER rather than data.
+    """
+    updated = []
+    for r in rows:
+        if r.idx == extra_row and r.role.value in {"anchor", "child", "blank"}:
+            updated.append(r.model_copy(update={
+                "role": RowRole.HEADER, "anchor_idx": None, "group_id": None,
+            }))
+        elif r.role is RowRole.CHILD and r.anchor_idx == extra_row:
+            # Sub-header row that was parented to the reclassified header row.
+            updated.append(r.model_copy(update={
+                "role": RowRole.HEADER, "anchor_idx": None, "group_id": None,
+            }))
+        else:
+            updated.append(r)
+    return updated
 
 
 @component
@@ -210,7 +291,27 @@ class SheetRowPlanner:
             confidence=_compute_confidence(pli_mode, kv_anchors),
         )
         ws = workbook_ctx.wb[sheet]
-        plan = plan.model_copy(update={"header_labels": _collect_header_labels(ws, plan)})
+        # Detect and correct the title-row pattern before collecting labels:
+        # when header_rows points at a wide merged title row, the next row is
+        # the true header row. Reclassify it in plan.rows and extend header_rows
+        # so apply_plan skips it as data. Pass only the true header row to
+        # _collect_header_labels so the title string is not included in labels.
+        extra_header_row = _detect_title_row_extra_header(ws, plan)
+        if extra_header_row is not None:
+            corrected_rows = _apply_extra_header_row(plan.rows, extra_header_row)
+            # header_rows includes the title row(s), the discovered true header row,
+            # and any sub-header rows that were reclassified alongside it.
+            new_header_idxs = {r.idx for r in corrected_rows if r.role is RowRole.HEADER}
+            corrected_header_rows = sorted(new_header_idxs)
+            plan = plan.model_copy(update={
+                "rows": corrected_rows,
+                "header_rows": corrected_header_rows,
+            })
+            # Collect labels from the true header row only (not the title row or sub-header).
+            labels_plan = plan.model_copy(update={"header_rows": [extra_header_row]})
+            plan = plan.model_copy(update={"header_labels": _collect_header_labels(ws, labels_plan)})
+        else:
+            plan = plan.model_copy(update={"header_labels": _collect_header_labels(ws, plan)})
         log.info("planner_complete", sheet=sheet, pli_mode=plan.pli_mode.value,
                  rows=len(plan.rows), blocks=len(plan.pli_blocks),
                  kv=len(plan.kv_anchors), header_labels=len(plan.header_labels),
