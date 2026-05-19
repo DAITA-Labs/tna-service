@@ -1,0 +1,152 @@
+{
+  "_description": "Mapping from Title Case label stage names to canonical snake_case used by FieldNamer. Applied to dataset/extracted/*.json in sub-PR G2.",
+  "_canonical_vocab_source": "app/prompts/workflow/field_namer.md (Canonical stage names section)",
+  "mapping": {
+    "A/W Appl": "art_work_approval",
+    "A/W Send": "art_work_send",
+    "CIP": "in_process_inspection",
+    "Consumption Locking": "planned_completion_date",
+    "Costing Freezed": "planned_completion_date",
+    "Cut": "cutting",
+    "Cuting": "cutting",
+    "Cutting": "cutting",
+    "Dyeing": "dyeing",
+    "EMB RECVD Plan": "embroidery",
+    "EMB Send Plan": "embroidery",
+    "Ex Factory Shipment": "ex_factory",
+    "FI": "final_inspection",
+    "FI Plan Date": "final_inspection",
+    "FPT": "first_pattern",
+    "Fabric": "fabric",
+    "Fabric ETA Plan": "in_house_fabric_send",
+    "Fabric I/H": "in_house_fabric_send",
+    "Fabric In-housed On": "in_house_fabric_approval",
+    "Fabric Inhouse": "in_house_fabric_send",
+    "Feeding": "feeding",
+    "File": "pre_production_send",
+    "Final Inspection": "final_inspection",
+    "Finishing": "finishing",
+    "Fit Appl": "fit_approval",
+    "Fit Send": "fit_send",
+    "GPT": "garment_pattern",
+    "Garment Handwork": "finishing",
+    "I/B Fab Appl": "in_house_fabric_approval",
+    "I/B Fab Send": "in_house_fabric_send",
+    "Inspection": "final_inspection",
+    "Job Sheet": "planned_completion_date",
+    "Knit": "knitting",
+    "L/D Appl": "lab_dip_approval",
+    "L/D Send": "lab_dip_send",
+    "Line": "sewing",
+    "Line Plan": "sewing",
+    "Line Plan Sewing": "sewing",
+    "Lot Card": "lot_card",
+    "PCD": "planned_completion_date",
+    "PP APVD": "pre_production_approval",
+    "PP Appl": "pre_production_approval",
+    "PP Sample": "pre_production_send",
+    "PP Send": "pre_production_send",
+    "PP Sent": "pre_production_send",
+    "PPS Com": "pre_production_send",
+    "PPS Submission": "pre_production_send",
+    "Ppm": "pre_production_send",
+    "Print/stone Received Plan": "printing",
+    "Print/stone Send Plan": "printing",
+    "Printing": "printing",
+    "Prnt/EMB": "printing",
+    "Program Submit On": "pre_production_send",
+    "SS": "size_set",
+    "Sewing": "sewing",
+    "Size Set": "size_set",
+    "Sizeset": "size_set",
+    "Sizeset Submission": "size_set",
+    "Trims Inhouse": "trims_inhouse",
+    "VAP-1": "value_added_processing_1",
+    "VAP-2": "value_added_processing_2",
+    "VAP-3": "value_added_processing_3",
+    "Vap 1 Rec": "value_added_processing_1",
+    "Vap 1 Send": "value_added_processing_1_send",
+    "Vap 2 Rec": "value_added_processing_2",
+    "Vap 2 Send": "value_added_processing_2_send",
+    "Yarn I/H": "in_house_fabric_send",
+    "Yarn Req. Deadline": "planned_completion_date"
+  },
+  "new_canonicals_proposed": [
+    {
+      "raw_name": "CIP",
+      "proposed_canonical": "in_process_inspection",
+      "rationale": "Appears consistently after Sewing and before Final Inspection across 5 files. In garment manufacturing CIP = Cutting/Checking In Process — an inline quality gate distinct from the terminal Final Inspection. No existing canonical covers mid-production QA.",
+      "occurrence_count": 56,
+      "files": ["63261-TNA", "NEW", "TNA DETAILS", "new Eastman TnAs", "new job-TNA"]
+    },
+    {
+      "raw_name": "Dyeing",
+      "proposed_canonical": "dyeing",
+      "rationale": "A distinct wet-processing stage (colour dyeing of knitted fabric or yarn) that is different from 'washing'. Appears in a knitwear supplier flow: Yarn I/H → Knit → Dyeing → Finishing. Mapping to 'washing' would be semantically incorrect.",
+      "occurrence_count": 21,
+      "files": ["63261-TNA", "NEW", "TNA DETAILS", "new job-TNA"]
+    },
+    {
+      "raw_name": "Ex Factory Shipment",
+      "proposed_canonical": "ex_factory",
+      "rationale": "Tracks the date goods depart factory for export. The PLI-level field ex_factory_date captures the planned date, but as a stage it tracks both planned and actual departure. No existing stage canonical covers shipment dispatch. 'final_inspection' is the wrong semantic.",
+      "occurrence_count": 281,
+      "files": ["20260129 DKN AW26 DROP 2 WOMEN NOS CK PRO STATUS", "20260213 MOPD FW26(1) MA08 MA09 COMPASS PRO", "20260304 MOPD W26(1) MANOS COMPASS PRO", "20260323 DKN AW26 DROP 2 (W26 1) MEN CK PRO STATUS REPORT", "20260323 DKN AW26 DROP 2 (W26 1) WOMEN CK PRO STATUS REPORT", "20260420 MOP W26(1) 608-609 COMPASS PRO", "20260420 MOP W26(1) CE08-MA08-MA09 COMPASS PRO", "20260420 MOP W26(1) MANOS07-08 COMPASS PRO", "20260420 MOPD MEN W26(1) MA09 COMPASS PRO"]
+    },
+    {
+      "raw_name": "Knit",
+      "proposed_canonical": "knitting",
+      "rationale": "Appears in knitwear-specific flow after Yarn I/H, representing the knitting production stage. Mapping to 'fabric' would conflate the material-receipt stage with the manufacturing step. Needs its own canonical.",
+      "occurrence_count": 21,
+      "files": ["63261-TNA", "NEW", "TNA DETAILS", "new job-TNA"]
+    },
+    {
+      "raw_name": "Trims Inhouse",
+      "proposed_canonical": "trims_inhouse",
+      "rationale": "Tracks arrival of trims (buttons, zippers, labels, etc.) at the factory — distinct from fabric inhouse. Appears in 9 files at high occurrence (281). Mapping to in_house_fabric_send would conflate trims with fabric, losing a critical supply-chain distinction.",
+      "occurrence_count": 281,
+      "files": ["20260129 DKN AW26 DROP 2 WOMEN NOS CK PRO STATUS", "20260213 MOPD FW26(1) MA08 MA09 COMPASS PRO", "20260304 MOPD W26(1) MANOS COMPASS PRO", "20260323 DKN AW26 DROP 2 (W26 1) MEN CK PRO STATUS REPORT", "20260323 DKN AW26 DROP 2 (W26 1) WOMEN CK PRO STATUS REPORT", "20260420 MOP W26(1) 608-609 COMPASS PRO", "20260420 MOP W26(1) CE08-MA08-MA09 COMPASS PRO", "20260420 MOP W26(1) MANOS07-08 COMPASS PRO", "20260420 MOPD MEN W26(1) MA09 COMPASS PRO"]
+    },
+    {
+      "raw_name": "VAP-1",
+      "proposed_canonical": "value_added_processing_1",
+      "rationale": "Generic numbered value-added processing slot (printing, embroidery, stone wash, etc.) used in MAIN FALL KIDS files as a sequence. No single existing canonical covers a generic numbered VAP slot without naming the specific process. Three VAP slots appear together — must be numbered to preserve slot identity.",
+      "occurrence_count": 244,
+      "files": ["MAIN FALL KIDS & MENS MASTER CHART #1", "MAIN FALL KIDS & MENS MASTER CHART #2", "MAIN FALL KIDS & MENS MASTER CHART #3"]
+    },
+    {
+      "raw_name": "VAP-2",
+      "proposed_canonical": "value_added_processing_2",
+      "rationale": "Second numbered VAP slot — same rationale as VAP-1.",
+      "occurrence_count": 244,
+      "files": ["MAIN FALL KIDS & MENS MASTER CHART #1", "MAIN FALL KIDS & MENS MASTER CHART #2", "MAIN FALL KIDS & MENS MASTER CHART #3"]
+    },
+    {
+      "raw_name": "VAP-3",
+      "proposed_canonical": "value_added_processing_3",
+      "rationale": "Third numbered VAP slot — same rationale as VAP-1.",
+      "occurrence_count": 244,
+      "files": ["MAIN FALL KIDS & MENS MASTER CHART #1", "MAIN FALL KIDS & MENS MASTER CHART #2", "MAIN FALL KIDS & MENS MASTER CHART #3"]
+    },
+    {
+      "raw_name": "Vap 1 Send",
+      "proposed_canonical": "value_added_processing_1_send",
+      "rationale": "FA26 explicitly tracks Send and Received sub-steps per VAP slot. Send = dispatch of cut panels to VAP subcontractor. Collapsing to value_added_processing_1 would lose the Send/Received distinction already encoded in labels.",
+      "occurrence_count": 16,
+      "files": ["FA26 YC & EUROPE T&A #1"]
+    },
+    {
+      "raw_name": "Vap 2 Send",
+      "proposed_canonical": "value_added_processing_2_send",
+      "rationale": "Same as Vap 1 Send — second VAP slot Send sub-step.",
+      "occurrence_count": 16,
+      "files": ["FA26 YC & EUROPE T&A #1"]
+    }
+  ],
+  "stats": {
+    "total_unique_names": 68,
+    "direct_matches": 27,
+    "vocab_stretches": 31,
+    "new_canonicals_proposed": 10
+  }
+}
