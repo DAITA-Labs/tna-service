@@ -37,6 +37,27 @@ _DATA_ROLES = {RowRole.ANCHOR, RowRole.CHILD}
 _STRING_FIELDS = {"io_number", "style_code", "style_name",
                   "color_code", "color_name", "fabric_code"}
 
+_CONFIDENCE_DEFAULTS = {
+    "kv_anchor": 0.95,
+    "header_label": 0.85,
+    "stage_column": 0.85,
+    "stage_subfield": 0.80,
+    "metadata_fallback": 0.40,
+}
+
+
+def _resolve_confidence(*, source: str, name_map: CanonicalNameMap,
+                        raw: str, canonical: str) -> float:
+    """Pick a per-field confidence value.
+
+    LLM-supplied confidence wins when the canonical name appears in
+    `name_map.field_confidence`. Otherwise returns a calibrated default per
+    source type. Returns 0.5 for unknown sources.
+    """
+    if canonical in name_map.field_confidence:
+        return name_map.field_confidence[canonical]
+    return _CONFIDENCE_DEFAULTS.get(source, 0.5)
+
 
 def _coerce(field: str, val: object) -> object:
     """Coerce a raw cell value to the type expected by `field`.
