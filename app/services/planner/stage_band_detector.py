@@ -50,6 +50,7 @@ def _is_sub_label_only_row(ws: object, row: int, date_cols: list[int]) -> bool:
     )
 
 
+# allow-long: dual-probe row scan with sub-label fallthrough is one nameable concept
 def _find_sub_header_row(ws: object, r: int, date_cols: list[int]) -> int | None:
     """Locate the nearest string-labelled row above `r` that aligns with date_cols.
 
