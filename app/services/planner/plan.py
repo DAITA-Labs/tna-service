@@ -255,6 +255,7 @@ def _apply_extra_header_row(rows: list[RowSpec], extra_row: int) -> list[RowSpec
 class SheetRowPlanner:
     """Orchestrates deterministic detectors to produce a SheetPlan from a WorkbookCtx and a sheet name."""
 
+    # allow-long: orchestrates detectors + title-row correction + header_labels collection
     @component.output_types(plan=SheetPlan)
     def run(self, workbook_ctx: Any, sheet: str) -> dict:
         """Run the full planner pipeline for one sheet and return a SheetPlan."""

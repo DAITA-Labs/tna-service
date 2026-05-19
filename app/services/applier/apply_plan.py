@@ -112,6 +112,7 @@ def _read_kv_into(values: dict, source_cells: dict, ws, kv: KVAnchor,
     )
 
 
+# allow-long: primary cell + sub-column iteration + dispatch is one cohesive read
 def _read_wide_stage_column(ws, band: StageBandSpec, stage_col: StageColumn,
                             pli_row: int, name_map: CanonicalNameMap) -> Stage | None:
     """Read one stage column in wide_sub_columns layout for `pli_row`.

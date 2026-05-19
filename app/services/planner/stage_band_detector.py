@@ -251,6 +251,7 @@ def _build_stage_columns(
     ]
 
 
+# allow-long: scans sheet rows, classifies layout mode, builds bands — one nameable concept
 def detect_stage_bands(
     ctx: WorkbookCtx, sheet: str, signals: SheetSignals,
 ) -> list[StageBandSpec]:

@@ -314,9 +314,9 @@ flowchart LR
 | `WorkbookSummary` | `sheet_count`, `sheet_names`, `file_size_kb` |
 | `SheetSignals` | merged regions, row-type distribution, header vocabulary, dtype profiles, sample rows |
 | `RowSpec` | `idx`, `role: RowRole`, `anchor_idx`, `group_id`, `sub_row_role: SubRowRole \| None` |
-| `HeaderLabel` | `col`, `label`, `row` — a single resolved column header for ROW_PER_PLI identity |
+| `HeaderLabel` | `raw`, `col`, `row`, `confidence` — a single resolved column header for ROW_PER_PLI identity |
 | `KVAnchor` | `label_cell`, `value_cell`, `field`, `confidence: float = 0.95` |
-| `StageColumn` | `col`, `name`, `sub_columns: list[StageColumn]` — wired into `StageBandSpec.stage_columns` for wide_sub_columns layouts |
+| `StageColumn` | `name`, `name_cell`, `primary_col`, `sub_columns: dict[str, str]` — wired into `StageBandSpec.stage_columns` for wide_sub_columns layouts |
 | `StageBandSpec` | `name`, `name_cell`, `sub_header_row`, `sub_rows: dict[role→row]`, `stage_cols: dict[name→col]` (deprecated alias), `stage_columns: list[StageColumn]`, `layout_mode` |
 | `PliBlock` | `id`, `bbox: (start_row, end_row)`, `identity: list[KVAnchor]`, `stage_bands: list[StageBandSpec]` |
 | `SheetPlan` | `sheet`, `pli_mode: PliMode`, `stage_scope: StageScope`, `header_rows`, `header_labels: list[HeaderLabel]`, `rows: list[RowSpec]`, `pli_blocks`, `kv_anchors`, `stage_bands`, `confidence` |
