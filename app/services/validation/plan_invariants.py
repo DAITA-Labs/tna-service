@@ -6,6 +6,7 @@ hints, not call PlanReviewer.
 from __future__ import annotations
 
 from app.core.logs import get_logger
+from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
 from app.enums.validation_severity import ValidationSeverity
 from app.models.artifacts import RowSpec, SheetPlan, ValidationFinding
@@ -94,6 +95,46 @@ def _check_sub_row_consistency(plan: SheetPlan) -> list[ValidationFinding]:
     return out
 
 
+def _check_exactly_one_identity_channel(plan: SheetPlan) -> list[ValidationFinding]:
+    """Exactly one of header_labels / kv_anchors / pli_blocks may be non-empty."""
+    populated = [
+        ("header_labels", bool(plan.header_labels)),
+        ("kv_anchors", bool(plan.kv_anchors)),
+        ("pli_blocks", bool(plan.pli_blocks)),
+    ]
+    count = sum(1 for _, v in populated if v)
+    if count > 1:
+        names = ", ".join(n for n, v in populated if v)
+        return [_error(
+            "exactly_one_identity_channel",
+            f"multiple identity channels populated: {names}",
+        )]
+    return []
+
+
+def _check_mode_channel_consistency(plan: SheetPlan) -> list[ValidationFinding]:
+    """Verify pli_mode matches the populated identity channel.
+
+    Three paths: returns [] when no channel is populated (empty plan, handled
+    elsewhere); returns an ERROR when pli_mode's expected channel is empty;
+    returns [] otherwise.
+    """
+    expected = {
+        PliMode.ROW_PER_PLI: bool(plan.header_labels),
+        PliMode.SHEET_IS_PLI: bool(plan.kv_anchors),
+        PliMode.SECTION_PER_PLI: bool(plan.pli_blocks),
+    }
+    any_populated = bool(plan.header_labels or plan.kv_anchors or plan.pli_blocks)
+    if not any_populated:
+        return []  # empty plan — handled elsewhere
+    if not expected.get(plan.pli_mode, False):
+        return [_error(
+            "mode_channel_consistency",
+            f"pli_mode={plan.pli_mode.value} but its expected channel is empty",
+        )]
+    return []
+
+
 def validate_invariants(plan: SheetPlan) -> list[ValidationFinding]:
     """Run all Tier 1 structural invariant checks against a SheetPlan.
 
@@ -106,6 +147,8 @@ def validate_invariants(plan: SheetPlan) -> list[ValidationFinding]:
         *_check_header_contiguity(plan),
         *_check_pli_blocks_disjoint(plan),
         *_check_sub_row_consistency(plan),
+        *_check_exactly_one_identity_channel(plan),
+        *_check_mode_channel_consistency(plan),
     ]
     if findings:
         log.info(

@@ -314,11 +314,13 @@ flowchart LR
 | `WorkbookSummary` | `sheet_count`, `sheet_names`, `file_size_kb` |
 | `SheetSignals` | merged regions, row-type distribution, header vocabulary, dtype profiles, sample rows |
 | `RowSpec` | `idx`, `role: RowRole`, `anchor_idx`, `group_id`, `sub_row_role: SubRowRole \| None` |
-| `KVAnchor` | `label_cell`, `value_cell`, `field` |
-| `StageBandSpec` | `name`, `name_cell`, `sub_header_row`, `sub_rows: dict[role→row]`, `stage_cols: dict[name→col]`, `layout_mode` |
+| `HeaderLabel` | `raw`, `col`, `row`, `confidence` — a single resolved column header for ROW_PER_PLI identity |
+| `KVAnchor` | `label_cell`, `value_cell`, `field`, `confidence: float = 0.95` |
+| `StageColumn` | `name`, `name_cell`, `primary_col`, `sub_columns: dict[str, str]` — wired into `StageBandSpec.stage_columns` for wide_sub_columns layouts |
+| `StageBandSpec` | `name`, `name_cell`, `sub_header_row`, `sub_rows: dict[role→row]`, `stage_cols: dict[name→col]` (deprecated alias), `stage_columns: list[StageColumn]`, `layout_mode` |
 | `PliBlock` | `id`, `bbox: (start_row, end_row)`, `identity: list[KVAnchor]`, `stage_bands: list[StageBandSpec]` |
-| `SheetPlan` | `sheet`, `pli_mode: PliMode`, `stage_scope: StageScope`, `header_rows`, `rows: list[RowSpec]`, `pli_blocks`, `kv_anchors`, `stage_bands`, `confidence` |
-| `CanonicalNameMap` | `field_aliases: dict[raw_label→canonical_field]`, `stage_name_map: dict[raw→canonical]` |
+| `SheetPlan` | `sheet`, `pli_mode: PliMode`, `stage_scope: StageScope`, `header_rows`, `header_labels: list[HeaderLabel]`, `rows: list[RowSpec]`, `pli_blocks`, `kv_anchors`, `stage_bands`, `confidence` |
+| `CanonicalNameMap` | `field_aliases: dict[raw_label→canonical_field]`, `stage_name_map: dict[raw→canonical]`, `stage_subfield_labels` (optional), `field_confidence` (optional), `stage_confidence` (optional) |
 | `LayoutHints` | hints from LayoutHinter to guide re-planning (identity_column, mode_lock, etc.) |
 | `PlanVerdict` | `verdict: looks_correct \| needs_fix`, row corrections, identity-column suggestion, warnings, confidence |
 | `ValidationFinding` | `check`, `severity: ValidationSeverity`, `message`, `pli_index`, `field` |
@@ -430,6 +432,22 @@ flowchart TB
 **Tier 2 — Statistical sanity (mandatory, always run):** SequenceMatch, TotalArithmetic, DateBandDensity, KvAnchorAdjacency, PliCountSanity, IdentityColumnCoverage, VocabularyOverlap.
 
 Tier 1 errors trigger a re-plan loop with `LayoutHinter` hints (identity_column override, mode lock). Tier 1/2 warnings (not errors) trigger `PlanReviewer`. If the reviewer says `needs_fix`, corrections are applied and validation reruns.
+
+### Channel ↔ mode matrix (added in ADR-0006)
+
+Each `pli_mode` has a dedicated identity channel in `SheetPlan`. `FieldNamer`
+and `apply_plan` read from this channel symmetrically.
+
+| Mode | Identity channel | Stage channel |
+|---|---|---|
+| `ROW_PER_PLI` | `header_labels` | `stage_bands[].stage_columns` |
+| `SHEET_IS_PLI` | `kv_anchors` | `stage_bands[].stage_columns` |
+| `SECTION_PER_PLI` | `pli_blocks[].identity` | `pli_blocks[].stage_bands[].stage_columns` |
+
+A new Tier 1 invariant (`exactly_one_identity_channel`) enforces that exactly
+one identity channel is non-empty per plan, and a second invariant
+(`mode_channel_consistency`) enforces that `pli_mode` matches the populated
+channel.
 
 ### apply_plan — locked contract
 

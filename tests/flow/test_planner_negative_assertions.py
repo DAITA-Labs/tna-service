@@ -14,6 +14,8 @@ _POSITIVE_FIXTURES = (
     "tabular_repeat_header",
     "sheet_per_pli_clean",
     "row_per_pli_with_merges",
+    "row_per_pli_wide_single_row_strip",
+    "row_per_pli_wide_two_row_strip",
 )
 
 

@@ -83,12 +83,8 @@ def _classify_single_row(
     )
 
     if first_data_row is None:
-        row_strs = [
-            _norm(ws.cell(row=r, column=c).value)
-            for c in range(1, signals.max_col + 1)
-            if isinstance(ws.cell(row=r, column=c).value, str)
-        ]
-        if any(s in header_vocab_set for s in row_strs):
+        id_cell_str = _norm(ws.cell(row=r, column=id_col).value)
+        if id_cell_str and id_cell_str in header_vocab_set:
             return (
                 RowSpec(idx=r, role=RowRole.HEADER),
                 first_data_row, last_known_anchor, last_known_anchor_group, next_group_id,

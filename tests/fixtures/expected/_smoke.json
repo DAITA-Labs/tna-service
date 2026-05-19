@@ -3,7 +3,8 @@
   "description": "Minimal smoke fixture used by conftest loader tests.",
   "layer_expectations": {
     "flow": {
-      "pli_mode": "row_per_pli"
+      "pli_mode": "row_per_pli",
+      "header_labels_count_min": 1
     }
   },
   "failure_expectations": null

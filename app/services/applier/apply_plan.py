@@ -26,6 +26,7 @@ from app.models.artifacts import (
     RowSpec,
     SheetPlan,
     StageBandSpec,
+    StageColumn,
 )
 from app.models.extraction import PLI, Stage
 from app.models.workbook import WorkbookCtx
@@ -36,6 +37,27 @@ log = get_logger(__name__)
 _DATA_ROLES = {RowRole.ANCHOR, RowRole.CHILD}
 _STRING_FIELDS = {"io_number", "style_code", "style_name",
                   "color_code", "color_name", "fabric_code"}
+
+_CONFIDENCE_DEFAULTS = {
+    "kv_anchor": 0.95,
+    "header_label": 0.85,
+    "stage_column": 0.85,
+    "stage_subfield": 0.80,
+    "metadata_fallback": 0.40,
+}
+
+
+def _resolve_confidence(*, source: str, name_map: CanonicalNameMap,
+                        raw: str, canonical: str) -> float:
+    """Pick a per-field confidence value.
+
+    LLM-supplied confidence wins when the canonical name appears in
+    `name_map.field_confidence`. Otherwise returns a calibrated default per
+    source type. Returns 0.5 for unknown sources.
+    """
+    if canonical in name_map.field_confidence:
+        return name_map.field_confidence[canonical]
+    return _CONFIDENCE_DEFAULTS.get(source, 0.5)
 
 
 def _coerce(field: str, val: object) -> object:
@@ -68,11 +90,7 @@ def _read_with_merge(ws, row: int, col_idx: int) -> tuple[object, str]:
 
 def _read_kv_into(values: dict, source_cells: dict, ws, kv: KVAnchor,
                   name_map: CanonicalNameMap) -> None:
-    """Read one KV anchor cell and write the result into `values` and `source_cells`.
-
-    Mutates both dicts in place.  Skips the field when the canonical name is
-    "ignore" or when the cell is empty.
-    """
+    """Read one KV anchor cell and write the result into `values` and `source_cells`."""
     canonical = name_map.field_labels.get(kv.field, kv.field)
     if canonical == "ignore":
         return
@@ -81,30 +99,61 @@ def _read_kv_into(values: dict, source_cells: dict, ws, kv: KVAnchor,
     val = ws.cell(row=row, column=col).value
     if val is None:
         return
-    values[canonical] = _coerce(canonical, val)
+    is_canonical_field = canonical in PLI.model_fields
+    target_source = "kv_anchor" if is_canonical_field else "metadata_fallback"
+    if is_canonical_field:
+        values[canonical] = _coerce(canonical, val)
+    else:
+        values.setdefault("metadata", {})[canonical] = val
     source_cells[canonical] = kv.value_cell
+    values.setdefault("confidence", {})[canonical] = _resolve_confidence(
+        source=target_source, name_map=name_map,
+        raw=kv.field, canonical=canonical,
+    )
 
 
-def _read_wide_stage_column(ws, band: StageBandSpec, stage_name: str,
-                            col_letter: str, pli_row: int,
-                            name_map: CanonicalNameMap) -> Stage | None:
+# allow-long: primary cell + sub-column iteration + dispatch is one cohesive read
+def _read_wide_stage_column(ws, band: StageBandSpec, stage_col: StageColumn,
+                            pli_row: int, name_map: CanonicalNameMap) -> Stage | None:
     """Read one stage column in wide_sub_columns layout for `pli_row`.
 
-    Returns a `Stage` when the cell is non-empty, or None to signal skip.
+    primary_col → planned_date. Each sub_column is canonicalised via
+    name_map.stage_subfield_labels; canonical Stage fields write to the Stage
+    record, everything else goes into Stage.metadata. Returns None when the
+    primary cell is empty or the stage is mapped to "ignore".
     """
-    canonical_stage = name_map.stage_names.get(stage_name, stage_name)
+    canonical_stage = name_map.stage_names.get(stage_col.name, stage_col.name)
     if canonical_stage == "ignore":
         return None
-    c_idx = column_index_from_string(col_letter)
-    val, addr = _read_with_merge(ws, pli_row, c_idx)
-    if val is None:
+    c_idx = column_index_from_string(stage_col.primary_col)
+    pv, pa = _read_with_merge(ws, pli_row, c_idx)
+    if pv is None:
         return None
+
+    metadata: dict = {}
+    source_cells: dict[str, str] = {"planned_date": pa}
+    stage_fields: dict = {}
+
+    for raw_sub, sub_col in stage_col.sub_columns.items():
+        canonical_sub = name_map.stage_subfield_labels.get(raw_sub, raw_sub)
+        if canonical_sub == "ignore":
+            continue
+        sv, sa = _read_with_merge(ws, pli_row, column_index_from_string(sub_col))
+        if sv is None:
+            continue
+        if canonical_sub in Stage.model_fields and canonical_sub not in {"name", "source"}:
+            stage_fields[canonical_sub] = sv
+        else:
+            # Normalize datetime to date — label schema stores bare dates in metadata
+            metadata[canonical_sub] = sv.date() if isinstance(sv, datetime) else sv
+        source_cells[canonical_sub] = sa
+
     return Stage(
         name=canonical_stage,
-        planned_date=val if isinstance(val, (date, datetime)) else None,
-        section=band.name,
-        source={"sheet": ws.title, "rows": [pli_row],
-                "cells": {"planned_date": addr}},
+        planned_date=pv if isinstance(pv, (date, datetime)) else None,
+        section=band.name, metadata=metadata,
+        source={"sheet": ws.title, "rows": [pli_row], "cells": source_cells},
+        **stage_fields,
     )
 
 
@@ -150,42 +199,70 @@ def _read_stages(ws, bands: list[StageBandSpec], pli_row: int,
 
     Dispatches each stage column to `_read_wide_stage_column` or
     `_read_tall_stage_column` depending on `band.layout_mode`.
+    Prefers `band.stage_columns` when populated; falls back to synthesising
+    StageColumn objects from the deprecated `band.stage_cols` dict.
     `parent_source` is accepted for interface symmetry but is not read here.
     """
     stages: list[Stage] = []
     for band in bands:
-        for stage_name, col_letter in band.stage_cols.items():
-            if band.layout_mode == "wide_sub_columns":
-                stage = _read_wide_stage_column(
-                    ws, band, stage_name, col_letter, pli_row, name_map)
-            else:  # tall_sub_rows
+        stage_columns = band.stage_columns or [
+            StageColumn(name=name, name_cell=f"{col}{band.sub_header_row}",
+                        primary_col=col)
+            for name, col in band.stage_cols.items()
+        ]
+        if band.layout_mode == "wide_sub_columns":
+            for sc in stage_columns:
+                stage = _read_wide_stage_column(ws, band, sc, pli_row, name_map)
+                if stage is not None:
+                    stages.append(stage)
+        else:  # tall_sub_rows — unchanged behaviour
+            for sc in stage_columns:
                 stage = _read_tall_stage_column(
-                    ws, band, stage_name, col_letter, name_map)
-            if stage is not None:
-                stages.append(stage)
+                    ws, band, sc.name, sc.primary_col, name_map)
+                if stage is not None:
+                    stages.append(stage)
     return stages
 
 
+# allow-long: iterates label sources, dispatches by source kind, records confidence
 def _emit_single_row_pli(ws, plan: SheetPlan, row: RowSpec,
                          header_label_by_col: dict[int, str],
                          name_map: CanonicalNameMap) -> PLI:
-    """Build one PLI from a single data row plus plan-level KV anchors and stages."""
-    values: dict = {"metadata": {}}
+    """Build one PLI from a single data row plus plan-level KV anchors and stages.
+
+    Identity columns come from `plan.header_labels` for ROW_PER_PLI; the legacy
+    `header_label_by_col` parameter is kept as a fallback for fixtures that pre-date
+    header_labels surfacing.
+    """
+    values: dict = {"metadata": {}, "confidence": {}}
     source_cells: dict[str, str] = {}
 
-    for col_idx, label in header_label_by_col.items():
+    if plan.header_labels:
+        iter_labels = [
+            (column_index_from_string(hl.col), hl.raw, "header_label")
+            for hl in plan.header_labels
+        ]
+    else:
+        iter_labels = [(c, lab, "header_label") for c, lab in header_label_by_col.items()]
+
+    for col_idx, label, source_kind in iter_labels:
         canonical = name_map.field_labels.get(label, label)
         if canonical == "ignore":
             continue
         val, addr = _read_with_merge(ws, row.idx, col_idx)
         if val is None:
             continue
-        if canonical in PLI.model_fields:
+        is_canonical_field = canonical in PLI.model_fields
+        target_source = source_kind if is_canonical_field else "metadata_fallback"
+        if is_canonical_field:
             values[canonical] = _coerce(canonical, val)
-            source_cells[canonical] = addr
         else:
             values["metadata"][canonical] = val
-            source_cells[canonical] = addr
+        source_cells[canonical] = addr
+        values["confidence"][canonical] = _resolve_confidence(
+            source=target_source, name_map=name_map,
+            raw=label, canonical=canonical,
+        )
 
     for kv in plan.kv_anchors:
         _read_kv_into(values, source_cells, ws, kv, name_map)
