@@ -6,11 +6,6 @@ import pytest
 from app.services.extraction import extract
 
 
-_FA26_XFAIL_REASON = (
-    "FA26 layout (flat with TOTAL footers) is misclassified as SECTION_PER_PLI; "
-    "ROW_PER_PLI is correct. Mode-decision fix deferred to follow-up work."
-)
-
 _CANONICAL_FIELDS = (
     "io_number", "style_code", "style_name", "color_code", "color_name",
     "fabric_code", "delivery_date", "quantity", "order_quantity",
@@ -32,10 +27,7 @@ def _populated_canonical_count(pli: object) -> int:
 @pytest.mark.parametrize("xlsx", [
     "CHRISTIAN BERG- T&A.xlsx",
     "20260129 DKN AW26 DROP 2 WOMEN NOS CK PRO STATUS.xlsx",
-    pytest.param(
-        "FA26 YC & EUROPE T&A #1.xlsx",
-        marks=pytest.mark.xfail(reason=_FA26_XFAIL_REASON, strict=False),
-    ),
+    "FA26 YC & EUROPE T&A #1.xlsx",
     "NORTHERN REFLECTIONS- T&a.xlsx",
 ])
 def test_live_extraction_produces_canonical_fields(xlsx: str) -> None:

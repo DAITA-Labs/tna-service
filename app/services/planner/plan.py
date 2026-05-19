@@ -155,11 +155,19 @@ def _compute_confidence(pli_mode: PliMode, kv_anchors: list[KVAnchor]) -> float:
     return 0.9
 
 
-def _count_populated_data_cols(ws: object, plan: SheetPlan) -> int:
-    """Count columns that have at least one non-empty cell across ANCHOR/CHILD data rows.
+def _count_populated_data_cols(
+    ws: object,
+    plan: SheetPlan,
+    claimed_cols: set[str] | None = None,
+) -> int:
+    """Count columns with at least one non-empty cell across ANCHOR/CHILD data rows.
 
     Used to judge whether the labels collected from header_rows are sufficient.
     Returns 0 when there are no classified data rows (e.g. plan has no rows yet).
+
+    When ``claimed_cols`` is provided, columns whose letter appears in the set are
+    excluded from the count. This keeps the denominator consistent with
+    ``_collect_header_labels``, which also excludes stage-band-claimed columns.
     """
     data_rows = [
         r.idx for r in plan.rows
@@ -167,9 +175,12 @@ def _count_populated_data_cols(ws: object, plan: SheetPlan) -> int:
     ]
     if not data_rows:
         return 0
+    claimed = claimed_cols or set()
     cols: set[int] = set()
     for r in data_rows:
         for c_idx in range(1, (ws.max_column or 0) + 1):
+            if get_column_letter(c_idx) in claimed:
+                continue
             if ws.cell(row=r, column=c_idx).value is not None:
                 cols.add(c_idx)
     return len(cols)
@@ -200,7 +211,7 @@ def _detect_title_row_extra_header(ws: object, plan: SheetPlan) -> int | None:
             for h_row in plan.header_rows
         )
     )
-    populated = _count_populated_data_cols(ws, plan)
+    populated = _count_populated_data_cols(ws, plan, claimed_cols=claimed)
     if populated > 0 and initial_labels_count < populated / 2:
         return max(plan.header_rows) + 1
     return None
