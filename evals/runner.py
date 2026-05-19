@@ -25,6 +25,22 @@ class EvalRow:
     header_match: float
     duration_seconds: float
     retry_count: int = 0
+    error: str | None = None
+
+
+def failed_row(*, file_name: str, error: str, duration_seconds: float = 0.0) -> EvalRow:
+    """Build an EvalRow representing an extraction or scoring failure.
+
+    All metric scores are 0.0; the truncated exception message lands in `error`
+    so the matrix surfaces which file crashed without aborting the batch.
+    """
+    return EvalRow(
+        file_name=file_name,
+        pli_recall=0.0, field_precision=0.0, field_recall=0.0,
+        stage_recall=0.0, source_cell_match=0.0, header_match=0.0,
+        duration_seconds=round(duration_seconds, 1),
+        error=error[:200],
+    )
 
 
 def _load_label(path: Path) -> ExtractionResult:

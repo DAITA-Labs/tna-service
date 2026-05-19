@@ -1,11 +1,15 @@
 """Top-level evaluator — iterate all labeled files, collect EvalRows, write history."""
 from __future__ import annotations
 import json
+import logging
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from app.repositories.workbook_repo import register_workbook
 from evals.interface import ExtractorProtocol
-from evals.runner import EvalRow, run_one
+from evals.runner import EvalRow, failed_row, run_one
+
+log = logging.getLogger(__name__)
 
 
 def evaluate(
@@ -18,9 +22,20 @@ def evaluate(
         wb_path = workbooks_dir / f"{label_path.stem}.xlsx"
         if not wb_path.exists():
             continue
-        ctx = register_workbook(wb_path)
-        row = run_one(extractor=extractor, workbook_path=wb_path,
-                     label_path=label_path, ctx=ctx)
+        t0 = time.monotonic()
+        try:
+            ctx = register_workbook(wb_path)
+            row = run_one(extractor=extractor, workbook_path=wb_path,
+                         label_path=label_path, ctx=ctx)
+        except Exception as exc:  # noqa: BLE001 — isolate per-file failures
+            duration = time.monotonic() - t0
+            error_msg = f"{type(exc).__name__}: {exc}"
+            log.warning("eval_per_file_failure file=%s error=%s",
+                        label_path.stem, error_msg)
+            row = failed_row(
+                file_name=label_path.stem, error=error_msg,
+                duration_seconds=duration,
+            )
         rows.append(row)
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     out = runs_dir / f"{ts}.json"
