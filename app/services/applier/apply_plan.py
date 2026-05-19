@@ -26,6 +26,7 @@ from app.models.artifacts import (
     RowSpec,
     SheetPlan,
     StageBandSpec,
+    StageColumn,
 )
 from app.models.extraction import PLI, Stage
 from app.models.workbook import WorkbookCtx
@@ -111,26 +112,46 @@ def _read_kv_into(values: dict, source_cells: dict, ws, kv: KVAnchor,
     )
 
 
-def _read_wide_stage_column(ws, band: StageBandSpec, stage_name: str,
-                            col_letter: str, pli_row: int,
-                            name_map: CanonicalNameMap) -> Stage | None:
+def _read_wide_stage_column(ws, band: StageBandSpec, stage_col: StageColumn,
+                            pli_row: int, name_map: CanonicalNameMap) -> Stage | None:
     """Read one stage column in wide_sub_columns layout for `pli_row`.
 
-    Returns a `Stage` when the cell is non-empty, or None to signal skip.
+    primary_col → planned_date. Each sub_column is canonicalised via
+    name_map.stage_subfield_labels; canonical Stage fields write to the Stage
+    record, everything else goes into Stage.metadata. Returns None when the
+    primary cell is empty or the stage is mapped to "ignore".
     """
-    canonical_stage = name_map.stage_names.get(stage_name, stage_name)
+    canonical_stage = name_map.stage_names.get(stage_col.name, stage_col.name)
     if canonical_stage == "ignore":
         return None
-    c_idx = column_index_from_string(col_letter)
-    val, addr = _read_with_merge(ws, pli_row, c_idx)
-    if val is None:
+    c_idx = column_index_from_string(stage_col.primary_col)
+    pv, pa = _read_with_merge(ws, pli_row, c_idx)
+    if pv is None:
         return None
+
+    metadata: dict = {}
+    source_cells: dict[str, str] = {"planned_date": pa}
+    stage_fields: dict = {}
+
+    for raw_sub, sub_col in stage_col.sub_columns.items():
+        canonical_sub = name_map.stage_subfield_labels.get(raw_sub, raw_sub)
+        if canonical_sub == "ignore":
+            continue
+        sv, sa = _read_with_merge(ws, pli_row, column_index_from_string(sub_col))
+        if sv is None:
+            continue
+        if canonical_sub in Stage.model_fields and canonical_sub not in {"name", "source"}:
+            stage_fields[canonical_sub] = sv
+        else:
+            metadata[canonical_sub] = sv.date() if isinstance(sv, datetime) else sv
+        source_cells[canonical_sub] = sa
+
     return Stage(
         name=canonical_stage,
-        planned_date=val if isinstance(val, (date, datetime)) else None,
-        section=band.name,
-        source={"sheet": ws.title, "rows": [pli_row],
-                "cells": {"planned_date": addr}},
+        planned_date=pv if isinstance(pv, (date, datetime)) else None,
+        section=band.name, metadata=metadata,
+        source={"sheet": ws.title, "rows": [pli_row], "cells": source_cells},
+        **stage_fields,
     )
 
 
@@ -176,19 +197,28 @@ def _read_stages(ws, bands: list[StageBandSpec], pli_row: int,
 
     Dispatches each stage column to `_read_wide_stage_column` or
     `_read_tall_stage_column` depending on `band.layout_mode`.
+    Prefers `band.stage_columns` when populated; falls back to synthesising
+    StageColumn objects from the deprecated `band.stage_cols` dict.
     `parent_source` is accepted for interface symmetry but is not read here.
     """
     stages: list[Stage] = []
     for band in bands:
-        for stage_name, col_letter in band.stage_cols.items():
-            if band.layout_mode == "wide_sub_columns":
-                stage = _read_wide_stage_column(
-                    ws, band, stage_name, col_letter, pli_row, name_map)
-            else:  # tall_sub_rows
+        stage_columns = band.stage_columns or [
+            StageColumn(name=name, name_cell=f"{col}{band.sub_header_row}",
+                        primary_col=col)
+            for name, col in band.stage_cols.items()
+        ]
+        if band.layout_mode == "wide_sub_columns":
+            for sc in stage_columns:
+                stage = _read_wide_stage_column(ws, band, sc, pli_row, name_map)
+                if stage is not None:
+                    stages.append(stage)
+        else:  # tall_sub_rows — unchanged behaviour
+            for sc in stage_columns:
                 stage = _read_tall_stage_column(
-                    ws, band, stage_name, col_letter, name_map)
-            if stage is not None:
-                stages.append(stage)
+                    ws, band, sc.name, sc.primary_col, name_map)
+                if stage is not None:
+                    stages.append(stage)
     return stages
 
 
