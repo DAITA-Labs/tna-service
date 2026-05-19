@@ -113,7 +113,12 @@ def _check_exactly_one_identity_channel(plan: SheetPlan) -> list[ValidationFindi
 
 
 def _check_mode_channel_consistency(plan: SheetPlan) -> list[ValidationFinding]:
-    """pli_mode must match the populated identity channel."""
+    """Verify pli_mode matches the populated identity channel.
+
+    Three paths: returns [] when no channel is populated (empty plan, handled
+    elsewhere); returns an ERROR when pli_mode's expected channel is empty;
+    returns [] otherwise.
+    """
     expected = {
         PliMode.ROW_PER_PLI: bool(plan.header_labels),
         PliMode.SHEET_IS_PLI: bool(plan.kv_anchors),
