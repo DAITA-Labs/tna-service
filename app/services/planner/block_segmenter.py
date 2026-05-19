@@ -61,6 +61,13 @@ def segment_blocks(
             id=block_id, bbox=(start, end),
             identity=block_kvs, stage_bands=block_bands,
         ))
+        if not block_kvs:
+            log.warning(
+                "block_empty_identity",
+                block_id=block_id,
+                bbox_start=start,
+                bbox_end=end,
+            )
         block_id += 1
     log.info("blocks_segmented", count=len(blocks))
     return blocks
