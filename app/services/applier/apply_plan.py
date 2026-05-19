@@ -89,11 +89,7 @@ def _read_with_merge(ws, row: int, col_idx: int) -> tuple[object, str]:
 
 def _read_kv_into(values: dict, source_cells: dict, ws, kv: KVAnchor,
                   name_map: CanonicalNameMap) -> None:
-    """Read one KV anchor cell and write the result into `values` and `source_cells`.
-
-    Mutates both dicts in place.  Skips the field when the canonical name is
-    "ignore" or when the cell is empty.
-    """
+    """Read one KV anchor cell and write the result into `values` and `source_cells`."""
     canonical = name_map.field_labels.get(kv.field, kv.field)
     if canonical == "ignore":
         return
@@ -102,8 +98,17 @@ def _read_kv_into(values: dict, source_cells: dict, ws, kv: KVAnchor,
     val = ws.cell(row=row, column=col).value
     if val is None:
         return
-    values[canonical] = _coerce(canonical, val)
+    is_canonical_field = canonical in PLI.model_fields
+    target_source = "kv_anchor" if is_canonical_field else "metadata_fallback"
+    if is_canonical_field:
+        values[canonical] = _coerce(canonical, val)
+    else:
+        values.setdefault("metadata", {})[canonical] = val
     source_cells[canonical] = kv.value_cell
+    values.setdefault("confidence", {})[canonical] = _resolve_confidence(
+        source=target_source, name_map=name_map,
+        raw=kv.field, canonical=canonical,
+    )
 
 
 def _read_wide_stage_column(ws, band: StageBandSpec, stage_name: str,
@@ -187,26 +192,45 @@ def _read_stages(ws, bands: list[StageBandSpec], pli_row: int,
     return stages
 
 
+# allow-long: iterates label sources, dispatches by source kind, records confidence
 def _emit_single_row_pli(ws, plan: SheetPlan, row: RowSpec,
                          header_label_by_col: dict[int, str],
                          name_map: CanonicalNameMap) -> PLI:
-    """Build one PLI from a single data row plus plan-level KV anchors and stages."""
-    values: dict = {"metadata": {}}
+    """Build one PLI from a single data row plus plan-level KV anchors and stages.
+
+    Identity columns come from `plan.header_labels` for ROW_PER_PLI; the legacy
+    `header_label_by_col` parameter is kept as a fallback for fixtures that pre-date
+    header_labels surfacing.
+    """
+    values: dict = {"metadata": {}, "confidence": {}}
     source_cells: dict[str, str] = {}
 
-    for col_idx, label in header_label_by_col.items():
+    if plan.header_labels:
+        iter_labels = [
+            (column_index_from_string(hl.col), hl.raw, "header_label")
+            for hl in plan.header_labels
+        ]
+    else:
+        iter_labels = [(c, lab, "header_label") for c, lab in header_label_by_col.items()]
+
+    for col_idx, label, source_kind in iter_labels:
         canonical = name_map.field_labels.get(label, label)
         if canonical == "ignore":
             continue
         val, addr = _read_with_merge(ws, row.idx, col_idx)
         if val is None:
             continue
-        if canonical in PLI.model_fields:
+        is_canonical_field = canonical in PLI.model_fields
+        target_source = source_kind if is_canonical_field else "metadata_fallback"
+        if is_canonical_field:
             values[canonical] = _coerce(canonical, val)
-            source_cells[canonical] = addr
         else:
             values["metadata"][canonical] = val
-            source_cells[canonical] = addr
+        source_cells[canonical] = addr
+        values["confidence"][canonical] = _resolve_confidence(
+            source=target_source, name_map=name_map,
+            raw=label, canonical=canonical,
+        )
 
     for kv in plan.kv_anchors:
         _read_kv_into(values, source_cells, ws, kv, name_map)
