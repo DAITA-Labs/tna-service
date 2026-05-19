@@ -10,6 +10,7 @@
       "total_count": 2,
       "kv_anchor_count": 0,
       "header_rows": [1],
+      "header_labels_count_min": 4,
       "must_not": {
         "pli_mode_in": ["sheet_is_pli", "section_per_pli"],
         "has_kv_anchors": false,
