@@ -11,7 +11,7 @@ from __future__ import annotations
 
 from datetime import date, datetime
 
-from openpyxl.utils import get_column_letter
+from openpyxl.utils import column_index_from_string, get_column_letter
 
 from app.core.logs import get_logger
 from app.models.artifacts import SheetSignals, StageBandSpec, StageColumn
@@ -35,20 +35,65 @@ def _find_date_cols(ws: object, r: int, max_col: int) -> list[int]:
     return [c for c in range(1, max_col + 1) if _is_date(ws.cell(row=r, column=c).value)]
 
 
+def _is_sub_label_only_row(ws: object, row: int, date_cols: list[int]) -> bool:
+    """Return True when every non-empty string in `row` at `date_cols` is a sub-label.
+
+    Used to skip an intermediate Plan/Actual row and find the true stage-name row.
+    """
+    values = [
+        ws.cell(row=row, column=c).value
+        for c in date_cols
+        if isinstance(ws.cell(row=row, column=c).value, str)
+    ]
+    return bool(values) and all(
+        v.strip().lower() in _SUB_ROW_LABELS for v in values
+    )
+
+
 def _find_sub_header_row(ws: object, r: int, date_cols: list[int]) -> int | None:
     """Locate the nearest string-labelled row above `r` that aligns with date_cols.
 
-    Probes r-1 and r-2. Returns the row index, or None if no candidate found.
+    Probes r-1 and r-2. When r-1 contains only sub-field vocabulary (Plan/Actual
+    etc.), skips it and prefers r-2 as the true stage-name row, using a threshold
+    of at least 1 non-sub-label string. Returns the row index, or None if no
+    candidate found.
     """
-    for prev in (r - 1, r - 2):
-        if prev < 1:
-            break
-        str_count = sum(
+    threshold = max(2, len(date_cols) // 2)
+
+    prev1 = r - 1
+    if prev1 < 1:
+        return None
+
+    str_count1 = sum(
+        1 for c in date_cols
+        if isinstance(ws.cell(row=prev1, column=c).value, str)
+    )
+
+    if str_count1 >= threshold:
+        # r-1 qualifies; check if it is entirely sub-field vocabulary.
+        if _is_sub_label_only_row(ws, prev1, date_cols):
+            # Try r-2 with a relaxed threshold of 1 (stage name may span fewer cols).
+            prev2 = r - 2
+            if prev2 >= 1:
+                str_count2 = sum(
+                    1 for c in date_cols
+                    if isinstance(ws.cell(row=prev2, column=c).value, str)
+                )
+                if str_count2 >= 1:
+                    return prev2
+            # Fall through to returning r-1 if r-2 also has no strings.
+        return prev1
+
+    # r-1 below threshold; try r-2.
+    prev2 = r - 2
+    if prev2 >= 1:
+        str_count2 = sum(
             1 for c in date_cols
-            if isinstance(ws.cell(row=prev, column=c).value, str)
+            if isinstance(ws.cell(row=prev2, column=c).value, str)
         )
-        if str_count >= max(2, len(date_cols) // 2):
-            return prev
+        if str_count2 >= threshold:
+            return prev2
+
     return None
 
 
@@ -106,19 +151,55 @@ def _collect_sub_rows(ws: object, r: int, max_row: int) -> dict[str, int]:
     return sub_rows
 
 
+def _collect_sub_columns(
+    ws: object, stage_name_row: int, sub_label_row: int, max_col: int,
+    stage_cols: dict[str, str],
+) -> dict[str, dict[str, str]]:
+    """Map each stage to its sub-column labels read from `sub_label_row`.
+
+    For each adjacent column after a stage's primary column, if the cell at
+    (sub_label_row, col) is a non-stage-vocab string, attribute it to the nearest
+    preceding stage. Returns {stage_name: {sub_label: col_letter}}.
+    """
+    if sub_label_row == stage_name_row:
+        return {name: {} for name in stage_cols}
+
+    primary_cols_by_idx = {
+        column_index_from_string(col): name for name, col in stage_cols.items()
+    }
+    sorted_idx = sorted(primary_cols_by_idx)
+    result: dict[str, dict[str, str]] = {name: {} for name in stage_cols}
+
+    for c in range(1, max_col + 1):
+        if c in primary_cols_by_idx:
+            continue
+        preceding = [i for i in sorted_idx if i < c]
+        if not preceding:
+            continue
+        owner_stage = primary_cols_by_idx[preceding[-1]]
+        # Stop attributing to a stage once we cross the next stage's column.
+        following = [i for i in sorted_idx if i > preceding[-1]]
+        if following and c >= following[0]:
+            continue
+        v = ws.cell(row=sub_label_row, column=c).value
+        if isinstance(v, str) and v.strip():
+            result[owner_stage][v.strip()] = get_column_letter(c)
+
+    return result
+
+
 def _build_stage_columns(
     stage_cols: dict[str, str], sub_header_row: int,
+    sub_columns_by_stage: dict[str, dict[str, str]] | None = None,
 ) -> list[StageColumn]:
-    """Build a StageColumn per (stage_name, col) pair with empty sub_columns.
-
-    Structural-only mirror of `stage_cols`. Sub-columns are filled by
-    `_collect_sub_columns` in a subsequent step (wide_sub_columns code path).
-    """
+    """Build a StageColumn per (stage_name, col) pair, with sub_columns when known."""
+    sub_columns_by_stage = sub_columns_by_stage or {}
     return [
         StageColumn(
             name=name,
             name_cell=f"{col_letter}{sub_header_row}",
             primary_col=col_letter,
+            sub_columns=sub_columns_by_stage.get(name, {}),
         )
         for name, col_letter in stage_cols.items()
     ]
@@ -163,13 +244,25 @@ def detect_stage_bands(
             layout_mode = "wide_sub_columns"
             sub_rows = {"plan": r}
 
+        sub_columns_by_stage: dict[str, dict[str, str]] = {}
+        if layout_mode == "wide_sub_columns":
+            sub_label_row = sub_header_row + 1
+            if sub_label_row <= signals.max_row:
+                sub_columns_by_stage = _collect_sub_columns(
+                    ws, stage_name_row=sub_header_row,
+                    sub_label_row=sub_label_row, max_col=signals.max_col,
+                    stage_cols=stage_cols,
+                )
+
         bands.append(StageBandSpec(
             name=section_title,
             name_cell=name_cell,
             sub_header_row=sub_header_row,
             sub_rows=sub_rows,
             stage_cols=stage_cols,
-            stage_columns=_build_stage_columns(stage_cols, sub_header_row),
+            stage_columns=_build_stage_columns(
+                stage_cols, sub_header_row, sub_columns_by_stage
+            ),
             layout_mode=layout_mode,
         ))
 
