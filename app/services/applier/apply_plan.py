@@ -37,6 +37,7 @@ log = get_logger(__name__)
 _DATA_ROLES = {RowRole.ANCHOR, RowRole.CHILD}
 _STRING_FIELDS = {"io_number", "style_code", "style_name",
                   "color_code", "color_name", "fabric_code"}
+_INT_FIELDS = frozenset({"quantity", "order_quantity", "plan_quantity"})
 
 _CONFIDENCE_DEFAULTS = {
     "kv_anchor": 0.95,
@@ -60,14 +61,31 @@ def _resolve_confidence(*, source: str, name_map: CanonicalNameMap,
     return _CONFIDENCE_DEFAULTS.get(source, 0.5)
 
 
-def _coerce(field: str, val: object) -> object:
+def _coerce(field: str, val: object) -> object | None:
     """Coerce a raw cell value to the type expected by `field`.
 
     String-typed PLI fields (style_code, color_code, etc.) are stringified even
     when the cell holds an int — Excel sometimes stores codes as numbers.
+    Int-typed PLI fields (quantity, order_quantity, plan_quantity) try-parse
+    strings (allowing commas and whitespace); unparseable values return None so
+    the caller can route the raw value to metadata instead of crashing PLI
+    validation.
     """
-    if field in _STRING_FIELDS and val is not None:
+    if val is None:
+        return None
+    if field in _STRING_FIELDS:
         return str(val)
+    if field in _INT_FIELDS:
+        if isinstance(val, bool):
+            return None
+        if isinstance(val, (int, float)):
+            return int(val)
+        if isinstance(val, str):
+            try:
+                return int(val.replace(",", "").strip())
+            except ValueError:
+                return None
+        return None
     return val
 
 
@@ -102,7 +120,16 @@ def _read_kv_into(values: dict, source_cells: dict, ws, kv: KVAnchor,
     is_canonical_field = canonical in PLI.model_fields
     target_source = "kv_anchor" if is_canonical_field else "metadata_fallback"
     if is_canonical_field:
-        values[canonical] = _coerce(canonical, val)
+        coerced = _coerce(canonical, val)
+        if coerced is None and val is not None:
+            log.warning(
+                "canonical_coerce_failed",
+                field=canonical, raw_value=str(val)[:60], source="kv_anchor",
+            )
+            values.setdefault("metadata", {})[canonical] = val
+            target_source = "metadata_fallback"
+        else:
+            values[canonical] = coerced
     else:
         values.setdefault("metadata", {})[canonical] = val
     source_cells[canonical] = kv.value_cell
@@ -255,7 +282,16 @@ def _emit_single_row_pli(ws, plan: SheetPlan, row: RowSpec,
         is_canonical_field = canonical in PLI.model_fields
         target_source = source_kind if is_canonical_field else "metadata_fallback"
         if is_canonical_field:
-            values[canonical] = _coerce(canonical, val)
+            coerced = _coerce(canonical, val)
+            if coerced is None and val is not None:
+                log.warning(
+                    "canonical_coerce_failed",
+                    field=canonical, raw_value=str(val)[:60], source=source_kind,
+                )
+                values["metadata"][canonical] = val
+                target_source = "metadata_fallback"
+            else:
+                values[canonical] = coerced
         else:
             values["metadata"][canonical] = val
         source_cells[canonical] = addr
