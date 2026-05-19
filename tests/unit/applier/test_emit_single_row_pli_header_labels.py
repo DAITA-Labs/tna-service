@@ -2,9 +2,7 @@
 import openpyxl
 from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
-from app.models.artifacts import (
-    CanonicalNameMap, HeaderLabel, RowSpec, SheetPlan, StageBandSpec, StageColumn,
-)
+from app.models.artifacts import CanonicalNameMap, HeaderLabel, RowSpec, SheetPlan
 from app.repositories.workbook_repo import register_workbook
 from app.services.applier.apply_plan import apply_plan
 
