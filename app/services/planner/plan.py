@@ -17,6 +17,7 @@ from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
 from app.enums.stage_scope import StageScope
 from app.models.artifacts import (
+    HeaderLabel,
     KVAnchor,
     PliBlock,
     SheetPlan,
@@ -155,6 +156,33 @@ def _compute_confidence(pli_mode: PliMode, kv_anchors: list[KVAnchor]) -> float:
     return 0.9
 
 
+def _collect_header_labels(ws: object, plan: SheetPlan) -> list[HeaderLabel]:
+    """Lift identity-column header strings from header_rows into the artifact.
+
+    For each column NOT claimed by a stage band's primary_col or sub_columns,
+    take the first non-empty string scanning header_rows top-to-bottom. Returns
+    empty for non-ROW_PER_PLI modes.
+    """
+    if plan.pli_mode is not PliMode.ROW_PER_PLI:
+        return []
+    claimed: set[str] = set()
+    for band in plan.stage_bands:
+        for sc in band.stage_columns:
+            claimed.add(sc.primary_col)
+            claimed.update(sc.sub_columns.values())
+    labels: list[HeaderLabel] = []
+    for c_idx in range(1, (ws.max_column or 0) + 1):
+        col = get_column_letter(c_idx)
+        if col in claimed:
+            continue
+        for h_row in plan.header_rows:
+            v = ws.cell(row=h_row, column=c_idx).value
+            if isinstance(v, str) and v.strip():
+                labels.append(HeaderLabel(raw=v.strip(), col=col, row=h_row))
+                break
+    return labels
+
+
 @component
 class SheetRowPlanner:
     """Orchestrates deterministic detectors to produce a SheetPlan from a WorkbookCtx and a sheet name."""
@@ -194,8 +222,11 @@ class SheetRowPlanner:
             stage_scope=stage_scope,
             confidence=_compute_confidence(pli_mode, kv_anchors),
         )
+        ws = workbook_ctx.wb[sheet]
+        plan = plan.model_copy(update={"header_labels": _collect_header_labels(ws, plan)})
         log.info("planner_complete", sheet=sheet, pli_mode=plan.pli_mode.value,
                  rows=len(plan.rows), blocks=len(plan.pli_blocks),
-                 kv=len(plan.kv_anchors), bands=len(plan.stage_bands),
+                 kv=len(plan.kv_anchors), header_labels=len(plan.header_labels),
+                 bands=len(plan.stage_bands),
                  confidence=plan.confidence)
         return {"plan": plan}
