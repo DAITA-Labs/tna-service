@@ -49,9 +49,10 @@ def test_per_file_extractor_crash_does_not_abort_batch(tmp_path) -> None:
     assert len(rows) == 2
     assert all(r.error and "simulated extractor crash" in r.error for r in rows)
     assert all(r.pli_recall == 0.0 for r in rows)
-    # The runs file got written.
-    runs = list(runs_dir.glob("*.json"))
-    assert len(runs) == 1
+    # The per-run nested dir + matrix.json got written.
+    run_dirs = [p for p in runs_dir.iterdir() if p.is_dir()]
+    assert len(run_dirs) == 1
+    assert (run_dirs[0] / "matrix.json").exists()
 
 
 def test_successful_extraction_row_has_no_error(tmp_path) -> None:
