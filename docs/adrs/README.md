@@ -7,6 +7,7 @@
 | 0003 | 2026-05-13 | SheetRowPlanner (induction-then-apply) | Accepted |
 | 0004 | 2026-05-13 | Test strategy (five-tier, fixture-driven) | Accepted |
 | 0005 | 2026-05-13 | SigNoz migration | Accepted |
+| 0006 | 2026-05-19 | Symmetric planner→agent contract | Accepted |
 
 All ADRs are retrospective — written after the work, to capture why we did what we did.
 

@@ -4,9 +4,17 @@
 
 TNA Service is a production-shaped FastAPI microservice that parses Excel TNA (Time and Action) spreadsheets into structured PLI JSON using a multi-agent LLM pipeline backed by deterministic helpers. It is the operational successor to the `tna_parser` experiment package.
 
-## Current state (as of 2026-05-14)
+## Current state (as of 2026-05-19)
 
-Production-shaped but not yet deployed. The SheetRowPlanner architecture is fully implemented: deterministic `SheetSurveyor` + `row_classifier` + `kv_anchor_detector` + `stage_band_detector` + `block_segmenter` produce a `SheetPlan`; `LayoutHinter` + `PlanReviewer` agents refine it conditionally; `apply_plan` executes deterministically. SigNoz (ClickHouse-backed) replaces the former Grafana stack for all three signals. Test count: ~209 passing (non-live). One open item: SZ Task 22 (final end-to-end verification with SigNoz UI).
+Production-shaped, not yet deployed. The SheetRowPlanner pipeline now feeds
+FieldNamer and apply_plan symmetrically across all three `pli_mode`s via the
+extended `SheetPlan` artifact contract (ADR-0006): `header_labels` for
+ROW_PER_PLI, `kv_anchors` for SHEET_IS_PLI, `pli_blocks[].identity` for
+SECTION_PER_PLI. `StageBandSpec.stage_columns` carries per-stage `sub_columns`
+for wide_sub_columns layouts. `apply_plan` writes per-field `PLI.confidence`.
+Test count: 248 passing (non-live). Live regression passes for Christian
+Berg, DKN, and Northern Reflections; FA26 (Family 5 TOTAL-footers) is xfailed
+pending a mode-decision follow-up.
 
 ## Orientation map
 
