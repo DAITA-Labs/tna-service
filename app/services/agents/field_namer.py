@@ -4,10 +4,13 @@ from __future__ import annotations
 from pathlib import Path
 
 from haystack import component
+from openpyxl.utils.cell import coordinate_from_string
 
 from app.core.logs import get_logger
 from app.core.prompt_loader import load_prompt
-from app.models.artifacts import CanonicalNameMap, SheetPlan
+from app.models.artifacts import (
+    CanonicalNameMap, KVAnchor, SheetPlan, StageBandSpec, StageColumn,
+)
 from app.services.agents._base import AgentRunFailure, AgentRunner, AgentSpec
 from app.services.llm_provider import LLMProvider
 
@@ -17,33 +20,82 @@ _PROMPT_DIR = Path(__file__).resolve().parents[2] / "prompts"
 
 
 def _build_user_input(ctx: object, inputs: dict) -> str:
-    """Assemble the LLM prompt body from a SheetPlan's detected labels and stage headers.
+    """Assemble the LLM prompt body from all identity + stage channels.
 
-    Collects all KV-anchor fields, PLI identity fields, and stage-band column
-    headers from `inputs["plan"]`, then formats them as a markdown block the
-    field_namer system prompt expects.
+    Reads symmetrically across the three pli_modes:
+      ROW_PER_PLI     → plan.header_labels
+      SHEET_IS_PLI    → plan.kv_anchors
+      SECTION_PER_PLI → plan.pli_blocks[].identity
+    Stage names + sub-field labels come from stage_columns on both sheet-level
+    and block-level stage bands. For ROW_PER_PLI, also pulls 3 sample values per
+    identity label from the workbook so the LLM can infer canonical names from
+    values when prompt vocab doesn't match.
     """
     plan: SheetPlan = inputs["plan"]
-    labels = {kv.field for kv in plan.kv_anchors}
-    for blk in plan.pli_blocks:
-        for kv in blk.identity:
-            labels.add(kv.field)
-    stage_headers: set[str] = set()
-    for band in plan.stage_bands:
-        stage_headers.update(band.stage_cols.keys())
-    for blk in plan.pli_blocks:
-        for band in blk.stage_bands:
-            stage_headers.update(band.stage_cols.keys())
+    ws = ctx.wb[plan.sheet] if hasattr(ctx, "wb") else None
 
-    lines = [f"# Sheet: {plan.sheet}",
-             "## Detected labels:"]
-    for label in sorted(labels):
-        lines.append(f"  - {label!r}")
+    identity: list[tuple[str, str]] = [(hl.raw, hl.col) for hl in plan.header_labels]
+    identity.extend((kv.field, _col_of(kv.label_cell)) for kv in plan.kv_anchors)
+    for blk in plan.pli_blocks:
+        identity.extend((kv.field, _col_of(kv.label_cell)) for kv in blk.identity)
+
+    stage_names: list[str] = []
+    sub_field_labels: set[str] = set()
+    all_bands = list(plan.stage_bands)
+    for blk in plan.pli_blocks:
+        all_bands.extend(blk.stage_bands)
+    for band in all_bands:
+        for sc in band.stage_columns or _legacy_columns(band):
+            stage_names.append(sc.name)
+            sub_field_labels.update(sc.sub_columns.keys())
+
+    samples = _sample_values(ws, plan, identity, k=3) if ws is not None else {}
+    return _format_markdown(plan.sheet, identity, stage_names, sub_field_labels, samples)
+
+
+def _col_of(addr: str) -> str:
+    """Return the column letter from a cell address like 'AA12'."""
+    col_letter, _ = coordinate_from_string(addr)
+    return col_letter
+
+
+def _legacy_columns(band: StageBandSpec) -> list[StageColumn]:
+    """Build StageColumn list from a band's legacy `stage_cols` dict."""
+    return [
+        StageColumn(name=name, name_cell=f"{col}{band.sub_header_row}",
+                     primary_col=col)
+        for name, col in band.stage_cols.items()
+    ]
+
+
+def _format_markdown(sheet: str, identity: list[tuple[str, str]],
+                     stage_names: list[str], sub_field_labels: set[str],
+                     samples: dict[str, list[object]]) -> str:
+    """Render a deterministic markdown prompt body."""
+    lines = [f"# Sheet: {sheet}", "", "## Identity labels detected:"]
+    for raw, col in sorted(set(identity)):
+        sample_blurb = ""
+        if samples.get(raw):
+            sample_blurb = "  samples: " + ", ".join(
+                repr(s) for s in samples[raw][:3]
+            )
+        lines.append(f"  - {raw!r} (col {col}){sample_blurb}")
     lines.append("")
-    lines.append("## Detected stage column headers:")
-    for header in sorted(stage_headers):
-        lines.append(f"  - {header!r}")
+    lines.append("## Stage headers detected:")
+    for name in sorted(set(stage_names)):
+        lines.append(f"  - {name!r}")
+    if sub_field_labels:
+        lines.append("")
+        lines.append("## Stage sub-field labels detected:")
+        for sub in sorted(sub_field_labels):
+            lines.append(f"  - {sub!r}")
     return "\n".join(lines)
+
+
+def _sample_values(ws, plan: SheetPlan, identity: list[tuple[str, str]],
+                   k: int = 3) -> dict[str, list[object]]:
+    """Placeholder; filled in Task 12."""
+    return {}
 
 
 SPEC = AgentSpec(
