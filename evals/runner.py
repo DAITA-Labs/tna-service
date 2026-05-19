@@ -51,10 +51,20 @@ def run_one(
     *, extractor: ExtractorProtocol,
     workbook_path: Path, label_path: Path,
     ctx: WorkbookCtx | None = None,
+    output_dir: Path | None = None,
 ) -> EvalRow:
     expected = _load_label(label_path)
     t0 = time.monotonic()
     actual = extractor.extract(workbook_path)
+
+    if output_dir is not None:
+        output_dir.mkdir(parents=True, exist_ok=True)
+        out_path = output_dir / f"{label_path.stem}.json"
+        out_path.write_text(
+            actual.model_dump_json(indent=2),
+            encoding="utf-8",
+        )
+
     duration = time.monotonic() - t0
 
     pli_r = score_pli_recall(actual, expected)
