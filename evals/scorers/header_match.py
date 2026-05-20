@@ -18,6 +18,15 @@ _VOCAB = {
 
 
 def score_header_match(actual: ExtractionResult, ctx: WorkbookCtx) -> float:
+    """Score the fraction of source columns whose header relates to the canonical field.
+
+    Meaningful only for row_per_pli layouts (the only layout with traditional
+    column headers in rows 1-5). For sheet_is_pli (KV-anchor) and
+    section_per_pli layouts, header rows hold data values not column labels,
+    so the metric does not meaningfully apply and we return 1.0 (skip).
+    """
+    if actual.format_detected and actual.format_detected != "row_per_pli":
+        return 1.0
     seen: set[tuple[str, str, str]] = set()
     matched = 0
     total = 0
