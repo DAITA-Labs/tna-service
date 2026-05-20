@@ -61,11 +61,32 @@ def _resolve_confidence(*, source: str, name_map: CanonicalNameMap,
     return _CONFIDENCE_DEFAULTS.get(source, 0.5)
 
 
+def _promote_io_number_fallback(values: dict) -> None:
+    """Promote metadata['buyer_po_no'] to io_number when io_number is empty.
+
+    When the FieldNamer prompt's PLI-canonical-preference rule misfires
+    (LLM maps a buyer-PO column to `buyer_po_no` instead of `io_number`),
+    this deterministic post-extraction fallback recovers the canonical
+    PLI field. Operates in-place on `values`.
+    """
+    if values.get("io_number") is not None:
+        return
+    meta = values.get("metadata") or {}
+    raw = meta.get("buyer_po_no")
+    if raw is None:
+        return
+    values["io_number"] = str(raw)
+    meta.pop("buyer_po_no", None)
+
+
 def _coerce(field: str, val: object) -> object | None:
     """Coerce a raw cell value to the type expected by `field`.
 
     String-typed PLI fields (style_code, color_code, etc.) are stringified even
     when the cell holds an int — Excel sometimes stores codes as numbers.
+    Excel serialises integer-valued numeric identifiers as floats (e.g. 1078 →
+    1078.0); trailing `.0` is stripped so the canonical string form matches
+    downstream comparisons and eval tuple matching.
     Int-typed PLI fields (quantity, order_quantity, plan_quantity) try-parse
     strings (allowing commas and whitespace); unparseable values return None so
     the caller can route the raw value to metadata instead of crashing PLI
@@ -74,6 +95,11 @@ def _coerce(field: str, val: object) -> object | None:
     if val is None:
         return None
     if field in _STRING_FIELDS:
+        # Excel sometimes stores numeric identifiers (io_number, style_code) as
+        # floats — 1078 → 1078.0. Strip the trailing .0 so the canonical
+        # string-form matches downstream comparisons.
+        if isinstance(val, float) and val.is_integer():
+            return str(int(val))
         return str(val)
     if field in _INT_FIELDS:
         if isinstance(val, bool):
@@ -305,6 +331,7 @@ def _emit_single_row_pli(ws, plan: SheetPlan, row: RowSpec,
 
     values["source"] = {"sheet": plan.sheet, "rows": [row.idx], "cells": source_cells}
     values["stages"] = _read_stages(ws, plan.stage_bands, row.idx, name_map, source_cells)
+    _promote_io_number_fallback(values)
     return PLI(**values)
 
 
@@ -379,6 +406,7 @@ def _apply_section_per_pli(ctx: WorkbookCtx, plan: SheetPlan,
                 values["stages"].extend(
                     _read_stages(ws, [band], plan_row, name_map, source_cells)
                 )
+        _promote_io_number_fallback(values)
         plis.append(PLI(**values))
     return plis
 
@@ -399,6 +427,7 @@ def _apply_sheet_is_pli(ctx: WorkbookCtx, plan: SheetPlan,
             values["stages"].extend(
                 _read_stages(ws, [band], plan_row, name_map, source_cells)
             )
+    _promote_io_number_fallback(values)
     return [PLI(**values)]
 
 

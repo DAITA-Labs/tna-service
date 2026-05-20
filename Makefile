@@ -1,4 +1,4 @@
-.PHONY: install test test-live eval serve build up down logs lint fmt clean
+.PHONY: install test test-live eval eval-smoke serve build up down logs lint fmt clean
 
 # Activate-script path differs by platform (Windows: Scripts/, POSIX: bin/).
 ifeq ($(OS),Windows_NT)
@@ -19,6 +19,9 @@ test-live:
 
 eval:
 	$(VENV_ACTIVATE) && python scripts/run_eval.py
+
+eval-smoke:
+	$(VENV_ACTIVATE) && python scripts/run_eval.py --smoke
 
 eval-refresh-golden:
 	$(VENV_ACTIVATE) && python scripts/refresh_golden.py

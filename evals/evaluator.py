@@ -18,8 +18,9 @@ log = logging.getLogger(__name__)
 def evaluate(
     *, extractor: ExtractorProtocol,
     labels_dir: Path, workbooks_dir: Path, runs_dir: Path,
+    file_stems: frozenset[str] | set[str] | None = None,
 ) -> list[EvalRow]:
-    """Run extractor against every labeled file and write a per-run nested dir.
+    """Run extractor against labeled files and write a per-run nested dir.
 
     Output layout (one directory per invocation):
         runs_dir / <utc>/
@@ -30,6 +31,9 @@ def evaluate(
     Per-file failures are isolated: a crash records a failed_row but does not
     abort the batch. The eval.log captures all structlog/print output during
     the run so the console scoreboard at the end is the operator's primary signal.
+
+    When `file_stems` is given, only labels whose `path.stem` is in the set are
+    evaluated — used by `make eval-smoke` to run a fast representative subset.
     """
     runs_dir.mkdir(parents=True, exist_ok=True)
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -43,6 +47,8 @@ def evaluate(
     with open(log_path, "w", encoding="utf-8") as log_fp:
         with contextlib.redirect_stdout(log_fp):
             for label_path in sorted(labels_dir.glob("*.json")):
+                if file_stems is not None and label_path.stem not in file_stems:
+                    continue
                 wb_path = workbooks_dir / f"{label_path.stem}.xlsx"
                 if not wb_path.exists():
                     continue
@@ -77,12 +83,16 @@ def evaluate(
 def evaluate_replay(
     *, replay_outputs_dir: Path,
     labels_dir: Path, workbooks_dir: Path, runs_dir: Path,
+    file_stems: frozenset[str] | set[str] | None = None,
 ) -> list[EvalRow]:
     """Re-score against frozen ExtractionResult outputs from a prior run.
 
     For each label in labels_dir, looks for replay_outputs_dir/<stem>.json. If
     found, loads it and scores; if missing, skips the file (no row, since there
     is nothing to score against). The new matrix lands in runs_dir/<utc>-replay/.
+
+    When `file_stems` is given, only labels whose `path.stem` is in the set are
+    re-scored — pairs with `make eval-smoke` for fast replay against a subset.
     """
     runs_dir.mkdir(parents=True, exist_ok=True)
     ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
@@ -95,6 +105,8 @@ def evaluate_replay(
     with open(log_path, "w", encoding="utf-8") as log_fp:
         with contextlib.redirect_stdout(log_fp):
             for label_path in sorted(labels_dir.glob("*.json")):
+                if file_stems is not None and label_path.stem not in file_stems:
+                    continue
                 output_path = replay_outputs_dir / f"{label_path.stem}.json"
                 if not output_path.exists():
                     continue
