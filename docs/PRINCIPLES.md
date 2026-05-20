@@ -127,3 +127,31 @@ These rules were established through live development experience and promoted fr
 - Do not artificially compress task scope to fit a deadline.
 - Welcome iterations that surface new patterns, even if they require schema or agent extensions.
 - Reference the spec's milestone section only as historical context.
+
+---
+
+## 10. Canonical PLI contract
+
+**Rule:** A PLI must populate these as **top-level fields**, not `metadata`: `io_number`, `style_code`, `color_code`, `fabric_code`, `quantity`, `delivery_date`. A canonical value appearing in `metadata` instead of its canonical PLI field is a bug — even if extracted from the correct cell. Stage records likewise must populate `planned_date` at the top level; supporting per-stage details belong in `Stage.metadata`. Additional non-canonical PLI context (buyer, season, factory, PO number, lifecycle dates, etc.) belongs in `PLI.metadata`.
+
+**Why:** Downstream consumers query canonical fields directly (e.g., `pli.io_number`). If a buyer-PO column gets canonicalised to `buyer_po_no` and lands in `metadata["buyer_po_no"]` because `buyer_po_no` is not a PLI field, the consumer doesn't see the data unless it knows to look. Worse, eval scorers compare label canonical fields to the extractor's PLI fields — when the extractor puts the value in `metadata`, every comparison fails. This pattern was identified during F3 diagnostic investigation (2026-05-20), where DKN/MOP files dropped `fabric_code`, `delivery_date`, `quantity` into `metadata` under canonical aliases (`fabric_quality`, `etd_ex_factory`, `order_quantity`) instead of the canonical PLI fields.
+
+**How to apply:**
+- Prefer mapping the most common canonical name. If a label says "Order Qty", map to `quantity` (PLI field), not to the more specific `order_quantity` (which becomes metadata).
+- When extending FieldNamer's vocab, prefer adding aliases to existing PLI canonical fields over introducing new metadata-bound canonicals.
+- If a new canonical truly needs its own PLI field (recurs across many files, downstream consumers need it directly), add it to the `PLI` Pydantic model — don't leave it stranded in `metadata`.
+- During code review of any FieldNamer-prompt or apply_plan change: ask "does this map cells to PLI fields, or does it create new metadata buckets?"
+
+---
+
+## 11. LLM call budget — proportional to sheets
+
+**Rule:** Total LLM calls per `/extract` invocation must scale with the count of relevant sheets in the workbook (`O(sheets)`), not with rows, PLIs, or fields. Per-sheet calls can be > 1 (currently SheetClassifier once + FieldNamer per sheet + occasionally LayoutHinter/PlanReviewer), but never per-row or per-PLI.
+
+**Why:** The 2026-05-13 ADR-0003 brainstorm chose "induction-then-apply": LLM induces an extraction plan from a sample, deterministic Python applies it to all rows. This bound LLM cost to sheet count rather than corpus size — critical for 1000-row GUESS master files. If a future agent adds per-PLI or per-field calls, that contract breaks and cost grows unboundedly with the data. Equally, an agent whose prompt is bloated to "do three jobs in one call" (e.g., FieldNamer mapping field labels + stage names + sub-field labels + confidence values in one shot) degrades each job's quality more than splitting would — but only if the split keeps total calls `O(sheets)`.
+
+**How to apply:**
+- Before adding a new LLM call site, ask: "Is this O(sheets), or am I introducing per-row/per-PLI/per-field calls?" If the latter, redesign — find a way to keep the work deterministic, or batch into a single per-sheet call.
+- An agent that does multiple distinct mapping jobs in one call should be evaluated for splitting *only* if its outputs are demonstrably lower-quality than separate focused calls would produce. Splitting costs more — needs to earn its keep on the quality metric.
+- During code review: a new `await llm.complete(...)` inside a for-loop over PLIs or rows is a defect.
+- Re-validate the budget after every architectural change: count actual LLM calls per file in `make eval` outputs; flag any drift from the `(1 SheetClassifier + N × FieldNamer + conditional LayoutHinter/PlanReviewer)` shape for a relevant-sheet count N.
