@@ -120,6 +120,13 @@ def _snapshot_artifact(name: str, *, payload: Any) -> None:
     log_artifact(name, payload=payload)
 
 
+def _warning_severity_of(severity: ValidationSeverity) -> str:
+    """Map ValidationSeverity (WARN/ERROR/INFO) to the Warning model's literal set."""
+    if severity is ValidationSeverity.WARN:
+        return "warning"
+    return severity.value
+
+
 def _run_planner(ctx: Any, sheet: str) -> SheetPlan:
     """Run the deterministic SheetRowPlanner pipeline and return the plan."""
     planner = SheetRowPlanner()
@@ -227,7 +234,9 @@ def _plan_for_sheet(
 
     post_review_findings = validate_post_review(plan)
     for f in post_review_findings:
-        warnings.append(Warning(message=f"{f.check}: {f.message}", severity=f.severity.value))
+        warnings.append(Warning(
+            message=f"{f.check}: {f.message}", severity=_warning_severity_of(f.severity),
+        ))
 
     with _phase("field_namer"):
         namer = FieldNamer(llm=llm)
@@ -239,7 +248,9 @@ def _plan_for_sheet(
 
     post_namer_findings = validate_post_namer(plan, name_map)
     for f in post_namer_findings:
-        warnings.append(Warning(message=f"{f.check}: {f.message}", severity=f.severity.value))
+        warnings.append(Warning(
+            message=f"{f.check}: {f.message}", severity=_warning_severity_of(f.severity),
+        ))
 
     return plan, name_map, warnings
 
@@ -289,7 +300,8 @@ def extract(workbook_path: Path | str, *, llm: Any = None) -> ExtractionResult:
                     continue  # skip apply for this sheet — fall back to no PLIs
                 for f in pre_apply_findings:
                     all_warnings.append(Warning(
-                        message=f"{f.check}: {f.message}", severity=f.severity.value,
+                        message=f"{f.check}: {f.message}",
+                        severity=_warning_severity_of(f.severity),
                     ))
 
                 with _phase("apply_plan"):
