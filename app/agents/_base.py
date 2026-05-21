@@ -1,9 +1,10 @@
 """Agent generic base — single LLM call with schema-retry and lifecycle-hook slots.
 
 The lifecycle hooks (`before_run`, `validate_input`, `validate_output`,
-`after_run`, `on_retry`) default to no-ops. Sub-plan 3 fills them in. This
-file preserves today's `AgentRunner` retry-on-schema-failure semantics so
-migrating subclasses do not change behaviour.
+`after_run`, `on_retry`) are no-op slots; subclasses override them to
+add gate behaviour. The retry-on-schema-failure loop preserves
+today's `AgentRunner` semantics so migrating subclasses do not change
+behaviour.
 """
 from __future__ import annotations
 
