@@ -2,7 +2,7 @@
 from __future__ import annotations
 from openpyxl.utils import column_index_from_string
 from app.models.workbook import WorkbookCtx, MergedRegion
-from app.repositories.workbook_tools._registry import tool
+from app.tools._decorator import tool
 
 
 @tool("get_merged_regions")

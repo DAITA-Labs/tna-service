@@ -1,6 +1,6 @@
-"""Tests for app/repositories/workbook_tools/survey."""
+"""Tests for app/tools/survey."""
 from app.repositories.workbook_repo import register_workbook
-from app.repositories.workbook_tools.survey import list_sheets, workbook_summary
+from app.tools.survey import list_sheets, workbook_summary
 
 
 def test_list_sheets_returns_sheet_meta(dkn_file):

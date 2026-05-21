@@ -1,8 +1,8 @@
 """Agent test: PlanReviewer judges a SheetPlan."""
 from app.components.plan_reviewer import PlanReviewer
 from app.services.planner.plan import SheetRowPlanner
-import app.repositories.workbook_tools.survey  # noqa: F401 — register tools
-import app.repositories.workbook_tools.bulk_read  # noqa: F401 — register tools
+import app.tools.survey  # noqa: F401 — register tools
+import app.tools.bulk_read  # noqa: F401 — register tools
 from tests.fixtures.case import fixture_case
 from tests.fixtures.fake_llm import FakeLLM
 

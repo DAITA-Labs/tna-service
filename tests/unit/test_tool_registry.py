@@ -1,7 +1,8 @@
-"""Tests for app/repositories/workbook_tools/_registry."""
-from app.repositories.workbook_tools._registry import (
-    tool, get_tool, list_tools, ToolRegistry,
+"""Tests for app/tools/_registry."""
+from app.tools._registry import (
+    get_tool, list_tools, ToolRegistry,
 )
+from app.tools._decorator import tool
 
 
 def test_register_and_lookup():

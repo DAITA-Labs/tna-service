@@ -8,7 +8,7 @@ from app.agents.plan_reviewer.schema import PlanReviewerInputs, PlanVerdict
 from app.agents.plan_reviewer.tuning import PlanReviewerTuning
 from app.agents.plan_reviewer.validators import validate_plan_verdict
 from app.prompts import PLAN_REVIEWER
-from app.repositories.workbook_tools._registry import TOOL_REGISTRY
+from app.tools._registry import TOOL_REGISTRY
 
 
 class PlanReviewerAgent(Agent):

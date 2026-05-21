@@ -13,8 +13,8 @@ from __future__ import annotations
 from app.components.field_namer import FieldNamer
 from app.components.sheet_classifier import SheetClassifier
 from app.services.planner.plan import SheetRowPlanner
-from app.repositories.workbook_tools._registry import TOOL_REGISTRY
-import app.repositories.workbook_tools.survey  # noqa: F401 — register tools
+from app.tools._registry import TOOL_REGISTRY
+import app.tools.survey  # noqa: F401 — register tools
 from tests.fixtures.case import fixture_case
 
 

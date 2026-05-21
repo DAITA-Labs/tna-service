@@ -2,7 +2,7 @@
 from __future__ import annotations
 from app.models.workbook import WorkbookCtx, SheetMeta
 from app.models.artifacts import WorkbookSummary
-from app.repositories.workbook_tools._registry import tool
+from app.tools._decorator import tool
 
 
 @tool("list_sheets")

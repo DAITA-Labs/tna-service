@@ -10,7 +10,7 @@ from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
 from app.enums.stage_scope import StageScope
 from app.models.artifacts import RowSpec, SheetPlan
-from app.repositories.workbook_tools._registry import TOOL_REGISTRY
+from app.tools._registry import TOOL_REGISTRY
 from tests.fixtures.fake_llm import FakeLLM
 
 

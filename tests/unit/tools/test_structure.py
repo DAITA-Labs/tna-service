@@ -1,6 +1,6 @@
-"""Tests for app/repositories/workbook_tools/structure."""
+"""Tests for app/tools/structure."""
 from app.repositories.workbook_repo import register_workbook
-from app.repositories.workbook_tools.structure import (
+from app.tools.structure import (
     get_merged_regions, count_non_empty_rows_in_column,
 )
 

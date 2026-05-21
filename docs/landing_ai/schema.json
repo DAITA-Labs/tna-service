@@ -1,0 +1,239 @@
+{
+  "type": "object",
+  "description": "TNA (Time & Action) spreadsheet extraction. A workbook describes garment production orders for one or more buyers. Each Product Line Item (PLI) = one style + color combination being ordered, with a set of production milestones (stages). PLIs appear in three possible layouts: (a) ROW-PER-PLI — each row is one PLI with stage columns to the right; (b) SHEET-IS-PLI — the entire sheet describes one PLI as key/value pairs scattered around it; (c) SECTION-PER-PLI — multiple PLIs stacked vertically on one sheet, each as a multi-row section. Output the same flat shape regardless of layout: a list of PLI objects with stages nested inside each PLI. Two PLIs may legitimately share the same io_number — do NOT deduplicate. Copy cell content verbatim: do not split one cell across multiple fields, do not concatenate multiple cells into one field, do not strip leading zeros or reformat. If a field is not present in the workbook, leave it null. Skip helper sheets named 'Help', 'Master', 'Codes', 'Lookups', 'Legend', cover/title pages, and pure summary sheets.",
+  "properties": {
+    "plis": {
+      "type": "array",
+      "description": "Every PLI found in the workbook, in document order. A PLI is valid if you can find at least one identifier — io_number is the most reliable (almost every TNA has it under some label); style_code+color_code or quantity may serve as a fallback identifier when io_number is absent. Do NOT emit a PLI with no identifiers at all.",
+      "items": {
+        "type": "object",
+        "description": "One PLI. Populate fields you can verify from the workbook; leave the rest null. Faithful extraction: copy values verbatim from the source cell.",
+        "properties": {
+          "io_number": {
+            "type": "string",
+            "description": "Primary per-row order identifier — usually a short alphanumeric code uniquely identifying the buyer's order. The most reliable PLI identifier; nearly every TNA workbook contains it under some label. Copy verbatim. If a 'Buyer PO' column is the primary per-row identifier, map it here (not to metadata.buyer_po_no). Use metadata.buyer_po_no only when a separate io_number-style column also exists.",
+            "x-alternativeNames": [
+              "IO", "IO #", "IO No", "IO No.", "IO Number", "I/O", "I/O No", "I/O Number",
+              "Order No", "Order No.", "Order Number", "Order Ref", "Order Reference", "Order #",
+              "PO", "PO No", "PO No.", "PO Number", "PO#", "P.O.", "P.O. No",
+              "Buyer PO", "Buyer PO No", "Buyer Po No", "Buyer Order", "Buyer Order No",
+              "Job", "Job No", "Job #", "Job Number",
+              "Reference", "Ref", "Ref No", "Ref Number",
+              "Indent", "Indent No", "Indent #",
+              "Customer Order", "Customer Reference", "Customer PO",
+              "Sales Order", "SO", "SO No"
+            ]
+          },
+          "style_code": {
+            "type": "string",
+            "description": "Style identifier — a short alphanumeric code for the garment style. May be absent. Copy verbatim. If a 'STYLE' column contains a combined code+name like '890162 TAVIRA_2 522148' or 'STYLE_NAME / STYLE-CODE', extract the entire cell value as style_code. If the cell is a pure descriptive name like 'D-T-SHIRT 3/4', put it in style_name instead.",
+            "x-alternativeNames": [
+              "Style", "Style No", "Style No.", "Style Number", "Style Code", "Style #",
+              "Art", "Art No", "Art No.", "Art Number", "Article", "Article No", "Article Number", "Article #",
+              "SKU", "Model", "Model No", "Model Number",
+              "Item Code", "Item No", "Item Number", "Item #",
+              "Product Code", "Product No"
+            ]
+          },
+          "style_name": {
+            "type": "string",
+            "description": "Descriptive style name (e.g. 'D-T-SHIRT 3/4', 'POLO LS', 'CARGO PANT'). Use when the cell holds words rather than a code. Copy verbatim.",
+            "x-alternativeNames": [
+              "Style Name", "Style Description", "Style Desc",
+              "Product Name", "Product Description", "Product Desc",
+              "Garment", "Garment Type", "Garment Description",
+              "Description", "Item Description", "Item Desc"
+            ]
+          },
+          "color_code": {
+            "type": "string",
+            "description": "Color identifier — usually a short alphanumeric color code. May be absent. Copy verbatim.",
+            "x-alternativeNames": [
+              "Color", "Colour", "Color Code", "Colour Code", "Color No", "Colour No",
+              "Color #", "Colour #", "Shade", "Shade Code", "C/W", "Colour Way", "Color Way"
+            ]
+          },
+          "color_name": {
+            "type": "string",
+            "description": "Descriptive color name (e.g. 'NAVY', 'BLACK', 'BURGUNDY 432'). Use when the cell value is a name rather than a code.",
+            "x-alternativeNames": [
+              "Color Name", "Colour Name", "Color Description", "Colour Description",
+              "Shade Name", "Color Desc"
+            ]
+          },
+          "fabric_code": {
+            "type": "string",
+            "description": "Fabric identifier — an alphanumeric code OR a fabric description like '100% COTTON 30S'. May be absent. Copy verbatim. If the source column is named 'Fabric Quality', 'Material Quality', 'Fabric Type', or 'Fabric Description', map the value here, NOT to metadata. Every column that holds a fabric description should populate this field.",
+            "x-alternativeNames": [
+              "Fabric", "Fabric Code", "Fabric No", "Fabric #",
+              "Fabric Quality", "Fabric Type", "Fabric Description", "Fab Code", "Fab Quality",
+              "Material", "Material Code", "Material Quality", "Material Type", "Material Description",
+              "Quality", "Quality Code", "Quality Description", "Composition"
+            ]
+          },
+          "quantity": {
+            "type": "integer",
+            "description": "Total order quantity in units (pieces). Integer. This is the canonical 'how many pieces are being ordered' field; every column that holds an order/plan/required quantity maps here, NOT to metadata.order_quantity or metadata.plan_quantity. Round non-integer numeric cells (e.g. 1500.0) to integer; if the cell shows 'PO' or non-numeric text, leave null. Can serve as a secondary identifier when style/color codes are absent.",
+            "x-alternativeNames": [
+              "Qty", "Quantity", "Order Qty", "Order Quantity", "Order Pcs",
+              "Total Qty", "Total Quantity", "Total Pcs",
+              "Required Qty", "Required Quantity", "Req Qty",
+              "Plan Qty", "Plan Quantity", "Planned Qty",
+              "Cut Qty Plan", "Pcs", "Pieces", "Units"
+            ]
+          },
+          "delivery_date": {
+            "type": "string",
+            "format": "YYYY-MM-DD",
+            "description": "Promised delivery / ex-factory / ETD date for the order. The canonical 'when does this PLI ship' field; every column whose header looks like 'Delivery Date', 'Ex Factory Date', 'ETD', 'ETD Ex Factory as per P.O', or 'Shipment Date' maps here, NOT to metadata.ex_factory_date or metadata.etd_ex_factory. Output YYYY-MM-DD. Input formats vary: DD-MMM-YYYY, DD/MM/YYYY, DD.MM.YYYY are common. If the cell value isn't a parseable date, leave null.",
+            "x-alternativeNames": [
+              "Delivery", "Delivery Date", "Del Date", "Del. Date",
+              "Ex Factory", "Ex Factory Date", "Ex-Factory", "Ex-Factory Date", "Ex. Factory",
+              "Shipment", "Shipment Date", "Ship Date", "Shipping Date",
+              "ETD", "ETD Date", "ETD Ex Factory", "Etd Ex factory as per P.O", "ETA",
+              "Required Delivery", "Promised Delivery", "Due Date", "Target Date",
+              "Delivery to Buyer", "Shipping Window"
+            ]
+          },
+          "metadata": {
+            "type": "object",
+            "description": "Additional PLI-level fields that don't fit the canonical PLI fields above. Populate only keys you find in the workbook; leave the rest null. These are PLI-level (apply to the whole PLI), not stage-level. Do NOT duplicate canonical PLI fields here — quantity, delivery_date, fabric_code, etc. always go in their top-level PLI field.",
+            "properties": {
+              "buyer": {
+                "type": "string",
+                "description": "Buyer / customer name.",
+                "x-alternativeNames": ["Buyer", "Customer", "Client", "Brand", "Account"]
+              },
+              "season": {
+                "type": "string",
+                "description": "Season label (e.g. 'AW26', 'SS26', 'FW26', 'Spring 2027').",
+                "x-alternativeNames": ["Season", "Season Code", "Collection", "Drop"]
+              },
+              "factory": {
+                "type": "string",
+                "description": "Producing factory / unit name.",
+                "x-alternativeNames": ["Factory", "Unit", "Plant", "Production Unit", "Manufacturer"]
+              },
+              "buyer_po_no": {
+                "type": "string",
+                "description": "Buyer's PO number, ONLY when a separate io_number-style column also exists. If buyer-PO is the primary per-row identifier, it goes in io_number instead.",
+                "x-alternativeNames": ["Buyer PO No", "Buyer Po No", "Buyer PO Number"]
+              },
+              "article_no": {
+                "type": "string",
+                "description": "Article number, if separate from style_code.",
+                "x-alternativeNames": ["Article", "Article No", "Article #", "Art No"]
+              },
+              "price": {
+                "type": "number",
+                "description": "Unit price (FOB / per-piece) if recorded.",
+                "x-alternativeNames": ["Price", "Unit Price", "FOB", "FOB Price", "Cost", "Rate"]
+              },
+              "balance_qty": {
+                "type": "integer",
+                "description": "Balance quantity remaining to ship, if separate from order quantity.",
+                "x-alternativeNames": ["Balance", "Balance Qty", "Bal Qty", "Pending Qty", "Remaining Qty"]
+              },
+              "order_receipt_date": {
+                "type": "string",
+                "format": "YYYY-MM-DD",
+                "description": "Date the order was received by the factory.",
+                "x-alternativeNames": ["Order Receipt Date", "Order Date", "Order Received", "PO Date", "PO Received Date"]
+              },
+              "sample_dispatch": {
+                "type": "string",
+                "format": "YYYY-MM-DD",
+                "description": "Date a sample was dispatched. This is an admin/lifecycle date, not a production-stage date.",
+                "x-alternativeNames": ["Sample Dispatch", "Sample Dispatch Date", "Sample Sent"]
+              },
+              "sample_completion": {
+                "type": "string",
+                "format": "YYYY-MM-DD",
+                "description": "Date sample was completed.",
+                "x-alternativeNames": ["Sample Completion", "Sample Completed", "Sample Completion Date"]
+              },
+              "pps_completion": {
+                "type": "string",
+                "format": "YYYY-MM-DD",
+                "description": "Pre-production sample (PPS) completion date.",
+                "x-alternativeNames": ["PPS Completion", "PPS Completion Date", "Pre-Production Sample Completion"]
+              },
+              "department": {
+                "type": "string",
+                "description": "Department / division (e.g. 'WOMEN NOS', 'MEN', 'KIDS').",
+                "x-alternativeNames": ["Department", "Division", "Dept", "Category", "Gender"]
+              },
+              "drop_no": {
+                "type": "string",
+                "description": "Drop number / release wave label.",
+                "x-alternativeNames": ["Drop", "Drop No", "Wave", "Release"]
+              }
+            }
+          },
+          "stages": {
+            "type": "array",
+            "description": "Production milestones for this PLI. Layouts vary: (a) WIDE COLUMNS — one column per stage; (b) WIDE COLUMNS WITH SUB-COLUMNS — each stage spans Plan/Actual/Approved-Qty sub-columns; (c) BAND-SEPARATED — stages stacked vertically inside the PLI section, each band = header row + child rows; (d) TALL ROWS — one row per stage. Output the same flat shape regardless. Two stages MAY share a name (e.g. two 'Sewing' bands for different sub-orders) — do not deduplicate.",
+            "items": {
+              "type": "object",
+              "description": "One production milestone. Map the spreadsheet's header to a canonical stage name. Never emit a stage whose name matches a PLI field — 'delivery_date', 'ex_factory_date', 'fabric_code' are PLI fields, not stages; skip those columns when iterating stages.",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Canonical stage name in snake_case. Choose the closest match from this fixed list: fabric, lab_dip_send, lab_dip_approval, fit_send, fit_approval, art_work_send, art_work_approval, in_house_fabric_send, in_house_fabric_approval, pre_production_send, pre_production_approval, first_pattern, garment_pattern, planned_completion_date, size_set, lot_card, cutting, feeding, sewing, sewing_start, sewing_end, final_inspection, printing, embroidery, washing, finishing, packing, ex_factory, trims_inhouse. If a header looks like a PLI field (e.g. 'Delivery Date', 'Ex Factory Date as per P.O') and not a production milestone, skip it — do NOT emit it as a stage. Examples: 'Ex Factory Shipment' → ex_factory; 'Sewing Start' → sewing_start; 'Final Inspection' / 'FI' → final_inspection; 'Trims Inhouse' → trims_inhouse.",
+                  "x-alternativeNames": [
+                    "Stage", "Stage Name", "Milestone", "Activity", "Task", "Process", "Operation"
+                  ]
+                },
+                "planned_date": {
+                  "type": "string",
+                  "format": "YYYY-MM-DD",
+                  "description": "The planned / scheduled / target date for this stage. In multi-column layouts this is usually under a 'Plan' or 'Planned Date' sub-column. In single-date layouts it's the only date cell associated with the stage. Output YYYY-MM-DD.",
+                  "x-alternativeNames": [
+                    "Plan", "Planned", "Plan Date", "Planned Date", "Plan Dt",
+                    "Target", "Target Date", "Schedule", "Schedule Date", "Scheduled",
+                    "Start", "Start Date", "Sched", "Required Date"
+                  ]
+                },
+                "actual_date": {
+                  "type": "string",
+                  "format": "YYYY-MM-DD",
+                  "description": "The actual completion / approval / receipt date of this stage. Null if not yet completed.",
+                  "x-alternativeNames": [
+                    "Actual", "Actual Date", "Act Date", "Act Dt",
+                    "Completed", "Completion Date", "Completed Date", "Done", "Done On",
+                    "Received Date", "Receipt Date", "Received On",
+                    "Approval Date", "Approved Date", "Approved On"
+                  ]
+                },
+                "quantity": {
+                  "type": "integer",
+                  "description": "Stage-level quantity if recorded (e.g. approved qty for a lab dip, cut qty, sewn qty, shipped qty). Null if not present.",
+                  "x-alternativeNames": [
+                    "Qty", "Quantity", "Approved Qty", "Approved Quantity",
+                    "Cut Qty", "Sewing Qty", "Sewn Qty", "Shipped Qty", "Inspected Qty"
+                  ]
+                },
+                "remarks": {
+                  "type": "string",
+                  "description": "Free-text comments / notes / status for this stage (e.g. 'Pending approval', 'Delayed 3 days', 'Lab dip rejected, re-send').",
+                  "x-alternativeNames": [
+                    "Remarks", "Remark", "Comments", "Comment", "Notes", "Note",
+                    "Status", "Observations", "Issues"
+                  ]
+                },
+                "section": {
+                  "type": "string",
+                  "description": "If stages are organised into sections/groups (e.g. 'Fabric & Trims', 'Sample Approval', 'Production', 'Cutting & Sewing', 'Finishing & Packing'), record the section header here. Null if no sectioning is used."
+                }
+              }
+            }
+          },
+          "sheet": {
+            "type": "string",
+            "description": "Name of the sheet this PLI was extracted from. Useful in multi-sheet workbooks, especially SHEET-IS-PLI layouts where each sheet represents one PLI."
+          }
+        }
+      }
+    }
+  }
+}

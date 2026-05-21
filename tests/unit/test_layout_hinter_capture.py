@@ -5,7 +5,7 @@ from unittest.mock import MagicMock
 
 from structlog.testing import capture_logs
 
-import app.repositories.workbook_tools.bulk_read  # noqa: F401 — register peek_sheet
+import app.tools.bulk_read  # noqa: F401 — register peek_sheet
 from app.models.artifacts import LayoutHints, SheetSignals
 from app.components.layout_hinter import LayoutHinter
 from tests.fixtures.fake_llm import FakeLLM

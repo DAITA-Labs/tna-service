@@ -1,6 +1,6 @@
-"""Tests for app/repositories/workbook_tools/targeted."""
+"""Tests for app/tools/targeted."""
 from app.repositories.workbook_repo import register_workbook
-from app.repositories.workbook_tools.targeted import read_row, read_relative, get_cell_at
+from app.tools.targeted import read_row, read_relative, get_cell_at
 
 
 def test_read_row_full_width(dkn_file):

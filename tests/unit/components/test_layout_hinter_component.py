@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 
 from app.components.layout_hinter import LayoutHinter
 from app.models.artifacts import SheetSignals
-from app.repositories.workbook_tools._registry import TOOL_REGISTRY
+from app.tools._registry import TOOL_REGISTRY
 from tests.fixtures.fake_llm import FakeLLM
 
 
