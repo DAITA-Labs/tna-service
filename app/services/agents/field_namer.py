@@ -10,6 +10,7 @@ from openpyxl.utils.cell import coordinate_from_string
 from app.core.logs import get_logger
 from app.core.prompt_loader import load_prompt
 from app.enums.pli_mode import PliMode
+from app.inferencing.tuning import AgentTuning
 from app.models.artifacts import (
     CanonicalNameMap, KVAnchor, SheetPlan, StageBandSpec, StageColumn,
 )
@@ -135,6 +136,7 @@ SPEC = AgentSpec(
     ),
     output_schema=CanonicalNameMap,
     build_user_input=_build_user_input,
+    tuning=AgentTuning(),
 )
 
 

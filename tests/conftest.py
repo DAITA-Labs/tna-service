@@ -36,14 +36,29 @@ def _reset_otel_spans():
 
 @pytest.fixture(autouse=True)
 def _reset_structlog():
-    """Disable structlog's logger cache for tests.
+    """Reset structlog to a test-friendly state before every test.
 
-    configure_logging() sets cache_logger_on_first_use=True for production.
-    That causes the first get_logger() call to freeze the processor chain,
-    making subsequent capture_logs() blocks invisible to already-cached loggers.
-    Forcing False here ensures capture_logs() works regardless of import order.
+    Three hazards introduced by Haystack's __init__ (which calls
+    structlog.configure at import time) are neutralised here:
+
+    1. cache_logger_on_first_use=True — freezes the processor chain on first
+       use, making subsequent capture_logs() blocks invisible.
+
+    2. logger_factory=stdlib.LoggerFactory — routes output through the stdlib
+       logging module; capture_logs() swaps processors but stdlib-backed loggers
+       bypass the structlog processor chain entirely.
+
+    3. wrapper_class=BoundLoggerFilteringAtWarning — silently drops .info()
+       calls, so agent.input / agent.output log events never fire.
+
+    Resetting all three to test-friendly defaults ensures capture_logs() works
+    correctly in any test that exercises Haystack-based agents.
     """
-    structlog.configure(cache_logger_on_first_use=False)
+    structlog.configure(
+        wrapper_class=structlog.make_filtering_bound_logger(0),
+        logger_factory=structlog.PrintLoggerFactory(),
+        cache_logger_on_first_use=False,
+    )
     yield
 
 
