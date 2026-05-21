@@ -95,15 +95,15 @@ def test_tool_decorator_registers_callable() -> None:
 
 def test_component_base_runs_under_haystack() -> None:
     """A subclass of `Component` decorated with `@component` runs and produces typed output."""
-    from haystack import component as hs_component
+    from haystack import component
 
     from app.components._base import Component
 
-    @hs_component
+    @component
     class Doubler(Component):
         """Return x doubled — fixture component."""
 
-        @hs_component.output_types(value=int)
+        @component.output_types(value=int)
         def run(self, x: int) -> dict:
             return {"value": x * 2}
 
@@ -126,15 +126,15 @@ def test_component_run_unoverridden_raises() -> None:
 
 def test_component_lifecycle_hooks_default_to_safe_noops() -> None:
     """before_run / after_run are no-ops; on_error logs and does not raise."""
-    from haystack import component as hs_component
+    from haystack import component
 
     from app.components._base import Component
 
-    @hs_component
+    @component
     class _Probe(Component):
         """Fixture exposing the lifecycle slots so we can poke them."""
 
-        @hs_component.output_types(value=int)
+        @component.output_types(value=int)
         def run(self, x: int) -> dict:
             return {"value": x}
 
@@ -147,17 +147,17 @@ def test_component_lifecycle_hooks_default_to_safe_noops() -> None:
 
 def test_component_on_error_is_overridable() -> None:
     """Subclasses can override on_error to record the exception for inspection."""
-    from haystack import component as hs_component
+    from haystack import component
 
     from app.components._base import Component
 
     captured: list[tuple[str, str, list[str]]] = []
 
-    @hs_component
+    @component
     class _Recorder(Component):
         """Fixture that captures on_error invocations into a list."""
 
-        @hs_component.output_types(value=int)
+        @component.output_types(value=int)
         def run(self, x: int) -> dict:
             return {"value": x}
 
@@ -249,16 +249,16 @@ def test_agent_base_runs_and_lifecycle_hooks_are_noops() -> None:
 
 def test_make_pipeline_returns_haystack_pipeline_with_components() -> None:
     """`make_pipeline` returns a Haystack Pipeline with the named components added."""
-    from haystack import Pipeline, component as hs_component
+    from haystack import Pipeline, component
 
     from app.components._base import Component
     from app.pipelines._base import make_pipeline
 
-    @hs_component
+    @component
     class Inc(Component):
         """Add 1 — fixture component."""
 
-        @hs_component.output_types(value=int)
+        @component.output_types(value=int)
         def run(self, x: int) -> dict:
             return {"value": x + 1}
 
@@ -304,7 +304,7 @@ def test_artifacts_package_reexports_models() -> None:
 
 def test_end_to_end_composition_smoke() -> None:
     """Agent + Component + Pipeline + @tool compose without runtime errors."""
-    from haystack import component as hs_component
+    from haystack import component
     from pydantic import BaseModel
 
     from app.agents._base import Agent
@@ -356,11 +356,11 @@ def test_end_to_end_composition_smoke() -> None:
         def build_input(self, ctx, inputs):
             return str(TOOL_REGISTRY.get("framework_smoke_double")(inputs.x))
 
-    @hs_component
+    @component
     class _SmokeComponent(Component):
         """Run the smoke agent and surface the parsed `_Out`."""
 
-        @hs_component.output_types(out=_Out)
+        @component.output_types(out=_Out)
         def run(self, x: int, provider: object = None) -> dict:
             agent = _SmokeAgent()
             return {"out": agent.run(ctx=None, inputs=_Inputs(x=x), provider=provider or _FakeProvider())}
