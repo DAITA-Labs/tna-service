@@ -10,11 +10,20 @@ ROOT = Path(__file__).resolve().parents[3]
 
 
 def test_workflow_agents_each_in_own_module():
-    """All workflow agents have been migrated to app/agents/; services/agents/ has none left."""
+    """All workflow agents live in app/agents/; app/services/agents/ has been deleted."""
     agents_dir = ROOT / "app" / "services" / "agents"
-    agents = {p.stem for p in agents_dir.glob("*.py")
-              if p.name not in ("__init__.py", "_base.py")}
-    assert agents == set()
+    assert not agents_dir.exists(), (
+        "app/services/agents/ still exists — legacy agent directory must be deleted"
+    )
+
+
+def test_services_contains_only_service_layer():
+    """app/services/ contains only the orchestration service layer."""
+    svc_dir = ROOT / "app" / "services"
+    files = {p.name for p in svc_dir.glob("*.py")}
+    assert files == {"__init__.py", "extract_service.py"}, (
+        f"Unexpected files in app/services/: {files}"
+    )
 
 
 def test_validators_each_in_own_module():

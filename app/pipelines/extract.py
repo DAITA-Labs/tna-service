@@ -1,23 +1,17 @@
-"""Top-level orchestration for TNA workbook extraction.
+"""Haystack Pipeline factories for TNA workbook extraction.
 
-Provides two Haystack Pipeline factories:
-- `make_per_sheet_pipeline(llm)` — builds the per-sheet flow DAG
-- `make_extract_pipeline(llm)` — builds the workbook-level DAG
+Two factories:
+- `make_per_sheet_pipeline(llm)` — builds the per-sheet processing DAG
+- `make_extract_pipeline(llm, ctx)` — builds the workbook-level DAG
 
-The thin `extract()` driver registers the workbook, handles the empty-sheet
-early-return, then runs the pipeline and returns the reconciled result.
+Orchestration (provider init, telemetry, empty-sheet guard) lives in
+`app/services/extract_service.py`. These factories are pure DAG construction:
+no side effects, no provider init, no telemetry.
 """
 from __future__ import annotations
 
-import time
-from pathlib import Path
 from typing import Any
 
-import app.tools.bulk_read  # noqa: F401 — force tool registration
-import app.tools.search  # noqa: F401
-import app.tools.structure  # noqa: F401
-import app.tools.survey  # noqa: F401
-import app.tools.targeted  # noqa: F401
 from haystack import Pipeline
 
 from app.components.applier import Applier
@@ -38,20 +32,6 @@ from app.components.validators.field_dropout_verifier import FieldDropoutVerifie
 from app.components.validators.header_match_verifier import HeaderMatchVerifier
 from app.components.validators.source_cell_verifier import SourceCellVerifier
 from app.components.workbook_summary_provider import WorkbookSummaryProvider
-from app.core.logs import get_logger
-from app.core.telemetry import (
-    extraction_duration_seconds,
-    extraction_pli_count,
-    extractions_total,
-    plis_extracted_total,
-)
-from app.core.tracing import get_tracer
-from app.models.extraction import ExtractionResult, Warning
-from app.repositories.workbook_repo import register_workbook
-from app.services.llm_provider import AnthropicProvider
-from app.tools._registry import TOOL_REGISTRY
-
-log = get_logger(__name__)
 
 
 def make_per_sheet_pipeline(llm: Any) -> Pipeline:
@@ -131,59 +111,3 @@ def make_extract_pipeline(llm: Any, ctx: Any) -> Pipeline:
     pipe.connect("field_dropout.findings", "reconciler.dropout_findings")
 
     return pipe
-
-
-def extract(workbook_path: Path | str, *, llm: Any = None) -> ExtractionResult:
-    """Extract structured PLIs from a TNA workbook via the Haystack Pipeline."""
-    t0 = time.monotonic()
-    ctx = register_workbook(workbook_path)
-    llm = llm or AnthropicProvider.from_env()
-
-    log.info("extract_start", file=str(ctx.path))
-    with get_tracer(__name__).start_as_current_span("extract") as root_span:
-        root_span.set_attribute("file", str(ctx.path))
-        try:
-            # Early-return when no relevant sheets — avoids building the full pipeline.
-            summary = TOOL_REGISTRY.get("workbook_summary")(ctx)
-            sc = SheetClassifier(llm=llm)
-            relevant = sc.run(workbook_ctx=ctx, workbook_summary=summary)["relevant_sheets"]
-            if not relevant:
-                log.info("no_relevant_sheets", file=str(ctx.path))
-                extractions_total.add(1, {"status": "empty"})
-                return ExtractionResult(
-                    plis=[], source_file=str(ctx.path),
-                    warnings=[Warning(
-                        message="No relevant sheets identified", severity="warning",
-                    )],
-                )
-
-            log.info("relevant_sheets_selected", sheets=relevant, count=len(relevant))
-            pipe = make_extract_pipeline(llm, ctx)
-            out = pipe.run({
-                "summary_provider": {"workbook_ctx": ctx},
-                "sheet_classifier": {"workbook_ctx": ctx},
-                "per_sheet": {"workbook_ctx": ctx},
-                "result_builder": {"source_file": str(ctx.path)},
-            })
-            final: ExtractionResult = out["reconciler"]["result"]
-            log.info(
-                "extract_complete",
-                file=ctx.path.name,
-                total_plis=len(final.plis),
-                warnings=len(final.warnings),
-                format=final.format_detected,
-            )
-            extraction_duration_seconds.record(
-                time.monotonic() - t0,
-                {"format_detected": final.format_detected or "unknown"},
-            )
-            extraction_pli_count.add(len(final.plis), {"source_file": ctx.path.name})
-            if len(final.plis) == 0:
-                extractions_total.add(1, {"status": "empty"})
-            else:
-                extractions_total.add(1, {"status": "success"})
-            plis_extracted_total.add(len(final.plis))
-            return final
-        except Exception:
-            extractions_total.add(1, {"status": "failure"})
-            raise

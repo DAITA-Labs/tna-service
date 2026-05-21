@@ -56,6 +56,8 @@ These rules were established through live development experience and promoted fr
 - Det wins on disagreement. LLM call failure is non-blocking (log to telemetry, keep original plan).
 - Apply the same inversion elsewhere: if there's a deterministic backbone, build that first and use the LLM to review/refine.
 
+Now enforced by the agent lifecycle — see Principle 12.
+
 ---
 
 ## 5. Four extensibility axes
@@ -155,6 +157,8 @@ These rules were established through live development experience and promoted fr
 - An agent that does multiple distinct mapping jobs in one call should be evaluated for splitting *only* if its outputs are demonstrably lower-quality than separate focused calls would produce. Splitting costs more — needs to earn its keep on the quality metric.
 - During code review: a new `await llm.complete(...)` inside a for-loop over PLIs or rows is a defect.
 - Re-validate the budget after every architectural change: count actual LLM calls per file in `make eval` outputs; flag any drift from the `(1 SheetClassifier + N × FieldNamer + conditional LayoutHinter/PlanReviewer)` shape for a relevant-sheet count N.
+
+Decision logs capture every LLM call; see ADR-0007 and observability.md.
 
 ---
 

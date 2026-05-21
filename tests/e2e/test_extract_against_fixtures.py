@@ -1,7 +1,7 @@
 """End-to-end test: full extract() pipeline with FakeLLM against fixtures."""
 from structlog.testing import capture_logs
 
-from app.pipelines.extract import extract
+from app.services.extract_service import extract
 from tests.fixtures.case import fixture_case
 from tests.fixtures.fake_llm import FakeLLM
 

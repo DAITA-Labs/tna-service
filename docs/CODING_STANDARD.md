@@ -371,6 +371,29 @@ def configure_tracing(service_name: str = "tna-service",
 - [ ] Dependencies enter through parameters or constructors, not module globals.
 - [ ] Production code does not import from `tests/`.
 
+## 11. Framework primitives
+
+Seven primitives, each with a single home in the file tree and a single
+responsibility. Reviews flag misuse of these boundaries.
+
+| Primitive | Home | Role |
+|---|---|---|
+| pipeline | `app/pipelines/<name>.py` | Top-level orchestration. Haystack `Pipeline` with `add_component()` + `connect()` edges. No business logic. |
+| component | `app/components/<name>.py` | A unit the pipeline calls. Two flavours: deterministic (e.g. `Applier`) or LLM-backed (wraps an agent). Single `run()` entry, typed I/O, Haystack `@component`. |
+| agent | `app/agents/<name>/` | Exactly one narrow LLM mapping job per agent. Folder contains `agent.py`, `schema.py`, `tuning.py`, `validators.py`, prompt backlink via `app.prompts`. |
+| tool | `app/tools/<name>.py` | Deterministic side-effect-free helper. `@tool`-decorated. Called by pipelines / components — never invoked by the LLM. |
+| inferencing | `app/inferencing/<provider>.py` | Single LLM-call boundary. Owns retry, train-of-thought capture, provider SDK. Anything that imports `Anthropic` belongs here. |
+| prompts | `app/prompts/<name>.py` | One module per prompt; exports a single uppercase `str` constant. Importable as `from app.prompts import AGENT_NAME`. |
+| tuning_params | `app/agents/<name>/tuning.py` + `app/pipelines/tuning.py` | `pydantic-settings` blocks. Per-agent knobs (retries, decision-notes flag, allow-lists, semantic examples). |
+
+**Rules:**
+- One folder per agent. Re-export the class via `__init__.py`.
+- Each agent inherits `Agent` (from `app/agents/_base.py`), declares `validate_input` returning `InputVerdict` and `validate_output` returning `OutputVerdict`. No direct LLM calls outside the agent.
+- Components apply Haystack's `@component` at the class level and declare `@component.output_types(...)` on `run`. They use `Component.__init__(self)` not `super().__init__()` (Haystack `ComponentMeta` conflicts with `ABCMeta`).
+- A new architecture for an existing flow = a new `make_<x>_pipeline()` factory. Don't edit orchestration code; edit/add components.
+
+See ADR-0007.
+
 ## 10. Self-review checklist
 
 Run this against every file before commit. If any box is unchecked and there

@@ -1,9 +1,9 @@
-"""Tests for app/services/llm_provider — $ref inlining + provider behaviour."""
+"""Tests for app/inferencing/anthropic — $ref inlining, schema_to_tool, and key guard."""
 import json
 import pytest
 from unittest.mock import MagicMock
 from pydantic import BaseModel
-from app.services.llm_provider import (
+from app.inferencing.anthropic import (
     AnthropicProvider, MissingAPIKey, schema_to_tool, _inline_refs,
 )
 
@@ -40,7 +40,6 @@ def test_inline_refs_resolves_definitions():
 def test_anthropic_provider_raises_without_key(monkeypatch):
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     monkeypatch.setenv("ANTHROPIC_API_KEY", "")
-    # Also override get_settings cache to ensure clean state.
     from app.config import settings as cfg
     cfg.get_settings.cache_clear()
     with pytest.raises(MissingAPIKey):
@@ -57,7 +56,6 @@ def test_anthropic_provider_complete_with_schema_calls_client():
     fake_resp.content = [fake_block]
     fake_resp.stop_reason = "tool_use"
     fake_client.messages.create.return_value = fake_resp
-
     fake_resp.usage = MagicMock(input_tokens=5, output_tokens=3)
     p = AnthropicProvider(client=fake_client, model="claude-sonnet-4-6")
     parsed, raw_text, tin, tout = p.complete_with_schema(
