@@ -1,5 +1,5 @@
 """End-to-end test: full extract() pipeline with FakeLLM against fixtures."""
-from app.services.extraction import extract
+from app.pipelines.extract import extract
 from tests.fixtures.case import fixture_case
 from tests.fixtures.fake_llm import FakeLLM
 

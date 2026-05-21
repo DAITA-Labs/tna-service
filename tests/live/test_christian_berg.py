@@ -6,7 +6,7 @@ import pytest
 
 @pytest.mark.live
 def test_christian_berg_seven_plis():
-    from app.services.extraction import extract
+    from app.pipelines.extract import extract
     p = Path("dataset/CHRISTIAN BERG- T&A.xlsx")
     if not p.exists():
         pytest.skip("dataset file not present")
