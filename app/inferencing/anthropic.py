@@ -1,6 +1,8 @@
 """Anthropic SDK adapter — implements BaseProvider via tool-use completions."""
 from __future__ import annotations
 
+import json
+
 from anthropic import Anthropic
 from pydantic import BaseModel
 
@@ -139,7 +141,6 @@ class AnthropicProvider(BaseProvider):
 
     def _extract_raw_text(self, raw, tool_name: str) -> str:
         """Return a JSON-serialised string of the tool_use block's input dict."""
-        import json
         for block in raw.content:
             if getattr(block, "type", None) == "tool_use" and block.name == tool_name:
                 return json.dumps(block.input, default=str, sort_keys=True)
