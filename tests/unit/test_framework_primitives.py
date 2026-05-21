@@ -86,3 +86,21 @@ def test_tool_decorator_registers_callable() -> None:
         @tool("framework_test_echo")
         def _dupe(x: int) -> int:
             return x
+
+
+def test_component_base_runs_under_haystack() -> None:
+    """A subclass of `Component` decorated with `@component` runs and produces typed output."""
+    from haystack import component as hs_component
+
+    from app.components._base import Component
+
+    @hs_component
+    class Doubler(Component):
+        """Return x doubled — fixture component."""
+
+        @hs_component.output_types(value=int)
+        def run(self, x: int) -> dict:
+            return {"value": x * 2}
+
+    out = Doubler().run(x=4)
+    assert out == {"value": 8}
