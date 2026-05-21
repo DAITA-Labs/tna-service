@@ -26,11 +26,11 @@ from app.models.artifacts import (
     StageBandSpec,
     RowSpec,
 )
-from app.services.planner.block_segmenter import segment_blocks
-from app.services.planner.kv_anchor_detector import detect_kv_anchors
-from app.services.planner.row_classifier import classify_rows
-from app.services.planner.stage_band_detector import detect_stage_bands
-from app.services.planner.surveyor import survey_sheet
+from app.components.planner.block_segmenter import segment_blocks
+from app.components.planner.kv_anchor_detector import detect_kv_anchors
+from app.components.planner.row_classifier import classify_rows
+from app.components.planner.stage_band_detector import detect_stage_bands
+from app.components.planner.surveyor import survey_sheet
 
 log = get_logger(__name__)
 

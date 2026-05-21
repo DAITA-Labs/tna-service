@@ -2,7 +2,7 @@
 import openpyxl
 from app.enums.pli_mode import PliMode
 from app.models.artifacts import HeaderLabel, SheetPlan, StageBandSpec, StageColumn
-from app.services.planner.plan import _collect_header_labels
+from app.components.planner.plan import _collect_header_labels
 
 
 def _ws_with_header(tmp_path):
@@ -61,7 +61,7 @@ def test_collects_from_row_below_when_title_row_dominates(tmp_path) -> None:
     from app.enums.pli_mode import PliMode
     from app.enums.row_role import RowRole
     from app.models.artifacts import RowSpec, SheetPlan
-    from app.services.planner.plan import (
+    from app.components.planner.plan import (
         _apply_extra_header_row,
         _collect_header_labels,
         _detect_title_row_extra_header,

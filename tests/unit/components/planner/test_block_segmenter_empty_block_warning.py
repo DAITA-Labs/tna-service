@@ -3,7 +3,7 @@ import logging
 import structlog
 from app.enums.row_role import RowRole
 from app.models.artifacts import RowSpec
-from app.services.planner.block_segmenter import segment_blocks
+from app.components.planner.block_segmenter import segment_blocks
 
 
 def test_empty_block_emits_log_event(caplog) -> None:
@@ -27,8 +27,8 @@ def test_empty_block_emits_log_event(caplog) -> None:
     )
     # Force re-import of the module to get a fresh logger with new config
     import importlib
-    import app.services.planner.block_segmenter
-    importlib.reload(app.services.planner.block_segmenter)
+    import app.components.planner.block_segmenter
+    importlib.reload(app.components.planner.block_segmenter)
 
     blocks = segment_blocks(rows=rows, kv_anchors=[], blank_run_gaps=[], stage_bands=[])
     assert len(blocks) == 2

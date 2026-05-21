@@ -1,8 +1,8 @@
 from datetime import datetime
 from openpyxl import Workbook
 from app.repositories.workbook_repo import register_workbook, clear_cache
-from app.services.planner.surveyor import survey_sheet
-from app.services.planner.stage_band_detector import detect_stage_bands
+from app.components.planner.surveyor import survey_sheet
+from app.components.planner.stage_band_detector import detect_stage_bands
 
 
 def _ctx(tmp_path, cells):

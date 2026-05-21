@@ -1,7 +1,7 @@
 from openpyxl import Workbook
 from app.repositories.workbook_repo import register_workbook, clear_cache
-from app.services.planner.surveyor import survey_sheet
-from app.services.planner.kv_anchor_detector import detect_kv_anchors
+from app.components.planner.surveyor import survey_sheet
+from app.components.planner.kv_anchor_detector import detect_kv_anchors
 
 
 def _ctx(tmp_path, cells):

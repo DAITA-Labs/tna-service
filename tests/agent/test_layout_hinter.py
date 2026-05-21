@@ -1,6 +1,6 @@
 """Agent test: LayoutHinter under canned response."""
 from app.components.layout_hinter import LayoutHinter
-from app.services.planner.surveyor import survey_sheet
+from app.components.planner.surveyor import survey_sheet
 import app.tools.survey  # noqa: F401 — register tools
 import app.tools.bulk_read  # noqa: F401 — register tools
 from tests.fixtures.case import fixture_case

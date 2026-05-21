@@ -2,8 +2,8 @@
 from openpyxl import Workbook
 from app.repositories.workbook_repo import register_workbook, clear_cache
 from app.models.extraction import PLI, ExtractionResult
-from app.services.validation.source_cell_verifier import SourceCellVerifier
-from app.services.validation.header_match_verifier import HeaderMatchVerifier
+from app.components.validators.source_cell_verifier import SourceCellVerifier
+from app.components.validators.header_match_verifier import HeaderMatchVerifier
 
 
 def test_source_cell_verifier_passes_when_values_match(tmp_path):

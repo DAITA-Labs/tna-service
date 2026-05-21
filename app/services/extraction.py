@@ -52,15 +52,15 @@ from app.services.applier.apply_plan import apply_plan
 from app.core.log_capture import log_artifact
 from app.core.tracing import get_tracer
 from app.services.llm_provider import AnthropicProvider
-from app.services.planner.plan import SheetRowPlanner
-from app.services.planner.surveyor import survey_sheet
+from app.components.planner.plan import SheetRowPlanner
+from app.components.planner.surveyor import survey_sheet
 from app.services.reconciler import reconcile
-from app.services.validation.coverage_verifier import CoverageVerifier
-from app.services.validation.field_dropout_verifier import FieldDropoutVerifier
-from app.services.validation.header_match_verifier import HeaderMatchVerifier
-from app.services.validation.plan_invariants import validate_invariants
-from app.services.validation.plan_statistics import validate_statistics
-from app.services.validation.source_cell_verifier import SourceCellVerifier
+from app.components.validators.coverage_verifier import CoverageVerifier
+from app.components.validators.field_dropout_verifier import FieldDropoutVerifier
+from app.components.validators.header_match_verifier import HeaderMatchVerifier
+from app.components.validators.plan_invariants import validate_invariants
+from app.components.validators.plan_statistics import validate_statistics
+from app.components.validators.source_cell_verifier import SourceCellVerifier
 
 log = get_logger(__name__)
 

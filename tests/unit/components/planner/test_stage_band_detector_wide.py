@@ -3,7 +3,7 @@ from datetime import date
 
 from app.models.artifacts import SheetSignals
 from app.repositories.workbook_repo import register_workbook
-from app.services.planner.stage_band_detector import detect_stage_bands
+from app.components.planner.stage_band_detector import detect_stage_bands
 
 
 def _signals(max_row: int, max_col: int) -> SheetSignals:

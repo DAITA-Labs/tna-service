@@ -2,7 +2,7 @@ from app.models.artifacts import SheetPlan, RowSpec, PliBlock, KVAnchor, StageBa
 from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
 from app.enums.stage_scope import StageScope
-from app.services.validation.plan_invariants import validate_invariants
+from app.components.validators.plan_invariants import validate_invariants
 
 
 def _plan(rows=None, **kw):

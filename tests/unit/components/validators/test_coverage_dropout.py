@@ -1,8 +1,8 @@
 """Tests for coverage_verifier + field_dropout_verifier."""
 from app.models.extraction import PLI, ExtractionResult
 from app.models.artifacts import PLIBoundaries
-from app.services.validation.coverage_verifier import CoverageVerifier
-from app.services.validation.field_dropout_verifier import FieldDropoutVerifier
+from app.components.validators.coverage_verifier import CoverageVerifier
+from app.components.validators.field_dropout_verifier import FieldDropoutVerifier
 
 
 def test_coverage_warns_when_extracted_lt_80pct():

@@ -1,6 +1,6 @@
 from openpyxl import Workbook
 from app.repositories.workbook_repo import register_workbook, clear_cache
-from app.services.planner.surveyor import survey_sheet
+from app.components.planner.surveyor import survey_sheet
 
 
 def test_survey_basic_grid(tmp_path):
