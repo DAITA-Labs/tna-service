@@ -47,3 +47,15 @@ def test_anthropic_provider_satisfies_protocol() -> None:
     fake = _Fake()
     assert hasattr(fake, "model")
     assert isinstance(fake, Provider)
+
+
+def test_pipeline_tuning_loads_defaults() -> None:
+    """`PipelineTuning()` instantiates with documented defaults."""
+    from app.pipelines.tuning import PipelineTuning, Tuning
+
+    pt = PipelineTuning()
+    assert pt.extract_confidence_gate == 0.85
+    assert pt.coverage_floor == 0.80
+    assert pt.dropout_floor == 0.50
+    # subclass relationship lets agent tuning classes inherit later
+    assert issubclass(PipelineTuning, Tuning)
