@@ -2,15 +2,11 @@
 from __future__ import annotations
 
 import hashlib
-from typing import Literal, Protocol
+from typing import Literal
+
+from opentelemetry.trace import Span
 
 InputKind = Literal["system_prompt", "user_built"]
-
-
-class _SpanLike(Protocol):
-    """Minimal span surface used by capture helpers."""
-
-    def add_event(self, name: str, attributes: dict) -> None: ...
 
 
 def hash_text(s: str) -> str:
@@ -19,7 +15,7 @@ def hash_text(s: str) -> str:
 
 
 def record_input_event(
-    span: _SpanLike, *, kind: InputKind, text: str,
+    span: Span, *, kind: InputKind, text: str,
     tools_used: list[str] | None = None,
 ) -> None:
     """Record an input.<kind> span event with sha256 + length (+ tools_used)."""
@@ -30,7 +26,7 @@ def record_input_event(
 
 
 def record_request_event(
-    span: _SpanLike, *, model: str, max_tokens: int,
+    span: Span, *, model: str, max_tokens: int,
     temperature: float, attempt: int = 1,
 ) -> None:
     """Record an llm.request_sent event immediately before the provider call."""
@@ -41,7 +37,7 @@ def record_request_event(
 
 
 def record_response_event(
-    span: _SpanLike, *, raw: str, tokens_out: int,
+    span: Span, *, raw: str, tokens_out: int,
     duration_ms: float, attempt: int = 1,
 ) -> None:
     """Record an llm.response_received event with timing + token count + sha256."""
@@ -54,7 +50,7 @@ def record_response_event(
 
 
 def record_validate_event(
-    span: _SpanLike, *, ok: bool, error: str | None,
+    span: Span, *, ok: bool, error: str | None,
 ) -> None:
     """Record an llm.schema_validate event with ok flag and optional error string."""
     attrs: dict = {"ok": ok}
@@ -63,13 +59,13 @@ def record_validate_event(
     span.add_event("llm.schema_validate", attrs)
 
 
-def record_output_event(span: _SpanLike, *, schema_name: str) -> None:
+def record_output_event(span: Span, *, schema_name: str) -> None:
     """Record an output.parsed_ok event tagged with the output schema name."""
     span.add_event("output.parsed_ok", {"schema": schema_name})
 
 
 def record_retry_event(
-    span: _SpanLike, *, attempt: int, reason: str,
+    span: Span, *, attempt: int, reason: str,
 ) -> None:
     """Record an agent.retry event when a retry is about to happen."""
     span.add_event("agent.retry", {"attempt": attempt, "reason": reason})
