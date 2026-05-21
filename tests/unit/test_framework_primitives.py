@@ -111,6 +111,64 @@ def test_component_base_runs_under_haystack() -> None:
     assert out == {"value": 8}
 
 
+def test_component_run_unoverridden_raises() -> None:
+    """Calling `run` directly on the base raises NotImplementedError."""
+    import pytest
+
+    from app.components._base import Component
+
+    class _NoRun(Component):
+        pass
+
+    with pytest.raises(NotImplementedError, match="must override run"):
+        _NoRun().run(x=1)
+
+
+def test_component_lifecycle_hooks_default_to_safe_noops() -> None:
+    """before_run / after_run are no-ops; on_error logs and does not raise."""
+    from haystack import component as hs_component
+
+    from app.components._base import Component
+
+    @hs_component
+    class _Probe(Component):
+        """Fixture exposing the lifecycle slots so we can poke them."""
+
+        @hs_component.output_types(value=int)
+        def run(self, x: int) -> dict:
+            return {"value": x}
+
+    probe = _Probe()
+    # all three default hooks are callable and return None
+    assert probe.before_run({"x": 1}) is None
+    assert probe.after_run({"value": 1}) is None
+    assert probe.on_error(RuntimeError("boom"), {"x": 1}) is None
+
+
+def test_component_on_error_is_overridable() -> None:
+    """Subclasses can override on_error to record the exception for inspection."""
+    from haystack import component as hs_component
+
+    from app.components._base import Component
+
+    captured: list[tuple[str, str, list[str]]] = []
+
+    @hs_component
+    class _Recorder(Component):
+        """Fixture that captures on_error invocations into a list."""
+
+        @hs_component.output_types(value=int)
+        def run(self, x: int) -> dict:
+            return {"value": x}
+
+        def on_error(self, exc: Exception, inputs: dict) -> None:
+            captured.append((type(exc).__name__, str(exc), sorted(inputs.keys())))
+
+    rec = _Recorder()
+    rec.on_error(ValueError("nope"), {"x": 5})
+    assert captured == [("ValueError", "nope", ["x"])]
+
+
 def test_agent_base_runs_and_lifecycle_hooks_are_noops() -> None:
     """`Agent` is generic, calls the provider, and the default hooks return without error."""
     from typing import Generic, get_type_hints
