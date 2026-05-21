@@ -181,3 +181,13 @@ def test_make_pipeline_returns_haystack_pipeline_with_components() -> None:
     pipe = make_pipeline(("incrementer", Inc()))
     assert isinstance(pipe, Pipeline)
     assert "incrementer" in pipe.graph.nodes
+
+
+def test_shared_prompt_is_importable_string() -> None:
+    """`SHARED` exposes the shared prompt header as a non-empty string."""
+    from app.prompts._shared import SHARED
+
+    assert isinstance(SHARED, str)
+    assert "Glossary" in SHARED
+    assert "TNA" in SHARED
+    assert "PLI" in SHARED
