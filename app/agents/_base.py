@@ -188,6 +188,64 @@ class Agent:
         self.after_run(result, attempts)
         return result
 
+    def _handle_schema_failure(
+        self, span: object, exc: ValidationError, attempt: int, retries: int, user: str
+    ) -> tuple[int, str]:
+        """Handle a ValidationError from _invoke_provider; return updated (retries, user)."""
+        reason = str(exc)
+        record_validate_event(span, ok=False, error=reason[:200])
+        agent_retry_count.add(1, {"agent": self.name, "reason": "schema_validation"})
+        log.warning("agent_run_schema_validation_failed", agent=self.name, attempt=attempt, error=reason)
+        if attempt > self.retry.max_retries:
+            return retries, user
+        retries += 1
+        record_retry_event(span, attempt=attempt + 1, reason="schema_validation")
+        user = _build_retry_prompt(user, reason)
+        self.on_retry("schema_validation", attempt)
+        return retries, user
+
+    def _handle_post_parse(
+        self,
+        span: object,
+        parsed: BaseModel,
+        raw: str,
+        tin: int,
+        tout: int,
+        retries: int,
+        ctx: object,
+        user: str,
+        attempt: int,
+        run_t0: float,
+    ) -> tuple[BaseModel | AgentRunFailure | None, int, str, bool]:
+        """Evaluate validate_output verdict; return (result, retries, user, should_continue)."""
+        out_verdict = self.validate_output(parsed, ctx)
+        if out_verdict.is_ok:
+            record_validate_event(span, ok=True, error=None)
+            self._emit_success_capture(span, parsed, raw, tin, tout, retries)
+            self._record_success(attempt, span)
+            notes = getattr(parsed, "decision_notes", None)
+            if notes:
+                log_agent_io(self.name, kind="decision_notes", payload=notes)
+            return parsed, retries, user, False
+        if out_verdict.is_fail:
+            reason = out_verdict.reason or "output_failed"
+            record_validate_event(span, ok=False, error=reason[:200])
+            log.warning("agent_run_output_failed", agent=self.name, attempt=attempt, reason=reason)
+            span.set_attribute("retries", retries)
+            return self._record_failure(run_t0, attempt, reason, span), retries, user, False
+        # is_retry
+        reason = out_verdict.reason or "semantic_retry"
+        record_validate_event(span, ok=False, error=reason[:200])
+        agent_retry_count.add(1, {"agent": self.name, "reason": "semantic_validation"})
+        log.warning("agent_run_semantic_retry", agent=self.name, attempt=attempt, reason=reason)
+        if attempt > self.retry.max_retries:
+            return AgentRunFailure(agent_name=self.name, attempts=attempt, reason=reason), retries, user, False
+        retries += 1
+        record_retry_event(span, attempt=attempt + 1, reason="semantic_validation")
+        user = _build_retry_prompt(user, reason)
+        self.on_retry(reason, attempt)
+        return None, retries, user, True
+
     def _run_with_retries(self, user: str, ctx: object) -> tuple[BaseModel | AgentRunFailure, int]:
         """Drive the retry loop and return `(result, attempts)`."""
         tool_name = self.tool_name or f"emit_{self.name}"
@@ -209,16 +267,9 @@ class Agent:
                     parsed, raw, tin, tout = self._invoke_provider(tool_name, user, effective_system)
                 except ValidationError as exc:
                     last_reason = str(exc)
-                    record_validate_event(span, ok=False, error=last_reason[:200])
-                    agent_retry_count.add(1, {"agent": self.name, "reason": "schema_validation"})
-                    log.warning("agent_run_schema_validation_failed",
-                                agent=self.name, attempt=attempt, error=last_reason)
+                    retries, user = self._handle_schema_failure(span, exc, attempt, retries, user)
                     if attempt > self.retry.max_retries:
                         break
-                    retries += 1
-                    record_retry_event(span, attempt=attempt + 1, reason="schema_validation")
-                    user = _build_retry_prompt(user, last_reason)
-                    self.on_retry("schema_validation", attempt)
                     continue
                 except Exception as exc:
                     last_reason = f"{type(exc).__name__}: {exc}"
@@ -227,38 +278,15 @@ class Agent:
                         break
                     continue
 
-                out_verdict = self.validate_output(parsed, ctx)
-                if out_verdict.is_ok:
-                    record_validate_event(span, ok=True, error=None)
-                    self._emit_success_capture(span, parsed, raw, tin, tout, retries)
-                    self._record_success(attempt, span)
-                    notes = getattr(parsed, "decision_notes", None)
-                    if notes:
-                        log_agent_io(self.name, kind="decision_notes", payload=notes)
-                    return parsed, attempt
-                elif out_verdict.is_fail:
-                    last_reason = out_verdict.reason or "output_failed"
-                    record_validate_event(span, ok=False, error=last_reason[:200])
-                    log.warning("agent_run_output_failed",
-                                agent=self.name, attempt=attempt, reason=last_reason)
-                    span.set_attribute("retries", retries)
-                    failure = self._record_failure(run_t0, attempt, last_reason, span)
-                    return failure, attempt
-                else:  # is_retry
-                    last_reason = out_verdict.reason or "semantic_retry"
-                    record_validate_event(span, ok=False, error=last_reason[:200])
-                    agent_retry_count.add(1, {"agent": self.name, "reason": "semantic_validation"})
-                    log.warning("agent_run_semantic_retry",
-                                agent=self.name, attempt=attempt, reason=last_reason)
-                    if attempt > self.retry.max_retries:
-                        break
-                    retries += 1
-                    record_retry_event(span, attempt=attempt + 1, reason="semantic_validation")
-                    user = _build_retry_prompt(user, last_reason)
-                    self.on_retry(last_reason, attempt)
+                result, retries, user, should_continue = self._handle_post_parse(
+                    span, parsed, raw, tin, tout, retries, ctx, user, attempt, run_t0,
+                )
+                if not should_continue:
+                    return result, attempt
+                last_reason = result.reason if isinstance(result, AgentRunFailure) else ""
 
             span.set_attribute("retries", retries)
-            failure = self._record_failure(run_t0, attempt, last_reason, span)
+            failure = self._record_failure(run_t0, attempt, last_reason or "exhausted", span)
             return failure, attempt
 
     def _invoke_provider(self, tool_name: str, user: str, system: str | None = None) -> tuple[BaseModel, str, int, int]:
