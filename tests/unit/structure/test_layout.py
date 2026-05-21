@@ -10,12 +10,12 @@ ROOT = Path(__file__).resolve().parents[3]
 
 
 def test_workflow_agents_each_in_own_module():
-    """One file per workflow agent in services/agents/."""
+    """One file per workflow agent in services/agents/ (migrated agents move to app/agents/)."""
     agents_dir = ROOT / "app" / "services" / "agents"
     agents = {p.stem for p in agents_dir.glob("*.py")
               if p.name not in ("__init__.py", "_base.py")}
     assert agents == {
-        "sheet_classifier", "layout_hinter", "plan_reviewer", "field_namer",
+        "layout_hinter", "plan_reviewer", "field_namer",
     }
 
 
