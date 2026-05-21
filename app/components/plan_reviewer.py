@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from haystack import component as hs_component
+from haystack import component
 
 from app.agents._base import AgentRunFailure
 from app.agents.plan_reviewer import PlanReviewerAgent
@@ -20,7 +20,7 @@ from app.inferencing._base import BaseProvider
 from app.models.artifacts import SheetPlan, ValidationFinding
 
 
-@hs_component
+@component
 class PlanReviewer(Component):
     """Pipeline component that reviews a SheetPlan for correctness."""
 
@@ -30,7 +30,7 @@ class PlanReviewer(Component):
         self._agent = PlanReviewerAgent()
         self._llm = llm
 
-    @hs_component.output_types(verdict=PlanVerdict)
+    @component.output_types(verdict=PlanVerdict)
     def run(
         self, workbook_ctx: Any, plan: SheetPlan,
         findings: list[ValidationFinding] | None = None,
