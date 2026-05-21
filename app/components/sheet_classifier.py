@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import types
 
-from haystack import component as hs_component
+from haystack import component
 
 from app.agents._base import AgentRunFailure
 from app.agents.sheet_classifier import SheetClassifierAgent, SheetClassifierInputs
@@ -27,7 +27,7 @@ def _ensure_sheet_names_on_ctx(workbook_ctx: object, workbook_summary: object) -
     return proxy
 
 
-@hs_component
+@component
 class SheetClassifier(Component):
     """Haystack component that filters a workbook down to TNA-relevant sheet names.
 
@@ -42,7 +42,7 @@ class SheetClassifier(Component):
         self._agent = SheetClassifierAgent()
         self._llm = llm
 
-    @hs_component.output_types(relevant_sheets=list)
+    @component.output_types(relevant_sheets=list)
     def run(self, workbook_ctx: object, workbook_summary: object) -> dict:
         """Run the sheet-classifier agent and return the relevant sheet names."""
         ctx_with_names = _ensure_sheet_names_on_ctx(workbook_ctx, workbook_summary)

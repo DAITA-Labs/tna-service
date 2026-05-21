@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from haystack import component as hs_component
+from haystack import component
 
 from app.agents._base import AgentRunFailure
 from app.agents.layout_hinter import LayoutHinterAgent
@@ -12,7 +12,7 @@ from app.components._base import Component
 from app.inferencing._base import BaseProvider
 
 
-@hs_component
+@component
 class LayoutHinter(Component):
     """Pipeline component that produces LayoutHints from sheet signals."""
 
@@ -22,7 +22,7 @@ class LayoutHinter(Component):
         self._agent = LayoutHinterAgent()
         self._llm = llm
 
-    @hs_component.output_types(hints=LayoutHints)
+    @component.output_types(hints=LayoutHints)
     def run(self, workbook_ctx: Any, sheet: str, signals: Any) -> dict:
         """Run the agent and fall back to empty LayoutHints() on failure."""
         result = self._agent.run(
