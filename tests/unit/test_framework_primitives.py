@@ -216,3 +216,59 @@ def test_artifacts_package_reexports_models() -> None:
     for cls_name in expected:
         assert hasattr(artifacts, cls_name), f"app.artifacts missing {cls_name!r}"
         assert getattr(artifacts, cls_name) is getattr(legacy, cls_name)
+
+
+def test_end_to_end_composition_smoke() -> None:
+    """Agent + Component + Pipeline + @tool compose without runtime errors."""
+    from haystack import component as hs_component
+    from pydantic import BaseModel
+
+    from app.agents._base import Agent
+    from app.components._base import Component
+    from app.pipelines._base import make_pipeline
+    from app.pipelines.tuning import Tuning
+    from app.tools._decorator import tool
+    from app.tools._registry import TOOL_REGISTRY
+
+    @tool("framework_smoke_double")
+    def _double(x: int) -> int:
+        """Return 2*x — used by the composition smoke agent."""
+        return x * 2
+
+    class _Inputs(BaseModel):
+        x: int
+
+    class _Out(BaseModel):
+        v: int
+
+    class _T(Tuning):
+        pass
+
+    class _FakeProvider:
+        model = "fake"
+
+        def complete_with_schema(self, *, system, user, output_schema, tool_name, agent_name):
+            return output_schema(v=int(user.strip()))
+
+    class _SmokeAgent(Agent[_Inputs, _Out]):
+        name = "smoke_agent"
+        prompt = "Emit the value."
+        output_schema = _Out
+        tuning = _T()
+
+        def build_input(self, ctx, inputs):
+            return str(TOOL_REGISTRY.get("framework_smoke_double")(inputs.x))
+
+    @hs_component
+    class _SmokeComponent(Component):
+        """Run the smoke agent and surface the parsed `_Out`."""
+
+        @hs_component.output_types(out=_Out)
+        def run(self, x: int, provider: object = None) -> dict:
+            agent = _SmokeAgent()
+            return {"out": agent.run(ctx=None, inputs=_Inputs(x=x), provider=provider or _FakeProvider())}
+
+    pipeline = make_pipeline(("smoke", _SmokeComponent()))
+    assert "smoke" in pipeline.graph.nodes
+    result = pipeline.run({"smoke": {"x": 7, "provider": _FakeProvider()}})
+    assert result["smoke"]["out"].v == 14
