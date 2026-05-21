@@ -536,6 +536,10 @@ The matrix prints numbers only (no diff column) by design — diffs are computed
 
 ---
 
+## Observability
+
+For the train-of-thought capture surface — spans, events, structured logs, SigNoz queries, and how to read a trace — see [`docs/observability.md`](./docs/observability.md).
+
 ## Telemetry
 
 All observability flows over a single OTLP gRPC connection (`OTEL_EXPORTER_OTLP_ENDPOINT=http://signoz-otel-collector:4317`) into the vendored SigNoz stack under `deploy/`. The service name is `tna-service` (`OTEL_SERVICE_NAME=tna-service`).
