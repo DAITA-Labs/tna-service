@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pytest
 
-from app.pipelines.extract import extract
+from app.services.extract_service import extract
 
 
 _CANONICAL_FIELDS = (

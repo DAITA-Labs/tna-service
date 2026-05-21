@@ -3,7 +3,7 @@ import ast
 from pathlib import Path
 
 
-_BANNED = ("app.services.agents", "app.services.llm_provider", "anthropic", "openai")
+_BANNED = ("app.services.agents", "app.services.llm_provider", "app.inferencing", "anthropic", "openai")
 
 
 def test_apply_plan_no_llm_imports():
