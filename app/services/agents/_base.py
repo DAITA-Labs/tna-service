@@ -15,9 +15,16 @@ from typing import Any
 
 from pydantic import BaseModel, ValidationError
 
+from app.core.log_capture import log_agent_io
 from app.core.logs import get_logger
 from app.core.telemetry import agent_calls_total, agent_duration_seconds, agent_retry_count
 from app.core.tracing import get_tracer
+from app.inferencing.capture import (
+    record_input_event,
+    record_output_event,
+    record_retry_event,
+    record_validate_event,
+)
 from app.services.llm_provider import LLMProvider
 
 log = get_logger(__name__)
@@ -63,6 +70,7 @@ class AgentRunner:
         """Execute the agent with retry-on-schema-validation-failure, returning a parsed model or failure report."""
         tool_name = self.spec.tool_name or f"emit_{self.spec.name}"
         user = self.spec.build_user_input(ctx, inputs)
+        retries = 0
         attempt = 0
         last_error = ""
         run_t0 = time.monotonic()
@@ -70,20 +78,27 @@ class AgentRunner:
 
         with get_tracer(__name__).start_as_current_span(f"agent.{self.spec.name}") as span:
             span.set_attribute("agent.name", self.spec.name)
+            self._emit_input_capture(span, user)
+            log_agent_io(self.spec.name, kind="input", payload=user)
 
             while attempt <= self.spec.retry.max_retries:
                 attempt += 1
                 try:
-                    result = self._invoke_llm(tool_name, user)
+                    result, raw, tin, tout = self._invoke_llm(tool_name, user)
+                    record_validate_event(span, ok=True, error=None)
+                    self._emit_success_capture(span, result, raw, tin, tout, retries)
                     self._record_attempt_success(run_t0, attempt, span)
                     return result
                 except ValidationError as e:
                     last_error = str(e)
+                    record_validate_event(span, ok=False, error=last_error[:200])
                     agent_retry_count.add(1, {"agent": self.spec.name, "reason": "schema_validation"})
                     log.warning("agent_run_schema_validation_failed",
                                 agent=self.spec.name, attempt=attempt, error=last_error)
                     if attempt > self.spec.retry.max_retries:
                         break
+                    retries += 1
+                    record_retry_event(span, attempt=attempt + 1, reason="schema_validation")
                     user = _build_retry_prompt(user, last_error)
                 except Exception as e:
                     last_error = f"{type(e).__name__}: {e}"
@@ -91,16 +106,17 @@ class AgentRunner:
                     if attempt > self.spec.retry.max_retries:
                         break
 
+            span.set_attribute("retries", retries)
             return self._record_run_failure(run_t0, attempt, last_error, span)
 
-    def _invoke_llm(self, tool_name: str, user: str) -> BaseModel:
-        """Call the LLM provider and return a validated Pydantic model.
+    def _invoke_llm(self, tool_name: str, user: str) -> tuple[BaseModel, str, int, int]:
+        """Call the LLM provider and return (parsed, raw_text, tokens_in, tokens_out).
 
         Records per-attempt duration telemetry on success. Raises ValidationError
         or any provider exception on failure — callers handle retry logic.
         """
         t0 = time.monotonic()
-        result, _raw, _tin, _tout = self.llm.complete_with_schema(
+        result, raw, tin, tout = self.llm.complete_with_schema(
             system=self.spec.system_prompt,
             user=user,
             output_schema=self.spec.output_schema,
@@ -112,7 +128,25 @@ class AgentRunner:
             {"agent": self.spec.name, "status": "success"},
         )
         agent_calls_total.add(1, {"agent": self.spec.name, "status": "success"})
-        return result
+        return result, raw, tin, tout
+
+    def _emit_input_capture(self, span: object, user: str) -> None:
+        """Emit input span events for system_prompt and user_built."""
+        record_input_event(span, kind="system_prompt", text=self.spec.system_prompt)
+        record_input_event(span, kind="user_built", text=user, tools_used=None)
+
+    def _emit_success_capture(
+        self, span: object, result: BaseModel, raw: str,
+        tin: int, tout: int, retries: int,
+    ) -> None:
+        """Emit success span attrs + structured logs."""
+        record_output_event(span, schema_name=type(result).__name__)
+        span.set_attribute("model", getattr(self.llm, "model", "unknown"))
+        span.set_attribute("tokens.in", tin)
+        span.set_attribute("tokens.out", tout)
+        span.set_attribute("retries", retries)
+        log_agent_io(self.spec.name, kind="response", payload=raw)
+        log_agent_io(self.spec.name, kind="output", payload=result.model_dump())
 
     def _record_attempt_success(self, run_t0: float, attempt: int, span: object) -> None:
         """Log success and set span attributes after a successful attempt."""

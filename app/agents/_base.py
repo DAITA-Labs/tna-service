@@ -14,10 +14,17 @@ from typing import Generic, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
+from app.core.log_capture import log_agent_io
 from app.core.logs import get_logger
 from app.core.telemetry import agent_calls_total, agent_duration_seconds, agent_retry_count
 from app.core.tracing import get_tracer
 from app.inferencing._base import BaseProvider
+from app.inferencing.capture import (
+    record_input_event,
+    record_output_event,
+    record_retry_event,
+    record_validate_event,
+)
 from app.pipelines.tuning import Tuning
 
 
@@ -104,25 +111,34 @@ class Agent(Generic[InputsT, OutputT]):
         """Drive the retry loop and return `(result, attempts)`."""
         tool_name = self.tool_name or f"emit_{self.name}"
         attempt = 0
+        retries = 0
         last_error = ""
         run_t0 = time.monotonic()
         log.info("agent_run_start", agent=self.name)
 
         with get_tracer(__name__).start_as_current_span(f"agent.{self.name}") as span:
             span.set_attribute("agent.name", self.name)
+            self._emit_input_capture(span, user)
+            log_agent_io(self.name, kind="input", payload=user)
+
             while attempt <= self.retry.max_retries:
                 attempt += 1
                 try:
-                    parsed = self._invoke_provider(tool_name, user)
+                    parsed, raw, tin, tout = self._invoke_provider(tool_name, user)
+                    record_validate_event(span, ok=True, error=None)
+                    self._emit_success_capture(span, parsed, raw, tin, tout, retries)
                     self._record_success(attempt, span)
                     return parsed, attempt
                 except ValidationError as exc:
                     last_error = str(exc)
+                    record_validate_event(span, ok=False, error=last_error[:200])
                     agent_retry_count.add(1, {"agent": self.name, "reason": "schema_validation"})
                     log.warning("agent_run_schema_validation_failed",
                                 agent=self.name, attempt=attempt, error=last_error)
                     if attempt > self.retry.max_retries:
                         break
+                    retries += 1
+                    record_retry_event(span, attempt=attempt + 1, reason="schema_validation")
                     user = _build_retry_prompt(user, last_error)
                     self.on_retry("schema_validation", attempt)
                 except Exception as exc:
@@ -131,13 +147,14 @@ class Agent(Generic[InputsT, OutputT]):
                     if attempt > self.retry.max_retries:
                         break
 
+            span.set_attribute("retries", retries)
             failure = self._record_failure(run_t0, attempt, last_error, span)
             return failure, attempt
 
-    def _invoke_provider(self, tool_name: str, user: str) -> OutputT:
-        """Call the LLM provider and return a parsed model. Raises on schema or SDK errors."""
+    def _invoke_provider(self, tool_name: str, user: str) -> tuple[OutputT, str, int, int]:
+        """Call the LLM provider and return (parsed, raw_text, tokens_in, tokens_out)."""
         t0 = time.monotonic()
-        result, _raw, _tin, _tout = self._provider.complete_with_schema(
+        result, raw, tin, tout = self._provider.complete_with_schema(
             system=self.prompt,
             user=user,
             output_schema=self.output_schema,
@@ -148,7 +165,25 @@ class Agent(Generic[InputsT, OutputT]):
             time.monotonic() - t0, {"agent": self.name, "status": "success"},
         )
         agent_calls_total.add(1, {"agent": self.name, "status": "success"})
-        return result  # type: ignore[return-value]
+        return result, raw, tin, tout  # type: ignore[return-value]
+
+    def _emit_input_capture(self, span: object, user: str) -> None:
+        """Emit input span events for system_prompt and user_built."""
+        record_input_event(span, kind="system_prompt", text=self.prompt)
+        record_input_event(span, kind="user_built", text=user, tools_used=None)
+
+    def _emit_success_capture(
+        self, span: object, result: OutputT, raw: str,
+        tin: int, tout: int, retries: int,
+    ) -> None:
+        """Emit success span attrs + structured logs."""
+        record_output_event(span, schema_name=type(result).__name__)
+        span.set_attribute("model", self._provider.model)
+        span.set_attribute("tokens.in", tin)
+        span.set_attribute("tokens.out", tout)
+        span.set_attribute("retries", retries)
+        log_agent_io(self.name, kind="response", payload=raw)
+        log_agent_io(self.name, kind="output", payload=result.model_dump())
 
     def _record_success(self, attempt: int, span: object) -> None:
         """Log + tag span on success."""

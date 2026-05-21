@@ -8,13 +8,17 @@ from typing import Any
 
 
 class FakeLLM:
+    model: str = "fake"
+
     def __init__(self, canned: dict[str, dict],
                  raw_text: str = "{}",
-                 tokens_in: int = 0, tokens_out: int = 0) -> None:
+                 tokens_in: int = 0, tokens_out: int = 0,
+                 model: str = "fake") -> None:
         self._canned = canned
         self._raw = raw_text
         self._tokens_in = tokens_in
         self._tokens_out = tokens_out
+        self.model = model
 
     def complete_with_schema(self, *, system: str, user: str,
                               output_schema: type, tool_name: str | None = None,
