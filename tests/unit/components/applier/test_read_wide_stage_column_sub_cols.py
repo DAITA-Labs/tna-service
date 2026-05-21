@@ -7,7 +7,7 @@ from app.models.artifacts import (
     CanonicalNameMap, HeaderLabel, RowSpec, SheetPlan, StageBandSpec, StageColumn,
 )
 from app.repositories.workbook_repo import register_workbook
-from app.services.applier.apply_plan import apply_plan
+from app.components.applier import apply_plan
 
 
 def test_sub_column_routes_to_stage_metadata(tmp_path) -> None:

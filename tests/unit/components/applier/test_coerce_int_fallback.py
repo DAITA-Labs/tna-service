@@ -8,7 +8,7 @@ import openpyxl
 from app.enums.pli_mode import PliMode
 from app.models.artifacts import CanonicalNameMap, KVAnchor, SheetPlan
 from app.repositories.workbook_repo import register_workbook
-from app.services.applier.apply_plan import _coerce, apply_plan
+from app.components.applier import _coerce, apply_plan
 
 
 def test_coerce_int_field_with_int_input() -> None:
