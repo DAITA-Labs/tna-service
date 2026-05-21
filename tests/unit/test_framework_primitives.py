@@ -161,3 +161,23 @@ def test_agent_base_runs_and_lifecycle_hooks_are_noops() -> None:
     assert isinstance(failure, AgentRunFailure)
     assert failure.agent_name == "echo_agent"
     assert failure.attempt_count >= 2  # initial + one retry per default policy
+
+
+def test_make_pipeline_returns_haystack_pipeline_with_components() -> None:
+    """`make_pipeline` returns a Haystack Pipeline with the named components added."""
+    from haystack import Pipeline, component as hs_component
+
+    from app.components._base import Component
+    from app.pipelines._base import make_pipeline
+
+    @hs_component
+    class Inc(Component):
+        """Add 1 — fixture component."""
+
+        @hs_component.output_types(value=int)
+        def run(self, x: int) -> dict:
+            return {"value": x + 1}
+
+    pipe = make_pipeline(("incrementer", Inc()))
+    assert isinstance(pipe, Pipeline)
+    assert "incrementer" in pipe.graph.nodes
