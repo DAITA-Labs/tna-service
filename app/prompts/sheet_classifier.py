@@ -1,5 +1,9 @@
-{{SHARED}}
+"""SheetClassifier prompt — exported as a Python constant."""
+from __future__ import annotations
 
+from app.prompts._shared import SHARED
+
+SHEET_CLASSIFIER: str = SHARED + """
 # SheetClassifier — role
 
 Given a workbook summary (sheet names, dimensions, file size), return the list
@@ -21,3 +25,4 @@ of sheets that look like real TNA data and the list of sheets to skip.
 
 Emit `relevant_sheets: list[str]` via the `emit_sheet_classifier` tool. If
 unsure, include the sheet — false positives are cheaper than false negatives.
+"""

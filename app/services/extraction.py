@@ -47,7 +47,7 @@ from app.repositories.workbook_tools._registry import TOOL_REGISTRY
 from app.services.agents.field_namer import FieldNamer
 from app.services.agents.layout_hinter import LayoutHinter
 from app.services.agents.plan_reviewer import PlanReviewer
-from app.services.agents.sheet_classifier import SheetClassifier
+from app.components.sheet_classifier import SheetClassifier
 from app.services.applier.apply_plan import apply_plan
 from app.core.log_capture import log_artifact
 from app.core.tracing import get_tracer
