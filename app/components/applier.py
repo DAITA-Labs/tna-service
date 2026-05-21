@@ -8,6 +8,9 @@ each mode has its own private apply function; `apply_plan` is the single public
 entry point.  This module is statically guaranteed to import no LLM modules; the
 test `tests/unit/applier/test_apply_plan_no_llm_imports.py` enforces this via
 an AST import scan.
+
+`Applier` is the Haystack `@component` wrapper around `apply_plan`.  It lives
+in this same file so the LLM-import guarantee remains easy to verify.
 """
 from __future__ import annotations
 
@@ -16,9 +19,13 @@ from datetime import date, datetime
 from openpyxl.utils import column_index_from_string, get_column_letter
 from openpyxl.utils.cell import coordinate_from_string
 
+from haystack import component
+
+from app.components._base import Component
 from app.core.logs import get_logger
 from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
+from app.enums.validation_severity import ValidationSeverity
 from app.models.artifacts import (
     CanonicalNameMap,
     KVAnchor,
@@ -27,8 +34,9 @@ from app.models.artifacts import (
     SheetPlan,
     StageBandSpec,
     StageColumn,
+    ValidationFinding,
 )
-from app.models.extraction import PLI, Stage
+from app.models.extraction import PLI, Stage, Warning
 from app.models.workbook import WorkbookCtx
 
 log = get_logger(__name__)
@@ -432,7 +440,7 @@ def _apply_sheet_is_pli(ctx: WorkbookCtx, plan: SheetPlan,
 
 
 def apply_plan(ctx: WorkbookCtx, plan: SheetPlan,
-               name_map: CanonicalNameMap) -> list[PLI]:
+               name_map: CanonicalNameMap) -> list[PLI]:  # noqa: E302
     """Dispatch on pli_mode and return all PLIs extracted from `plan`.
 
     Raises `ValueError` for unknown `pli_mode` values.  Pure function — no LLM
@@ -449,3 +457,33 @@ def apply_plan(ctx: WorkbookCtx, plan: SheetPlan,
         raise ValueError(f"unknown pli_mode: {plan.pli_mode}")
     log.info("apply_plan_complete", sheet=plan.sheet, pli_count=len(result))
     return result
+
+
+@component
+class Applier(Component):
+    """Pipeline component that runs apply_plan; blocks on pre_apply errors."""
+
+    def __init__(self) -> None:
+        Component.__init__(self)
+
+    @component.output_types(plis=list, warnings=list)
+    def run(
+        self,
+        workbook_ctx: WorkbookCtx,
+        plan: SheetPlan,
+        name_map: CanonicalNameMap,
+        findings_pre_apply: list[ValidationFinding],
+    ) -> dict:
+        """Run apply_plan unless pre_apply findings contain errors."""
+        errors = [f for f in findings_pre_apply if f.severity is ValidationSeverity.ERROR]
+        if errors:
+            warnings = [
+                Warning(message=f"{f.check}: {f.message}", severity="error")
+                for f in errors
+            ]
+            return {"plis": [], "warnings": warnings}
+        plis = apply_plan(workbook_ctx, plan, name_map)
+        for pli in plis:
+            if not pli.source.sheet:
+                pli.source.sheet = plan.sheet
+        return {"plis": plis, "warnings": []}

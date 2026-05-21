@@ -1,262 +1,140 @@
 """Top-level orchestration for TNA workbook extraction.
 
-This module owns the end-to-end extraction flow: classify relevant sheets,
-build a `SheetPlan` per sheet via the SheetRowPlanner pipeline (surveyor +
-row_classifier + kv_anchor_detector + stage_band_detector + block_segmenter),
-validate the plan, conditionally invoke `LayoutHinter` and `PlanReviewer`,
-name fields, apply the plan deterministically, and run cross-cutting
-validators + reconciliation. Per-sheet failures are isolated from the
-workbook-level extraction by the validators-and-reconciler stage.
+Provides two Haystack Pipeline factories:
+- `make_per_sheet_pipeline(llm)` — builds the per-sheet flow DAG
+- `make_extract_pipeline(llm)` — builds the workbook-level DAG
+
+The thin `extract()` driver registers the workbook, handles the empty-sheet
+early-return, then runs the pipeline and returns the reconciled result.
 """
 from __future__ import annotations
 
-import contextlib
 import time
-from collections.abc import Iterator
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-
-import structlog.contextvars
 
 import app.tools.bulk_read  # noqa: F401 — force tool registration
 import app.tools.search  # noqa: F401
 import app.tools.structure  # noqa: F401
 import app.tools.survey  # noqa: F401
 import app.tools.targeted  # noqa: F401
+from haystack import Pipeline
+
+from app.components.applier import Applier
+from app.components.extraction_result_builder import ExtractionResultBuilder
+from app.components.field_namer import FieldNamer
+from app.components.layout_hinter import LayoutHinter
+from app.components.per_sheet import PerSheetProcessor
+from app.components.plan_reviewer import PlanReviewer
+from app.components.plan_validator import PlanValidator
+from app.components.planner_component import Planner
+from app.components.post_namer_validator import PostNamerValidator
+from app.components.post_review_validator import PostReviewValidator
+from app.components.pre_apply_validator import PreApplyValidator
+from app.components.reconciler import Reconciler
+from app.components.sheet_classifier import SheetClassifier
+from app.components.validators.coverage_verifier import CoverageVerifier
+from app.components.validators.field_dropout_verifier import FieldDropoutVerifier
+from app.components.validators.header_match_verifier import HeaderMatchVerifier
+from app.components.validators.source_cell_verifier import SourceCellVerifier
+from app.components.workbook_summary_provider import WorkbookSummaryProvider
 from app.core.logs import get_logger
 from app.core.telemetry import (
     extraction_duration_seconds,
-    extraction_phase_duration_seconds,
     extraction_pli_count,
     extractions_total,
     plis_extracted_total,
 )
-from app.enums.pli_mode import PliMode
-from app.enums.row_role import RowRole
-from app.enums.validation_severity import ValidationSeverity
-from app.models.artifacts import (
-    CanonicalNameMap,
-    LayoutHints,
-    PlanVerdict,
-    SheetPlan,
-    ValidationFindings,
-)
-from app.models.extraction import ExtractionResult, PLI, Warning
-from app.repositories.workbook_repo import register_workbook
-from app.tools._registry import TOOL_REGISTRY
-from app.components.field_namer import FieldNamer
-from app.components.layout_hinter import LayoutHinter
-from app.components.plan_reviewer import PlanReviewer
-from app.components.sheet_classifier import SheetClassifier
-from app.components.applier import apply_plan
-from app.core.log_capture import log_artifact
 from app.core.tracing import get_tracer
+from app.models.extraction import ExtractionResult, Warning
+from app.repositories.workbook_repo import register_workbook
 from app.services.llm_provider import AnthropicProvider
-from app.components.planner.plan import SheetRowPlanner
-from app.components.planner.surveyor import survey_sheet
-from app.components.reconciler import reconcile
-from app.components.validators.coverage_verifier import CoverageVerifier
-from app.components.validators.field_dropout_verifier import FieldDropoutVerifier
-from app.components.validators.header_match_verifier import HeaderMatchVerifier
-from app.components.validators.plan_invariants import validate_invariants
-from app.components.validators.plan_statistics import validate_statistics
-from app.components.validators.source_cell_verifier import SourceCellVerifier
-from app.components.validators.post_namer_canonical import validate_post_namer
-from app.components.validators.post_review_plan import validate_post_review
-from app.components.validators.pre_apply_readiness import validate_pre_apply
+from app.tools._registry import TOOL_REGISTRY
 
 log = get_logger(__name__)
 
-_CONFIDENCE_GATE = 0.85
 
+def make_per_sheet_pipeline(llm: Any) -> Pipeline:
+    """Build the per-sheet processing pipeline.
 
-@dataclass(frozen=True)
-class ExtractPipeline:
-    """Bundle of component instances used by the imperative extract() driver.
-
-    Stops short of a full Haystack Pipeline DSL — the per-sheet loop and
-    conditional LayoutHinter/PlanReviewer branches don't map cleanly to a
-    DAG yet. This factory groups the component instances for future use.
+    DAG: planner → plan_validator → layout_hinter → plan_reviewer →
+         post_review_validator → field_namer → post_namer_validator →
+         pre_apply_validator → applier
     """
+    pipe = Pipeline()
+    pipe.add_component("planner", Planner())
+    pipe.add_component("plan_validator", PlanValidator())
+    pipe.add_component("layout_hinter", LayoutHinter(llm=llm))
+    pipe.add_component("plan_reviewer", PlanReviewer(llm=llm))
+    pipe.add_component("post_review_validator", PostReviewValidator())
+    pipe.add_component("field_namer", FieldNamer(llm=llm))
+    pipe.add_component("post_namer_validator", PostNamerValidator())
+    pipe.add_component("pre_apply_validator", PreApplyValidator())
+    pipe.add_component("applier", Applier())
 
-    sheet_classifier: SheetClassifier
-    layout_hinter: LayoutHinter
-    plan_reviewer: PlanReviewer
-    field_namer: FieldNamer
+    # planner → plan_validator
+    pipe.connect("planner.plan", "plan_validator.plan")
+    # plan_validator → layout_hinter
+    pipe.connect("plan_validator.plan", "layout_hinter.plan")
+    pipe.connect("plan_validator.findings", "layout_hinter.findings")
+    # layout_hinter → plan_reviewer
+    pipe.connect("layout_hinter.plan", "plan_reviewer.plan")
+    pipe.connect("plan_validator.findings", "plan_reviewer.findings")
+    # plan_reviewer → post_review_validator
+    pipe.connect("plan_reviewer.plan", "post_review_validator.plan")
+    # post_review_validator → field_namer
+    pipe.connect("post_review_validator.plan", "field_namer.plan")
+    # field_namer → post_namer_validator
+    pipe.connect("field_namer.name_map", "post_namer_validator.name_map")
+    pipe.connect("post_review_validator.plan", "post_namer_validator.plan")
+    # post_review_validator → pre_apply_validator
+    pipe.connect("post_review_validator.plan", "pre_apply_validator.plan")
+    # pre_apply_validator → applier
+    pipe.connect("pre_apply_validator.plan", "applier.plan")
+    pipe.connect("pre_apply_validator.findings", "applier.findings_pre_apply")
+    # post_namer_validator → applier
+    pipe.connect("post_namer_validator.name_map", "applier.name_map")
 
-
-def make_extract_pipeline(llm: Any) -> ExtractPipeline:
-    """Construct the LLM-backed components used by the extract() driver."""
-    return ExtractPipeline(
-        sheet_classifier=SheetClassifier(llm=llm),
-        layout_hinter=LayoutHinter(llm=llm),
-        plan_reviewer=PlanReviewer(llm=llm),
-        field_namer=FieldNamer(llm=llm),
-    )
-
-
-@contextlib.contextmanager
-def _phase(name: str, **attrs: Any) -> Iterator[Any]:
-    """Time a phase + open an OTel span + bind phase to log context."""
-    structlog.contextvars.bind_contextvars(phase=name)
-    t0 = time.monotonic()
-    with get_tracer(__name__).start_as_current_span(f"phase.{name}") as span:
-        for k, v in attrs.items():
-            try:
-                span.set_attribute(k, v)
-            except Exception:
-                # best-effort: span attribute is telemetry-only, never block work
-                pass
-        try:
-            yield span
-        finally:
-            extraction_phase_duration_seconds.record(time.monotonic() - t0, {"phase": name})
-            structlog.contextvars.unbind_contextvars("phase")
-
-
-def _snapshot_artifact(name: str, *, payload: Any) -> None:
-    """Emit one structured log carrying a between-phase artifact snapshot."""
-    log_artifact(name, payload=payload)
+    return pipe
 
 
-def _warning_severity_of(severity: ValidationSeverity) -> str:
-    """Map ValidationSeverity (WARN/ERROR/INFO) to the Warning model's literal set."""
-    if severity is ValidationSeverity.WARN:
-        return "warning"
-    return severity.value
+def make_extract_pipeline(llm: Any, ctx: Any) -> Pipeline:
+    """Build the workbook-level extract pipeline.
 
+    DAG: summary_provider → sheet_classifier → per_sheet →
+         result_builder → [4 verifiers] → reconciler
+    """
+    pipe = Pipeline()
+    pipe.add_component("summary_provider", WorkbookSummaryProvider())
+    pipe.add_component("sheet_classifier", SheetClassifier(llm=llm))
+    pipe.add_component("per_sheet", PerSheetProcessor(llm=llm))
+    pipe.add_component("result_builder", ExtractionResultBuilder())
+    pipe.add_component("source_cell", SourceCellVerifier(workbook_ctx=ctx))
+    pipe.add_component("header_match", HeaderMatchVerifier(workbook_ctx=ctx))
+    pipe.add_component("coverage", CoverageVerifier(boundaries=[]))
+    pipe.add_component("field_dropout", FieldDropoutVerifier())
+    pipe.add_component("reconciler", Reconciler())
 
-def _run_planner(ctx: Any, sheet: str) -> SheetPlan:
-    """Run the deterministic SheetRowPlanner pipeline and return the plan."""
-    planner = SheetRowPlanner()
-    with _phase("planner"):
-        plan: SheetPlan = planner.run(workbook_ctx=ctx, sheet=sheet)["plan"]
-    log.info("plan_emitted",
-             sheet=sheet, pli_mode=plan.pli_mode.value,
-             confidence=plan.confidence,
-             anchor_count=len([r for r in plan.rows if r.role.value == "anchor"]),
-             block_count=len(plan.pli_blocks),
-             kv_count=len(plan.kv_anchors),
-             band_count=len(plan.stage_bands))
-    return plan
+    pipe.connect("summary_provider.summary", "sheet_classifier.workbook_summary")
+    pipe.connect("sheet_classifier.relevant_sheets", "per_sheet.relevant_sheets")
+    pipe.connect("per_sheet.plis", "result_builder.plis")
+    pipe.connect("per_sheet.warnings", "result_builder.warnings")
+    pipe.connect("per_sheet.format_detected", "result_builder.format_detected")
+    pipe.connect("result_builder.result", "source_cell.extraction")
+    pipe.connect("result_builder.result", "header_match.extraction")
+    pipe.connect("result_builder.result", "coverage.extraction")
+    pipe.connect("result_builder.result", "field_dropout.extraction")
+    pipe.connect("result_builder.result", "reconciler.workflow_out")
+    pipe.connect("source_cell.findings", "reconciler.source_findings")
+    pipe.connect("header_match.findings", "reconciler.header_findings")
+    pipe.connect("coverage.findings", "reconciler.coverage_findings")
+    pipe.connect("field_dropout.findings", "reconciler.dropout_findings")
 
-
-def _validate_plan(ctx: Any, plan: SheetPlan, sheet: str) -> tuple[list, list, list]:
-    """Run tier-1 invariants + tier-2 statistics; return (all, errors, warns)."""
-    with _phase("plan_validate"):
-        findings_t1 = validate_invariants(plan)
-        findings_t2 = validate_statistics(ctx, plan)
-        findings = findings_t1 + findings_t2
-        errors = [f for f in findings if f.severity == ValidationSeverity.ERROR]
-        warns = [f for f in findings if f.severity == ValidationSeverity.WARN]
-    log.info("plan_validation_complete", sheet=sheet,
-             tier1_errors=sum(1 for f in findings_t1 if f.severity == ValidationSeverity.ERROR),
-             tier1_warns=sum(1 for f in findings_t1 if f.severity == ValidationSeverity.WARN),
-             tier2_warns=len(findings_t2))
-    return findings, errors, warns
-
-
-def _apply_layout_hints_if_needed(
-    ctx: Any, sheet: str, plan: SheetPlan, errors: list, llm: Any, warnings: list[Warning],
-) -> SheetPlan:
-    """Call LayoutHinter when tier-1 validation has errors; possibly update plan."""
-    if not errors:
-        return plan
-    log.info("layout_hinter_invoked", sheet=sheet, identity_suggestion=None)
-    hinter = LayoutHinter(llm=llm)
-    signals = survey_sheet(ctx, sheet)
-    hints: LayoutHints = hinter.run(
-        workbook_ctx=ctx, sheet=sheet, signals=signals,
-    )["hints"]
-    log.info("layout_hinter_invoked", sheet=sheet,
-             identity_suggestion=hints.identity_column_suggestion)
-    if hints.identity_column_suggestion:
-        plan = plan.model_copy(update={"identity_column": hints.identity_column_suggestion})
-    findings_t1 = validate_invariants(plan)
-    findings_t2 = validate_statistics(ctx, plan)
-    for f in findings_t1 + findings_t2:
-        warnings.append(Warning(message=f"{f.check}: {f.message}", severity="warning"))
-    return plan
-
-
-def _apply_plan_review_if_needed(
-    ctx: Any, sheet: str, plan: SheetPlan, findings: list, warns: list, llm: Any,
-) -> SheetPlan:
-    """Call PlanReviewer on warnings, low confidence, or non-row mode; apply fixes."""
-    needs_reviewer = (
-        bool(warns)
-        or plan.confidence < _CONFIDENCE_GATE
-        or plan.pli_mode is not PliMode.ROW_PER_PLI
-    )
-    if not needs_reviewer:
-        return plan
-    log.info("plan_reviewer_invoked", sheet=sheet,
-             reason="warnings" if warns else "low_confidence" if plan.confidence < _CONFIDENCE_GATE else "non_row_mode")
-    with _phase("plan_reviewer"):
-        reviewer = PlanReviewer(llm=llm)
-        verdict: PlanVerdict = reviewer.run(
-            workbook_ctx=ctx, plan=plan, findings=findings,
-        )["verdict"]
-    if verdict.verdict == "needs_fix":
-        new_rows = list(plan.rows)
-        for corr in verdict.row_corrections:
-            for i, r in enumerate(new_rows):
-                if r.idx == corr.get("row"):
-                    suggested = corr.get("suggested_role", r.role)
-                    # Coerce string role values from LLM JSON responses to RowRole enum.
-                    if isinstance(suggested, str):
-                        try:
-                            suggested = RowRole(suggested)
-                        except ValueError:
-                            suggested = r.role
-                    new_rows[i] = r.model_copy(update={
-                        "role": suggested,
-                        "anchor_idx": corr.get("anchor_idx", r.anchor_idx),
-                    })
-                    break
-        plan = plan.model_copy(update={"rows": new_rows})
-    return plan
-
-
-def _plan_for_sheet(
-    ctx: Any, sheet: str, llm: Any,
-) -> tuple[SheetPlan, CanonicalNameMap, list[Warning]]:
-    """Plan one sheet: run planner, validate, optionally refine, name fields."""
-    warnings: list[Warning] = []
-
-    plan = _run_planner(ctx, sheet)
-    _snapshot_artifact("plan.snapshot_after_planner", payload=plan.model_dump())
-    findings, errors, warns = _validate_plan(ctx, plan, sheet)
-    plan = _apply_layout_hints_if_needed(ctx, sheet, plan, errors, llm, warnings)
-    plan = _apply_plan_review_if_needed(ctx, sheet, plan, findings, warns, llm)
-    _snapshot_artifact("plan.snapshot_after_reviewer", payload=plan.model_dump())
-
-    post_review_findings = validate_post_review(plan)
-    for f in post_review_findings:
-        warnings.append(Warning(
-            message=f"{f.check}: {f.message}", severity=_warning_severity_of(f.severity),
-        ))
-
-    with _phase("field_namer"):
-        namer = FieldNamer(llm=llm)
-        name_map: CanonicalNameMap = namer.run(workbook_ctx=ctx, plan=plan)["name_map"]
-    _snapshot_artifact("name_map.snapshot_after_namer", payload=name_map.model_dump())
-    log.info("name_map_received", sheet=sheet,
-             field_count=len(name_map.field_labels),
-             stage_count=len(name_map.stage_names))
-
-    post_namer_findings = validate_post_namer(plan, name_map)
-    for f in post_namer_findings:
-        warnings.append(Warning(
-            message=f"{f.check}: {f.message}", severity=_warning_severity_of(f.severity),
-        ))
-
-    return plan, name_map, warnings
+    return pipe
 
 
 def extract(workbook_path: Path | str, *, llm: Any = None) -> ExtractionResult:
-    """Extract structured PLIs from a TNA workbook, end-to-end."""
+    """Extract structured PLIs from a TNA workbook via the Haystack Pipeline."""
     t0 = time.monotonic()
     ctx = register_workbook(workbook_path)
     llm = llm or AnthropicProvider.from_env()
@@ -265,78 +143,41 @@ def extract(workbook_path: Path | str, *, llm: Any = None) -> ExtractionResult:
     with get_tracer(__name__).start_as_current_span("extract") as root_span:
         root_span.set_attribute("file", str(ctx.path))
         try:
-            with _phase("sheet_classifier"):
-                summary = TOOL_REGISTRY.get("workbook_summary")(ctx)
-                sc = SheetClassifier(llm=llm)
-                relevant = sc.run(workbook_ctx=ctx, workbook_summary=summary)["relevant_sheets"]
+            # Early-return when no relevant sheets — avoids building the full pipeline.
+            summary = TOOL_REGISTRY.get("workbook_summary")(ctx)
+            sc = SheetClassifier(llm=llm)
+            relevant = sc.run(workbook_ctx=ctx, workbook_summary=summary)["relevant_sheets"]
             if not relevant:
                 log.info("no_relevant_sheets", file=str(ctx.path))
                 extractions_total.add(1, {"status": "empty"})
                 return ExtractionResult(
                     plis=[], source_file=str(ctx.path),
-                    warnings=[Warning(message="No relevant sheets identified", severity="warning")],
+                    warnings=[Warning(
+                        message="No relevant sheets identified", severity="warning",
+                    )],
                 )
 
             log.info("relevant_sheets_selected", sheets=relevant, count=len(relevant))
-            all_plis: list[PLI] = []
-            all_warnings: list[Warning] = []
-            format_detected: str | None = None
-
-            for sheet in relevant:
-                plan, name_map, warns = _plan_for_sheet(ctx, sheet, llm)
-                all_warnings.extend(warns)
-
-                pre_apply_findings = validate_pre_apply(plan)
-                errors_block_apply = [
-                    f for f in pre_apply_findings if f.severity is ValidationSeverity.ERROR
-                ]
-                if errors_block_apply:
-                    for f in pre_apply_findings:
-                        all_warnings.append(Warning(
-                            message=f"{f.check}: {f.message}", severity="error",
-                        ))
-                    log.warning("pre_apply_readiness_blocked", sheet=sheet,
-                                errors=[f.message for f in errors_block_apply])
-                    continue  # skip apply for this sheet — fall back to no PLIs
-                for f in pre_apply_findings:
-                    all_warnings.append(Warning(
-                        message=f"{f.check}: {f.message}",
-                        severity=_warning_severity_of(f.severity),
-                    ))
-
-                with _phase("apply_plan"):
-                    plis = apply_plan(ctx, plan, name_map)
-                for pli in plis:
-                    if not pli.source.sheet:
-                        pli.source.sheet = sheet
-                log.info("plis_emitted", sheet=sheet, pli_count=len(plis))
-                all_plis.extend(plis)
-                if format_detected is None:
-                    format_detected = plan.pli_mode.value
-
-            result = ExtractionResult(
-                plis=all_plis, warnings=all_warnings,
-                format_detected=format_detected, source_file=str(ctx.path),
+            pipe = make_extract_pipeline(llm, ctx)
+            out = pipe.run({
+                "summary_provider": {"workbook_ctx": ctx},
+                "sheet_classifier": {"workbook_ctx": ctx},
+                "per_sheet": {"workbook_ctx": ctx},
+                "result_builder": {"source_file": str(ctx.path)},
+            })
+            final: ExtractionResult = out["reconciler"]["result"]
+            log.info(
+                "extract_complete",
+                file=ctx.path.name,
+                total_plis=len(final.plis),
+                warnings=len(final.warnings),
+                format=final.format_detected,
             )
-            with _phase("validators"):
-                src_v = SourceCellVerifier(workbook_ctx=ctx).run(extraction=result)["findings"]
-                hdr_v = HeaderMatchVerifier(workbook_ctx=ctx).run(extraction=result)["findings"]
-                cov_v = CoverageVerifier(boundaries=[]).run(extraction=result)["findings"]
-                drop_v = FieldDropoutVerifier().run(extraction=result)["findings"]
-            all_findings = ValidationFindings(findings=(
-                src_v.findings + hdr_v.findings + cov_v.findings + drop_v.findings
-            ))
-            with _phase("reconciler"):
-                final = reconcile(workflow_out=result, validation_out=all_findings)
-            log.info("extract_complete", file=ctx.path.name, total_plis=len(final.plis),
-                     warnings=len(final.warnings), format=final.format_detected)
             extraction_duration_seconds.record(
                 time.monotonic() - t0,
                 {"format_detected": final.format_detected or "unknown"},
             )
-            extraction_pli_count.add(
-                len(final.plis), {"source_file": ctx.path.name}
-            )
+            extraction_pli_count.add(len(final.plis), {"source_file": ctx.path.name})
             if len(final.plis) == 0:
                 extractions_total.add(1, {"status": "empty"})
             else:
@@ -344,6 +185,5 @@ def extract(workbook_path: Path | str, *, llm: Any = None) -> ExtractionResult:
             plis_extracted_total.add(len(final.plis))
             return final
         except Exception:
-            # log+re-raise: count the failure for observability, surface to caller
             extractions_total.add(1, {"status": "failure"})
             raise
