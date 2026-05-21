@@ -104,3 +104,60 @@ def test_component_base_runs_under_haystack() -> None:
 
     out = Doubler().run(x=4)
     assert out == {"value": 8}
+
+
+def test_agent_base_runs_and_lifecycle_hooks_are_noops() -> None:
+    """`Agent` is generic, calls the provider, and the default hooks return without error."""
+    from typing import Generic, get_type_hints
+
+    from pydantic import BaseModel
+
+    from app.agents._base import Agent, AgentRunFailure, RetryPolicy
+    from app.pipelines.tuning import Tuning
+
+    class _Out(BaseModel):
+        v: int
+
+    class _Inputs(BaseModel):
+        x: int
+
+    class _T(Tuning):
+        pass
+
+    class _FakeProvider:
+        model = "fake"
+
+        def complete_with_schema(self, *, system, user, output_schema, tool_name, agent_name):
+            return output_schema(v=int(user.strip()))
+
+    class _Echo(Agent[_Inputs, _Out]):
+        name = "echo_agent"
+        prompt = "You echo numbers."
+        output_schema = _Out
+        tuning = _T()
+
+        def build_input(self, ctx, inputs):
+            return str(inputs.x)
+
+    # generic params survive subclassing
+    assert any(getattr(b, "__origin__", None) is Agent for b in _Echo.__orig_bases__)
+
+    out = _Echo().run(ctx=None, inputs=_Inputs(x=42), provider=_FakeProvider())
+    assert isinstance(out, _Out) and out.v == 42
+
+    # retry policy is a frozen dataclass with max_retries=1
+    rp = RetryPolicy()
+    assert rp.max_retries == 1
+
+    # failure path: provider always raises ValueError → AgentRunFailure
+    class _AlwaysFails:
+        model = "fake"
+
+        def complete_with_schema(self, **_kw):
+            from pydantic import ValidationError
+            raise ValidationError.from_exception_data("bad", [])  # type: ignore[arg-type]
+
+    failure = _Echo().run(ctx=None, inputs=_Inputs(x=1), provider=_AlwaysFails())
+    assert isinstance(failure, AgentRunFailure)
+    assert failure.agent_name == "echo_agent"
+    assert failure.attempt_count >= 2  # initial + one retry per default policy
