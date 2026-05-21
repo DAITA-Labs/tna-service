@@ -1,5 +1,5 @@
 """Agent test: SheetClassifier behaviour under canned LLM responses."""
-from app.components.sheet_classifier import SheetClassifier
+from app.components.workbook.sheet_classifier import SheetClassifier
 from app.tools._registry import TOOL_REGISTRY
 import app.tools.survey  # noqa: F401 — register tools
 from tests.fixtures.case import fixture_case

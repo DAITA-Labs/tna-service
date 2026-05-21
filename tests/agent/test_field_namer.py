@@ -1,5 +1,5 @@
 """Agent test: FieldNamer maps labels to canonical names."""
-from app.components.field_namer import FieldNamer
+from app.components.per_sheet.field_namer import FieldNamer
 from app.components.planner.plan import SheetRowPlanner
 import app.tools.survey  # noqa: F401 — register tools
 import app.tools.bulk_read  # noqa: F401 — register tools

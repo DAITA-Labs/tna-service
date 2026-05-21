@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 
 from structlog.testing import capture_logs
 
-from app.components.layout_hinter import LayoutHinter
+from app.components.per_sheet.layout_hinter import LayoutHinter
 from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
 from app.enums.stage_scope import StageScope
@@ -30,7 +30,7 @@ def _patch_peek_sheet(monkeypatch) -> None:
 def _patch_survey(monkeypatch) -> None:
     """Replace survey_sheet with stub signals."""
     monkeypatch.setattr(
-        "app.components.layout_hinter.survey_sheet",
+        "app.components.per_sheet.layout_hinter.survey_sheet",
         lambda ctx, sheet: _STUB_SIGNALS,
     )
 

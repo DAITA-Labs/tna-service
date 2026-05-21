@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock
 
-from app.components.field_namer import FieldNamer
+from app.components.per_sheet.field_namer import FieldNamer
 from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
 from app.enums.stage_scope import StageScope

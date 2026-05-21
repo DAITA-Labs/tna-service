@@ -1,6 +1,6 @@
 """apply_plan._resolve_confidence — picks per-field confidence with calibrated defaults."""
 from app.models.artifacts import CanonicalNameMap
-from app.components.applier import _resolve_confidence
+from app.components.per_sheet.applier import _resolve_confidence
 
 
 def test_llm_supplied_confidence_wins() -> None:

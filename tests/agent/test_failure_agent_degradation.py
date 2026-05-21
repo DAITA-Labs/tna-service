@@ -10,8 +10,8 @@ In every case the agent should yield a usable default and NOT propagate the
 exception — the orchestrator depends on this for graceful degradation.
 """
 from __future__ import annotations
-from app.components.field_namer import FieldNamer
-from app.components.sheet_classifier import SheetClassifier
+from app.components.per_sheet.field_namer import FieldNamer
+from app.components.workbook.sheet_classifier import SheetClassifier
 from app.components.planner.plan import SheetRowPlanner
 from app.tools._registry import TOOL_REGISTRY
 import app.tools.survey  # noqa: F401 — register tools

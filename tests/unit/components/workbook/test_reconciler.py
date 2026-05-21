@@ -2,7 +2,7 @@
 from app.models.extraction import PLI, ExtractionResult
 from app.models.artifacts import ValidationFinding, ValidationFindings
 from app.enums.validation_severity import ValidationSeverity
-from app.components.reconciler import reconcile, aggregate_confidence
+from app.components.workbook.reconciler import reconcile, aggregate_confidence
 
 
 def test_reconcile_lenient_attaches_findings_as_warnings():

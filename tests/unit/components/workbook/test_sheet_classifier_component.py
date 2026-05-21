@@ -1,7 +1,7 @@
 """SheetClassifier component unit tests."""
 from __future__ import annotations
 
-from app.components.sheet_classifier import SheetClassifier
+from app.components.workbook.sheet_classifier import SheetClassifier
 from app.models.artifacts import WorkbookSummary
 from tests.fixtures.fake_llm import FakeLLM
 
