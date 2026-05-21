@@ -59,3 +59,30 @@ def test_pipeline_tuning_loads_defaults() -> None:
     assert pt.dropout_floor == 0.50
     # subclass relationship lets agent tuning classes inherit later
     assert issubclass(PipelineTuning, Tuning)
+
+
+def test_tool_decorator_registers_callable() -> None:
+    """`@tool('name')` registers a function and `TOOL_REGISTRY.get(name)` returns it."""
+    from app.tools._decorator import tool
+    from app.tools._registry import TOOL_REGISTRY
+
+    @tool("framework_test_echo")
+    def echo(x: int) -> int:
+        """Return x — fixture for registry test."""
+        return x
+
+    # decorated function is callable directly
+    assert echo(7) == 7
+
+    # and the registry has an instrumented entry under the name
+    registered = TOOL_REGISTRY.get("framework_test_echo")
+    assert callable(registered)
+    assert registered(9) == 9
+
+    # double registration is rejected
+    import pytest
+
+    with pytest.raises(ValueError):
+        @tool("framework_test_echo")
+        def _dupe(x: int) -> int:
+            return x
