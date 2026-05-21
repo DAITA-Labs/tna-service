@@ -25,7 +25,7 @@ from app.inferencing.capture import (
     record_retry_event,
     record_validate_event,
 )
-from app.pipelines.tuning import Tuning
+from app.inferencing.tuning import AgentTuning, render_prompt
 
 
 InputsT = TypeVar("InputsT", bound=BaseModel)
@@ -63,7 +63,7 @@ class Agent(Generic[InputsT, OutputT]):
     name: str = ""
     prompt: str = ""
     output_schema: type[BaseModel]
-    tuning: Tuning
+    tuning: AgentTuning = AgentTuning()
     retry: RetryPolicy = RetryPolicy()
     tool_name: str | None = None
 
@@ -110,6 +110,7 @@ class Agent(Generic[InputsT, OutputT]):
     def _run_with_retries(self, user: str) -> tuple[OutputT | AgentRunFailure, int]:
         """Drive the retry loop and return `(result, attempts)`."""
         tool_name = self.tool_name or f"emit_{self.name}"
+        effective_system = render_prompt(self.prompt, tuning=self.tuning)
         attempt = 0
         retries = 0
         last_error = ""
@@ -124,10 +125,13 @@ class Agent(Generic[InputsT, OutputT]):
             while attempt <= self.retry.max_retries:
                 attempt += 1
                 try:
-                    parsed, raw, tin, tout = self._invoke_provider(tool_name, user)
+                    parsed, raw, tin, tout = self._invoke_provider(tool_name, user, effective_system)
                     record_validate_event(span, ok=True, error=None)
                     self._emit_success_capture(span, parsed, raw, tin, tout, retries)
                     self._record_success(attempt, span)
+                    notes = getattr(parsed, "decision_notes", None)
+                    if notes:
+                        log_agent_io(self.name, kind="decision_notes", payload=notes)
                     return parsed, attempt
                 except ValidationError as exc:
                     last_error = str(exc)
@@ -151,11 +155,11 @@ class Agent(Generic[InputsT, OutputT]):
             failure = self._record_failure(run_t0, attempt, last_error, span)
             return failure, attempt
 
-    def _invoke_provider(self, tool_name: str, user: str) -> tuple[OutputT, str, int, int]:
+    def _invoke_provider(self, tool_name: str, user: str, system: str | None = None) -> tuple[OutputT, str, int, int]:
         """Call the LLM provider and return (parsed, raw_text, tokens_in, tokens_out)."""
         t0 = time.monotonic()
         result, raw, tin, tout = self._provider.complete_with_schema(
-            system=self.prompt,
+            system=system if system is not None else self.prompt,
             user=user,
             output_schema=self.output_schema,
             tool_name=tool_name,

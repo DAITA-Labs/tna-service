@@ -15,6 +15,7 @@ from typing import Any
 
 from pydantic import BaseModel, ValidationError
 
+from app.artifacts.agent_io import AgentOutput
 from app.core.log_capture import log_agent_io
 from app.core.logs import get_logger
 from app.core.telemetry import agent_calls_total, agent_duration_seconds, agent_retry_count
@@ -25,6 +26,7 @@ from app.inferencing.capture import (
     record_retry_event,
     record_validate_event,
 )
+from app.inferencing.tuning import AgentTuning, render_prompt
 from app.services.llm_provider import LLMProvider
 
 log = get_logger(__name__)
@@ -47,6 +49,7 @@ class AgentSpec:
     build_user_input: Callable[[Any, dict], str]  # Any: caller-defined context object
     tool_name: str | None = None  # defaults to f"emit_{name}" in runner
     retry: RetryPolicy = field(default_factory=RetryPolicy)
+    tuning: AgentTuning | None = field(default=None)
 
 
 @dataclass
@@ -76,6 +79,9 @@ class AgentRunner:
         run_t0 = time.monotonic()
         log.info("agent_run_start", agent=self.spec.name, input_keys=sorted(inputs.keys()))
 
+        tuning = self.spec.tuning or AgentTuning()
+        effective_system = render_prompt(self.spec.system_prompt, tuning=tuning)
+
         with get_tracer(__name__).start_as_current_span(f"agent.{self.spec.name}") as span:
             span.set_attribute("agent.name", self.spec.name)
             self._emit_input_capture(span, user)
@@ -84,10 +90,13 @@ class AgentRunner:
             while attempt <= self.spec.retry.max_retries:
                 attempt += 1
                 try:
-                    result, raw, tin, tout = self._invoke_llm(tool_name, user)
+                    result, raw, tin, tout = self._invoke_llm(tool_name, user, effective_system)
                     record_validate_event(span, ok=True, error=None)
                     self._emit_success_capture(span, result, raw, tin, tout, retries)
                     self._record_attempt_success(run_t0, attempt, span)
+                    notes = getattr(result, "decision_notes", None)
+                    if notes:
+                        log_agent_io(self.spec.name, kind="decision_notes", payload=notes)
                     return result
                 except ValidationError as e:
                     last_error = str(e)
@@ -109,7 +118,7 @@ class AgentRunner:
             span.set_attribute("retries", retries)
             return self._record_run_failure(run_t0, attempt, last_error, span)
 
-    def _invoke_llm(self, tool_name: str, user: str) -> tuple[BaseModel, str, int, int]:
+    def _invoke_llm(self, tool_name: str, user: str, system: str | None = None) -> tuple[BaseModel, str, int, int]:
         """Call the LLM provider and return (parsed, raw_text, tokens_in, tokens_out).
 
         Records per-attempt duration telemetry on success. Raises ValidationError
@@ -117,7 +126,7 @@ class AgentRunner:
         """
         t0 = time.monotonic()
         result, raw, tin, tout = self.llm.complete_with_schema(
-            system=self.spec.system_prompt,
+            system=system if system is not None else self.spec.system_prompt,
             user=user,
             output_schema=self.spec.output_schema,
             tool_name=tool_name,
