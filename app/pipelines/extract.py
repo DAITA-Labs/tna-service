@@ -13,6 +13,7 @@ from __future__ import annotations
 import contextlib
 import time
 from collections.abc import Iterator
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -61,10 +62,38 @@ from app.components.validators.header_match_verifier import HeaderMatchVerifier
 from app.components.validators.plan_invariants import validate_invariants
 from app.components.validators.plan_statistics import validate_statistics
 from app.components.validators.source_cell_verifier import SourceCellVerifier
+from app.components.validators.post_namer_canonical import validate_post_namer
+from app.components.validators.post_review_plan import validate_post_review
+from app.components.validators.pre_apply_readiness import validate_pre_apply
 
 log = get_logger(__name__)
 
 _CONFIDENCE_GATE = 0.85
+
+
+@dataclass(frozen=True)
+class ExtractPipeline:
+    """Bundle of component instances used by the imperative extract() driver.
+
+    Stops short of a full Haystack Pipeline DSL — the per-sheet loop and
+    conditional LayoutHinter/PlanReviewer branches don't map cleanly to a
+    DAG yet. This factory groups the component instances for future use.
+    """
+
+    sheet_classifier: SheetClassifier
+    layout_hinter: LayoutHinter
+    plan_reviewer: PlanReviewer
+    field_namer: FieldNamer
+
+
+def make_extract_pipeline(llm: Any) -> ExtractPipeline:
+    """Construct the LLM-backed components used by the extract() driver."""
+    return ExtractPipeline(
+        sheet_classifier=SheetClassifier(llm=llm),
+        layout_hinter=LayoutHinter(llm=llm),
+        plan_reviewer=PlanReviewer(llm=llm),
+        field_namer=FieldNamer(llm=llm),
+    )
 
 
 @contextlib.contextmanager
@@ -89,6 +118,13 @@ def _phase(name: str, **attrs: Any) -> Iterator[Any]:
 def _snapshot_artifact(name: str, *, payload: Any) -> None:
     """Emit one structured log carrying a between-phase artifact snapshot."""
     log_artifact(name, payload=payload)
+
+
+def _warning_severity_of(severity: ValidationSeverity) -> str:
+    """Map ValidationSeverity (WARN/ERROR/INFO) to the Warning model's literal set."""
+    if severity is ValidationSeverity.WARN:
+        return "warning"
+    return severity.value
 
 
 def _run_planner(ctx: Any, sheet: str) -> SheetPlan:
@@ -196,6 +232,12 @@ def _plan_for_sheet(
     plan = _apply_plan_review_if_needed(ctx, sheet, plan, findings, warns, llm)
     _snapshot_artifact("plan.snapshot_after_reviewer", payload=plan.model_dump())
 
+    post_review_findings = validate_post_review(plan)
+    for f in post_review_findings:
+        warnings.append(Warning(
+            message=f"{f.check}: {f.message}", severity=_warning_severity_of(f.severity),
+        ))
+
     with _phase("field_namer"):
         namer = FieldNamer(llm=llm)
         name_map: CanonicalNameMap = namer.run(workbook_ctx=ctx, plan=plan)["name_map"]
@@ -203,6 +245,12 @@ def _plan_for_sheet(
     log.info("name_map_received", sheet=sheet,
              field_count=len(name_map.field_labels),
              stage_count=len(name_map.stage_names))
+
+    post_namer_findings = validate_post_namer(plan, name_map)
+    for f in post_namer_findings:
+        warnings.append(Warning(
+            message=f"{f.check}: {f.message}", severity=_warning_severity_of(f.severity),
+        ))
 
     return plan, name_map, warnings
 
@@ -237,6 +285,25 @@ def extract(workbook_path: Path | str, *, llm: Any = None) -> ExtractionResult:
             for sheet in relevant:
                 plan, name_map, warns = _plan_for_sheet(ctx, sheet, llm)
                 all_warnings.extend(warns)
+
+                pre_apply_findings = validate_pre_apply(plan)
+                errors_block_apply = [
+                    f for f in pre_apply_findings if f.severity is ValidationSeverity.ERROR
+                ]
+                if errors_block_apply:
+                    for f in pre_apply_findings:
+                        all_warnings.append(Warning(
+                            message=f"{f.check}: {f.message}", severity="error",
+                        ))
+                    log.warning("pre_apply_readiness_blocked", sheet=sheet,
+                                errors=[f.message for f in errors_block_apply])
+                    continue  # skip apply for this sheet — fall back to no PLIs
+                for f in pre_apply_findings:
+                    all_warnings.append(Warning(
+                        message=f"{f.check}: {f.message}",
+                        severity=_warning_severity_of(f.severity),
+                    ))
+
                 with _phase("apply_plan"):
                     plis = apply_plan(ctx, plan, name_map)
                 for pli in plis:

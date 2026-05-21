@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from structlog.testing import capture_logs
 
-from app.services.extraction import _snapshot_artifact
+from app.pipelines.extract import _snapshot_artifact
 
 
 def test_snapshot_emits_artifact_log_for_named_phase() -> None:

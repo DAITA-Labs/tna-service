@@ -3,7 +3,7 @@ from __future__ import annotations
 
 from structlog.testing import capture_logs
 
-from app.services.extraction import extract
+from app.pipelines.extract import extract
 from tests.fixtures.case import fixture_case
 from tests.fixtures.fake_llm import FakeLLM
 
