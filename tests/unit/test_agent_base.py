@@ -63,4 +63,4 @@ def test_runner_returns_failure_when_retries_exhausted():
     result = runner.run(ctx=None, inputs={})
     assert isinstance(result, AgentRunFailure)
     assert result.agent_name == "dummy_agent"
-    assert result.attempt_count == 2  # initial + 1 retry
+    assert result.attempts == 2  # initial + 1 retry

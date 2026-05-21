@@ -8,6 +8,7 @@ behaviour.
 """
 from __future__ import annotations
 
+import enum
 import time
 from dataclasses import dataclass, field
 
@@ -42,10 +43,85 @@ class AgentRunFailure:
     """Returned (not raised) when all retry attempts are exhausted without a valid schema response."""
 
     agent_name: str
-    attempt_count: int
-    final_error: str
+    attempts: int
+    reason: str
     raw_outputs: list[str] = field(default_factory=list)
 
+
+# ---------------------------------------------------------------------------
+# Verdict types
+# ---------------------------------------------------------------------------
+
+class _InputState(enum.Enum):
+    OK = "ok"
+    ABORT = "abort"
+
+
+class _OutputState(enum.Enum):
+    OK = "ok"
+    RETRY = "retry"
+    FAIL = "fail"
+
+
+@dataclass(frozen=True)
+class InputVerdict:
+    """Verdict returned by `validate_input`; gates whether the LLM is called."""
+
+    state: _InputState
+    reason: str | None = None
+
+    @classmethod
+    def ok(cls) -> InputVerdict:
+        return cls(state=_InputState.OK)
+
+    @classmethod
+    def abort(cls, reason: str) -> InputVerdict:
+        return cls(state=_InputState.ABORT, reason=reason)
+
+    @property
+    def is_ok(self) -> bool:
+        return self.state is _InputState.OK
+
+    @property
+    def is_abort(self) -> bool:
+        return self.state is _InputState.ABORT
+
+
+@dataclass(frozen=True)
+class OutputVerdict:
+    """Verdict returned by `validate_output`; gates whether the result is accepted or retried."""
+
+    state: _OutputState
+    reason: str | None = None
+
+    @classmethod
+    def ok(cls) -> OutputVerdict:
+        return cls(state=_OutputState.OK)
+
+    @classmethod
+    def retry(cls, reason: str) -> OutputVerdict:
+        return cls(state=_OutputState.RETRY, reason=reason)
+
+    @classmethod
+    def fail(cls, reason: str) -> OutputVerdict:
+        return cls(state=_OutputState.FAIL, reason=reason)
+
+    @property
+    def is_ok(self) -> bool:
+        return self.state is _OutputState.OK
+
+    @property
+    def is_retry(self) -> bool:
+        return self.state is _OutputState.RETRY
+
+    @property
+    def is_fail(self) -> bool:
+        return self.state is _OutputState.FAIL
+
+
+# ---------------------------------------------------------------------------
+# Agent base class
+# ---------------------------------------------------------------------------
 
 class Agent:
     """Closed-system base for one narrow LLM mapping job per subclass.
@@ -67,13 +143,13 @@ class Agent:
         """Return the user-prompt text for this run. Subclasses must override."""
         raise NotImplementedError
 
-    def validate_input(self, user_text: str) -> bool:
-        """Return True if `user_text` is acceptable. Default: always True (no-op slot)."""
-        return True
+    def validate_input(self, user_text: str) -> InputVerdict:
+        """Return InputVerdict for `user_text`. Default: always ok (no-op slot)."""
+        return InputVerdict.ok()
 
-    def validate_output(self, output: BaseModel, ctx: object) -> bool:
-        """Return True if `output` is semantically acceptable. Default: True (no-op slot)."""
-        return True
+    def validate_output(self, output: BaseModel, ctx: object) -> OutputVerdict:
+        """Return OutputVerdict for `output`. Default: always ok (no-op slot)."""
+        return OutputVerdict.ok()
 
     def before_run(self, ctx: object, inputs: BaseModel) -> None:
         """Hook fired once before the first attempt. Default: no-op slot."""
@@ -97,19 +173,28 @@ class Agent:
         self._provider = provider
         self.before_run(ctx, inputs)
         user = self.build_input(ctx, inputs)
-        self.validate_input(user)
 
-        result, attempts = self._run_with_retries(user)
+        verdict = self.validate_input(user)
+        if verdict.is_abort:
+            failure = AgentRunFailure(
+                agent_name=self.name,
+                attempts=0,
+                reason=verdict.reason or "input_aborted",
+            )
+            self.after_run(failure, 0)
+            return failure
+
+        result, attempts = self._run_with_retries(user, ctx)
         self.after_run(result, attempts)
         return result
 
-    def _run_with_retries(self, user: str) -> tuple[BaseModel | AgentRunFailure, int]:
+    def _run_with_retries(self, user: str, ctx: object) -> tuple[BaseModel | AgentRunFailure, int]:
         """Drive the retry loop and return `(result, attempts)`."""
         tool_name = self.tool_name or f"emit_{self.name}"
         effective_system = render_prompt(self.prompt, tuning=self.tuning)
         attempt = 0
         retries = 0
-        last_error = ""
+        last_reason = ""
         run_t0 = time.monotonic()
         log.info("agent_run_start", agent=self.name)
 
@@ -122,6 +207,28 @@ class Agent:
                 attempt += 1
                 try:
                     parsed, raw, tin, tout = self._invoke_provider(tool_name, user, effective_system)
+                except ValidationError as exc:
+                    last_reason = str(exc)
+                    record_validate_event(span, ok=False, error=last_reason[:200])
+                    agent_retry_count.add(1, {"agent": self.name, "reason": "schema_validation"})
+                    log.warning("agent_run_schema_validation_failed",
+                                agent=self.name, attempt=attempt, error=last_reason)
+                    if attempt > self.retry.max_retries:
+                        break
+                    retries += 1
+                    record_retry_event(span, attempt=attempt + 1, reason="schema_validation")
+                    user = _build_retry_prompt(user, last_reason)
+                    self.on_retry("schema_validation", attempt)
+                    continue
+                except Exception as exc:
+                    last_reason = f"{type(exc).__name__}: {exc}"
+                    log.error("agent_run_unexpected_error", agent=self.name, error=last_reason)
+                    if attempt > self.retry.max_retries:
+                        break
+                    continue
+
+                out_verdict = self.validate_output(parsed, ctx)
+                if out_verdict.is_ok:
                     record_validate_event(span, ok=True, error=None)
                     self._emit_success_capture(span, parsed, raw, tin, tout, retries)
                     self._record_success(attempt, span)
@@ -129,26 +236,29 @@ class Agent:
                     if notes:
                         log_agent_io(self.name, kind="decision_notes", payload=notes)
                     return parsed, attempt
-                except ValidationError as exc:
-                    last_error = str(exc)
-                    record_validate_event(span, ok=False, error=last_error[:200])
-                    agent_retry_count.add(1, {"agent": self.name, "reason": "schema_validation"})
-                    log.warning("agent_run_schema_validation_failed",
-                                agent=self.name, attempt=attempt, error=last_error)
+                elif out_verdict.is_fail:
+                    last_reason = out_verdict.reason or "output_failed"
+                    record_validate_event(span, ok=False, error=last_reason[:200])
+                    log.warning("agent_run_output_failed",
+                                agent=self.name, attempt=attempt, reason=last_reason)
+                    span.set_attribute("retries", retries)
+                    failure = self._record_failure(run_t0, attempt, last_reason, span)
+                    return failure, attempt
+                else:  # is_retry
+                    last_reason = out_verdict.reason or "semantic_retry"
+                    record_validate_event(span, ok=False, error=last_reason[:200])
+                    agent_retry_count.add(1, {"agent": self.name, "reason": "semantic_validation"})
+                    log.warning("agent_run_semantic_retry",
+                                agent=self.name, attempt=attempt, reason=last_reason)
                     if attempt > self.retry.max_retries:
                         break
                     retries += 1
-                    record_retry_event(span, attempt=attempt + 1, reason="schema_validation")
-                    user = _build_retry_prompt(user, last_error)
-                    self.on_retry("schema_validation", attempt)
-                except Exception as exc:
-                    last_error = f"{type(exc).__name__}: {exc}"
-                    log.error("agent_run_unexpected_error", agent=self.name, error=last_error)
-                    if attempt > self.retry.max_retries:
-                        break
+                    record_retry_event(span, attempt=attempt + 1, reason="semantic_validation")
+                    user = _build_retry_prompt(user, last_reason)
+                    self.on_retry(last_reason, attempt)
 
             span.set_attribute("retries", retries)
-            failure = self._record_failure(run_t0, attempt, last_error, span)
+            failure = self._record_failure(run_t0, attempt, last_reason, span)
             return failure, attempt
 
     def _invoke_provider(self, tool_name: str, user: str, system: str | None = None) -> tuple[BaseModel, str, int, int]:
@@ -191,7 +301,7 @@ class Agent:
         span.set_attribute("agent.status", "success")
 
     def _record_failure(
-        self, run_t0: float, attempt: int, last_error: str, span: object,
+        self, run_t0: float, attempt: int, last_reason: str, span: object,
     ) -> AgentRunFailure:
         """Emit failure telemetry and return an AgentRunFailure for the caller."""
         agent_duration_seconds.record(
@@ -199,17 +309,13 @@ class Agent:
         )
         agent_calls_total.add(1, {"agent": self.name, "status": "failure"})
         span.set_attribute("agent.status", "failure")
-        span.set_attribute("agent.error", str(last_error)[:200])
+        span.set_attribute("agent.error", str(last_reason)[:200])
         return AgentRunFailure(
             agent_name=self.name,
-            attempt_count=attempt,
-            final_error=last_error,
+            attempts=attempt,
+            reason=last_reason,
         )
 
-    # The `run` entry point above passes the provider through a transient
-    # attribute so `_invoke_provider` can stay parameter-light. Set just
-    # before each call; cleared on exit is unnecessary because each `run`
-    # overwrites it.
     _provider: BaseProvider
 
 
