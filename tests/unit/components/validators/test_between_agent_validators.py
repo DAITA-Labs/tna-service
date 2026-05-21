@@ -10,7 +10,7 @@ from app.enums.stage_scope import StageScope
 from app.enums.validation_severity import ValidationSeverity
 from app.models.artifacts import (
     CanonicalNameMap, HeaderLabel, KVAnchor, PliBlock, RowSpec,
-    SheetPlan, StageBandSpec, StageColumn,
+    SheetPlan, StageBandSpec, StageColumn, ValidationFinding,
 )
 
 
@@ -34,6 +34,32 @@ def _row_per_pli_plan() -> SheetPlan:
 def test_post_review_clean_plan_returns_no_findings() -> None:
     plan = _row_per_pli_plan()
     assert validate_post_review(plan) == []
+
+
+def test_post_review_propagates_both_errors_and_warnings() -> None:
+    """Both severities propagate so warnings introduced by PlanReviewer aren't lost."""
+    from unittest.mock import patch
+
+    # Inject a fake invariants result: one ERROR + one WARN
+    fake = [
+        ValidationFinding(
+            check="row_uniqueness",
+            severity=ValidationSeverity.ERROR,
+            message="row 7 duplicated",
+        ),
+        ValidationFinding(
+            check="vocabulary_overlap",
+            severity=ValidationSeverity.WARN,
+            message="header vocab thin",
+        ),
+    ]
+    with patch(
+        "app.components.validators.post_review_plan.validate_invariants",
+        return_value=fake,
+    ):
+        out = validate_post_review(_row_per_pli_plan())
+    assert {f.severity for f in out} == {ValidationSeverity.ERROR, ValidationSeverity.WARN}
+    assert all(f.check.startswith("post_review_plan/") for f in out)
 
 
 # === post_namer_canonical ===
