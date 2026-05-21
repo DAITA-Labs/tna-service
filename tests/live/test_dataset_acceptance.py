@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 import pytest
 
-from app.services.extraction import extract
+from app.services.extract_service import extract
 from app.repositories.workbook_repo import register_workbook
 from evals.runner import run_one
 

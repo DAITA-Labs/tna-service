@@ -56,3 +56,13 @@ class ToolRegistry:
 
 
 TOOL_REGISTRY = ToolRegistry()
+
+
+def get_tool(name: str) -> Callable:
+    """Look up a registered tool by name, raising KeyError if absent."""
+    return TOOL_REGISTRY.get(name)
+
+
+def list_tools() -> list[str]:
+    """Return all registered tool names in sorted order."""
+    return TOOL_REGISTRY.names()

@@ -21,7 +21,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from app.services.extraction import extract as _orchestrator_extract
+from app.services.extract_service import extract as _orchestrator_extract
 from evals._label_dir import LABELS_DIR
 from evals._smoke_subset import SMOKE_SUBSET
 from evals._workbook_dir import WORKBOOKS_DIR

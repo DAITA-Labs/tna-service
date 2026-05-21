@@ -1,5 +1,7 @@
 """End-to-end test: full extract() pipeline with FakeLLM against fixtures."""
-from app.services.extraction import extract
+from structlog.testing import capture_logs
+
+from app.services.extract_service import extract
 from tests.fixtures.case import fixture_case
 from tests.fixtures.fake_llm import FakeLLM
 
@@ -10,7 +12,8 @@ from tests.fixtures.fake_llm import FakeLLM
 )
 def test_extract_emits_expected_plis(fixture):
     llm = FakeLLM(canned=fixture.fake_llm_responses())
-    result = extract(fixture.xlsx_path, llm=llm)
+    with capture_logs():
+        result = extract(fixture.xlsx_path, llm=llm)
     e2e = fixture.expectations("e2e")
     assert len(result.plis) == e2e["pli_count"]
     expected_ios = e2e["io_numbers"]
@@ -26,7 +29,8 @@ def test_extract_does_not_emit_unexpected_io_numbers(fixture):
     """Negative assertion: extracted IO numbers must not include any value
     outside the fixture's expected set."""
     llm = FakeLLM(canned=fixture.fake_llm_responses())
-    result = extract(fixture.xlsx_path, llm=llm)
+    with capture_logs():
+        result = extract(fixture.xlsx_path, llm=llm)
     expected_set = set(fixture.expectations("e2e")["io_numbers"])
     actual_set = {p.io_number for p in result.plis if p.io_number is not None}
     unexpected = actual_set - expected_set

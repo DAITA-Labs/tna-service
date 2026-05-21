@@ -2,7 +2,7 @@
 """Flow failure test: synthetic SheetPlan with dangling anchor_idx triggers
 reference_integrity ERROR from validate_invariants."""
 import importlib
-from app.services.validation.plan_invariants import validate_invariants
+from app.components.validators.plan_invariants import validate_invariants
 from app.enums.validation_severity import ValidationSeverity
 from tests.fixtures.case import fixture_case
 

@@ -5,7 +5,7 @@ import pytest
 
 @pytest.mark.live
 def test_new_job_tna_five_plis_one_per_sheet():
-    from app.services.extraction import extract
+    from app.services.extract_service import extract
     p = Path("dataset/new job-TNA.xlsx")
     if not p.exists():
         pytest.skip("dataset file not present")

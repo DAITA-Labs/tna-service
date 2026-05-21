@@ -1,8 +1,8 @@
 # tests/flow/test_failure_data_anomalies.py
 """Flow failure test: stage band with mostly non-date cells triggers
 date_band_density warning from validate_statistics."""
-from app.services.planner.plan import SheetRowPlanner
-from app.services.validation.plan_statistics import validate_statistics
+from app.components.planner.plan import SheetRowPlanner
+from app.components.validators.plan_statistics import validate_statistics
 from tests.fixtures.case import fixture_case
 
 

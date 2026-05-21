@@ -8,7 +8,7 @@ from app.agents.layout_hinter.schema import LayoutHinterInputs, LayoutHints
 from app.agents.layout_hinter.tuning import LayoutHinterTuning
 from app.agents.layout_hinter.validators import validate_layout_hints
 from app.prompts import LAYOUT_HINTER
-from app.repositories.workbook_tools._registry import TOOL_REGISTRY
+from app.tools._registry import TOOL_REGISTRY
 
 
 class LayoutHinterAgent(Agent):

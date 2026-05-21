@@ -10,22 +10,32 @@ ROOT = Path(__file__).resolve().parents[3]
 
 
 def test_workflow_agents_each_in_own_module():
-    """All workflow agents have been migrated to app/agents/; services/agents/ has none left."""
+    """All workflow agents live in app/agents/; app/services/agents/ has been deleted."""
     agents_dir = ROOT / "app" / "services" / "agents"
-    agents = {p.stem for p in agents_dir.glob("*.py")
-              if p.name not in ("__init__.py", "_base.py")}
-    assert agents == set()
+    assert not agents_dir.exists(), (
+        "app/services/agents/ still exists — legacy agent directory must be deleted"
+    )
+
+
+def test_services_contains_only_service_layer():
+    """app/services/ contains only the orchestration service layer."""
+    svc_dir = ROOT / "app" / "services"
+    files = {p.name for p in svc_dir.glob("*.py")}
+    assert files == {"__init__.py", "extract_service.py"}, (
+        f"Unexpected files in app/services/: {files}"
+    )
 
 
 def test_validators_each_in_own_module():
-    """One file per validator in services/validation/."""
-    v_dir = ROOT / "app" / "services" / "validation"
+    """One file per validator in components/validators/."""
+    v_dir = ROOT / "app" / "components" / "validators"
     vals = {p.stem for p in v_dir.glob("*.py")
             if p.name not in ("__init__.py",)}
     assert vals == {
         "source_cell_verifier", "header_match_verifier",
         "coverage_verifier", "field_dropout_verifier",
         "plan_invariants", "plan_statistics",
+        "post_review_plan", "post_namer_canonical", "pre_apply_readiness",
     }
 
 
@@ -40,12 +50,11 @@ def test_eval_independent_of_app_services():
 
 
 def test_tools_grouped_by_purpose():
-    """workbook_tools/ has the expected 6 module files."""
-    t = ROOT / "app" / "repositories" / "workbook_tools"
+    """app/tools/ has the expected tool module files."""
+    t = ROOT / "app" / "tools"
     files = {p.stem for p in t.glob("*.py")
-             if p.name != "__init__.py"}
-    assert files == {"_registry", "survey", "bulk_read",
-                    "targeted", "structure", "search"}
+             if p.name not in ("__init__.py", "_registry.py", "_decorator.py")}
+    assert files == {"survey", "bulk_read", "targeted", "structure", "search"}
 
 
 def test_enums_each_in_own_module():

@@ -1,10 +1,4 @@
-"""Business logic / service layer."""
-from app.services.llm_provider import (
-    LLMProvider, AnthropicProvider, MissingAPIKey, schema_to_tool,
-)
-from app.services.reconciler import reconcile, aggregate_confidence
+"""Service layer — orchestration between the HTTP boundary and the Haystack pipeline."""
+from app.services.extract_service import extract
 
-__all__ = [
-    "LLMProvider", "AnthropicProvider", "MissingAPIKey", "schema_to_tool",
-    "reconcile", "aggregate_confidence",
-]
+__all__ = ["extract"]
