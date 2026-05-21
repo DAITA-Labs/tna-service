@@ -137,7 +137,7 @@ class Agent(Generic[InputsT, OutputT]):
     def _invoke_provider(self, tool_name: str, user: str) -> OutputT:
         """Call the LLM provider and return a parsed model. Raises on schema or SDK errors."""
         t0 = time.monotonic()
-        out = self._provider.complete_with_schema(
+        result, _raw, _tin, _tout = self._provider.complete_with_schema(
             system=self.prompt,
             user=user,
             output_schema=self.output_schema,
@@ -148,7 +148,7 @@ class Agent(Generic[InputsT, OutputT]):
             time.monotonic() - t0, {"agent": self.name, "status": "success"},
         )
         agent_calls_total.add(1, {"agent": self.name, "status": "success"})
-        return out  # type: ignore[return-value]
+        return result  # type: ignore[return-value]
 
     def _record_success(self, attempt: int, span: object) -> None:
         """Log + tag span on success."""

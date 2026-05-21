@@ -27,8 +27,8 @@ def test_baseprovider_is_abstract_template() -> None:
     with pytest.raises(TypeError):
         BaseProvider()  # type: ignore[abstract]
 
-    # Three abstract primitives + the concrete template
-    for name in ("_call_provider", "_record_usage", "_parse_response"):
+    # Five abstract primitives + the concrete template
+    for name in ("_call_provider", "_extract_tokens", "_extract_raw_text", "_record_usage", "_parse_response"):
         assert getattr(BaseProvider, name).__isabstractmethod__, (
             f"{name} must be marked @abstractmethod"
         )
@@ -48,7 +48,7 @@ def test_anthropic_provider_inherits_baseprovider() -> None:
     # `model` is declared on BaseProvider as a typed instance attribute
     assert "model" in BaseProvider.__annotations__
     # Each primitive is overridden (no longer abstract on the concrete class)
-    for name in ("_call_provider", "_record_usage", "_parse_response"):
+    for name in ("_call_provider", "_extract_tokens", "_extract_raw_text", "_record_usage", "_parse_response"):
         assert not getattr(
             getattr(AnthropicProvider, name), "__isabstractmethod__", False,
         ), f"AnthropicProvider must override abstract {name}"
@@ -195,6 +195,12 @@ def test_agent_base_runs_and_lifecycle_hooks_are_noops() -> None:
         def _call_provider(self, *, system, user, output_schema, tool_name):
             return output_schema(v=int(user.strip()))
 
+        def _extract_tokens(self, raw):
+            return None, None
+
+        def _extract_raw_text(self, raw, tool_name):
+            return ""
+
         def _record_usage(self, *, span, raw, agent_name) -> None:
             pass
 
@@ -227,6 +233,12 @@ def test_agent_base_runs_and_lifecycle_hooks_are_noops() -> None:
         def _call_provider(self, **_kw):
             from pydantic import ValidationError
             raise ValidationError.from_exception_data("bad", [])  # type: ignore[arg-type]
+
+        def _extract_tokens(self, raw):
+            return None, None
+
+        def _extract_raw_text(self, raw, tool_name):
+            return ""
 
         def _record_usage(self, **_kw) -> None:
             pass
@@ -327,6 +339,12 @@ def test_end_to_end_composition_smoke() -> None:
 
         def _call_provider(self, *, system, user, output_schema, tool_name):
             return output_schema(v=int(user.strip()))
+
+        def _extract_tokens(self, raw):
+            return None, None
+
+        def _extract_raw_text(self, raw, tool_name):
+            return ""
 
         def _record_usage(self, *, span, raw, agent_name) -> None:
             pass

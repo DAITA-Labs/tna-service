@@ -100,7 +100,7 @@ class AgentRunner:
         or any provider exception on failure — callers handle retry logic.
         """
         t0 = time.monotonic()
-        result = self.llm.complete_with_schema(
+        result, _raw, _tin, _tout = self.llm.complete_with_schema(
             system=self.spec.system_prompt,
             user=user,
             output_schema=self.spec.output_schema,

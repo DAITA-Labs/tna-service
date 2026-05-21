@@ -58,13 +58,16 @@ def test_anthropic_provider_complete_with_schema_calls_client():
     fake_resp.stop_reason = "tool_use"
     fake_client.messages.create.return_value = fake_resp
 
+    fake_resp.usage = MagicMock(input_tokens=5, output_tokens=3)
     p = AnthropicProvider(client=fake_client, model="claude-sonnet-4-6")
-    out = p.complete_with_schema(
+    parsed, raw_text, tin, tout = p.complete_with_schema(
         system="be brief",
         user="extract this",
         output_schema=DummyOut,
         tool_name="emit_dummy",
     )
-    assert isinstance(out, DummyOut)
-    assert out.name == "abc"
-    assert out.count == 7
+    assert isinstance(parsed, DummyOut)
+    assert parsed.name == "abc"
+    assert parsed.count == 7
+    assert tin == 5 and tout == 3
+    assert raw_text  # non-empty JSON string

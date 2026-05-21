@@ -22,7 +22,7 @@ class _RaisingLLM:
     """Always raises — simulates HTTP / SDK error."""
 
     def complete_with_schema(self, system, user, output_schema, tool_name=None,
-                             agent_name="unknown"):
+                             agent_name="unknown", attempt=1):
         raise RuntimeError("simulated LLM transport failure")
 
 
@@ -37,8 +37,8 @@ class _BadResponseLLM:
         self._response = response
 
     def complete_with_schema(self, system, user, output_schema, tool_name=None,
-                             agent_name="unknown"):
-        return output_schema(**self._response)
+                             agent_name="unknown", attempt=1):
+        return output_schema(**self._response), "{}", 0, 0
 
 
 # ---------------------------------------------------------------------------
