@@ -4,7 +4,7 @@ from app.models.artifacts import SheetPlan, RowSpec
 from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
 from app.enums.stage_scope import StageScope
-from app.services.validation.plan_statistics import validate_statistics
+from app.components.validators.plan_statistics import validate_statistics
 
 
 def _ctx(tmp_path, cells):

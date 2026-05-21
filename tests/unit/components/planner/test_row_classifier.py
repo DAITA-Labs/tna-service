@@ -1,7 +1,7 @@
 from openpyxl import Workbook
 from app.repositories.workbook_repo import register_workbook, clear_cache
-from app.services.planner.surveyor import survey_sheet
-from app.services.planner.row_classifier import classify_rows
+from app.components.planner.surveyor import survey_sheet
+from app.components.planner.row_classifier import classify_rows
 from app.enums.row_role import RowRole
 
 

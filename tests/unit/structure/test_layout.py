@@ -18,8 +18,8 @@ def test_workflow_agents_each_in_own_module():
 
 
 def test_validators_each_in_own_module():
-    """One file per validator in services/validation/."""
-    v_dir = ROOT / "app" / "services" / "validation"
+    """One file per validator in components/validators/."""
+    v_dir = ROOT / "app" / "components" / "validators"
     vals = {p.stem for p in v_dir.glob("*.py")
             if p.name not in ("__init__.py",)}
     assert vals == {

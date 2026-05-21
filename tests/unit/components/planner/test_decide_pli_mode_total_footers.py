@@ -10,7 +10,7 @@ import pytest
 
 from app.enums.pli_mode import PliMode
 from app.models.artifacts import SheetSignals
-from app.services.planner.plan import _decide_pli_mode
+from app.components.planner.plan import _decide_pli_mode
 
 
 def _tabular_signals_fa26_shape() -> SheetSignals:

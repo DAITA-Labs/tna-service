@@ -4,7 +4,7 @@ NOT produce features that don't apply (mode differentiation, etc.).
 These tests complement the positive `test_planner_pipeline.py` — together
 they pin both what the planner emits AND what it deliberately doesn't emit
 for each layout family."""
-from app.services.planner.plan import SheetRowPlanner
+from app.components.planner.plan import SheetRowPlanner
 from tests.fixtures.case import fixture_case
 
 

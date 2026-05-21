@@ -1,6 +1,6 @@
 from app.models.artifacts import SheetSignals, RowSpec, KVAnchor
 from app.enums.row_role import RowRole
-from app.services.planner.block_segmenter import segment_blocks
+from app.components.planner.block_segmenter import segment_blocks
 
 
 def test_segment_two_blocks_separated_by_blank_run():

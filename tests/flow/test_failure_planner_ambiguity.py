@@ -1,7 +1,7 @@
 # tests/flow/test_failure_planner_ambiguity.py
 """Flow failure test: planner ambiguity — no identity column candidates."""
-from app.services.planner.plan import SheetRowPlanner
-from app.services.validation.plan_statistics import validate_statistics
+from app.components.planner.plan import SheetRowPlanner
+from app.components.validators.plan_statistics import validate_statistics
 from tests.fixtures.case import fixture_case
 
 

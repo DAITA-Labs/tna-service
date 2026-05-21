@@ -1,5 +1,5 @@
 """Flow test: SheetRowPlanner emits expected SheetPlan per fixture."""
-from app.services.planner.plan import SheetRowPlanner
+from app.components.planner.plan import SheetRowPlanner
 from app.enums.row_role import RowRole
 from tests.fixtures.case import fixture_case
 

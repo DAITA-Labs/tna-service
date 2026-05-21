@@ -13,7 +13,7 @@ from app.enums.row_role import RowRole
 from app.models.artifacts import (
     HeaderLabel, RowSpec, SheetPlan, StageBandSpec, StageColumn,
 )
-from app.services.planner.plan import _detect_title_row_extra_header
+from app.components.planner.plan import _detect_title_row_extra_header
 
 
 def test_does_not_fire_when_stage_bands_claim_most_cols(tmp_path) -> None:

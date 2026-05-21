@@ -7,7 +7,7 @@ from app.models.artifacts import (
     PliBlock,
     SheetPlan,
 )
-from app.services.validation.plan_invariants import validate_invariants
+from app.components.validators.plan_invariants import validate_invariants
 
 
 def test_row_per_pli_with_header_labels_passes_invariants() -> None:
