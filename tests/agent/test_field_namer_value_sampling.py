@@ -4,7 +4,7 @@ from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
 from app.models.artifacts import HeaderLabel, RowSpec, SheetPlan
 from app.repositories.workbook_repo import register_workbook
-from app.services.agents.field_namer import _sample_values
+from app.agents.field_namer.agent import _sample_values
 
 
 def test_returns_at_most_k_samples_per_label(tmp_path) -> None:

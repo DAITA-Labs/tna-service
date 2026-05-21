@@ -44,7 +44,7 @@ from app.models.artifacts import (
 from app.models.extraction import ExtractionResult, PLI, Warning
 from app.repositories.workbook_repo import register_workbook
 from app.repositories.workbook_tools._registry import TOOL_REGISTRY
-from app.services.agents.field_namer import FieldNamer
+from app.components.field_namer import FieldNamer
 from app.components.layout_hinter import LayoutHinter
 from app.components.plan_reviewer import PlanReviewer
 from app.components.sheet_classifier import SheetClassifier
