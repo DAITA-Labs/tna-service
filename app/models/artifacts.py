@@ -314,11 +314,7 @@ class CanonicalNameMap(AgentOutput):
     stage_confidence: dict[str, float] = Field(default_factory=dict)
 
 
-class LayoutHints(AgentOutput):
-    """LayoutHinter's output — disambiguation hints for the planner."""
-    identity_column_suggestion: str | None = None
-    mode_suggestion: str | None = None
-    notes: list[str] = Field(default_factory=list)
+from app.agents.layout_hinter.schema import LayoutHints  # noqa: F401
 
 
 class PlanVerdict(AgentOutput):
