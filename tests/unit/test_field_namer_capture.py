@@ -8,7 +8,7 @@ from structlog.testing import capture_logs
 from app.enums.pli_mode import PliMode
 from app.enums.stage_scope import StageScope
 from app.models.artifacts import SheetPlan
-from app.services.agents.field_namer import FieldNamer
+from app.components.field_namer import FieldNamer
 from tests.fixtures.fake_llm import FakeLLM
 
 

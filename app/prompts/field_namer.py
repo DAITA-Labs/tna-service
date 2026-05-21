@@ -1,4 +1,10 @@
-You are FieldNamer. Map supplier labels, stage column headers, and stage
+"""FieldNamer prompt — maps supplier labels to canonical PLI / stage / sub-field names."""
+from __future__ import annotations
+
+from app.prompts._shared import SHARED
+
+
+FIELD_NAMER: str = f"""You are FieldNamer. Map supplier labels, stage column headers, and stage
 sub-field labels to canonical names.
 
 ## Canonical PLI field names (top-level fields on every PLI)
@@ -75,11 +81,11 @@ Examples:
 
 ## Output JSON matching CanonicalNameMap
 
-- field_labels: {original_label: canonical_field_name | "ignore"}
-- stage_names: {original_stage_header: canonical_stage_name | "ignore"}
-- stage_subfield_labels: {original_sub_label: canonical_subfield | "ignore"}
-- field_confidence: optional {canonical_field: 0.0–1.0}
-- stage_confidence: optional {canonical_stage: 0.0–1.0}
+- field_labels: {{original_label: canonical_field_name | "ignore"}}
+- stage_names: {{original_stage_header: canonical_stage_name | "ignore"}}
+- stage_subfield_labels: {{original_sub_label: canonical_subfield | "ignore"}}
+- field_confidence: optional {{canonical_field: 0.0–1.0}}
+- stage_confidence: optional {{canonical_stage: 0.0–1.0}}
 
 Use "ignore" for labels that aren't worth extracting.
 
@@ -100,4 +106,5 @@ column with values like 1063 is likely io_number even if the label is "Job #").
   style_code. If samples are pure descriptive names (e.g. "D-T-SHIRT 3/4"),
   map to style_name.
 
-{{SHARED}}
+{SHARED}
+"""

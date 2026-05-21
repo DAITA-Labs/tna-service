@@ -3,7 +3,14 @@ from app.enums.pli_mode import PliMode
 from app.models.artifacts import (
     HeaderLabel, KVAnchor, PliBlock, SheetPlan, StageBandSpec, StageColumn,
 )
-from app.services.agents.field_namer import _build_user_input
+from app.agents.field_namer.agent import _format_markdown, _sample_values, _col_of
+from app.agents.field_namer.schema import FieldNamerInputs
+
+
+def _build_user_input(ctx: object, inputs: dict) -> str:
+    """Shim: delegate to new agent's build_input for backward compatibility."""
+    from app.agents.field_namer import FieldNamerAgent
+    return FieldNamerAgent().build_input(ctx, FieldNamerInputs(plan=inputs["plan"]))
 
 
 def _stub_ctx(*, max_row: int = 4, max_col: int = 26) -> object:
