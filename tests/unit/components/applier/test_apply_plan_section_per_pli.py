@@ -7,7 +7,7 @@ from app.models.artifacts import (
 )
 from app.enums.pli_mode import PliMode
 from app.enums.stage_scope import StageScope
-from app.services.applier.apply_plan import apply_plan
+from app.components.applier import apply_plan
 
 
 def test_section_per_pli_two_blocks(tmp_path):

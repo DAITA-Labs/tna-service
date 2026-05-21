@@ -48,13 +48,13 @@ from app.components.field_namer import FieldNamer
 from app.components.layout_hinter import LayoutHinter
 from app.components.plan_reviewer import PlanReviewer
 from app.components.sheet_classifier import SheetClassifier
-from app.services.applier.apply_plan import apply_plan
+from app.components.applier import apply_plan
 from app.core.log_capture import log_artifact
 from app.core.tracing import get_tracer
 from app.services.llm_provider import AnthropicProvider
 from app.components.planner.plan import SheetRowPlanner
 from app.components.planner.surveyor import survey_sheet
-from app.services.reconciler import reconcile
+from app.components.reconciler import reconcile
 from app.components.validators.coverage_verifier import CoverageVerifier
 from app.components.validators.field_dropout_verifier import FieldDropoutVerifier
 from app.components.validators.header_match_verifier import HeaderMatchVerifier
