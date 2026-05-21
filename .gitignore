@@ -14,3 +14,15 @@ evals/golden_snapshots/_tmp/
 app/__pycache__/
 build/
 dist/
+
+# frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/*.log
+frontend/*.tsbuildinfo
+
+.claude/
+.DS_Store
+
+deploy/common/clickhouse/user_scripts/histogramQuantile
