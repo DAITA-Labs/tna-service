@@ -10,7 +10,7 @@ In every case the agent should yield a usable default and NOT propagate the
 exception — the orchestrator depends on this for graceful degradation.
 """
 from __future__ import annotations
-from app.services.agents.field_namer import FieldNamer
+from app.components.field_namer import FieldNamer
 from app.components.sheet_classifier import SheetClassifier
 from app.services.planner.plan import SheetRowPlanner
 from app.repositories.workbook_tools._registry import TOOL_REGISTRY
