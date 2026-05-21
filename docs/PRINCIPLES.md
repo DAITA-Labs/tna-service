@@ -155,3 +155,20 @@ These rules were established through live development experience and promoted fr
 - An agent that does multiple distinct mapping jobs in one call should be evaluated for splitting *only* if its outputs are demonstrably lower-quality than separate focused calls would produce. Splitting costs more — needs to earn its keep on the quality metric.
 - During code review: a new `await llm.complete(...)` inside a for-loop over PLIs or rows is a defect.
 - Re-validate the budget after every architectural change: count actual LLM calls per file in `make eval` outputs; flag any drift from the `(1 SheetClassifier + N × FieldNamer + conditional LayoutHinter/PlanReviewer)` shape for a relevant-sheet count N.
+
+---
+
+## 12. Agent lifecycle is a closed system
+
+**Rule:** Every LLM call goes through `Agent.run`. That method is the only place where schema validation and semantic validation happen, and it is the only place where retry-with-reason is allowed. Direct calls to a provider from anywhere except the `inferencing` layer are a defect.
+
+**Why:** The lifecycle slots — `before_run`, `build_input`, `validate_input`, `validate_output`, `on_retry`, `after_run` — exist so that any new guard (PlanReviewer-style "raw LLM verdict directly into pipeline state" being the original anti-pattern) lands as a `validate_output` override rather than as ad-hoc post-processing in a calling component. Without this closure, every caller invents its own retry policy, its own gate, its own logging — and bugs accumulate at every call site.
+
+**How to apply:**
+- One LLM call per agent attempt; at most two attempts per `Agent.run` (default `RetryPolicy.max_retries=1`).
+- Schema-validation failure and semantic-validation failure share the same retry budget. Both count toward `attempts`.
+- Failure surfaces as `AgentRunFailure(agent_name, attempts, reason)`, never as an exception — so the caller can choose a fallback without losing the trace.
+- Per-agent gates plug in as `validate_input` / `validate_output` overrides; they MUST return `InputVerdict` / `OutputVerdict` (not bare booleans).
+- The `inferencing` layer (`app/inferencing/*`) is the only place that calls the provider SDK. Anything else that imports `Anthropic` directly is a defect.
+
+See also: Principle 4 (LLM as reviewer, not producer) — now enforced by the lifecycle, not by convention.

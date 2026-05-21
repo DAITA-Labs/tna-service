@@ -57,8 +57,8 @@ class AgentRunFailure:
     """Returned (not raised) when all retry attempts are exhausted without a valid schema response."""
 
     agent_name: str
-    attempt_count: int
-    final_error: str
+    attempts: int
+    reason: str
     raw_outputs: list[str] = field(default_factory=list)
 
 
@@ -175,8 +175,8 @@ class AgentRunner:
         span.set_attribute("agent.error", str(last_error)[:200])
         return AgentRunFailure(
             agent_name=self.spec.name,
-            attempt_count=attempt,
-            final_error=last_error,
+            attempts=attempt,
+            reason=last_error,
         )
 
 

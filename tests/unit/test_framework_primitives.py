@@ -244,7 +244,7 @@ def test_agent_base_runs_and_lifecycle_hooks_are_noops() -> None:
     failure = _Echo().run(ctx=None, inputs=_Inputs(x=1), provider=_AlwaysFails())
     assert isinstance(failure, AgentRunFailure)
     assert failure.agent_name == "echo_agent"
-    assert failure.attempt_count >= 2  # initial + one retry per default policy
+    assert failure.attempts >= 2  # initial + one retry per default policy
 
 
 def test_make_pipeline_returns_haystack_pipeline_with_components() -> None:
