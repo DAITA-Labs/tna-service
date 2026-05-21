@@ -20,7 +20,7 @@ class _StubCtx:
 
 def test_user_input_uses_json_safe_enum_serialisation(monkeypatch) -> None:
     """Plan dump must NOT contain Python repr like <PliMode.ROW_PER_PLI: 'row_per_pli'>."""
-    from app.repositories.workbook_tools._registry import TOOL_REGISTRY
+    from app.tools._registry import TOOL_REGISTRY
     monkeypatch.setitem(TOOL_REGISTRY._tools, "peek_sheet", _StubPeek())
     plan = SheetPlan(
         sheet="S",

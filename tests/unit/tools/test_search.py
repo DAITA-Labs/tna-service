@@ -1,6 +1,6 @@
-"""Tests for app/repositories/workbook_tools/search."""
+"""Tests for app/tools/search."""
 from app.repositories.workbook_repo import register_workbook
-from app.repositories.workbook_tools.search import find_value
+from app.tools.search import find_value
 
 
 def test_find_value_returns_addresses(dkn_file):

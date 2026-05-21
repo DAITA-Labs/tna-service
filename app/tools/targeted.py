@@ -3,8 +3,8 @@ from __future__ import annotations
 from openpyxl.utils import column_index_from_string
 from openpyxl.utils.cell import coordinate_from_string
 from app.models.workbook import WorkbookCtx, Cell
-from app.repositories.workbook_tools._registry import tool
-from app.repositories.workbook_tools.bulk_read import _cell
+from app.tools._decorator import tool
+from app.tools.bulk_read import _cell
 
 
 @tool("read_row")

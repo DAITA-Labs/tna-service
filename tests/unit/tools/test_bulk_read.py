@@ -1,6 +1,6 @@
-"""Tests for app/repositories/workbook_tools/bulk_read."""
+"""Tests for app/tools/bulk_read."""
 from app.repositories.workbook_repo import register_workbook
-from app.repositories.workbook_tools.bulk_read import (
+from app.tools.bulk_read import (
     peek_sheet, sample_rows, read_range,
 )
 

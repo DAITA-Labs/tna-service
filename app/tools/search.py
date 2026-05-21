@@ -2,7 +2,7 @@
 from __future__ import annotations
 from openpyxl.utils import get_column_letter
 from app.models.workbook import WorkbookCtx
-from app.repositories.workbook_tools._registry import tool
+from app.tools._decorator import tool
 
 
 @tool("find_value")

@@ -18,11 +18,11 @@ from typing import Any
 
 import structlog.contextvars
 
-import app.repositories.workbook_tools.bulk_read  # noqa: F401
-import app.repositories.workbook_tools.search  # noqa: F401
-import app.repositories.workbook_tools.structure  # noqa: F401
-import app.repositories.workbook_tools.survey  # noqa: F401
-import app.repositories.workbook_tools.targeted  # noqa: F401
+import app.tools.bulk_read  # noqa: F401 — force tool registration
+import app.tools.search  # noqa: F401
+import app.tools.structure  # noqa: F401
+import app.tools.survey  # noqa: F401
+import app.tools.targeted  # noqa: F401
 from app.core.logs import get_logger
 from app.core.telemetry import (
     extraction_duration_seconds,
@@ -43,7 +43,7 @@ from app.models.artifacts import (
 )
 from app.models.extraction import ExtractionResult, PLI, Warning
 from app.repositories.workbook_repo import register_workbook
-from app.repositories.workbook_tools._registry import TOOL_REGISTRY
+from app.tools._registry import TOOL_REGISTRY
 from app.components.field_namer import FieldNamer
 from app.components.layout_hinter import LayoutHinter
 from app.components.plan_reviewer import PlanReviewer

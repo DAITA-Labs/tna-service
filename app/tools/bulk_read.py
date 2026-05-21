@@ -6,7 +6,7 @@ from openpyxl.utils import get_column_letter
 
 from app.enums.cell_dtype import CellDtype
 from app.models.workbook import Cell, CellGrid, WorkbookCtx
-from app.repositories.workbook_tools._registry import tool
+from app.tools._decorator import tool
 
 
 def _infer_dtype(v: object) -> CellDtype:
