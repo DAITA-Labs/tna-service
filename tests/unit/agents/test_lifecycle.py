@@ -115,3 +115,98 @@ def test_retry_exhausted_returns_failure():
     result = agent.run(ctx=None, inputs=_DemoInputs(), provider=_PROVIDER)
     assert isinstance(result, AgentRunFailure)
     assert result.attempts == 2
+
+
+# ---------------------------------------------------------------------------
+# T5: on_retry default structured log
+# ---------------------------------------------------------------------------
+
+def test_on_retry_default_logs_reason_and_attempt() -> None:
+    """The default on_retry slot emits a structured log per retry."""
+    from structlog.testing import capture_logs
+
+    agent = _SemanticAgent(verdicts=[OutputVerdict.retry("nudge"), OutputVerdict.ok()])
+
+    with capture_logs() as caps:
+        result = agent.run(ctx=None, inputs=_DemoInputs(), provider=_PROVIDER)
+
+    assert isinstance(result, _DemoOutput)
+    retry_logs = [c for c in caps if c["event"] == "agent.retry_reason"]
+    assert len(retry_logs) == 1
+    assert retry_logs[0]["reason"] == "nudge"
+    assert retry_logs[0]["attempt"] == 1
+
+
+def test_on_retry_not_called_when_first_attempt_ok() -> None:
+    """on_retry MUST NOT fire when validate_output returns ok on the first attempt."""
+    from structlog.testing import capture_logs
+
+    agent = _SemanticAgent(verdicts=[OutputVerdict.ok()])
+
+    with capture_logs() as caps:
+        agent.run(ctx=None, inputs=_DemoInputs(), provider=_PROVIDER)
+
+    assert not any(c["event"] == "agent.retry_reason" for c in caps)
+
+
+# ---------------------------------------------------------------------------
+# T6: before_run / after_run fire on every exit path
+# ---------------------------------------------------------------------------
+
+class _ProbeAgent(_SemanticAgent):
+    def __init__(self, verdicts: list[OutputVerdict]) -> None:
+        super().__init__(verdicts)
+        self.before_calls: list = []
+        self.after_calls: list = []
+
+    def before_run(self, ctx, inputs) -> None:
+        self.before_calls.append((ctx, inputs))
+
+    def after_run(self, result, attempts: int) -> None:
+        self.after_calls.append((type(result).__name__, attempts))
+
+
+class _ProbeAbortingAgent(_AbortingAgent):
+    def __init__(self) -> None:
+        self.before_calls: list = []
+        self.after_calls: list = []
+
+    def before_run(self, ctx, inputs) -> None:
+        self.before_calls.append((ctx, inputs))
+
+    def after_run(self, result, attempts: int) -> None:
+        self.after_calls.append((type(result).__name__, attempts))
+
+
+def test_before_and_after_run_fire_exactly_once_on_success() -> None:
+    """Probe agent records before_run + after_run; both fire once on success."""
+    agent = _ProbeAgent(verdicts=[OutputVerdict.ok()])
+    agent.run(ctx=None, inputs=_DemoInputs(), provider=_PROVIDER)
+
+    assert len(agent.before_calls) == 1
+    assert len(agent.after_calls) == 1
+    assert agent.after_calls[0][0] == "DemoOutput" or agent.after_calls[0][0] == "_DemoOutput"
+    assert agent.after_calls[0][1] == 1  # one attempt
+
+
+def test_before_and_after_run_fire_on_input_abort() -> None:
+    """Both hooks still fire when validate_input aborts (no LLM call happens)."""
+    agent = _ProbeAbortingAgent()
+    agent.run(ctx=None, inputs=_DemoInputs(), provider=_PROVIDER)
+
+    assert len(agent.before_calls) == 1
+    assert len(agent.after_calls) == 1
+    assert agent.after_calls[0][0] == "AgentRunFailure"
+    assert agent.after_calls[0][1] == 0  # zero attempts (LLM never called)
+
+
+def test_before_and_after_run_fire_on_retry_exhausted() -> None:
+    """after_run receives the AgentRunFailure when budget is exhausted."""
+    agent = _ProbeAgent(verdicts=[OutputVerdict.retry("bad 1"), OutputVerdict.retry("bad 2")])
+    result = agent.run(ctx=None, inputs=_DemoInputs(), provider=_PROVIDER)
+
+    assert isinstance(result, AgentRunFailure)
+    assert len(agent.before_calls) == 1
+    assert len(agent.after_calls) == 1
+    assert agent.after_calls[0][0] == "AgentRunFailure"
+    assert agent.after_calls[0][1] == 2  # both attempts consumed

@@ -160,8 +160,13 @@ class Agent:
         return None
 
     def on_retry(self, reason: str, attempt: int) -> None:
-        """Hook fired before each retry attempt with the reason for retry. Default: no-op slot."""
-        return None
+        """Default: emit a structured log with reason + attempt. Subclasses may override."""
+        log.info(
+            "agent.retry_reason",
+            agent=self.name,
+            attempt=attempt,
+            reason=reason,
+        )
 
     def run(
         self,
