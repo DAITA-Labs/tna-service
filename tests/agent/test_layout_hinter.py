@@ -1,5 +1,5 @@
 """Agent test: LayoutHinter under canned response."""
-from app.services.agents.layout_hinter import LayoutHinter
+from app.components.layout_hinter import LayoutHinter
 from app.services.planner.surveyor import survey_sheet
 import app.repositories.workbook_tools.survey  # noqa: F401 — register tools
 import app.repositories.workbook_tools.bulk_read  # noqa: F401 — register tools
