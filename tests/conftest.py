@@ -1,6 +1,11 @@
 """Shared fixtures for the test suite."""
 from pathlib import Path
 import pytest
+import structlog
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import SimpleSpanProcessor
+from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
 
 # Re-export the fixture loader so any tier can use @fixture_case.
 from tests.fixtures.conftest import fixture  # noqa: F401
@@ -9,6 +14,37 @@ from tests.fixtures.conftest import fixture  # noqa: F401
 # Dataset ships inside tna-service/ so the microservice is self-contained.
 # tests/conftest.py → tests → tna-service → dataset
 DATASET_DIR = Path(__file__).resolve().parents[1] / "dataset"
+
+# ---------------------------------------------------------------------------
+# Shared OTel in-memory exporter — set up ONCE for the whole test session so
+# multiple test modules don't fight over set_tracer_provider (which is a
+# one-shot global).  Individual tests clear it via the autouse fixture below.
+# ---------------------------------------------------------------------------
+SPAN_EXPORTER = InMemorySpanExporter()
+_test_tracer_provider = TracerProvider()
+_test_tracer_provider.add_span_processor(SimpleSpanProcessor(SPAN_EXPORTER))
+trace.set_tracer_provider(_test_tracer_provider)
+
+
+@pytest.fixture(autouse=True)
+def _reset_otel_spans():
+    """Clear the shared in-memory span exporter before every test."""
+    SPAN_EXPORTER.clear()
+    yield
+    SPAN_EXPORTER.clear()
+
+
+@pytest.fixture(autouse=True)
+def _reset_structlog():
+    """Disable structlog's logger cache for tests.
+
+    configure_logging() sets cache_logger_on_first_use=True for production.
+    That causes the first get_logger() call to freeze the processor chain,
+    making subsequent capture_logs() blocks invisible to already-cached loggers.
+    Forcing False here ensures capture_logs() works regardless of import order.
+    """
+    structlog.configure(cache_logger_on_first_use=False)
+    yield
 
 
 @pytest.fixture

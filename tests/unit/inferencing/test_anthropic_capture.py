@@ -3,15 +3,10 @@ from __future__ import annotations
 
 from unittest.mock import MagicMock
 
-from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import SimpleSpanProcessor
-from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
-    InMemorySpanExporter,
-)
 from pydantic import BaseModel
 
 from app.inferencing.anthropic import AnthropicProvider
+from tests.conftest import SPAN_EXPORTER
 
 
 class _Out(BaseModel):
@@ -28,11 +23,7 @@ def _fake_resp(in_tok: int, out_tok: int):
 
 
 def test_provider_records_request_and_response_events() -> None:
-    exporter = InMemorySpanExporter()
-    provider_tp = TracerProvider()
-    provider_tp.add_span_processor(SimpleSpanProcessor(exporter))
-    trace.set_tracer_provider(provider_tp)
-
+    # _reset_otel_spans autouse fixture in tests/conftest.py clears SPAN_EXPORTER.
     client = MagicMock()
     client.messages.create.return_value = _fake_resp(10, 7)
     p = AnthropicProvider(client=client, model="claude-sonnet-4-6",
@@ -48,7 +39,7 @@ def test_provider_records_request_and_response_events() -> None:
     assert raw_text  # non-empty JSON string
     assert tin == 10 and tout == 7
 
-    llm_span = next(s for s in exporter.get_finished_spans()
+    llm_span = next(s for s in SPAN_EXPORTER.get_finished_spans()
                     if s.name == "llm.complete")
     names = [e.name for e in llm_span.events]
     assert "llm.request_sent" in names

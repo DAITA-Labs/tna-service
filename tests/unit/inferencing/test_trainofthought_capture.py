@@ -2,16 +2,11 @@
 from __future__ import annotations
 
 import pytest
-from opentelemetry import trace
-from opentelemetry.sdk.trace import TracerProvider
-from opentelemetry.sdk.trace.export import SimpleSpanProcessor
-from opentelemetry.sdk.trace.export.in_memory_span_exporter import (
-    InMemorySpanExporter,
-)
 from pydantic import BaseModel
 from structlog.testing import capture_logs
 
 from app.services.agents._base import AgentRunner, AgentSpec, RetryPolicy
+from tests.conftest import SPAN_EXPORTER
 from tests.fixtures.fake_llm import FakeLLM
 
 
@@ -29,16 +24,8 @@ def _spec() -> AgentSpec:
     )
 
 
-_EXPORTER = InMemorySpanExporter()
-_TP = TracerProvider()
-_TP.add_span_processor(SimpleSpanProcessor(_EXPORTER))
-trace.set_tracer_provider(_TP)
-
-
-@pytest.fixture(autouse=True)
-def _reset_exporter():
-    _EXPORTER.clear()
-    yield
+# _reset_otel_spans and _reset_structlog autouse fixtures in tests/conftest.py
+# handle clearing the shared SPAN_EXPORTER and disabling structlog cache.
 
 
 def test_capture_emits_all_required_events_for_one_call() -> None:
@@ -47,7 +34,7 @@ def test_capture_emits_all_required_events_for_one_call() -> None:
         out = AgentRunner(_spec(), llm).run(ctx=None, inputs={})
     assert isinstance(out, Out)
 
-    spans = _EXPORTER.get_finished_spans()
+    spans = SPAN_EXPORTER.get_finished_spans()
     agent_span = next(s for s in spans if s.name == "agent.dummy")
     event_names = [e.name for e in agent_span.events]
     assert "input.system_prompt" in event_names
@@ -88,7 +75,7 @@ def test_capture_emits_attempt_2_events_on_retry() -> None:
 
     AgentRunner(_spec(), FlipLLM()).run(ctx=None, inputs={})
 
-    agent_span = next(s for s in _EXPORTER.get_finished_spans()
+    agent_span = next(s for s in SPAN_EXPORTER.get_finished_spans()
                       if s.name == "agent.dummy")
     retries = [e for e in agent_span.events if e.name == "agent.retry"]
     assert len(retries) == 1
