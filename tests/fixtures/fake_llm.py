@@ -19,11 +19,22 @@ class FakeLLM:
         self._tokens_in = tokens_in
         self._tokens_out = tokens_out
         self.model = model
+        self._scripted: list[dict] | None = None
+
+    def script_responses(self, *responses: dict) -> "FakeLLM":
+        """Configure an ordered queue of responses; one is popped per call. Chainable."""
+        self._scripted = list(responses)
+        return self
 
     def complete_with_schema(self, *, system: str, user: str,
                               output_schema: type, tool_name: str | None = None,
                               agent_name: str = "unknown",
                               attempt: int = 1) -> Any:
+        if self._scripted is not None:
+            if not self._scripted:
+                raise AssertionError("FakeLLM script exhausted")
+            payload = self._scripted.pop(0)
+            return (output_schema(**payload), self._raw, self._tokens_in, self._tokens_out)
         name = output_schema.__name__
         if name not in self._canned:
             raise AssertionError(

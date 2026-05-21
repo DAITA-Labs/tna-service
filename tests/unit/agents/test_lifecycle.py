@@ -210,3 +210,50 @@ def test_before_and_after_run_fire_on_retry_exhausted() -> None:
     assert len(agent.after_calls) == 1
     assert agent.after_calls[0][0] == "AgentRunFailure"
     assert agent.after_calls[0][1] == 2  # both attempts consumed
+
+
+# ---------------------------------------------------------------------------
+# T7: Schema-fail on attempt 1 + semantic-retry on attempt 2 → exhausted
+# ---------------------------------------------------------------------------
+
+def test_schema_fail_then_semantic_retry_exhausts() -> None:
+    """Schema error on attempt 1 → semantic retry verdict on attempt 2 → AgentRunFailure."""
+    from pydantic import ValidationError
+
+    class _OneBadOneGoodProvider(BaseProvider):
+        """Raises ValidationError on the first call; returns canned model on second."""
+        model = "fake"
+
+        def __init__(self) -> None:
+            super().__init__()
+            self.calls = 0
+
+        def _call_provider(self, *, system, user, output_schema, tool_name):
+            self.calls += 1
+            if self.calls == 1:
+                raise ValidationError.from_exception_data(
+                    "Out", [{"type": "missing", "loc": ("value",), "input": {}}],
+                )
+            return output_schema(value="from-2nd-call")
+
+        def _extract_tokens(self, raw):
+            return None, None
+
+        def _extract_raw_text(self, raw, tool_name):
+            return ""
+
+        def _record_usage(self, *, span, raw, agent_name):
+            pass
+
+        def _parse_response(self, *, raw, tool_name, output_schema):
+            return raw
+
+    provider = _OneBadOneGoodProvider()
+    # The second attempt returns a parsed model; validate_output then asks for retry
+    agent = _SemanticAgent(verdicts=[OutputVerdict.retry("not yet")])
+
+    result = agent.run(ctx=None, inputs=_DemoInputs(), provider=provider)
+
+    assert isinstance(result, AgentRunFailure)
+    assert result.attempts == 2
+    assert provider.calls == 2
