@@ -1,5 +1,5 @@
 """Agent test: PlanReviewer judges a SheetPlan."""
-from app.services.agents.plan_reviewer import PlanReviewer
+from app.components.plan_reviewer import PlanReviewer
 from app.services.planner.plan import SheetRowPlanner
 import app.repositories.workbook_tools.survey  # noqa: F401 — register tools
 import app.repositories.workbook_tools.bulk_read  # noqa: F401 — register tools
