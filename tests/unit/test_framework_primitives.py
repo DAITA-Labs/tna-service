@@ -191,3 +191,28 @@ def test_shared_prompt_is_importable_string() -> None:
     assert "Glossary" in SHARED
     assert "TNA" in SHARED
     assert "PLI" in SHARED
+
+
+def test_artifacts_package_reexports_models() -> None:
+    """Every artifact class is importable from `app.artifacts` as well as `app.models.artifacts`."""
+    import app.artifacts as artifacts
+    from app.models import artifacts as legacy
+
+    expected = (
+        "SheetPlan",
+        "CanonicalNameMap",
+        "PlanVerdict",
+        "LayoutHints",
+        "ValidationFinding",
+        "ValidationFindings",
+        "HeaderLabel",
+        "KVAnchor",
+        "StageColumn",
+        "StageBandSpec",
+        "PliBlock",
+        "RowSpec",
+        "SheetSignals",
+    )
+    for cls_name in expected:
+        assert hasattr(artifacts, cls_name), f"app.artifacts missing {cls_name!r}"
+        assert getattr(artifacts, cls_name) is getattr(legacy, cls_name)
