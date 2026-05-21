@@ -29,3 +29,21 @@ def test_provider_is_runtime_checkable_protocol() -> None:
     hints = get_type_hints(Provider.complete_with_schema)
     for required in ("system", "user", "output_schema", "tool_name", "agent_name"):
         assert required in hints, f"Provider.complete_with_schema missing kw {required!r}"
+
+
+def test_anthropic_provider_satisfies_protocol() -> None:
+    """The new AnthropicProvider class must satisfy the Provider Protocol."""
+    from app.inferencing._base import Provider
+    from app.inferencing.anthropic import AnthropicProvider
+
+    # class-level structural check
+    assert hasattr(AnthropicProvider, "complete_with_schema")
+
+    # isinstance against a fake instance: build the minimum needed object
+    class _Fake(AnthropicProvider):
+        def __init__(self) -> None:
+            self.model = "fake"
+
+    fake = _Fake()
+    assert hasattr(fake, "model")
+    assert isinstance(fake, Provider)
