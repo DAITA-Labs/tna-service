@@ -17,36 +17,41 @@ def test_new_packages_import() -> None:
         importlib.import_module(module_name)
 
 
-def test_provider_is_runtime_checkable_protocol() -> None:
-    """`Provider` must be a runtime-checkable Protocol with `complete_with_schema`."""
-    from typing import get_type_hints
+def test_baseprovider_is_abstract_template() -> None:
+    """`BaseProvider` is an ABC with abstract primitives and a concrete template."""
+    import pytest
 
-    from app.inferencing._base import Provider
+    from app.inferencing._base import BaseProvider
 
-    assert hasattr(Provider, "complete_with_schema")
-    # runtime_checkable Protocols expose this attribute
-    assert getattr(Provider, "_is_runtime_protocol", False) is True
-    hints = get_type_hints(Provider.complete_with_schema)
-    for required in ("system", "user", "output_schema", "tool_name", "agent_name"):
-        assert required in hints, f"Provider.complete_with_schema missing kw {required!r}"
+    # Cannot instantiate the ABC directly
+    with pytest.raises(TypeError):
+        BaseProvider()  # type: ignore[abstract]
+
+    # Three abstract primitives + the concrete template
+    for name in ("_call_provider", "_record_usage", "_parse_response"):
+        assert getattr(BaseProvider, name).__isabstractmethod__, (
+            f"{name} must be marked @abstractmethod"
+        )
+    assert hasattr(BaseProvider, "complete_with_schema")
+    assert not getattr(
+        BaseProvider.complete_with_schema, "__isabstractmethod__", False,
+    ), "complete_with_schema must NOT be abstract (it's the template)"
 
 
-def test_anthropic_provider_satisfies_protocol() -> None:
-    """The new AnthropicProvider class must satisfy the Provider Protocol."""
-    from app.inferencing._base import Provider
+def test_anthropic_provider_inherits_baseprovider() -> None:
+    """`AnthropicProvider` inherits `BaseProvider` and implements the 3 primitives."""
+    from app.inferencing._base import BaseProvider
     from app.inferencing.anthropic import AnthropicProvider
 
-    # class-level structural check
+    assert issubclass(AnthropicProvider, BaseProvider)
     assert hasattr(AnthropicProvider, "complete_with_schema")
-
-    # isinstance against a fake instance: build the minimum needed object
-    class _Fake(AnthropicProvider):
-        def __init__(self) -> None:
-            self.model = "fake"
-
-    fake = _Fake()
-    assert hasattr(fake, "model")
-    assert isinstance(fake, Provider)
+    # `model` is declared on BaseProvider as a typed instance attribute
+    assert "model" in BaseProvider.__annotations__
+    # Each primitive is overridden (no longer abstract on the concrete class)
+    for name in ("_call_provider", "_record_usage", "_parse_response"):
+        assert not getattr(
+            getattr(AnthropicProvider, name), "__isabstractmethod__", False,
+        ), f"AnthropicProvider must override abstract {name}"
 
 
 def test_pipeline_tuning_loads_defaults() -> None:
@@ -124,11 +129,19 @@ def test_agent_base_runs_and_lifecycle_hooks_are_noops() -> None:
     class _T(Tuning):
         pass
 
-    class _FakeProvider:
+    from app.inferencing._base import BaseProvider
+
+    class _FakeProvider(BaseProvider):
         model = "fake"
 
-        def complete_with_schema(self, *, system, user, output_schema, tool_name, agent_name):
+        def _call_provider(self, *, system, user, output_schema, tool_name):
             return output_schema(v=int(user.strip()))
+
+        def _record_usage(self, *, span, raw, agent_name) -> None:
+            pass
+
+        def _parse_response(self, *, raw, tool_name, output_schema):
+            return raw
 
     class _Echo(Agent[_Inputs, _Out]):
         name = "echo_agent"
@@ -149,13 +162,19 @@ def test_agent_base_runs_and_lifecycle_hooks_are_noops() -> None:
     rp = RetryPolicy()
     assert rp.max_retries == 1
 
-    # failure path: provider always raises ValueError → AgentRunFailure
-    class _AlwaysFails:
+    # failure path: provider always raises ValidationError → AgentRunFailure
+    class _AlwaysFails(BaseProvider):
         model = "fake"
 
-        def complete_with_schema(self, **_kw):
+        def _call_provider(self, **_kw):
             from pydantic import ValidationError
             raise ValidationError.from_exception_data("bad", [])  # type: ignore[arg-type]
+
+        def _record_usage(self, **_kw) -> None:
+            pass
+
+        def _parse_response(self, **_kw):
+            return None
 
     failure = _Echo().run(ctx=None, inputs=_Inputs(x=1), provider=_AlwaysFails())
     assert isinstance(failure, AgentRunFailure)
@@ -225,6 +244,7 @@ def test_end_to_end_composition_smoke() -> None:
 
     from app.agents._base import Agent
     from app.components._base import Component
+    from app.inferencing._base import BaseProvider
     from app.pipelines._base import make_pipeline
     from app.pipelines.tuning import Tuning
     from app.tools._decorator import tool
@@ -244,11 +264,17 @@ def test_end_to_end_composition_smoke() -> None:
     class _T(Tuning):
         pass
 
-    class _FakeProvider:
+    class _FakeProvider(BaseProvider):
         model = "fake"
 
-        def complete_with_schema(self, *, system, user, output_schema, tool_name, agent_name):
+        def _call_provider(self, *, system, user, output_schema, tool_name):
             return output_schema(v=int(user.strip()))
+
+        def _record_usage(self, *, span, raw, agent_name) -> None:
+            pass
+
+        def _parse_response(self, *, raw, tool_name, output_schema):
+            return raw
 
     class _SmokeAgent(Agent[_Inputs, _Out]):
         name = "smoke_agent"

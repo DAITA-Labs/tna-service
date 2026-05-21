@@ -1,7 +1,5 @@
-"""Anthropic SDK wrapper — drives schema-constrained tool-use completions."""
+"""Anthropic SDK adapter — implements BaseProvider via tool-use completions."""
 from __future__ import annotations
-
-import time
 
 from anthropic import Anthropic
 from pydantic import BaseModel
@@ -12,10 +10,8 @@ from app.core.telemetry import (
     agent_tokens_input,
     agent_tokens_output,
     llm_calls_total,
-    llm_inference_duration_seconds,
 )
-from app.core.tracing import get_tracer
-from app.inferencing._base import T
+from app.inferencing._base import BaseProvider, T
 
 
 log = get_logger(__name__)
@@ -62,8 +58,8 @@ def schema_to_tool(name: str, model: type[BaseModel]) -> dict:
     }
 
 
-class AnthropicProvider:
-    """Anthropic SDK wrapper that drives schema-constrained tool-use completions."""
+class AnthropicProvider(BaseProvider):
+    """Anthropic SDK adapter using tool-use completions to enforce schemas."""
 
     def __init__(self, client: Anthropic, model: str,
                  max_tokens: int = 4096, temperature: float = 0.0):
@@ -87,34 +83,15 @@ class AnthropicProvider:
             max_tokens=s.max_tokens, temperature=s.temperature,
         )
 
-    def complete_with_schema(
+    def _call_provider(
         self, *, system: str, user: str,
         output_schema: type[T], tool_name: str,
-        agent_name: str = "unknown",
-    ) -> T:
-        """Call the Anthropic API and parse the response into output_schema."""
-        tool = schema_to_tool(tool_name, output_schema)
-        log.debug("llm_call_start", model=self.model, tool=tool_name,
-                  system_chars=len(system), user_chars=len(user))
-        t0 = time.monotonic()
-        with get_tracer(__name__).start_as_current_span("llm.complete") as span:
-            span.set_attribute("llm.model", self.model)
-            span.set_attribute("llm.agent", agent_name)
-            resp = self._call_sdk(system=system, user=user, tool=tool, tool_name=tool_name)
-            llm_inference_duration_seconds.record(
-                time.monotonic() - t0, {"model": self.model}
-            )
-            llm_calls_total.add(1, {"model": self.model, "status": "success"})
-            self._record_usage(span=span, resp=resp, agent_name=agent_name)
-            return self._parse_tool_response(
-                resp=resp, tool_name=tool_name, output_schema=output_schema,
-            )
-
-    def _call_sdk(self, *, system: str, user: str, tool: dict, tool_name: str):
-        """Submit the completion request to the Anthropic API.
+    ):
+        """Submit a tool-use completion to the Anthropic API.
 
         Records a failure counter and re-raises on any SDK error.
         """
+        tool = schema_to_tool(tool_name, output_schema)
         try:
             return self.client.messages.create(
                 model=self.model,
@@ -129,9 +106,9 @@ class AnthropicProvider:
             llm_calls_total.add(1, {"model": self.model, "status": "failure"})
             raise
 
-    def _record_usage(self, *, span, resp, agent_name: str) -> None:
+    def _record_usage(self, *, span, raw, agent_name: str) -> None:
         """Emit token-count metrics and span attributes from the response usage block."""
-        usage = getattr(resp, "usage", None)
+        usage = getattr(raw, "usage", None)
         inp_tokens: int | None = None
         out_tokens: int | None = None
         if usage is not None:
@@ -150,15 +127,14 @@ class AnthropicProvider:
         log.info("llm_call_complete", model=self.model, agent=agent_name,
                  input_tokens=inp_tokens, output_tokens=out_tokens)
 
-    def _parse_tool_response(self, *, resp, tool_name: str, output_schema: type[T]) -> T:
-        """Extract the tool_use block from the response and instantiate output_schema.
-
-        Raises RuntimeError if the model did not return a tool_use block.
-        """
-        for block in resp.content:
+    def _parse_response(
+        self, *, raw, tool_name: str, output_schema: type[T],
+    ) -> T:
+        """Extract the tool_use block and instantiate `output_schema`."""
+        for block in raw.content:
             if getattr(block, "type", None) == "tool_use" and block.name == tool_name:
                 return output_schema(**block.input)
         raise RuntimeError(
             f"Anthropic returned no tool_use block for {tool_name!r}. "
-            f"stop_reason={resp.stop_reason}; content={resp.content!r}"
+            f"stop_reason={raw.stop_reason}; content={raw.content!r}"
         )

@@ -17,7 +17,7 @@ from pydantic import BaseModel, ValidationError
 from app.core.logs import get_logger
 from app.core.telemetry import agent_calls_total, agent_duration_seconds, agent_retry_count
 from app.core.tracing import get_tracer
-from app.inferencing._base import Provider
+from app.inferencing._base import BaseProvider
 from app.pipelines.tuning import Tuning
 
 
@@ -88,7 +88,7 @@ class Agent(Generic[InputsT, OutputT]):
         self,
         ctx: object,
         inputs: InputsT,
-        provider: Provider,
+        provider: BaseProvider,
     ) -> OutputT | AgentRunFailure:
         """Execute the agent and return the validated output or an `AgentRunFailure`."""
         self._provider = provider
@@ -175,7 +175,7 @@ class Agent(Generic[InputsT, OutputT]):
     # attribute so `_invoke_provider` can stay parameter-light. Set just
     # before each call; cleared on exit is unnecessary because each `run`
     # overwrites it.
-    _provider: Provider
+    _provider: BaseProvider
 
     def __init_subclass__(cls, **kwargs: object) -> None:
         super().__init_subclass__(**kwargs)
