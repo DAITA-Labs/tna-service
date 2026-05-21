@@ -15,7 +15,6 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from app.artifacts.agent_io import AgentOutput
 from app.enums.location_pattern import LocationPattern
 from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole, SubRowRole
@@ -299,20 +298,6 @@ class SheetPlan(BaseModel):
     confidence: float = 1.0
 
 
-class CanonicalNameMap(AgentOutput):
-    """FieldNamer's output — map detected labels to canonical field and stage names.
-
-    Adds optional ``stage_subfield_labels`` for wide_sub_columns sub-columns,
-    plus ``field_confidence`` / ``stage_confidence`` so the LLM can self-report
-    per-label confidence. All four dicts default empty so existing FakeLLM canned
-    responses validate without change.
-    """
-    field_labels: dict[str, str] = Field(default_factory=dict)
-    stage_names: dict[str, str] = Field(default_factory=dict)
-    stage_subfield_labels: dict[str, str] = Field(default_factory=dict)
-    field_confidence: dict[str, float] = Field(default_factory=dict)
-    stage_confidence: dict[str, float] = Field(default_factory=dict)
-
-
+from app.agents.field_namer.schema import CanonicalNameMap  # noqa: F401
 from app.agents.layout_hinter.schema import LayoutHints  # noqa: F401
 from app.agents.plan_reviewer.schema import PlanVerdict  # noqa: F401
