@@ -170,9 +170,7 @@ def test_component_on_error_is_overridable() -> None:
 
 
 def test_agent_base_runs_and_lifecycle_hooks_are_noops() -> None:
-    """`Agent` is generic, calls the provider, and the default hooks return without error."""
-    from typing import Generic, get_type_hints
-
+    """`Agent` calls the provider and the default hooks return without error."""
     from pydantic import BaseModel
 
     from app.agents._base import Agent, AgentRunFailure, RetryPolicy
@@ -207,7 +205,7 @@ def test_agent_base_runs_and_lifecycle_hooks_are_noops() -> None:
         def _parse_response(self, *, raw, tool_name, output_schema):
             return raw
 
-    class _Echo(Agent[_Inputs, _Out]):
+    class _Echo(Agent):
         name = "echo_agent"
         prompt = "You echo numbers."
         output_schema = _Out
@@ -215,9 +213,6 @@ def test_agent_base_runs_and_lifecycle_hooks_are_noops() -> None:
 
         def build_input(self, ctx, inputs):
             return str(inputs.x)
-
-    # generic params survive subclassing
-    assert any(getattr(b, "__origin__", None) is Agent for b in _Echo.__orig_bases__)
 
     out = _Echo().run(ctx=None, inputs=_Inputs(x=42), provider=_FakeProvider())
     assert isinstance(out, _Out) and out.v == 42
@@ -352,7 +347,7 @@ def test_end_to_end_composition_smoke() -> None:
         def _parse_response(self, *, raw, tool_name, output_schema):
             return raw
 
-    class _SmokeAgent(Agent[_Inputs, _Out]):
+    class _SmokeAgent(Agent):
         name = "smoke_agent"
         prompt = "Emit the value."
         output_schema = _Out

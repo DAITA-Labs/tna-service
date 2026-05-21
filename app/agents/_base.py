@@ -1,4 +1,4 @@
-"""Agent generic base — single LLM call with schema-retry and lifecycle-hook slots.
+"""Agent base — single LLM call with schema-retry and lifecycle-hook slots.
 
 The lifecycle hooks (`before_run`, `validate_input`, `validate_output`,
 `after_run`, `on_retry`) are no-op slots; subclasses override them to
@@ -10,7 +10,6 @@ from __future__ import annotations
 
 import time
 from dataclasses import dataclass, field
-from typing import Generic, TypeVar
 
 from pydantic import BaseModel, ValidationError
 
@@ -27,9 +26,6 @@ from app.inferencing.capture import (
 )
 from app.inferencing.tuning import AgentTuning, render_prompt
 
-
-InputsT = TypeVar("InputsT", bound=BaseModel)
-OutputT = TypeVar("OutputT", bound=BaseModel)
 
 log = get_logger(__name__)
 
@@ -51,7 +47,7 @@ class AgentRunFailure:
     raw_outputs: list[str] = field(default_factory=list)
 
 
-class Agent(Generic[InputsT, OutputT]):
+class Agent:
     """Closed-system base for one narrow LLM mapping job per subclass.
 
     Subclasses set the four class attributes (`name`, `prompt`, `output_schema`,
@@ -67,7 +63,7 @@ class Agent(Generic[InputsT, OutputT]):
     retry: RetryPolicy = RetryPolicy()
     tool_name: str | None = None
 
-    def build_input(self, ctx: object, inputs: InputsT) -> str:
+    def build_input(self, ctx: object, inputs: BaseModel) -> str:
         """Return the user-prompt text for this run. Subclasses must override."""
         raise NotImplementedError
 
@@ -75,15 +71,15 @@ class Agent(Generic[InputsT, OutputT]):
         """Return True if `user_text` is acceptable. Default: always True (no-op slot)."""
         return True
 
-    def validate_output(self, output: OutputT, ctx: object) -> bool:
+    def validate_output(self, output: BaseModel, ctx: object) -> bool:
         """Return True if `output` is semantically acceptable. Default: True (no-op slot)."""
         return True
 
-    def before_run(self, ctx: object, inputs: InputsT) -> None:
+    def before_run(self, ctx: object, inputs: BaseModel) -> None:
         """Hook fired once before the first attempt. Default: no-op slot."""
         return None
 
-    def after_run(self, result: OutputT | AgentRunFailure, attempts: int) -> None:
+    def after_run(self, result: BaseModel | AgentRunFailure, attempts: int) -> None:
         """Hook fired once after the final attempt. Default: no-op slot."""
         return None
 
@@ -94,9 +90,9 @@ class Agent(Generic[InputsT, OutputT]):
     def run(
         self,
         ctx: object,
-        inputs: InputsT,
+        inputs: BaseModel,
         provider: BaseProvider,
-    ) -> OutputT | AgentRunFailure:
+    ) -> BaseModel | AgentRunFailure:
         """Execute the agent and return the validated output or an `AgentRunFailure`."""
         self._provider = provider
         self.before_run(ctx, inputs)
@@ -107,7 +103,7 @@ class Agent(Generic[InputsT, OutputT]):
         self.after_run(result, attempts)
         return result
 
-    def _run_with_retries(self, user: str) -> tuple[OutputT | AgentRunFailure, int]:
+    def _run_with_retries(self, user: str) -> tuple[BaseModel | AgentRunFailure, int]:
         """Drive the retry loop and return `(result, attempts)`."""
         tool_name = self.tool_name or f"emit_{self.name}"
         effective_system = render_prompt(self.prompt, tuning=self.tuning)
@@ -155,7 +151,7 @@ class Agent(Generic[InputsT, OutputT]):
             failure = self._record_failure(run_t0, attempt, last_error, span)
             return failure, attempt
 
-    def _invoke_provider(self, tool_name: str, user: str, system: str | None = None) -> tuple[OutputT, str, int, int]:
+    def _invoke_provider(self, tool_name: str, user: str, system: str | None = None) -> tuple[BaseModel, str, int, int]:
         """Call the LLM provider and return (parsed, raw_text, tokens_in, tokens_out)."""
         t0 = time.monotonic()
         result, raw, tin, tout = self._provider.complete_with_schema(
@@ -169,7 +165,7 @@ class Agent(Generic[InputsT, OutputT]):
             time.monotonic() - t0, {"agent": self.name, "status": "success"},
         )
         agent_calls_total.add(1, {"agent": self.name, "status": "success"})
-        return result, raw, tin, tout  # type: ignore[return-value]
+        return result, raw, tin, tout
 
     def _emit_input_capture(self, span: object, user: str) -> None:
         """Emit input span events for system_prompt and user_built."""
@@ -177,7 +173,7 @@ class Agent(Generic[InputsT, OutputT]):
         record_input_event(span, kind="user_built", text=user, tools_used=None)
 
     def _emit_success_capture(
-        self, span: object, result: OutputT, raw: str,
+        self, span: object, result: BaseModel, raw: str,
         tin: int, tout: int, retries: int,
     ) -> None:
         """Emit success span attrs + structured logs."""
@@ -215,9 +211,6 @@ class Agent(Generic[InputsT, OutputT]):
     # before each call; cleared on exit is unnecessary because each `run`
     # overwrites it.
     _provider: BaseProvider
-
-    def __init_subclass__(cls, **kwargs: object) -> None:
-        super().__init_subclass__(**kwargs)
 
 
 def _build_retry_prompt(user: str, validation_error: str) -> str:
