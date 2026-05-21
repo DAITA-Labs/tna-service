@@ -12,7 +12,7 @@ def test_coverage_warns_when_extracted_lt_80pct():
     result = ExtractionResult(plis=[PLI(io_number=str(i)) for i in range(5)])
     v = CoverageVerifier(boundaries=[boundaries], floor=0.8)
     findings = v.run(extraction=result)["findings"].findings
-    assert any(f.check == "coverage" and f.severity == "warn" for f in findings)
+    assert any(f.check == "coverage" and f.severity == "warning" for f in findings)
 
 
 def test_coverage_passes_when_extracted_ge_80pct():

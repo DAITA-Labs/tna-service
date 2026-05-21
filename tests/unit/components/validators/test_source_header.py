@@ -18,7 +18,7 @@ def test_source_cell_verifier_passes_when_values_match(tmp_path):
     v = SourceCellVerifier(workbook_ctx=ctx)
     out = v.run(extraction=result)
     fs = out["findings"]
-    assert not any(f.severity == "warn" for f in fs.findings)
+    assert not any(f.severity == "warning" for f in fs.findings)
 
 
 def test_source_cell_verifier_warns_on_mismatch(tmp_path):
@@ -32,7 +32,7 @@ def test_source_cell_verifier_warns_on_mismatch(tmp_path):
     result = ExtractionResult(plis=[pli], source_file=str(p))
     v = SourceCellVerifier(workbook_ctx=ctx)
     fs = v.run(extraction=result)["findings"]
-    assert any(f.severity == "warn" and f.check == "source_cell" for f in fs.findings)
+    assert any(f.severity == "warning" and f.check == "source_cell" for f in fs.findings)
 
 
 def test_header_match_verifier_passes(tmp_path):
@@ -47,4 +47,4 @@ def test_header_match_verifier_passes(tmp_path):
     result = ExtractionResult(plis=[pli], source_file=str(p))
     v = HeaderMatchVerifier(workbook_ctx=ctx)
     fs = v.run(extraction=result)["findings"]
-    assert not any(f.severity == "warn" and f.check == "header_match" for f in fs.findings)
+    assert not any(f.severity == "warning" and f.check == "header_match" for f in fs.findings)

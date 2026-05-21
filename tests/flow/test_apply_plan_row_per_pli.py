@@ -1,5 +1,5 @@
 """Flow test: SheetRowPlanner + apply_plan for ROW_PER_PLI fixtures."""
-from app.components.applier import apply_plan
+from app.components.per_sheet.applier import apply_plan
 from app.components.planner.plan import SheetRowPlanner
 from app.models.artifacts import CanonicalNameMap
 from tests.fixtures.case import fixture_case

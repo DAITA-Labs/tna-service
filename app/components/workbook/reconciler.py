@@ -12,7 +12,6 @@ from haystack import component
 
 from app.components._base import Component
 from app.core.logs import get_logger
-from app.enums.validation_severity import ValidationSeverity
 from app.models.artifacts import ValidationFinding, ValidationFindings
 from app.models.extraction import ExtractionResult, Warning
 
@@ -20,15 +19,10 @@ log = get_logger(__name__)
 
 
 def _finding_to_warning(f: ValidationFinding) -> Warning:
-    """Map validator severity to Warning severity ('warn' -> 'warning')."""
-    sev_map = {
-        ValidationSeverity.INFO: "info",
-        ValidationSeverity.WARN: "warning",
-        ValidationSeverity.ERROR: "error",
-    }
+    """Convert a ValidationFinding to a Warning using the enum value directly."""
     return Warning(
         message=f.message,
-        severity=sev_map.get(f.severity, "warning"),
+        severity=f.severity.value,
         pli_index=f.pli_index,
         field=f.field,
         check=f.check,

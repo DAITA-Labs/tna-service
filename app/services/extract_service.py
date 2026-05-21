@@ -16,7 +16,7 @@ import app.tools.search  # noqa: F401
 import app.tools.structure  # noqa: F401
 import app.tools.survey  # noqa: F401
 import app.tools.targeted  # noqa: F401
-from app.components.sheet_classifier import SheetClassifier
+from app.components.workbook.sheet_classifier import SheetClassifier
 from app.core.logs import get_logger
 from app.core.telemetry import (
     extraction_duration_seconds,

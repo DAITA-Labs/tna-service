@@ -6,7 +6,7 @@ from app.models.artifacts import (
     CanonicalNameMap, HeaderLabel, KVAnchor, PliBlock, RowSpec, SheetPlan,
 )
 from app.repositories.workbook_repo import register_workbook
-from app.components.applier import apply_plan
+from app.components.per_sheet.applier import apply_plan
 
 
 def test_canonical_field_via_header_label(tmp_path) -> None:

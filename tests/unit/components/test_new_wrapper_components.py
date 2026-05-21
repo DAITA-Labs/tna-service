@@ -11,15 +11,15 @@ from structlog.testing import capture_logs
 
 import openpyxl
 
-from app.components.applier import Applier
-from app.components.extraction_result_builder import ExtractionResultBuilder
-from app.components.plan_validator import PlanValidator
-from app.components.planner_component import Planner
-from app.components.post_namer_validator import PostNamerValidator
-from app.components.post_review_validator import PostReviewValidator
-from app.components.pre_apply_validator import PreApplyValidator
-from app.components.reconciler import Reconciler
-from app.components.workbook_summary_provider import WorkbookSummaryProvider
+from app.components.per_sheet.applier import Applier
+from app.components.workbook.extraction_result_builder import ExtractionResultBuilder
+from app.components.per_sheet.plan_validator import PlanValidator
+from app.components.per_sheet.planner import Planner
+from app.components.validators.post_namer_validator import PostNamerValidator
+from app.components.validators.post_review_validator import PostReviewValidator
+from app.components.validators.pre_apply_validator import PreApplyValidator
+from app.components.workbook.reconciler import Reconciler
+from app.components.workbook.summary_provider import WorkbookSummaryProvider
 from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
 from app.enums.stage_scope import StageScope
@@ -74,7 +74,7 @@ def test_workbook_summary_provider_calls_tool(monkeypatch) -> None:
 def test_planner_delegates_to_sheet_row_planner() -> None:
     """Planner.run() should call SheetRowPlanner.run() and unwrap plan."""
     fake_plan = _simple_plan()
-    with patch("app.components.planner_component.SheetRowPlanner") as MockPlanner:
+    with patch("app.components.per_sheet.planner.SheetRowPlanner") as MockPlanner:
         MockPlanner.return_value.run.return_value = {"plan": fake_plan}
         comp = Planner()
         out = comp.run(workbook_ctx=MagicMock(), sheet="S1")

@@ -7,7 +7,7 @@ from unittest.mock import MagicMock
 from structlog.testing import capture_logs
 
 import app.tools.bulk_read  # noqa: F401 — register peek_sheet
-from app.components.layout_hinter import LayoutHinter
+from app.components.per_sheet.layout_hinter import LayoutHinter
 from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
 from app.enums.stage_scope import StageScope
@@ -44,7 +44,7 @@ def _plan() -> SheetPlan:
 def test_layout_hinter_emits_capture_logs(monkeypatch) -> None:
     """When Tier-1 errors force the LLM path, agent.input and agent.output are logged."""
     monkeypatch.setattr(
-        "app.components.layout_hinter.survey_sheet",
+        "app.components.per_sheet.layout_hinter.survey_sheet",
         lambda ctx, sheet: SheetSignals(sheet="S1", max_row=0, max_col=0),
     )
     llm = FakeLLM(canned={"LayoutHints": {}})

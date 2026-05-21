@@ -7,7 +7,7 @@ _BANNED = ("app.services.agents", "app.services.llm_provider", "app.inferencing"
 
 
 def test_apply_plan_no_llm_imports():
-    path = Path("app/components/applier.py").resolve()
+    path = Path("app/components/per_sheet/applier.py").resolve()
     tree = ast.parse(path.read_text(encoding="utf-8"))
     imports: list[str] = []
     for node in ast.walk(tree):

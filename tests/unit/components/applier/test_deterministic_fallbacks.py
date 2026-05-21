@@ -7,7 +7,7 @@ from app.models.artifacts import (
     CanonicalNameMap, HeaderLabel, KVAnchor, RowSpec, SheetPlan,
 )
 from app.repositories.workbook_repo import register_workbook
-from app.components.applier import (
+from app.components.per_sheet.applier import (
     _coerce, _promote_io_number_fallback, apply_plan,
 )
 

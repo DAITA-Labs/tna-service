@@ -14,24 +14,24 @@ from typing import Any
 
 from haystack import Pipeline
 
-from app.components.applier import Applier
-from app.components.extraction_result_builder import ExtractionResultBuilder
-from app.components.field_namer import FieldNamer
-from app.components.layout_hinter import LayoutHinter
-from app.components.per_sheet import PerSheetProcessor
-from app.components.plan_reviewer import PlanReviewer
-from app.components.plan_validator import PlanValidator
-from app.components.planner_component import Planner
-from app.components.post_namer_validator import PostNamerValidator
-from app.components.post_review_validator import PostReviewValidator
-from app.components.pre_apply_validator import PreApplyValidator
-from app.components.reconciler import Reconciler
-from app.components.sheet_classifier import SheetClassifier
+from app.components.per_sheet.applier import Applier
+from app.components.per_sheet.field_namer import FieldNamer
+from app.components.per_sheet.layout_hinter import LayoutHinter
+from app.components.per_sheet.plan_reviewer import PlanReviewer
+from app.components.per_sheet.plan_validator import PlanValidator
+from app.components.per_sheet.planner import Planner
 from app.components.validators.coverage_verifier import CoverageVerifier
 from app.components.validators.field_dropout_verifier import FieldDropoutVerifier
 from app.components.validators.header_match_verifier import HeaderMatchVerifier
+from app.components.validators.post_namer_validator import PostNamerValidator
+from app.components.validators.post_review_validator import PostReviewValidator
+from app.components.validators.pre_apply_validator import PreApplyValidator
 from app.components.validators.source_cell_verifier import SourceCellVerifier
-from app.components.workbook_summary_provider import WorkbookSummaryProvider
+from app.components.workbook.extraction_result_builder import ExtractionResultBuilder
+from app.components.workbook.per_sheet import PerSheetProcessor
+from app.components.workbook.reconciler import Reconciler
+from app.components.workbook.sheet_classifier import SheetClassifier
+from app.components.workbook.summary_provider import WorkbookSummaryProvider
 
 
 def make_per_sheet_pipeline(llm: Any) -> Pipeline:

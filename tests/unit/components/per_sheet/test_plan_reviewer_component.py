@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 
 from structlog.testing import capture_logs
 
-from app.components.plan_reviewer import PlanReviewer
+from app.components.per_sheet.plan_reviewer import PlanReviewer
 from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
 from app.enums.stage_scope import StageScope

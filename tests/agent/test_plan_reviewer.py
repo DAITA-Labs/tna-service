@@ -3,7 +3,7 @@ import app.tools.bulk_read  # noqa: F401 — register tools
 import app.tools.survey  # noqa: F401 — register tools
 from structlog.testing import capture_logs
 
-from app.components.plan_reviewer import PlanReviewer
+from app.components.per_sheet.plan_reviewer import PlanReviewer
 from app.components.planner.plan import SheetRowPlanner
 from app.enums.validation_severity import ValidationSeverity
 from app.models.artifacts import SheetPlan, ValidationFinding
