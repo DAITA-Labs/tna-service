@@ -10,10 +10,12 @@ class _SchemaA(BaseModel):
 
 def test_fake_llm_returns_canned_response():
     llm = FakeLLM(canned={"_SchemaA": {"name": "hello"}})
-    out = llm.complete_with_schema(system="s", user="u",
-                                  output_schema=_SchemaA)
-    assert isinstance(out, _SchemaA)
-    assert out.name == "hello"
+    parsed, raw, tin, tout = llm.complete_with_schema(system="s", user="u",
+                                                      output_schema=_SchemaA)
+    assert isinstance(parsed, _SchemaA)
+    assert parsed.name == "hello"
+    assert raw == "{}"
+    assert tin == 0 and tout == 0
 
 
 def test_fake_llm_raises_when_schema_not_canned():

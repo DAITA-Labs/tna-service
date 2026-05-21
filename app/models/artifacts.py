@@ -15,6 +15,7 @@ from typing import Any
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.artifacts.agent_io import AgentOutput
 from app.enums.location_pattern import LocationPattern
 from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole, SubRowRole
@@ -298,7 +299,7 @@ class SheetPlan(BaseModel):
     confidence: float = 1.0
 
 
-class CanonicalNameMap(BaseModel):
+class CanonicalNameMap(AgentOutput):
     """FieldNamer's output — map detected labels to canonical field and stage names.
 
     Adds optional ``stage_subfield_labels`` for wide_sub_columns sub-columns,
@@ -306,8 +307,6 @@ class CanonicalNameMap(BaseModel):
     per-label confidence. All four dicts default empty so existing FakeLLM canned
     responses validate without change.
     """
-
-    model_config = ConfigDict(extra="ignore")
     field_labels: dict[str, str] = Field(default_factory=dict)
     stage_names: dict[str, str] = Field(default_factory=dict)
     stage_subfield_labels: dict[str, str] = Field(default_factory=dict)
@@ -315,19 +314,15 @@ class CanonicalNameMap(BaseModel):
     stage_confidence: dict[str, float] = Field(default_factory=dict)
 
 
-class LayoutHints(BaseModel):
+class LayoutHints(AgentOutput):
     """LayoutHinter's output — disambiguation hints for the planner."""
-
-    model_config = ConfigDict(extra="ignore")
     identity_column_suggestion: str | None = None
     mode_suggestion: str | None = None
     notes: list[str] = Field(default_factory=list)
 
 
-class PlanVerdict(BaseModel):
+class PlanVerdict(AgentOutput):
     """PlanReviewer's output — a verdict on a draft SheetPlan with optional row corrections."""
-
-    model_config = ConfigDict(extra="ignore")
     verdict: str = "looks_correct"
     row_corrections: list[dict[str, Any]] = Field(default_factory=list)
     identity_column_suggestion: str | None = None

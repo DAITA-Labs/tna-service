@@ -4,10 +4,12 @@ from __future__ import annotations
 from pathlib import Path
 
 from haystack import component
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import Field
 
+from app.artifacts.agent_io import AgentOutput
 from app.core.logs import get_logger
 from app.core.prompt_loader import load_prompt
+from app.inferencing.tuning import AgentTuning
 from app.services.agents._base import AgentRunFailure, AgentRunner, AgentSpec
 from app.services.llm_provider import LLMProvider
 
@@ -16,10 +18,9 @@ log = get_logger(__name__)
 _PROMPT_DIR = Path(__file__).resolve().parents[2] / "prompts"
 
 
-class SheetClassifierOutput(BaseModel):
+class SheetClassifierOutput(AgentOutput):
     """Structured output produced by the SheetClassifier agent."""
 
-    model_config = ConfigDict(extra="ignore")
     relevant_sheets: list[str] = Field(default_factory=list)
     notes: str | None = None
 
@@ -44,6 +45,7 @@ SPEC = AgentSpec(
     ),
     output_schema=SheetClassifierOutput,
     build_user_input=_build_user_input,
+    tuning=AgentTuning(),
 )
 
 

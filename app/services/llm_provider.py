@@ -10,6 +10,7 @@ strings and Pydantic rejects them.
 """
 from __future__ import annotations
 
+import json
 import time
 from typing import Protocol, TypeVar, runtime_checkable
 
@@ -25,6 +26,7 @@ from app.core.telemetry import (
     llm_inference_duration_seconds,
 )
 from app.core.tracing import get_tracer
+from app.inferencing.capture import record_request_event, record_response_event
 
 T = TypeVar("T", bound=BaseModel)
 log = get_logger(__name__)
@@ -81,7 +83,8 @@ class LLMProvider(Protocol):
         self, *, system: str, user: str,
         output_schema: type[T], tool_name: str,
         agent_name: str = "unknown",
-    ) -> T: ...
+        attempt: int = 1,
+    ) -> tuple[T, str, int, int]: ...
 
 
 class AnthropicProvider:
@@ -113,8 +116,9 @@ class AnthropicProvider:
         self, *, system: str, user: str,
         output_schema: type[T], tool_name: str,
         agent_name: str = "unknown",
-    ) -> T:
-        """Call the Anthropic API and parse the response into output_schema."""
+        attempt: int = 1,
+    ) -> tuple[T, str, int, int]:
+        """Call the Anthropic API and return `(parsed, raw_text, tokens_in, tokens_out)`."""
         tool = schema_to_tool(tool_name, output_schema)
         log.debug("llm_call_start", model=self.model, tool=tool_name,
                   system_chars=len(system), user_chars=len(user))
@@ -122,13 +126,44 @@ class AnthropicProvider:
         with get_tracer(__name__).start_as_current_span("llm.complete") as span:
             span.set_attribute("llm.model", self.model)
             span.set_attribute("llm.agent", agent_name)
+            record_request_event(
+                span, model=self.model, max_tokens=self.max_tokens,
+                temperature=self.temperature, attempt=attempt,
+            )
             resp = self._call_sdk(system=system, user=user, tool=tool, tool_name=tool_name)
+            duration_ms = (time.monotonic() - t0) * 1000.0
+            tokens_in, tokens_out = self._extract_tokens(resp)
+            raw_text = self._extract_raw_text(resp, tool_name)
+            record_response_event(
+                span, raw=raw_text, tokens_out=tokens_out or 0,
+                duration_ms=duration_ms, attempt=attempt,
+            )
             llm_inference_duration_seconds.record(
-                time.monotonic() - t0, {"model": self.model}
+                duration_ms / 1000.0, {"model": self.model}
             )
             llm_calls_total.add(1, {"model": self.model, "status": "success"})
             self._record_usage(span=span, resp=resp, agent_name=agent_name)
-            return self._parse_tool_response(resp=resp, tool_name=tool_name, output_schema=output_schema)
+            parsed = self._parse_tool_response(
+                resp=resp, tool_name=tool_name, output_schema=output_schema,
+            )
+            return parsed, raw_text, tokens_in or 0, tokens_out or 0
+
+    def _extract_tokens(self, resp) -> tuple[int | None, int | None]:
+        """Return `(input_tokens, output_tokens)` from `resp.usage`, or (None, None)."""
+        usage = getattr(resp, "usage", None)
+        if usage is None:
+            return None, None
+        return (
+            getattr(usage, "input_tokens", None),
+            getattr(usage, "output_tokens", None),
+        )
+
+    def _extract_raw_text(self, resp, tool_name: str) -> str:
+        """Return a JSON-serialised string of the tool_use block's input dict."""
+        for block in resp.content:
+            if getattr(block, "type", None) == "tool_use" and block.name == tool_name:
+                return json.dumps(block.input, default=str, sort_keys=True)
+        return ""
 
     def _call_sdk(self, *, system: str, user: str, tool: dict, tool_name: str):
         """Submit the completion request to the Anthropic API.

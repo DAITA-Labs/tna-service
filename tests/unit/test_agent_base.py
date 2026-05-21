@@ -22,7 +22,7 @@ def _spec(builder):
 
 def test_runner_succeeds_first_attempt():
     fake_client = MagicMock()
-    fake_client.complete_with_schema.return_value = DummyOut(val=42)
+    fake_client.complete_with_schema.return_value = (DummyOut(val=42), "{}", 0, 0)
     fake_client.model = "claude-sonnet-4-6"
     spec = _spec(lambda ctx, inputs: "user prompt")
     runner = AgentRunner(spec, fake_client)
@@ -39,7 +39,7 @@ def test_runner_retries_with_error_context_on_validation_failure():
         ValidationError.from_exception_data("DummyOut", [{
             "type": "missing", "loc": ("val",), "input": {},
         }]),
-        DummyOut(val=99),
+        (DummyOut(val=99), "{}", 0, 0),
     ]
     spec = _spec(lambda ctx, inputs: "first prompt")
     runner = AgentRunner(spec, fake_client)

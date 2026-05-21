@@ -1,6 +1,8 @@
 """Anthropic SDK adapter — implements BaseProvider via tool-use completions."""
 from __future__ import annotations
 
+import json
+
 from anthropic import Anthropic
 from pydantic import BaseModel
 
@@ -126,6 +128,23 @@ class AnthropicProvider(BaseProvider):
                 span.set_attribute("llm.output_tokens", out_tokens)
         log.info("llm_call_complete", model=self.model, agent=agent_name,
                  input_tokens=inp_tokens, output_tokens=out_tokens)
+
+    def _extract_tokens(self, raw) -> tuple[int | None, int | None]:
+        """Return `(input_tokens, output_tokens)` from `raw.usage`, or (None, None)."""
+        usage = getattr(raw, "usage", None)
+        if usage is None:
+            return None, None
+        return (
+            getattr(usage, "input_tokens", None),
+            getattr(usage, "output_tokens", None),
+        )
+
+    def _extract_raw_text(self, raw, tool_name: str) -> str:
+        """Return a JSON-serialised string of the tool_use block's input dict."""
+        for block in raw.content:
+            if getattr(block, "type", None) == "tool_use" and block.name == tool_name:
+                return json.dumps(block.input, default=str, sort_keys=True)
+        return ""
 
     def _parse_response(
         self, *, raw, tool_name: str, output_schema: type[T],

@@ -344,7 +344,7 @@ After `make up`, open **http://localhost:8080** and find `tna-service` under Ser
 
 SigNoz's built-in APM views cover what the old TNA Overview dashboard did (RED metrics, service map, exception tracker, log explorer, trace explorer). Custom dashboards can be authored later in SigNoz if needed.
 
-For the full OTel pipeline details (TracerProvider + MeterProvider + LoggerProvider, metric names, propagator config), see [`ARCHITECTURE.md`](./ARCHITECTURE.md#telemetry).
+For the full train-of-thought capture surface (spans, events, structured logs, SigNoz queries), see [`docs/observability.md`](./docs/observability.md). For the full OTel pipeline details (TracerProvider + MeterProvider + LoggerProvider, metric names, propagator config), see [`ARCHITECTURE.md`](./ARCHITECTURE.md#telemetry).
 
 ---
 

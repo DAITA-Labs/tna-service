@@ -11,6 +11,7 @@ from haystack import component
 
 from app.core.logs import get_logger
 from app.core.prompt_loader import load_prompt
+from app.inferencing.tuning import AgentTuning
 from app.models.artifacts import PlanVerdict, SheetPlan, ValidationFinding
 from app.repositories.workbook_tools._registry import TOOL_REGISTRY
 from app.services.agents._base import AgentRunFailure, AgentRunner, AgentSpec
@@ -58,6 +59,7 @@ SPEC = AgentSpec(
     ),
     output_schema=PlanVerdict,
     build_user_input=_build_user_input,
+    tuning=AgentTuning(),
 )
 
 

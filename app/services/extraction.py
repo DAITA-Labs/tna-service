@@ -49,6 +49,7 @@ from app.services.agents.layout_hinter import LayoutHinter
 from app.services.agents.plan_reviewer import PlanReviewer
 from app.services.agents.sheet_classifier import SheetClassifier
 from app.services.applier.apply_plan import apply_plan
+from app.core.log_capture import log_artifact
 from app.core.tracing import get_tracer
 from app.services.llm_provider import AnthropicProvider
 from app.services.planner.plan import SheetRowPlanner
@@ -83,6 +84,11 @@ def _phase(name: str, **attrs: Any) -> Iterator[Any]:
         finally:
             extraction_phase_duration_seconds.record(time.monotonic() - t0, {"phase": name})
             structlog.contextvars.unbind_contextvars("phase")
+
+
+def _snapshot_artifact(name: str, *, payload: Any) -> None:
+    """Emit one structured log carrying a between-phase artifact snapshot."""
+    log_artifact(name, payload=payload)
 
 
 def _run_planner(ctx: Any, sheet: str) -> SheetPlan:
@@ -184,13 +190,16 @@ def _plan_for_sheet(
     warnings: list[Warning] = []
 
     plan = _run_planner(ctx, sheet)
+    _snapshot_artifact("plan.snapshot_after_planner", payload=plan.model_dump())
     findings, errors, warns = _validate_plan(ctx, plan, sheet)
     plan = _apply_layout_hints_if_needed(ctx, sheet, plan, errors, llm, warnings)
     plan = _apply_plan_review_if_needed(ctx, sheet, plan, findings, warns, llm)
+    _snapshot_artifact("plan.snapshot_after_reviewer", payload=plan.model_dump())
 
     with _phase("field_namer"):
         namer = FieldNamer(llm=llm)
         name_map: CanonicalNameMap = namer.run(workbook_ctx=ctx, plan=plan)["name_map"]
+    _snapshot_artifact("name_map.snapshot_after_namer", payload=name_map.model_dump())
     log.info("name_map_received", sheet=sheet,
              field_count=len(name_map.field_labels),
              stage_count=len(name_map.stage_names))
