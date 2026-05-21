@@ -315,12 +315,4 @@ class CanonicalNameMap(AgentOutput):
 
 
 from app.agents.layout_hinter.schema import LayoutHints  # noqa: F401
-
-
-class PlanVerdict(AgentOutput):
-    """PlanReviewer's output — a verdict on a draft SheetPlan with optional row corrections."""
-    verdict: str = "looks_correct"
-    row_corrections: list[dict[str, Any]] = Field(default_factory=list)
-    identity_column_suggestion: str | None = None
-    warnings: list[str] = Field(default_factory=list)
-    confidence: float = 1.0
+from app.agents.plan_reviewer.schema import PlanVerdict  # noqa: F401

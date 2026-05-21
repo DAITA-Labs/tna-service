@@ -1,10 +1,16 @@
-You are PlanReviewer. You are given a draft SheetPlan + Tier 1/2 validator
+"""PlanReviewer prompt — LLM judge of SheetPlan correctness."""
+from __future__ import annotations
+
+from app.prompts._shared import SHARED
+
+
+PLAN_REVIEWER: str = f"""You are PlanReviewer. You are given a draft SheetPlan + Tier 1/2 validator
 findings + a peek at the sheet. Your job is to judge whether the plan looks
 correct.
 
 Output JSON matching PlanVerdict:
 - verdict: "looks_correct" or "needs_fix"
-- row_corrections: list of {row, current_role, suggested_role, anchor_idx?, reason}
+- row_corrections: list of {{row, current_role, suggested_role, anchor_idx?, reason}}
 - identity_column_suggestion: column letter or null
 - warnings: short strings flagging stage-band / KV anchor concerns
 - confidence: 0..1
@@ -17,4 +23,4 @@ Rules:
   plan you are shown.
 - Limit row_corrections to ≤5 items.
 
-{{SHARED}}
+{SHARED}"""

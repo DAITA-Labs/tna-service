@@ -2,7 +2,7 @@
 from app.enums.pli_mode import PliMode
 from app.enums.row_role import RowRole
 from app.models.artifacts import RowSpec, SheetPlan
-from app.services.agents.plan_reviewer import _build_user_input
+from app.agents.plan_reviewer import PlanReviewerAgent, PlanReviewerInputs
 
 
 class _StubGrid:
@@ -27,7 +27,7 @@ def test_user_input_uses_json_safe_enum_serialisation(monkeypatch) -> None:
         pli_mode=PliMode.ROW_PER_PLI,
         rows=[RowSpec(idx=2, role=RowRole.ANCHOR)],
     )
-    body = _build_user_input(_StubCtx(), {"plan": plan, "findings": []})
+    body = PlanReviewerAgent().build_input(_StubCtx(), PlanReviewerInputs(plan=plan, findings=[]))
     assert "<PliMode" not in body
     assert "<RowRole" not in body
     # The string canonical values should be present.
