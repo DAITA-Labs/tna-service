@@ -1,15 +1,18 @@
-"""BaseCanonicalComponent — ROW_PER_PLI extraction harness."""
+"""BaseCanonicalExtractor — ROW_PER_PLI extraction harness."""
 from __future__ import annotations
+
+from haystack import component
 
 from app.artifacts.canvas import GridCanvas
 from app.artifacts.finding import Confidence
 from app.artifacts.layout import LayoutAxes, LayoutHint
 from app.artifacts.structure import DataRowRange, HeaderBand, Rect, StructureBag
 from app.artifacts.workbook import ClusterAnchorBundle, PliCluster
-from app.components.field._base import BaseCanonicalComponent
+from app.components.field._base import BaseCanonicalExtractor
 
 
-class _DummyCanonical(BaseCanonicalComponent):
+@component
+class _DummyExtractor(BaseCanonicalExtractor):
     """Test-only subclass — extracts a 'dummy_id' canonical."""
     canonical = "dummy_id"
 
@@ -42,13 +45,14 @@ def _bundle(*, axis="vertical", canvas_values=None, columns=None, rows=None,
 
 
 def test_subclass_without_canonical_raises() -> None:
-    """Calling extract_findings without setting `canonical` raises NotImplementedError."""
-    class BlankSubclass(BaseCanonicalComponent):
+    """Calling run without setting `canonical` raises NotImplementedError."""
+    @component
+    class _BlankSubclass(BaseCanonicalExtractor):
         pass
 
     import pytest
     with pytest.raises(NotImplementedError):
-        BlankSubclass().extract_findings(_bundle())
+        _BlankSubclass().run(bundle=_bundle())
 
 
 def test_vertical_pli_emits_one_finding_per_non_blank_row() -> None:
@@ -67,8 +71,8 @@ def test_vertical_pli_emits_one_finding_per_non_blank_row() -> None:
         columns={"dummy_id": [1]},
         rows={"dummy_id": [3, 4, 5, 6, 7]},
     )
-    findings = _DummyCanonical().extract_findings(bundle)
-    assert [f.value for f in findings] == ["IO-3", "IO-4", "IO-5", "IO-7"]
+    out = _DummyExtractor().run(bundle=bundle)
+    assert [f.value for f in out["findings"]] == ["IO-3", "IO-4", "IO-5", "IO-7"]
 
 
 def test_findings_carry_canonical_and_coords() -> None:
@@ -79,8 +83,8 @@ def test_findings_carry_canonical_and_coords() -> None:
         rows={"dummy_id": [3]},
         header_band_rect=Rect(2, 1, 2, 2),
     )
-    findings = _DummyCanonical().extract_findings(bundle)
-    f = findings[0]
+    out = _DummyExtractor().run(bundle=bundle)
+    f = out["findings"][0]
     assert f.canonical == "dummy_id"
     assert f.value_coord == ("A", 3)
     assert f.label_coord == ("A", 2)
@@ -91,13 +95,13 @@ def test_findings_carry_canonical_and_coords() -> None:
 def test_no_candidate_columns_yields_no_findings() -> None:
     values = [[None] * 2, [None] * 2, ["X-1", None]]
     bundle = _bundle(canvas_values=values, columns={}, rows={"dummy_id": [3]})
-    assert _DummyCanonical().extract_findings(bundle) == []
+    assert _DummyExtractor().run(bundle=bundle)["findings"] == []
 
 
 def test_no_candidate_rows_yields_no_findings() -> None:
     values = [[None] * 2, [None] * 2, ["X-1", None]]
     bundle = _bundle(canvas_values=values, columns={"dummy_id": [1]}, rows={})
-    assert _DummyCanonical().extract_findings(bundle) == []
+    assert _DummyExtractor().run(bundle=bundle)["findings"] == []
 
 
 def test_unsupported_pli_axis_returns_empty_list() -> None:
@@ -108,12 +112,13 @@ def test_unsupported_pli_axis_returns_empty_list() -> None:
             axis=axis, canvas_values=values,
             columns={"dummy_id": [1]}, rows={"dummy_id": [3]},
         )
-        assert _DummyCanonical().extract_findings(bundle) == []
+        assert _DummyExtractor().run(bundle=bundle)["findings"] == []
 
 
 def test_postprocess_hook_applied_to_each_value() -> None:
     """Subclass can override _postprocess to coerce values."""
-    class UpperCaser(BaseCanonicalComponent):
+    @component
+    class _UpperCaser(BaseCanonicalExtractor):
         canonical = "dummy_id"
 
         def _postprocess(self, value):
@@ -125,5 +130,19 @@ def test_postprocess_hook_applied_to_each_value() -> None:
         columns={"dummy_id": [1]},
         rows={"dummy_id": [3]},
     )
-    findings = UpperCaser().extract_findings(bundle)
-    assert findings[0].value == "IO-3"
+    out = _UpperCaser().run(bundle=bundle)
+    assert out["findings"][0].value == "IO-3"
+
+
+def test_extractor_sockets_registered() -> None:
+    """Concrete subclass exposes bundle input + findings output sockets."""
+    comp = _DummyExtractor()
+    assert "bundle" in comp.__haystack_input__._sockets_dict
+    assert "findings" in comp.__haystack_output__._sockets_dict
+
+
+def test_extractor_addable_to_pipeline() -> None:
+    from haystack import Pipeline
+    pipeline = Pipeline()
+    pipeline.add_component("dummy", _DummyExtractor())
+    assert "dummy" in pipeline.graph.nodes

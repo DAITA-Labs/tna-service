@@ -1,11 +1,15 @@
-"""Base canonical component — per-canonical extraction over a ClusterAnchorBundle.
+"""BaseCanonicalExtractor — per-canonical extraction over a ClusterAnchorBundle.
 
-Concrete subclasses set a single class-level `canonical` attribute and
-optionally override `_postprocess` to coerce raw cell values into the
-canonical's value space. Layout-specific extraction is dispatched on
-`bundle.hint.axes.pli_axis`.
+Concrete subclasses set a single class-level `canonical` attribute,
+optionally override `_postprocess` to coerce raw cell values, and apply
+Haystack's `@component` decorator at class level. The base provides a
+`run(bundle)` method whose Haystack output socket is `findings`.
 
-Currently supported axes:
+Each concrete extractor *is* a Haystack component — there's no
+separate logic / wrapper split. Add an extractor to a Pipeline with
+`pipeline.add_component("io_number", IoNumberExtractor())`.
+
+Layout-specific extraction is dispatched on `bundle.hint.axes.pli_axis`:
 
   vertical   — tabular ROW_PER_PLI. One Finding per data row whose
                 candidate column carries a non-blank value. Implemented.
@@ -14,40 +18,53 @@ Currently supported axes:
   sheet      — SHEET_IS_PLI. Deferred.
   horizontal — column-per-PLI. Deferred.
 
-`extract_findings(bundle)` returns an empty list for unsupported axes
-so a workbook with mixed templates degrades gracefully rather than
-raising.
+Unsupported axes return an empty findings list so a workbook with
+mixed templates degrades gracefully rather than raising.
 """
 from __future__ import annotations
 
 from typing import Any
 
+from haystack import component
 from openpyxl.utils import get_column_letter
 
 from app.artifacts.finding import Confidence, Coord, Finding
 from app.artifacts.workbook import ClusterAnchorBundle
+from app.components._base import Component
 
 
-class BaseCanonicalComponent:
-    """Abstract base for every per-canonical field component.
+class BaseCanonicalExtractor(Component):
+    """Abstract base for every per-canonical field extractor.
 
-    Subclasses MUST override `canonical` (a class-level str matching one of
-    the identifier-spec canonicals). They MAY override `_postprocess` to
-    coerce raw cell values.
+    Subclasses MUST:
+      - set `canonical` (a class-level str matching an identifier spec)
+      - apply `@component` at class level (Haystack decorator)
+
+    They MAY override `_postprocess` to coerce raw cell values.
+
+    The inherited `run(bundle)` is decorated with
+    `@component.output_types(findings=list[Finding])` on this class; the
+    decorator on each concrete subclass picks up the inherited shape and
+    registers a fresh input/output socket map per extractor instance.
     """
 
     canonical: str = ""
 
-    def extract_findings(self, bundle: ClusterAnchorBundle) -> list[Finding]:
-        """Extract one Finding per occurrence of this canonical in the bundle."""
+    def __init__(self) -> None:
+        Component.__init__(self)
+
+    @component.output_types(findings=list[Finding])
+    def run(self, bundle: ClusterAnchorBundle) -> dict:
         if not self.canonical:
             raise NotImplementedError(
                 f"{type(self).__name__} must set a `canonical` class attribute."
             )
         axis = bundle.hint.axes.pli_axis
         if axis == "vertical":
-            return self._extract_row_per_pli(bundle)
-        return []
+            findings = self._extract_row_per_pli(bundle)
+        else:
+            findings = []
+        return {"findings": findings}
 
     def _extract_row_per_pli(self, bundle: ClusterAnchorBundle) -> list[Finding]:
         """ROW_PER_PLI extraction — one Finding per data row in the canonical's column."""
@@ -86,6 +103,6 @@ class BaseCanonicalComponent:
         """Coerce a raw cell value into the canonical's value space.
 
         Default: identity. Subclasses override for type coercion (e.g.,
-        io_number normalises numeric io-codes back to strings).
+        IoNumberExtractor normalises numeric IO codes back to strings).
         """
         return value
