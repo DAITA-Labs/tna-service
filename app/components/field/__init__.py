@@ -6,5 +6,6 @@ canonicals have different extraction shapes (some read columns, some
 read KvBlocks, some derive from other findings).
 """
 from app.components.field.io_number import IoNumberExtractor
+from app.components.field.quantity import QuantityExtractor
 
-__all__ = ["IoNumberExtractor"]
+__all__ = ["IoNumberExtractor", "QuantityExtractor"]
