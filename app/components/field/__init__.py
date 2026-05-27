@@ -1,8 +1,10 @@
-"""Per-canonical field extractors — emit Findings from a ClusterAnchorBundle."""
-from app.components.field._base import BaseCanonicalExtractor
+"""Per-canonical field extractors — emit Findings from a ClusterAnchorBundle.
+
+Each extractor is a standalone Haystack `@component class` with its own
+`run(bundle)` method. They share no template base class — different
+canonicals have different extraction shapes (some read columns, some
+read KvBlocks, some derive from other findings).
+"""
 from app.components.field.io_number import IoNumberExtractor
 
-__all__ = [
-    "BaseCanonicalExtractor",
-    "IoNumberExtractor",
-]
+__all__ = ["IoNumberExtractor"]
