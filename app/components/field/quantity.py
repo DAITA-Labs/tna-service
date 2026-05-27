@@ -1,30 +1,32 @@
 """QuantityExtractor — spec-driven per-PLI numeric extraction.
 
-Three signals combine to produce each Finding:
+Column finalization:
+  The LayoutHint hands over one or more candidate columns ranked by
+  header-band alias-match weight. That rank is necessary but not
+  sufficient — a header labelled "Qty" may sit above a column that's
+  90% blank, full of garbage strings, or carrying values outside the
+  spec's valid range. So the extractor SCORES every candidate column
+  (header_match + strip_overlap + dtype_match_rate + constraint_pass_rate)
+  and picks the highest scorer. If even the best candidate falls below
+  `_COLUMN_FLOOR`, no findings are emitted — wrong findings beat right
+  findings every time.
 
-  1. **Header match** — the column appears in `hint.candidate_columns["quantity"]`
-     (its header cell matched a quantity-spec alias). Required to participate.
+Per-cell evidence:
 
-  2. **IntStrip confirmation** — the column also appears in `bag.int_strips`
-     covering the PLI data rows. The structure phase already classified
-     this column as ≥80% int; that's the strongest possible confirmation.
+  - **Header match** — column was in `hint.candidate_columns["quantity"]`.
+  - **IntStrip confirmation** — column also appears in `bag.int_strips`.
+  - **`QUANTITY_SPEC.value_constraints`** — `min=1, max=100000` per value.
 
-  3. **`QUANTITY_SPEC.value_constraints`** — each cell value is checked
-     against `min=1, max=100000`. A violation lowers confidence and tags
-     the finding with `CONSTRAINT:<which>`.
-
-Structural rejection: a value cell that's inside a merged range is
-skipped outright (no Finding emitted). Per-PLI quantities live in
-single-cell positions; a merged cell at the quantity column position
-is a label, a total, or a repeated-value filler — never a real PLI
-order count.
+Structural rejection:
+  A value cell inside a merged range is skipped outright (no Finding) —
+  merged cells at the quantity column position are labels, totals, or
+  repeated-value fillers, never real per-PLI order counts.
 
 Confidence ladder per cell (for non-rejected cells):
 
-  HIGH    header_band + int_strip + constraints satisfied
-  MEDIUM  header_band + constraints satisfied, no int_strip
-  LOW     header_band but a constraint was violated (extreme outlier,
-          non-numeric garbage that survived coercion)
+  HIGH    header + int_strip + constraints satisfied
+  MEDIUM  header + constraints satisfied, no int_strip
+  LOW     header but a constraint was violated
 """
 from __future__ import annotations
 
@@ -46,6 +48,9 @@ from app.tools._registry import TOOL_REGISTRY
 # attempting numeric parse.
 _DIGITS_AND_DOT = re.compile(r"^-?\d+(\.\d+)?$")
 
+# Minimum column-finalization score required to commit to a column.
+_COLUMN_FLOOR = 0.5
+
 
 @component
 class QuantityExtractor(Component):
@@ -65,13 +70,25 @@ class QuantityExtractor(Component):
         if not columns or not rows:
             return {"findings": []}
 
-        col_idx = columns[0]
+        score_column = TOOL_REGISTRY["score_column_for_canonical"]
+        check_column_has_strip = TOOL_REGISTRY["check_column_has_strip"]
+        find_merged_cells_in_column = TOOL_REGISTRY["find_merged_cells_in_column"]
+
+        # Column finalization — score every candidate, pick the highest scorer,
+        # skip entirely if the best score falls below the floor.
+        scored = [
+            (col, score_column(
+                bundle.canvas, col, rows, QUANTITY_SPEC, bundle.bag.int_strips,
+            ))
+            for col in columns
+        ]
+        col_idx, best_score = max(scored, key=lambda x: x[1])
+        if best_score < _COLUMN_FLOOR:
+            return {"findings": []}
+
         col_letter = get_column_letter(col_idx)
         band = bundle.hint.header_band
         label_coord = (col_letter, band.rect.r0 if band else 1)
-
-        check_column_has_strip = TOOL_REGISTRY["check_column_has_strip"]
-        find_merged_cells_in_column = TOOL_REGISTRY["find_merged_cells_in_column"]
 
         int_strip_confirmed = check_column_has_strip(bundle.bag.int_strips, col_idx, rows)
         constraints = QUANTITY_SPEC.value_constraints
