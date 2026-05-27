@@ -18,6 +18,7 @@ from app.components.field.io_number import IoNumberExtractor
 from app.components.field.metadata import MetadataExtractor
 from app.components.field.quantity import QuantityExtractor
 from app.components.field.shipment_date import ShipmentDateExtractor
+from app.components.field.stages import StageExtractor
 from app.components.field.style_code import StyleCodeExtractor
 from app.components.field.style_name import StyleNameExtractor
 
@@ -33,6 +34,7 @@ __all__ = [
     "MetadataExtractor",
     "QuantityExtractor",
     "ShipmentDateExtractor",
+    "StageExtractor",
     "StyleCodeExtractor",
     "StyleNameExtractor",
 ]
