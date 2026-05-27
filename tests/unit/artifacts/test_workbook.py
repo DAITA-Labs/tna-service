@@ -1,9 +1,13 @@
 """Workbook artifacts — SheetSignature + PliCluster shape and defaults."""
 from __future__ import annotations
 
+from app.artifacts.canvas import GridCanvas
+from app.artifacts.layout import LayoutAxes, LayoutHint
+from app.artifacts.structure import StructureBag
 from app.artifacts.workbook import (
     SIGNATURE_LABEL_ROWS,
     SIGNATURE_SAMPLE_ROWS,
+    ClusterAnchorBundle,
     PliCluster,
     SheetSignature,
 )
@@ -46,3 +50,21 @@ def test_signature_sample_row_constants_are_sensible() -> None:
     """SAMPLE_ROWS covers header + first data rows; LABEL_ROWS covers headers only."""
     assert SIGNATURE_SAMPLE_ROWS >= 10
     assert 1 <= SIGNATURE_LABEL_ROWS <= SIGNATURE_SAMPLE_ROWS
+
+
+def test_cluster_anchor_bundle_carries_phase_artifacts() -> None:
+    """ClusterAnchorBundle is frozen and bundles cluster + canvas + bag + hint."""
+    cluster = PliCluster(cluster_id="c0", sheet_names=["S"], role="pli_cluster")
+    canvas = GridCanvas(n_rows=1, n_cols=1, cell_values=[[None]])
+    bag = StructureBag()
+    hint = LayoutHint(
+        axes=LayoutAxes(pli_axis="vertical", stage_axis="none", subfield_axis="implicit"),
+        cluster_id="c0", confidence=0.5,
+    )
+    bundle = ClusterAnchorBundle(
+        cluster=cluster, anchor_sheet_name="S",
+        canvas=canvas, bag=bag, hint=hint,
+    )
+    assert bundle.cluster is cluster
+    assert bundle.anchor_sheet_name == "S"
+    assert bundle.hint.cluster_id == "c0"
