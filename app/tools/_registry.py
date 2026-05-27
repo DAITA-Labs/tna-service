@@ -50,6 +50,13 @@ class ToolRegistry:
             raise KeyError(f"tool {name!r} not registered")
         return self._tools[name]
 
+    def __getitem__(self, name: str) -> Callable:
+        """Subscript form of `get` — `TOOL_REGISTRY[\"name\"]` is the preferred call site."""
+        return self.get(name)
+
+    def __contains__(self, name: str) -> bool:
+        return name in self._tools
+
     def names(self) -> list[str]:
         """Return all registered tool names in sorted order."""
         return sorted(self._tools.keys())

@@ -18,11 +18,19 @@ from app.components.field.quantity import QuantityExtractor
 
 
 def _bundle_with(values, *, axis="vertical", columns=None, rows=None,
-                   int_strip_col: int | None = None):
-    """Build a bundle. When `int_strip_col` is set, the bag carries a matching IntStrip."""
+                   int_strip_col: int | None = None,
+                   merge_ranges: set[tuple[int, int, int, int]] | None = None):
+    """Build a bundle. When `int_strip_col` is set, the bag carries a matching IntStrip.
+
+    `merge_ranges` (1-indexed (r0, c0, r1, c1) tuples) populate the canvas
+    so the merged-cell rejection path can be exercised.
+    """
     n_rows = len(values)
     n_cols = len(values[0]) if values else 0
-    canvas = GridCanvas(n_rows=n_rows, n_cols=n_cols, cell_values=values)
+    canvas = GridCanvas(
+        n_rows=n_rows, n_cols=n_cols, cell_values=values,
+        merge_ranges=merge_ranges or set(),
+    )
     bag = StructureBag()
     bag.header_band = HeaderBand(rect=Rect(2, 1, 2, n_cols), score=0.9)
     bag.data_row_ranges = [DataRowRange(row_start=3, row_end=n_rows)]
@@ -104,6 +112,47 @@ def test_garbage_string_demoted_to_low_with_value_not_numeric() -> None:
     f = out["findings"][0]
     assert f.confidence == Confidence.LOW
     assert "CONSTRAINT:value_not_numeric" in f.evidence
+
+
+# ─── Merged-cell structural rejection ──────────────────────────────────────
+
+
+def test_cell_inside_merge_range_is_skipped_entirely() -> None:
+    """A quantity cell inside a merge range yields no Finding."""
+    bundle = _bundle_with(
+        [
+            [None],
+            ["Qty"],
+            [1200],   # row 3 — inside the merge below
+            [None],   # row 4 — also inside the merge (continuation)
+            [500],    # row 5 — outside any merge → emitted
+        ],
+        merge_ranges={(3, 1, 4, 1)},  # A3:A4 merged
+    )
+    out = QuantityExtractor().run(bundle=bundle)
+    assert [f.value for f in out["findings"]] == [500]
+    assert [f.value_coord for f in out["findings"]] == [("A", 5)]
+
+
+def test_merge_in_different_column_does_not_affect_quantity_column() -> None:
+    """Merges that don't touch the quantity column don't reject anything."""
+    bundle = _bundle_with(
+        [[None, None], ["Qty", "Other"], [1200, None], [500, None]],
+        merge_ranges={(3, 2, 4, 2)},  # B3:B4 — not the quantity column
+    )
+    out = QuantityExtractor().run(bundle=bundle)
+    assert [f.value for f in out["findings"]] == [1200, 500]
+
+
+def test_merge_that_only_touches_data_rows_via_overlap_still_rejects() -> None:
+    """A merge that overlaps even one data row in the quantity column rejects that row."""
+    bundle = _bundle_with(
+        [[None], ["Qty"], [1200], [500], [800]],
+        merge_ranges={(4, 1, 5, 1)},  # A4:A5
+    )
+    out = QuantityExtractor().run(bundle=bundle)
+    # Row 3 keeps its finding; rows 4 + 5 are inside the merge → dropped
+    assert [f.value_coord for f in out["findings"]] == [("A", 3)]
 
 
 # ─── Coercion still works ──────────────────────────────────────────────────

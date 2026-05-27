@@ -13,7 +13,13 @@ Three signals combine to produce each Finding:
      against `min=1, max=100000`. A violation lowers confidence and tags
      the finding with `CONSTRAINT:<which>`.
 
-Confidence ladder per cell:
+Structural rejection: a value cell that's inside a merged range is
+skipped outright (no Finding emitted). Per-PLI quantities live in
+single-cell positions; a merged cell at the quantity column position
+is a label, a total, or a repeated-value filler — never a real PLI
+order count.
+
+Confidence ladder per cell (for non-rejected cells):
 
   HIGH    header_band + int_strip + constraints satisfied
   MEDIUM  header_band + constraints satisfied, no int_strip
@@ -29,10 +35,11 @@ from haystack import component
 from openpyxl.utils import get_column_letter
 
 from app.artifacts.finding import Confidence, Finding
-from app.artifacts.structure import StructureBag
 from app.artifacts.workbook import ClusterAnchorBundle
 from app.components._base import Component
 from app.specs import QUANTITY_SPEC
+from app.tools import canvas as _canvas_tools  # noqa: F401 — registers @tool entries
+from app.tools._registry import TOOL_REGISTRY
 
 
 # Strip thousands separators (commas, spaces) and trailing unit text before
@@ -63,11 +70,20 @@ class QuantityExtractor(Component):
         band = bundle.hint.header_band
         label_coord = (col_letter, band.rect.r0 if band else 1)
 
-        int_strip_confirmed = _column_has_int_strip(bundle.bag, col_idx, rows)
+        check_column_has_strip = TOOL_REGISTRY["check_column_has_strip"]
+        find_merged_cells_in_column = TOOL_REGISTRY["find_merged_cells_in_column"]
+
+        int_strip_confirmed = check_column_has_strip(bundle.bag.int_strips, col_idx, rows)
         constraints = QUANTITY_SPEC.value_constraints
+        merged_cells = find_merged_cells_in_column(bundle.canvas, col_idx, rows)
 
         findings: list[Finding] = []
         for row in rows:
+            # Structural rejection: cells inside a merged range aren't real
+            # per-PLI quantities (labels, totals, repeated-value fillers).
+            if (row, col_idx) in merged_cells:
+                continue
+
             raw = bundle.canvas.cell_values[row - 1][col_idx - 1]
             value = _coerce_quantity(raw)
             if value is None or value == 0:
@@ -95,18 +111,6 @@ class QuantityExtractor(Component):
                 evidence=evidence,
             ))
         return {"findings": findings}
-
-
-def _column_has_int_strip(bag: StructureBag, col_idx: int, rows: list[int]) -> bool:
-    """True when an IntStrip overlaps `col_idx` and at least one of `rows`."""
-    row_set = set(rows)
-    for strip in bag.int_strips:
-        rect = strip.rect
-        if rect.c0 <= col_idx <= rect.c1 and any(
-            r in row_set for r in range(rect.r0, rect.r1 + 1)
-        ):
-            return True
-    return False
 
 
 def _check_constraints(value: Any, constraints) -> str | None:
