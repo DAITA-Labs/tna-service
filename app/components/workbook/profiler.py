@@ -17,6 +17,8 @@ import datetime as dt
 import re
 from typing import Any
 
+from haystack import component
+
 from app.artifacts.workbook import (
     SIGNATURE_LABEL_ROWS,
     SIGNATURE_SAMPLE_ROWS,
@@ -24,6 +26,7 @@ from app.artifacts.workbook import (
     LabelPosition,
     SheetSignature,
 )
+from app.components._base import Component
 
 
 # dtype slot identifiers — internal to the row-walk loop. The named
@@ -104,3 +107,23 @@ def _classify(value: Any) -> int:
 def _normalise(text: str) -> str:
     """Lowercase + collapse whitespace so similarity is robust to formatting."""
     return _WS.sub(" ", text.strip().lower())
+
+
+@component
+class WorkbookProfiler(Component):
+    """Haystack wrapper around `compute_sheet_signature`.
+
+    Inputs:
+        workbook — an openpyxl Workbook
+
+    Outputs:
+        signatures — list[SheetSignature], one per worksheet in workbook order
+    """
+
+    def __init__(self) -> None:
+        Component.__init__(self)
+
+    @component.output_types(signatures=list[SheetSignature])
+    def run(self, workbook) -> dict:
+        signatures = [compute_sheet_signature(ws) for ws in workbook.worksheets]
+        return {"signatures": signatures}
