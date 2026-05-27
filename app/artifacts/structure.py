@@ -159,6 +159,39 @@ class PlanMarkerCluster:
     cells: tuple[tuple[int, int], ...]
 
 
+@dataclass(frozen=True)
+class RowDtypeProfile:
+    """Per-row dtype distribution — counts of cells by dtype across one row.
+
+    Used by AxisInferrer to identify text-dense rows (likely headers) vs
+    numeric-dense rows (likely data) vs blank rows. Counts are absolute
+    cell counts; densities can be derived by dividing by `n_cols`.
+    """
+
+    row_idx:        int
+    n_cols:         int
+    n_blank:        int
+    n_date:         int
+    n_int:          int
+    n_float:        int
+    n_str:          int
+    n_formula:      int
+
+
+@dataclass(frozen=True)
+class ColDtypeProfile:
+    """Per-column dtype distribution — counts of cells by dtype down one column."""
+
+    col_idx:        int
+    n_rows:         int
+    n_blank:        int
+    n_date:         int
+    n_int:          int
+    n_float:        int
+    n_str:          int
+    n_formula:      int
+
+
 # ─── Semantic records ───────────────────────────────────────────────────────
 
 
