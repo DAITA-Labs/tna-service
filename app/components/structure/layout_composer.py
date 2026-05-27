@@ -58,18 +58,34 @@ def _overall_confidence(axes: LayoutAxes) -> float:
 
 def _candidate_columns_per_canonical(canvas: GridCanvas,
                                        bag: StructureBag) -> dict[str, list[int]]:
-    """Pre-narrow which columns are candidates for each canonical based on header band hits."""
+    """Pre-narrow which columns are candidates for each canonical, **ranked best-first**.
+
+    Each header-band cell that matches an identifier-spec alias contributes
+    its `SpecMatch.weight` (from the alias's `label_match_mode`) to its
+    column's aggregate score. Columns are returned per canonical sorted by
+    that aggregate descending — so consumers can take `columns[0]` and get
+    the strongest header match. Ties are broken by lower column index for
+    stable ordering.
+    """
     if bag.header_band is None:
         return {}
     band_rows = set(range(bag.header_band.rect.r0, bag.header_band.rect.r1 + 1))
 
     matches = query_phase(canvas, "identifier", restrict_rows=band_rows)
-    by_canon: dict[str, list[int]] = defaultdict(list)
+
+    # canonical → column_index → aggregate weight
+    weights: dict[str, dict[int, float]] = defaultdict(lambda: defaultdict(float))
     for m in matches:
         col_idx = _column_letter_to_index(m.col)
-        if col_idx not in by_canon[m.canonical]:
-            by_canon[m.canonical].append(col_idx)
-    return dict(by_canon)
+        weights[m.canonical][col_idx] += m.weight
+
+    return {
+        canonical: [col for col, _ in sorted(
+            col_weights.items(),
+            key=lambda item: (-item[1], item[0]),  # weight desc, col_idx asc
+        )]
+        for canonical, col_weights in weights.items()
+    }
 
 
 def _candidate_rows_per_canonical(canvas: GridCanvas,

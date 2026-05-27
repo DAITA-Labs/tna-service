@@ -42,7 +42,7 @@ class IoNumberExtractor(Component):
         if not columns or not rows:
             return {"findings": []}
 
-        col_idx = columns[0]  # multi-column arbitration deferred to a later validator
+        col_idx = columns[0]  # LayoutHint pre-ranks by aggregate spec-match weight
         col_letter = get_column_letter(col_idx)
         band = bundle.hint.header_band
         label_coord = (col_letter, band.rect.r0 if band else 1)
