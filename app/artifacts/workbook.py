@@ -26,6 +26,30 @@ ClusterRole = Literal["pli_cluster", "other_sheets", "unknown"]
 
 
 @dataclass(frozen=True)
+class DtypeHistogram:
+    """Per-row count of cells in each dtype slot.
+
+    Frozen + hashable so it composes inside `SheetSignature` (which is
+    itself frozen and used as a dict key in clusterer tests).
+    """
+
+    n_blank: int
+    n_str:   int
+    n_int:   int
+    n_float: int
+    n_date:  int
+
+
+@dataclass(frozen=True)
+class LabelPosition:
+    """A normalised label cell coordinate — (row, col, text)."""
+
+    row:  int
+    col:  int
+    text: str
+
+
+@dataclass(frozen=True)
 class SheetSignature:
     """Compact structural fingerprint of a sheet used by the clusterer.
 
@@ -37,24 +61,23 @@ class SheetSignature:
                             `SIGNATURE_SAMPLE_ROWS` rows. Captures the
                             shape of the populated region.
 
-      dtype_per_row      — per-row dtype histogram (n_blank, n_str, n_int,
-                            n_float, n_date) for the first
-                            `SIGNATURE_SAMPLE_ROWS` rows. Captures the
-                            ordering of header rows vs data rows.
+      dtype_per_row      — tuple of `DtypeHistogram`, one per sampled row,
+                            for the first `SIGNATURE_SAMPLE_ROWS` rows.
+                            Captures the ordering of header rows vs data
+                            rows.
 
-      label_positions    — frozenset of (row, col, normalised_text) for
-                            non-empty string cells in the first
-                            `SIGNATURE_LABEL_ROWS` rows. Captures shared
-                            header vocabulary even when the data shape
-                            differs slightly.
+      label_positions    — frozenset of `LabelPosition` for non-empty
+                            string cells in the first `SIGNATURE_LABEL_ROWS`
+                            rows. Captures shared header vocabulary even
+                            when the data shape differs slightly.
     """
 
     sheet_name:      str
     n_rows:          int
     n_cols:          int
     non_blank_mask:  frozenset[tuple[int, int]] = field(default_factory=frozenset)
-    dtype_per_row:   tuple[tuple[int, int, int, int, int], ...] = ()
-    label_positions: frozenset[tuple[int, int, str]] = field(default_factory=frozenset)
+    dtype_per_row:   tuple[DtypeHistogram, ...] = ()
+    label_positions: frozenset[LabelPosition] = field(default_factory=frozenset)
 
 
 @dataclass

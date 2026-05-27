@@ -30,7 +30,7 @@ from __future__ import annotations
 
 import math
 
-from app.artifacts.workbook import SheetSignature
+from app.artifacts.workbook import DtypeHistogram, SheetSignature
 
 
 _MASK_WEIGHT = 0.4
@@ -57,7 +57,8 @@ def _jaccard(left, right) -> float:
     return intersection / union if union else 0.0
 
 
-def _dtype_cosine(left: tuple, right: tuple) -> float:
+def _dtype_cosine(left: tuple[DtypeHistogram, ...],
+                    right: tuple[DtypeHistogram, ...]) -> float:
     """Cosine similarity over flattened per-row dtype histograms.
 
     Pads the shorter sequence with zero-tuples so unequal-length sheets
@@ -80,9 +81,9 @@ def _dtype_cosine(left: tuple, right: tuple) -> float:
     return dot / (norm_a * norm_b)
 
 
-def _flatten(rows: tuple) -> list[int]:
-    """Flatten a tuple of dtype-count tuples into a 1-D list."""
+def _flatten(rows: tuple[DtypeHistogram, ...]) -> list[int]:
+    """Flatten a tuple of DtypeHistograms into a 1-D list of counts."""
     out: list[int] = []
     for row in rows:
-        out.extend(row)
+        out.extend((row.n_blank, row.n_str, row.n_int, row.n_float, row.n_date))
     return out

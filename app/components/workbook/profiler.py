@@ -20,12 +20,15 @@ from typing import Any
 from app.artifacts.workbook import (
     SIGNATURE_LABEL_ROWS,
     SIGNATURE_SAMPLE_ROWS,
+    DtypeHistogram,
+    LabelPosition,
     SheetSignature,
 )
 
 
-# dtype slot order — must match SheetSignature.dtype_per_row's tuple shape
-# (n_blank, n_str, n_int, n_float, n_date).
+# dtype slot identifiers — internal to the row-walk loop. The named
+# `DtypeHistogram` carries the semantic shape; these constants only key
+# into the local counts list.
 _BLANK = 0
 _STR = 1
 _INT = 2
@@ -49,8 +52,8 @@ def compute_sheet_signature(sheet) -> SheetSignature:
     label_row_end = min(n_rows, SIGNATURE_LABEL_ROWS)
 
     mask: set[tuple[int, int]] = set()
-    dtype_rows: list[tuple[int, int, int, int, int]] = []
-    labels: set[tuple[int, int, str]] = set()
+    dtype_rows: list[DtypeHistogram] = []
+    labels: set[LabelPosition] = set()
 
     for r in range(1, sample_row_end + 1):
         counts = [0, 0, 0, 0, 0]
@@ -63,9 +66,11 @@ def compute_sheet_signature(sheet) -> SheetSignature:
             if r <= label_row_end and slot == _STR:
                 normalised = _normalise(value)
                 if normalised:
-                    labels.add((r, c, normalised))
-        dtype_rows.append((counts[_BLANK], counts[_STR], counts[_INT],
-                            counts[_FLOAT], counts[_DATE]))
+                    labels.add(LabelPosition(row=r, col=c, text=normalised))
+        dtype_rows.append(DtypeHistogram(
+            n_blank=counts[_BLANK], n_str=counts[_STR], n_int=counts[_INT],
+            n_float=counts[_FLOAT], n_date=counts[_DATE],
+        ))
 
     return SheetSignature(
         sheet_name=sheet.title,

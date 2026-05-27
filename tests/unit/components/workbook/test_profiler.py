@@ -5,7 +5,11 @@ import datetime as dt
 
 import openpyxl
 
-from app.artifacts.workbook import SIGNATURE_LABEL_ROWS, SIGNATURE_SAMPLE_ROWS
+from app.artifacts.workbook import (
+    SIGNATURE_LABEL_ROWS,
+    SIGNATURE_SAMPLE_ROWS,
+    LabelPosition,
+)
 from app.components.workbook.profiler import compute_sheet_signature
 
 
@@ -39,29 +43,26 @@ def test_non_blank_mask_captures_populated_cells_only() -> None:
 
 
 def test_dtype_per_row_counts_by_slot() -> None:
-    """Row 1: 2 strings + 1 int + 1 blank. Slot order: (blank, str, int, float, date)."""
+    """Row 1: 2 strings + 1 int + 1 blank."""
     ws = _sheet_with("S", [(1, 1, "A"), (1, 2, "B"), (1, 3, 10), (1, 5, None)])
     sig = compute_sheet_signature(ws)
-    # max_column is 3 (None doesn't extend column count)
-    blank, n_str, n_int, n_float, n_date = sig.dtype_per_row[0]
-    assert n_str == 2
-    assert n_int == 1
-    assert n_float == 0
-    assert n_date == 0
+    hist = sig.dtype_per_row[0]
+    assert hist.n_str == 2
+    assert hist.n_int == 1
+    assert hist.n_float == 0
+    assert hist.n_date == 0
 
 
 def test_date_cell_recognised_from_native_date() -> None:
     ws = _sheet_with("S", [(1, 1, dt.date(2026, 5, 27))])
     sig = compute_sheet_signature(ws)
-    _, _, _, _, n_date = sig.dtype_per_row[0]
-    assert n_date == 1
+    assert sig.dtype_per_row[0].n_date == 1
 
 
 def test_date_string_recognised_via_regex() -> None:
     ws = _sheet_with("S", [(1, 1, "2026-05-27")])
     sig = compute_sheet_signature(ws)
-    _, _, _, _, n_date = sig.dtype_per_row[0]
-    assert n_date == 1
+    assert sig.dtype_per_row[0].n_date == 1
 
 
 def test_label_positions_normalise_and_truncate() -> None:
@@ -73,8 +74,8 @@ def test_label_positions_normalise_and_truncate() -> None:
         (row_outside, 1, "ShouldNotAppear"),
     ])
     sig = compute_sheet_signature(ws)
-    assert (label_row_inside, 1, "job no") in sig.label_positions
-    assert all(text != "shouldnotappear" for (_, _, text) in sig.label_positions)
+    assert LabelPosition(row=label_row_inside, col=1, text="job no") in sig.label_positions
+    assert all(lp.text != "shouldnotappear" for lp in sig.label_positions)
 
 
 def test_signature_truncates_to_sample_rows() -> None:
