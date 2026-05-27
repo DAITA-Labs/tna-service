@@ -1,6 +1,8 @@
 """QuantityExtractor — spec-driven extraction with bag.int_strips + constraints."""
 from __future__ import annotations
 
+import datetime as dt
+
 from haystack import Pipeline
 
 from app.artifacts.canvas import GridCanvas
@@ -17,6 +19,25 @@ from app.artifacts.workbook import ClusterAnchorBundle, PliCluster
 from app.components.field.quantity import QuantityExtractor
 
 
+# Canvas dtype channel codes (mirror app.tools.canvas.build).
+_BLANK, _DATE, _INT, _FLOAT, _STR = 0, 1, 2, 3, 4
+
+
+def _classify_dtype(value) -> int:
+    """Map a cell value to the canvas's dtype-channel code."""
+    if value is None or value == "":
+        return _BLANK
+    if isinstance(value, bool):
+        return _INT
+    if isinstance(value, dt.datetime) or isinstance(value, dt.date):
+        return _DATE
+    if isinstance(value, int):
+        return _INT
+    if isinstance(value, float):
+        return _FLOAT
+    return _STR
+
+
 def _bundle_with(values, *, axis="vertical", columns=None, rows=None,
                    int_strip_col: int | None = None,
                    merge_ranges: set[tuple[int, int, int, int]] | None = None):
@@ -27,8 +48,13 @@ def _bundle_with(values, *, axis="vertical", columns=None, rows=None,
     """
     n_rows = len(values)
     n_cols = len(values[0]) if values else 0
+    # Derive the dtype channel from cell values so the column scorer can
+    # evaluate dtype_match_rate (the real bundle from run_structure_phase
+    # always carries this channel).
+    dtype_channel = [[_classify_dtype(v) for v in row] for row in values]
     canvas = GridCanvas(
         n_rows=n_rows, n_cols=n_cols, cell_values=values,
+        channels={"dtype": dtype_channel},
         merge_ranges=merge_ranges or set(),
     )
     bag = StructureBag()
@@ -87,6 +113,44 @@ def test_int_strip_on_different_column_does_not_confirm() -> None:
     assert "INT_STRIP_CONFIRMED" not in f.evidence
 
 
+# ─── Column arbitration (multi-candidate) ─────────────────────────────────
+
+
+def test_two_candidate_columns_picks_higher_scoring_one() -> None:
+    """When the hint has two candidate columns, the scorer picks the better one.
+
+    Col 1 (the hint's [0]) is mostly string garbage; col 2 carries real
+    integer quantities. The extractor must skip the hint's first choice.
+    """
+    values = [
+        [None, None],
+        ["Qty", "Pieces"],
+        ["aa", 100],
+        ["bb", 200],
+        ["cc", 300],
+        ["dd", 400],
+    ]
+    bundle = _bundle_with(
+        values,
+        columns={"quantity": [1, 2]},   # 1 is hint-best by header rank
+        int_strip_col=2,                 # but col 2 is the genuine int column
+    )
+    out = QuantityExtractor().run(bundle=bundle)
+    # Only col-2 values emit; col 1 was rejected by the scorer.
+    assert sorted(f.value for f in out["findings"]) == [100, 200, 300, 400]
+    assert all(f.value_coord[0] == "B" for f in out["findings"])
+
+
+def test_all_candidate_columns_below_floor_yields_no_findings() -> None:
+    """When every candidate column scores below the floor, no findings emit."""
+    bundle = _bundle_with(
+        [[None], ["Qty"], ["aa"], ["bb"], ["cc"]],   # all strings, no strip
+        columns={"quantity": [1]},
+    )
+    out = QuantityExtractor().run(bundle=bundle)
+    assert out["findings"] == []
+
+
 # ─── Constraint violations (LOW confidence) ────────────────────────────────
 
 
@@ -107,11 +171,16 @@ def test_above_max_constraint_tagged_and_demoted_to_low() -> None:
 
 
 def test_garbage_string_demoted_to_low_with_value_not_numeric() -> None:
-    bundle = _bundle_with([[None], ["Qty"], ["TBD"]])
+    """A garbage cell in an otherwise int-typed column passes the scorer
+    (column has strip + mostly-int dtype) and emits LOW for the bad cell."""
+    bundle = _bundle_with(
+        [[None], ["Qty"], [1200], [500], ["TBD"], [800]],
+        int_strip_col=1,
+    )
     out = QuantityExtractor().run(bundle=bundle)
-    f = out["findings"][0]
-    assert f.confidence == Confidence.LOW
-    assert "CONSTRAINT:value_not_numeric" in f.evidence
+    tbd_finding = [f for f in out["findings"] if f.value == "TBD"][0]
+    assert tbd_finding.confidence == Confidence.LOW
+    assert "CONSTRAINT:value_not_numeric" in tbd_finding.evidence
 
 
 # ─── Merged-cell structural rejection ──────────────────────────────────────
@@ -169,21 +238,34 @@ def test_integer_valued_float_coerced_to_int() -> None:
 
 
 def test_thousands_separator_string_parsed() -> None:
-    bundle = _bundle_with([[None], ["Qty"], ["1,200"]])
-    assert QuantityExtractor().run(bundle=bundle)["findings"][0].value == 1200
+    """One thousands-formatted string inside a mostly-int column coerces correctly."""
+    bundle = _bundle_with(
+        [[None], ["Qty"], [1100], [1150], ["1,200"], [800]],
+        int_strip_col=1,
+    )
+    out = QuantityExtractor().run(bundle=bundle)
+    assert 1200 in [f.value for f in out["findings"]]
 
 
 def test_unit_suffix_string_parsed() -> None:
-    bundle = _bundle_with([[None], ["Qty"], ["1200 pcs"]])
-    assert QuantityExtractor().run(bundle=bundle)["findings"][0].value == 1200
+    """One unit-suffixed string inside a mostly-int column coerces correctly."""
+    bundle = _bundle_with(
+        [[None], ["Qty"], [1100], [1150], ["1200 pcs"], [800]],
+        int_strip_col=1,
+    )
+    out = QuantityExtractor().run(bundle=bundle)
+    assert 1200 in [f.value for f in out["findings"]]
 
 
 def test_blank_and_zero_skipped() -> None:
-    bundle = _bundle_with([
-        [None], ["Qty"], [None], [""], [0], [0.0], ["0"], [100],
-    ])
+    """Inside an int-typed column, blank cells and zeros don't emit findings."""
+    bundle = _bundle_with(
+        [[None], ["Qty"], [100], [None], [""], [0], [0.0], ["0"], [200]],
+        int_strip_col=1,
+    )
     out = QuantityExtractor().run(bundle=bundle)
-    assert [f.value for f in out["findings"]] == [100]
+    # 100 and 200 emit; blanks/zeros do not.
+    assert sorted(f.value for f in out["findings"]) == [100, 200]
 
 
 def test_bool_rejected() -> None:

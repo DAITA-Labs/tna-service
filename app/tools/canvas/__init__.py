@@ -42,6 +42,7 @@ from app.tools.canvas.lookups import (
 )
 from app.tools.canvas.plan_marker import find_plan_marker_clusters
 from app.tools.canvas.repeating_group import find_repeating_row_groups
+from app.tools.canvas.scoring import score_column_for_canonical
 from app.tools.canvas.strips_date import (
     find_date_strips,
     find_date_strips_horizontal,
@@ -120,4 +121,5 @@ __all__ = [
     # column/cell lookups used by field extractors
     "check_column_has_strip",
     "find_merged_cells_in_column",
+    "score_column_for_canonical",
 ]
