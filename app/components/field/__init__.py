@@ -5,7 +5,16 @@ Each extractor is a standalone Haystack `@component class` with its own
 canonicals have different extraction shapes (some read columns, some
 read KvBlocks, some derive from other findings).
 """
+from app.components.field.color_code import ColorCodeExtractor
+from app.components.field.fabric_code import FabricCodeExtractor
 from app.components.field.io_number import IoNumberExtractor
 from app.components.field.quantity import QuantityExtractor
+from app.components.field.style_code import StyleCodeExtractor
 
-__all__ = ["IoNumberExtractor", "QuantityExtractor"]
+__all__ = [
+    "ColorCodeExtractor",
+    "FabricCodeExtractor",
+    "IoNumberExtractor",
+    "QuantityExtractor",
+    "StyleCodeExtractor",
+]
