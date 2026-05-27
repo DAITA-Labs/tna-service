@@ -1,17 +1,30 @@
-"""QuantityExtractor — emits Finding(canonical="quantity") per PLI.
+"""QuantityExtractor — spec-driven per-PLI numeric extraction.
 
-Quantity is a per-PLI numeric — the order count in pieces (or sometimes
-units). Raw values may arrive as:
+Three signals combine to produce each Finding:
 
-  - int (1200)
-  - float (1200.0 from openpyxl's tendency to type integer cells as float;
-           or genuinely fractional values like 1200.5)
-  - string ("1200", "1,200", "1200 pcs", " 1200  ")
+  1. **Header match** — the column appears in `hint.candidate_columns["quantity"]`
+     (its header cell matched a quantity-spec alias). Required to participate.
 
-The coercer normalises to int when the value is whole (counting pieces),
-falls back to float for genuinely fractional values, and returns the
-raw string when nothing parses. Blank and zero cells are skipped — a
-PLI with zero quantity is not a usable order line.
+  2. **IntStrip confirmation** — the column also appears in `bag.int_strips`
+     covering the PLI data rows. The structure phase already classified
+     this column as ≥80% int; that's the strongest possible confirmation.
+
+  3. **`QUANTITY_SPEC.value_constraints`** — each cell value is checked
+     against `min=1, max=100000`. A violation lowers confidence and tags
+     the finding with `CONSTRAINT:<which>`.
+
+Structural rejection: a value cell that's inside a merged range is
+skipped outright (no Finding emitted). Per-PLI quantities live in
+single-cell positions; a merged cell at the quantity column position
+is a label, a total, or a repeated-value filler — never a real PLI
+order count.
+
+Confidence ladder per cell (for non-rejected cells):
+
+  HIGH    header_band + int_strip + constraints satisfied
+  MEDIUM  header_band + constraints satisfied, no int_strip
+  LOW     header_band but a constraint was violated (extreme outlier,
+          non-numeric garbage that survived coercion)
 """
 from __future__ import annotations
 
@@ -24,18 +37,19 @@ from openpyxl.utils import get_column_letter
 from app.artifacts.finding import Confidence, Finding
 from app.artifacts.workbook import ClusterAnchorBundle
 from app.components._base import Component
+from app.specs import QUANTITY_SPEC
+from app.tools import canvas as _canvas_tools  # noqa: F401 — registers @tool entries
+from app.tools._registry import TOOL_REGISTRY
 
 
-_CANONICAL = "quantity"
-
-# Strip thousands separators (commas, spaces) and trailing unit text like "pcs"
-# before attempting numeric parse.
+# Strip thousands separators (commas, spaces) and trailing unit text before
+# attempting numeric parse.
 _DIGITS_AND_DOT = re.compile(r"^-?\d+(\.\d+)?$")
 
 
 @component
 class QuantityExtractor(Component):
-    """Extract `quantity` Findings from a ClusterAnchorBundle (vertical PLI axis)."""
+    """Extract `quantity` Findings using spec constraints + bag.int_strips."""
 
     def __init__(self) -> None:
         Component.__init__(self)
@@ -45,8 +59,9 @@ class QuantityExtractor(Component):
         if bundle.hint.axes.pli_axis != "vertical":
             return {"findings": []}
 
-        columns = bundle.hint.candidate_columns.get(_CANONICAL, [])
-        rows = bundle.hint.candidate_rows.get(_CANONICAL, [])
+        canonical = QUANTITY_SPEC.canonical
+        columns = bundle.hint.candidate_columns.get(canonical, [])
+        rows = bundle.hint.candidate_rows.get(canonical, [])
         if not columns or not rows:
             return {"findings": []}
 
@@ -55,37 +70,72 @@ class QuantityExtractor(Component):
         band = bundle.hint.header_band
         label_coord = (col_letter, band.rect.r0 if band else 1)
 
+        check_column_has_strip = TOOL_REGISTRY["check_column_has_strip"]
+        find_merged_cells_in_column = TOOL_REGISTRY["find_merged_cells_in_column"]
+
+        int_strip_confirmed = check_column_has_strip(bundle.bag.int_strips, col_idx, rows)
+        constraints = QUANTITY_SPEC.value_constraints
+        merged_cells = find_merged_cells_in_column(bundle.canvas, col_idx, rows)
+
         findings: list[Finding] = []
         for row in rows:
+            # Structural rejection: cells inside a merged range aren't real
+            # per-PLI quantities (labels, totals, repeated-value fillers).
+            if (row, col_idx) in merged_cells:
+                continue
+
             raw = bundle.canvas.cell_values[row - 1][col_idx - 1]
             value = _coerce_quantity(raw)
             if value is None or value == 0:
                 continue
+
+            evidence: list[str] = ["HEADER_BAND_MEMBER"]
+            if int_strip_confirmed:
+                evidence.append("INT_STRIP_CONFIRMED")
+
+            breach = _check_constraints(value, constraints)
+            if breach is not None:
+                evidence.append(f"CONSTRAINT:{breach}")
+                confidence = Confidence.LOW
+            elif int_strip_confirmed:
+                confidence = Confidence.HIGH
+            else:
+                confidence = Confidence.MEDIUM
+
             findings.append(Finding(
-                canonical=_CANONICAL,
+                canonical=canonical,
                 label_coord=label_coord,
                 value_coord=(col_letter, row),
                 value=value,
-                confidence=Confidence.MEDIUM,
-                evidence=["HEADER_BAND_MEMBER", "DTYPE_MATCH"],
+                confidence=confidence,
+                evidence=evidence,
             ))
         return {"findings": findings}
 
 
+def _check_constraints(value: Any, constraints) -> str | None:
+    """Return a short constraint-name token if violated, else None."""
+    if isinstance(value, str):
+        return "value_not_numeric"  # garbage that survived coercion
+    if constraints.min is not None and value < constraints.min:
+        return "below_min"
+    if constraints.max is not None and value > constraints.max:
+        return "above_max"
+    return None
+
+
 def _coerce_quantity(value: Any) -> int | float | str | None:
-    """Normalise a raw cell value into a quantity number; return None on blank."""
+    """Normalise raw cell value to a number, or None when blank."""
     if value is None or value == "":
         return None
-    if isinstance(value, bool):  # bool is subclass of int — reject defensively
-        return None
+    if isinstance(value, bool):
+        return None  # bool is subclass of int — reject defensively
     if isinstance(value, int):
         return value
     if isinstance(value, float):
         return int(value) if value.is_integer() else value
     if isinstance(value, str):
-        # Strip thousands separators + trailing unit text.
         cleaned = value.replace(",", "").replace(" ", "").strip().lower()
-        # Trim any unit suffix ("pcs", "units", "pc", "ea") at the end.
         for unit in ("pcs", "units", "unit", "pc", "ea"):
             if cleaned.endswith(unit):
                 cleaned = cleaned[: -len(unit)]
@@ -95,5 +145,5 @@ def _coerce_quantity(value: Any) -> int | float | str | None:
         if _DIGITS_AND_DOT.match(cleaned):
             num = float(cleaned)
             return int(num) if num.is_integer() else num
-        return value  # unparseable — preserve raw so validators can flag it
+        return value  # unparseable — preserve so the constraint check flags it
     return None
