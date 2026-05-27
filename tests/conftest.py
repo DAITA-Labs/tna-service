@@ -55,6 +55,11 @@ def _reset_structlog():
     correctly in any test that exercises Haystack-based agents.
     """
     structlog.configure(
+        # KeyValueRenderer collapses event + kwargs into a single string before
+        # the underlying logger gets called — PrintLogger.msg() only accepts a
+        # positional message, so without this it crashes on `extra=` (from
+        # Haystack's stdlib-bridge processors) or any other kwarg.
+        processors=[structlog.processors.KeyValueRenderer()],
         wrapper_class=structlog.make_filtering_bound_logger(0),
         logger_factory=structlog.PrintLoggerFactory(),
         cache_logger_on_first_use=False,

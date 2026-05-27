@@ -38,7 +38,8 @@ from app.artifacts.finding import Confidence, Finding
 from app.artifacts.workbook import ClusterAnchorBundle
 from app.components._base import Component
 from app.specs import QUANTITY_SPEC
-from app.tools.canvas.lookups import column_has_strip, merged_cells_in_column
+from app.tools import canvas as _canvas_tools  # noqa: F401 — registers @tool entries
+from app.tools._registry import TOOL_REGISTRY
 
 
 # Strip thousands separators (commas, spaces) and trailing unit text before
@@ -68,6 +69,9 @@ class QuantityExtractor(Component):
         col_letter = get_column_letter(col_idx)
         band = bundle.hint.header_band
         label_coord = (col_letter, band.rect.r0 if band else 1)
+
+        column_has_strip = TOOL_REGISTRY["column_has_strip"]
+        merged_cells_in_column = TOOL_REGISTRY["merged_cells_in_column"]
 
         int_strip_confirmed = column_has_strip(bundle.bag.int_strips, col_idx, rows)
         constraints = QUANTITY_SPEC.value_constraints
