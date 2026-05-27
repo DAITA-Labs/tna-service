@@ -24,6 +24,7 @@ from app.artifacts.structure import (
     DateStrip,
     HeaderBand,
     IntStrip,
+    KvBlock,
     LongTextStrip,
     Rect,
     SameLengthStrip,
@@ -61,6 +62,7 @@ def make_bundle(values: list[list[Any]],
                  date_strip_col: int | None = None,
                  same_length_strip_col: int | None = None,
                  long_text_strip_col: int | None = None,
+                 candidate_kv_blocks: dict[str, list[KvBlock]] | None = None,
                  merge_ranges: set[tuple[int, int, int, int]] | None = None,
                  ) -> ClusterAnchorBundle:
     """Construct a ClusterAnchorBundle for extractor tests.
@@ -109,6 +111,7 @@ def make_bundle(values: list[list[Any]],
         data_row_ranges=bag.data_row_ranges,
         candidate_columns=columns if columns is not None else {canonical: [1]},
         candidate_rows=rows if rows is not None else {canonical: list(range(3, n_rows + 1))},
+        candidate_kv_blocks=candidate_kv_blocks or {},
     )
     return ClusterAnchorBundle(
         cluster=PliCluster(cluster_id="c0", sheet_names=["S"], role="pli_cluster"),
