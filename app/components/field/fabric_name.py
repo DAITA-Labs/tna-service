@@ -27,6 +27,9 @@ from app.tools import canvas as _canvas_tools  # noqa: F401 — registers @tool 
 from app.tools._registry import TOOL_REGISTRY
 
 
+_COLUMN_FLOOR = 0.5
+
+
 @component
 class FabricNameExtractor(Component):
     """Extract `fabric_name` Findings from a ClusterAnchorBundle (vertical PLI axis)."""
@@ -45,9 +48,19 @@ class FabricNameExtractor(Component):
         if not columns or not rows:
             return {"findings": []}
 
+        score_column = TOOL_REGISTRY["score_column_for_canonical"]
         check_column_has_strip = TOOL_REGISTRY["check_column_has_strip"]
 
-        col_idx = columns[0]
+        scored = [
+            (col, score_column(
+                bundle.canvas, col, rows, FABRIC_NAME_SPEC, bundle.bag.long_text_strips,
+            ))
+            for col in columns
+        ]
+        col_idx, best_score = max(scored, key=lambda x: x[1])
+        if best_score < _COLUMN_FLOOR:
+            return {"findings": []}
+
         col_letter = get_column_letter(col_idx)
         band = bundle.hint.header_band
         label_coord = (col_letter, band.rect.r0 if band else 1)

@@ -1,8 +1,8 @@
-"""ExFtyDateExtractor — emits Finding(canonical="ex_fty_date") per PLI.
+"""ExFtyDateExtractor — spec-driven extraction of per-PLI ex-factory dates.
 
-Ex-factory date is the per-PLI date the goods leave the factory gates
-(the supplier's hand-off point). Raw cell values routed through
-`parse_date`.
+Same shape as DeliveryDateExtractor / ShipmentDateExtractor — header
+rank, DateStrip confirmation. See `delivery_date.py` for the
+explanatory docstring.
 """
 from __future__ import annotations
 
@@ -13,9 +13,12 @@ from app.artifacts.finding import Confidence, Finding
 from app.artifacts.workbook import ClusterAnchorBundle
 from app.components._base import Component
 from app.components.field._helpers import parse_date
+from app.specs import EX_FTY_DATE_SPEC
+from app.tools import canvas as _canvas_tools  # noqa: F401 — registers @tool entries
+from app.tools._registry import TOOL_REGISTRY
 
 
-_CANONICAL = "ex_fty_date"
+_COLUMN_FLOOR = 0.5
 
 
 @component
@@ -30,15 +33,32 @@ class ExFtyDateExtractor(Component):
         if bundle.hint.axes.pli_axis != "vertical":
             return {"findings": []}
 
-        columns = bundle.hint.candidate_columns.get(_CANONICAL, [])
-        rows = bundle.hint.candidate_rows.get(_CANONICAL, [])
+        canonical = EX_FTY_DATE_SPEC.canonical
+        columns = bundle.hint.candidate_columns.get(canonical, [])
+        rows = bundle.hint.candidate_rows.get(canonical, [])
         if not columns or not rows:
             return {"findings": []}
 
-        col_idx = columns[0]
+        score_column = TOOL_REGISTRY["score_column_for_canonical"]
+        check_column_has_strip = TOOL_REGISTRY["check_column_has_strip"]
+
+        scored = [
+            (col, score_column(
+                bundle.canvas, col, rows, EX_FTY_DATE_SPEC, bundle.bag.date_strips,
+            ))
+            for col in columns
+        ]
+        col_idx, best_score = max(scored, key=lambda x: x[1])
+        if best_score < _COLUMN_FLOOR:
+            return {"findings": []}
+
         col_letter = get_column_letter(col_idx)
         band = bundle.hint.header_band
         label_coord = (col_letter, band.rect.r0 if band else 1)
+
+        strip_confirmed = check_column_has_strip(
+            bundle.bag.date_strips, col_idx, rows,
+        )
 
         findings: list[Finding] = []
         for row in rows:
@@ -46,12 +66,20 @@ class ExFtyDateExtractor(Component):
             parsed = parse_date(raw)
             if parsed is None:
                 continue
+
+            evidence: list[str] = ["HEADER_BAND_MEMBER"]
+            if strip_confirmed:
+                evidence.append("DATE_STRIP_CONFIRMED")
+                confidence = Confidence.HIGH
+            else:
+                confidence = Confidence.MEDIUM
+
             findings.append(Finding(
-                canonical=_CANONICAL,
+                canonical=canonical,
                 label_coord=label_coord,
                 value_coord=(col_letter, row),
                 value=parsed,
-                confidence=Confidence.MEDIUM,
-                evidence=["HEADER_BAND_MEMBER", "DTYPE_MATCH"],
+                confidence=confidence,
+                evidence=evidence,
             ))
         return {"findings": findings}

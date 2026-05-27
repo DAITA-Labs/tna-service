@@ -4,20 +4,11 @@ from __future__ import annotations
 import pytest
 from haystack import Pipeline
 
-from app.artifacts.canvas import GridCanvas
 from app.artifacts.finding import Confidence
-from app.artifacts.layout import LayoutAxes, LayoutHint
-from app.artifacts.structure import (
-    DataRowRange,
-    HeaderBand,
-    LongTextStrip,
-    Rect,
-    StructureBag,
-)
-from app.artifacts.workbook import ClusterAnchorBundle, PliCluster
 from app.components.field.color_name import ColorNameExtractor
 from app.components.field.fabric_name import FabricNameExtractor
 from app.components.field.style_name import StyleNameExtractor
+from tests.unit.components.field._bundles import make_bundle
 
 
 NAME_EXTRACTORS = [
@@ -29,29 +20,10 @@ NAME_EXTRACTORS = [
 
 def _bundle_with(values, canonical, *, axis="vertical", columns=None, rows=None,
                    long_text_col: int | None = None):
-    """Build a bundle. When `long_text_col` is set, bag carries a matching LongTextStrip."""
-    n_rows = len(values)
-    n_cols = len(values[0]) if values else 0
-    canvas = GridCanvas(n_rows=n_rows, n_cols=n_cols, cell_values=values)
-    bag = StructureBag()
-    bag.header_band = HeaderBand(rect=Rect(2, 1, 2, n_cols), score=0.9)
-    bag.data_row_ranges = [DataRowRange(row_start=3, row_end=n_rows)]
-    if long_text_col is not None:
-        bag.long_text_strips = [LongTextStrip(
-            rect=Rect(3, long_text_col, n_rows, long_text_col),
-            mean_length=30.0,
-        )]
-    hint = LayoutHint(
-        axes=LayoutAxes(pli_axis=axis, stage_axis="none", subfield_axis="implicit"),
-        cluster_id="c0", confidence=0.9,
-        header_band=bag.header_band,
-        data_row_ranges=bag.data_row_ranges,
-        candidate_columns=columns if columns is not None else {canonical: [1]},
-        candidate_rows=rows if rows is not None else {canonical: list(range(3, n_rows + 1))},
-    )
-    return ClusterAnchorBundle(
-        cluster=PliCluster(cluster_id="c0", sheet_names=["S"], role="pli_cluster"),
-        anchor_sheet_name="S", canvas=canvas, bag=bag, hint=hint,
+    return make_bundle(
+        values, canonical,
+        axis=axis, columns=columns, rows=rows,
+        long_text_strip_col=long_text_col,
     )
 
 
@@ -70,10 +42,13 @@ def test_descriptive_names_extracted_with_whitespace_stripped(extractor_cls, can
 
 @pytest.mark.parametrize("extractor_cls,canonical", NAME_EXTRACTORS)
 def test_numeric_cells_coerced_to_string_via_str(extractor_cls, canonical) -> None:
-    """openpyxl may type a purely-numeric description as int; coerce defensively."""
-    bundle = _bundle_with([[None], ["Hdr"], [12345]], canonical)
+    """A stray numeric cell in a mostly-string name column coerces defensively."""
+    bundle = _bundle_with(
+        [[None], ["Hdr"], ["MIDNIGHT BLUE"], ["DARK NAVY"], [12345]],
+        canonical, long_text_col=1,
+    )
     out = extractor_cls().run(bundle=bundle)
-    assert out["findings"][0].value == "12345"
+    assert "12345" in [f.value for f in out["findings"]]
 
 
 @pytest.mark.parametrize("extractor_cls,canonical", NAME_EXTRACTORS)
