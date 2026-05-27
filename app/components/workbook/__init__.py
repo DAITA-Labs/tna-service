@@ -1,4 +1,5 @@
 """Workbook-level pipeline components."""
+from app.components.workbook.anchor_picker import AnchorPicker
 from app.components.workbook.clusterer import SheetClusterer
 from app.components.workbook.extraction_result_builder import ExtractionResultBuilder
 from app.components.workbook.per_sheet import PerSheetProcessor
