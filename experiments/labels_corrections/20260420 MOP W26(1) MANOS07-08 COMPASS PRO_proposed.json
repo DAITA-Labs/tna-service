@@ -1,0 +1,2158 @@
+{
+  "total_plis": 13,
+  "plis": [
+    {
+      "io_number": "7000022247, 7000022248",
+      "style_code": "CWJE NOS 90 1000000711 5000009474",
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "color_code": "4441 DARK BLUE - MULTI 02",
+      "color_name": null,
+      "fabric_code": "SZ SLUB JERSEY/100% ORGANIC COTTON/20S/155/YARN DYED + PANEL WASH",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-04-29",
+      "quantity": 1230,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-03-20",
+          "plan_date_col": "Q",
+          "stage_metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-02-26",
+          "plan_date_col": "S",
+          "stage_metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-03-31",
+          "plan_date_col": "U",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-03-24",
+          "plan_date_col": "Y",
+          "stage_metadata": {
+            "actual_date": "2026-03-24"
+          }
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-03-24",
+          "plan_date_col": "AA",
+          "stage_metadata": {
+            "actual_date": "2026-03-24"
+          }
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-04-07",
+          "plan_date_col": "AD",
+          "stage_metadata": {
+            "actual_date": "2026-04-07"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-04-29",
+          "plan_date_col": "AF",
+          "stage_metadata": {
+            "actual_date": "2026-04-10"
+          }
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 1,
+          "source": "A4",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "MARC O'POLO INTERNATIONAL GMBH",
+          "source": "B4",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "WARSAW INTERNATIONAL",
+          "source": "C4",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "MANOS07",
+          "source": "D4",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "F4",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "YARN DYED + PANEL WASH",
+          "source": "I4",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-02-26",
+          "source": "N4",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-04-21",
+          "source": "P4",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Cut Qty",
+          "value": 710,
+          "source": "X4",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Sewing Qty",
+          "value": 708,
+          "source": "AC4",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Shipped Qty",
+          "value": 704,
+          "source": "AI4",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": 34,
+          "source": "AJ4",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Remarks",
+          "value": "SHIPPED",
+          "source": "AK4",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        4
+      ]
+    },
+    {
+      "io_number": "7000022247, 7000022248",
+      "style_code": "CWJE NOS 90 1000000711 5000009474",
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "color_code": "2673-LIGHT BEIGE MULTI01",
+      "color_name": null,
+      "fabric_code": "SZ SLUB JERSEY/100% ORGANIC COTTON/20S/155/YARN DYED + PANEL WASH",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-04-29",
+      "quantity": 1230,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-03-20",
+          "plan_date_col": "Q",
+          "stage_metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-02-26",
+          "plan_date_col": "S",
+          "stage_metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-03-31",
+          "plan_date_col": "U",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-03-24",
+          "plan_date_col": "Y",
+          "stage_metadata": {
+            "actual_date": "2026-03-24"
+          }
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-03-24",
+          "plan_date_col": "AA",
+          "stage_metadata": {
+            "actual_date": "2026-03-24"
+          }
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-04-07",
+          "plan_date_col": "AD",
+          "stage_metadata": {
+            "actual_date": "2026-04-07"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-04-29",
+          "plan_date_col": "AF",
+          "stage_metadata": {
+            "actual_date": "2026-04-10"
+          }
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 1,
+          "source": "A5",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "MARC O'POLO INTERNATIONAL GMBH",
+          "source": "B5",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "WARSAW INTERNATIONAL",
+          "source": "C5",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "MANOS07",
+          "source": "D5",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "F5",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "YARN DYED + PANEL WASH",
+          "source": "I5",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-02-26",
+          "source": "N5",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-04-21",
+          "source": "P5",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Cut Qty",
+          "value": 606,
+          "source": "X5",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Sewing Qty",
+          "value": 600,
+          "source": "AC5",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Shipped Qty",
+          "value": 598,
+          "source": "AI5",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": 38,
+          "source": "AJ5",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Remarks",
+          "value": "SHIPPED",
+          "source": "AK5",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        5
+      ]
+    },
+    {
+      "io_number": "7000022237, 7000022238",
+      "style_code": "CWJE NOS 90 1000001172 5000009473",
+      "style_name": "CIRCULAR KNIT WOMENS TANK TOP",
+      "color_code": "0163 WHITE",
+      "color_name": null,
+      "fabric_code": "1X1 RIB/100% ORGANIC COTTON/48S////24GG/170//FABRIC DYED + PANEL WASHED",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-04-29",
+      "quantity": 1530,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-03-20",
+          "plan_date_col": "Q",
+          "stage_metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-03-14",
+          "plan_date_col": "S",
+          "stage_metadata": {
+            "actual_date": "2026-03-14"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-03-31",
+          "plan_date_col": "U",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-03-31",
+          "plan_date_col": "Y",
+          "stage_metadata": {
+            "actual_date": "2026-03-31"
+          }
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-04-02",
+          "plan_date_col": "AA",
+          "stage_metadata": {
+            "actual_date": "2026-04-02"
+          }
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-04-14",
+          "plan_date_col": "AD",
+          "stage_metadata": {
+            "actual_date": "2026-04-14"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-04-29",
+          "plan_date_col": "AF",
+          "stage_metadata": {
+            "actual_date": "2026-04-20"
+          }
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 2,
+          "source": "A6",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "MARC O'POLO INTERNATIONAL GMBH",
+          "source": "B6",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "WARSAW INTERNATIONAL",
+          "source": "C6",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "MANOS07",
+          "source": "D6",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "F6",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "FABRIC DYE + PANEL WASH",
+          "source": "I6",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-02-26",
+          "source": "N6",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-04-21",
+          "source": "P6",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Cut Qty",
+          "value": 940,
+          "source": "X6",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Sewing Qty",
+          "value": 936,
+          "source": "AC6",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Shipped Qty",
+          "value": 930,
+          "source": "AI6",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": 60,
+          "source": "AJ6",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Remarks",
+          "value": "SHIPPED",
+          "source": "AK6",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        6
+      ]
+    },
+    {
+      "io_number": "7000022237, 7000022238",
+      "style_code": "CWJE NOS 90 1000001172 5000009473",
+      "style_name": "CIRCULAR KNIT WOMENS TANK TOP",
+      "color_code": "4127-MANIAC MIDNIGHT",
+      "color_name": null,
+      "fabric_code": "1X1 RIB/100% ORGANIC COTTON/48S////24GG/170//FABRIC DYED + PANEL WASHED",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-04-29",
+      "quantity": 1530,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-03-20",
+          "plan_date_col": "Q",
+          "stage_metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-02-26",
+          "plan_date_col": "S",
+          "stage_metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-03-31",
+          "plan_date_col": "U",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-03-31",
+          "plan_date_col": "Y",
+          "stage_metadata": {
+            "actual_date": "2026-03-31"
+          }
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-04-02",
+          "plan_date_col": "AA",
+          "stage_metadata": {
+            "actual_date": "2026-04-02"
+          }
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-04-14",
+          "plan_date_col": "AD",
+          "stage_metadata": {
+            "actual_date": "2026-04-14"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-04-29",
+          "plan_date_col": "AF",
+          "stage_metadata": {
+            "actual_date": "2026-04-20"
+          }
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 2,
+          "source": "A7",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "MARC O'POLO INTERNATIONAL GMBH",
+          "source": "B7",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "WARSAW INTERNATIONAL",
+          "source": "C7",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "MANOS07",
+          "source": "D7",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "F7",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "FABRIC DYE + PANEL WASH",
+          "source": "I7",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-02-26",
+          "source": "N7",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-04-21",
+          "source": "P7",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Cut Qty",
+          "value": 716,
+          "source": "X7",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Sewing Qty",
+          "value": 715,
+          "source": "AC7",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Shipped Qty",
+          "value": 711,
+          "source": "AI7",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": 51,
+          "source": "AJ7",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Remarks",
+          "value": "SHIPPED",
+          "source": "AK7",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        7
+      ]
+    },
+    {
+      "io_number": "7000022206",
+      "style_code": "CWJE NOS 90 1000001160 5000009467",
+      "style_name": "CIRCULAR KNIT WOMENS TANK TOP",
+      "color_code": "0163 WHITE",
+      "color_name": null,
+      "fabric_code": "SINGLE JERSEY/96% ORGANIC COTTON 4% ELASTHANE/40S////28GG/160/20D/FABRIC DYED",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-04-29",
+      "quantity": 420,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-03-20",
+          "plan_date_col": "Q",
+          "stage_metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-02-26",
+          "plan_date_col": "S",
+          "stage_metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-03-31",
+          "plan_date_col": "U",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-04-03",
+          "plan_date_col": "Y",
+          "stage_metadata": {
+            "actual_date": "2026-04-03"
+          }
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-04-04",
+          "plan_date_col": "AA",
+          "stage_metadata": {
+            "actual_date": "2026-04-04"
+          }
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-04-16",
+          "plan_date_col": "AD",
+          "stage_metadata": {
+            "actual_date": "2026-04-16"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-04-29",
+          "plan_date_col": "AF",
+          "stage_metadata": {
+            "actual_date": "2026-04-20"
+          }
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 3,
+          "source": "A8",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "MARC O'POLO INTERNATIONAL GMBH",
+          "source": "B8",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "WARSAW INTERNATIONAL",
+          "source": "C8",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "MANOS07",
+          "source": "D8",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "F8",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "FABRIC DYED",
+          "source": "I8",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-02-26",
+          "source": "N8",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-04-21",
+          "source": "P8",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Cut Qty",
+          "value": 454,
+          "source": "X8",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Sewing Qty",
+          "value": 450,
+          "source": "AC8",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Shipped Qty",
+          "value": 449,
+          "source": "AI8",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": 29,
+          "source": "AJ8",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Remarks",
+          "value": "SHIPPED",
+          "source": "AK8",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        8
+      ]
+    },
+    {
+      "io_number": "7000022249, 7000022251, 7000022252",
+      "style_code": "CWJE NOS 90 1000000710 5000009477",
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "color_code": "0163 WHITE",
+      "color_name": null,
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-05-10",
+      "quantity": 4490,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-03-20",
+          "plan_date_col": "Q",
+          "stage_metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-02-26",
+          "plan_date_col": "S",
+          "stage_metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-04-06",
+          "plan_date_col": "U",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-03-24",
+          "plan_date_col": "Y",
+          "stage_metadata": {
+            "actual_date": "2026-03-24"
+          }
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-03-28",
+          "plan_date_col": "AA",
+          "stage_metadata": {
+            "actual_date": "2026-03-28"
+          }
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-04-13",
+          "plan_date_col": "AD",
+          "stage_metadata": {
+            "actual_date": "2026-04-13"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-05-10",
+          "plan_date_col": "AF",
+          "stage_metadata": {}
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 4,
+          "source": "A9",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "MARC O'POLO INTERNATIONAL GMBH",
+          "source": "B9",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "WARSAW INTERNATIONAL",
+          "source": "C9",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "MANOS08",
+          "source": "D9",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "F9",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "FABRIC DYE + PANEL WASH",
+          "source": "I9",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-02-26",
+          "source": "N9",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-04-28",
+          "source": "P9",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Cut Qty",
+          "value": 2210,
+          "source": "X9",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Sewing Qty",
+          "value": 2208,
+          "source": "AC9",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Shipped Qty",
+          "value": 2206,
+          "source": "AI9",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": 106,
+          "source": "AJ9",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Remarks",
+          "value": "READY TO SHIP",
+          "source": "AK9",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        9
+      ]
+    },
+    {
+      "io_number": "7000022249, 7000022251, 7000022252",
+      "style_code": "CWJE NOS 90 1000000710 5000009477",
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "color_code": "4127-MANIAC MIDNIGHT",
+      "color_name": null,
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-05-10",
+      "quantity": 4490,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-03-20",
+          "plan_date_col": "Q",
+          "stage_metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-02-26",
+          "plan_date_col": "S",
+          "stage_metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-04-06",
+          "plan_date_col": "U",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-03-24",
+          "plan_date_col": "Y",
+          "stage_metadata": {
+            "actual_date": "2026-03-24"
+          }
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-03-28",
+          "plan_date_col": "AA",
+          "stage_metadata": {
+            "actual_date": "2026-03-28"
+          }
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-04-13",
+          "plan_date_col": "AD",
+          "stage_metadata": {
+            "actual_date": "2026-04-13"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-05-10",
+          "plan_date_col": "AF",
+          "stage_metadata": {}
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 4,
+          "source": "A10",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "MARC O'POLO INTERNATIONAL GMBH",
+          "source": "B10",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "WARSAW INTERNATIONAL",
+          "source": "C10",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "MANOS08",
+          "source": "D10",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "F10",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "FABRIC DYE + PANEL WASH",
+          "source": "I10",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-02-26",
+          "source": "N10",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-04-28",
+          "source": "P10",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Cut Qty",
+          "value": 1874,
+          "source": "X10",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Sewing Qty",
+          "value": 1870,
+          "source": "AC10",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Shipped Qty",
+          "value": 1863,
+          "source": "AI10",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": 103,
+          "source": "AJ10",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Remarks",
+          "value": "READY TO SHIP",
+          "source": "AK10",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        10
+      ]
+    },
+    {
+      "io_number": "7000022249, 7000022251, 7000022252",
+      "style_code": "CWJE NOS 90 1000000710 5000009477",
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "color_code": "0001 BLACK",
+      "color_name": null,
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-05-10",
+      "quantity": 4490,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-03-20",
+          "plan_date_col": "Q",
+          "stage_metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-02-26",
+          "plan_date_col": "S",
+          "stage_metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-04-06",
+          "plan_date_col": "U",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-03-24",
+          "plan_date_col": "Y",
+          "stage_metadata": {
+            "actual_date": "2026-03-24"
+          }
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-03-28",
+          "plan_date_col": "AA",
+          "stage_metadata": {
+            "actual_date": "2026-03-28"
+          }
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-04-13",
+          "plan_date_col": "AD",
+          "stage_metadata": {
+            "actual_date": "2026-04-13"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-05-10",
+          "plan_date_col": "AF",
+          "stage_metadata": {}
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 4,
+          "source": "A11",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "MARC O'POLO INTERNATIONAL GMBH",
+          "source": "B11",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "WARSAW INTERNATIONAL",
+          "source": "C11",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "MANOS08",
+          "source": "D11",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "F11",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "FABRIC DYE + PANEL WASH",
+          "source": "I11",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-02-26",
+          "source": "N11",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-04-28",
+          "source": "P11",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Cut Qty",
+          "value": 692,
+          "source": "X11",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Sewing Qty",
+          "value": 690,
+          "source": "AC11",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Shipped Qty",
+          "value": 679,
+          "source": "AI11",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": 49,
+          "source": "AJ11",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Remarks",
+          "value": "READY TO SHIP",
+          "source": "AK11",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        11
+      ]
+    },
+    {
+      "io_number": "7000022254, 7000022255, 7000022256",
+      "style_code": "CWJE NOS 90 1000000710 5000009478",
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "color_code": "0163 WHITE",
+      "color_name": null,
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-05-10",
+      "quantity": 6840,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-03-20",
+          "plan_date_col": "Q",
+          "stage_metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-03-20",
+          "plan_date_col": "S",
+          "stage_metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-04-06",
+          "plan_date_col": "U",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-04-01",
+          "plan_date_col": "Y",
+          "stage_metadata": {
+            "actual_date": "2026-04-01"
+          }
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-04-09",
+          "plan_date_col": "AA",
+          "stage_metadata": {
+            "actual_date": "2026-04-09"
+          }
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-04-24",
+          "plan_date_col": "AD",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-05-10",
+          "plan_date_col": "AF",
+          "stage_metadata": {}
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 5,
+          "source": "A12",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "MARC O'POLO INTERNATIONAL GMBH",
+          "source": "B12",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "WARSAW INTERNATIONAL",
+          "source": "C12",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "MANOS08",
+          "source": "D12",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "F12",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "FABRIC DYE + PANEL WASH",
+          "source": "I12",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-02-26",
+          "source": "N12",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-04-28",
+          "source": "P12",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Cut Qty",
+          "value": 5480,
+          "source": "X12",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Sewing Qty",
+          "value": 5468,
+          "source": "AC12",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": -5200,
+          "source": "AJ12",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Remarks",
+          "value": "BULK UNDER FINISHING",
+          "source": "AK12",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        12
+      ]
+    },
+    {
+      "io_number": "7000022254, 7000022255, 7000022256",
+      "style_code": "CWJE NOS 90 1000000710 5000009478",
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "color_code": "4127-MANIAC MIDNIGHT",
+      "color_name": null,
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-05-10",
+      "quantity": 6840,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-03-20",
+          "plan_date_col": "Q",
+          "stage_metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-02-26",
+          "plan_date_col": "S",
+          "stage_metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-04-06",
+          "plan_date_col": "U",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-04-01",
+          "plan_date_col": "Y",
+          "stage_metadata": {
+            "actual_date": "2026-04-01"
+          }
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-04-09",
+          "plan_date_col": "AA",
+          "stage_metadata": {
+            "actual_date": "2026-04-09"
+          }
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-04-24",
+          "plan_date_col": "AD",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-05-10",
+          "plan_date_col": "AF",
+          "stage_metadata": {}
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 5,
+          "source": "A13",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "MARC O'POLO INTERNATIONAL GMBH",
+          "source": "B13",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "WARSAW INTERNATIONAL",
+          "source": "C13",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "MANOS08",
+          "source": "D13",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "F13",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "FABRIC DYE + PANEL WASH",
+          "source": "I13",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-02-26",
+          "source": "N13",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-04-28",
+          "source": "P13",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Cut Qty",
+          "value": 1110,
+          "source": "X13",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Sewing Qty",
+          "value": 1102,
+          "source": "AC13",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": -1050,
+          "source": "AJ13",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Remarks",
+          "value": "BULK UNDER FINISHING",
+          "source": "AK13",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        13
+      ]
+    },
+    {
+      "io_number": "7000022254, 7000022255, 7000022256",
+      "style_code": "CWJE NOS 90 1000000710 5000009478",
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "color_code": "0001 BLACK",
+      "color_name": null,
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-05-10",
+      "quantity": 6840,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-03-20",
+          "plan_date_col": "Q",
+          "stage_metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-02-26",
+          "plan_date_col": "S",
+          "stage_metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-04-06",
+          "plan_date_col": "U",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-04-01",
+          "plan_date_col": "Y",
+          "stage_metadata": {
+            "actual_date": "2026-04-01"
+          }
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-04-09",
+          "plan_date_col": "AA",
+          "stage_metadata": {
+            "actual_date": "2026-04-09"
+          }
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-04-24",
+          "plan_date_col": "AD",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-05-10",
+          "plan_date_col": "AF",
+          "stage_metadata": {}
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 5,
+          "source": "A14",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "MARC O'POLO INTERNATIONAL GMBH",
+          "source": "B14",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "WARSAW INTERNATIONAL",
+          "source": "C14",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "MANOS08",
+          "source": "D14",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "F14",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "FABRIC DYE + PANEL WASH",
+          "source": "I14",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-02-26",
+          "source": "N14",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-04-28",
+          "source": "P14",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Cut Qty",
+          "value": 630,
+          "source": "X14",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Sewing Qty",
+          "value": 630,
+          "source": "AC14",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": -590,
+          "source": "AJ14",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Remarks",
+          "value": "BULK UNDER FINISHING",
+          "source": "AK14",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        14
+      ]
+    },
+    {
+      "io_number": "7000023237, 7000023238",
+      "style_code": "CWJE NOS 90 1000000710 5000009477",
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "color_code": "0163 WHITE",
+      "color_name": null,
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-06-11",
+      "quantity": 2230,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-04-16",
+          "plan_date_col": "Q",
+          "stage_metadata": {
+            "actual_date": "2026-04-16"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-04-10",
+          "plan_date_col": "S",
+          "stage_metadata": {
+            "actual_date": "2026-04-10"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-05-05",
+          "plan_date_col": "U",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-05-06",
+          "plan_date_col": "Y",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-05-09",
+          "plan_date_col": "AA",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-05-12",
+          "plan_date_col": "AD",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-06-11",
+          "plan_date_col": "AF",
+          "stage_metadata": {}
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 6,
+          "source": "A15",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "MARC O'POLO INTERNATIONAL GMBH",
+          "source": "B15",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "WARSAW INTERNATIONAL",
+          "source": "C15",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "MANOS09",
+          "source": "D15",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "F15",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "FABRIC DYE + PANEL WASH",
+          "source": "I15",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-03-26",
+          "source": "N15",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-05-19",
+          "source": "P15",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": -1270,
+          "source": "AJ15",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Remarks",
+          "value": "BULK FABRIC READY TO CUT",
+          "source": "AK15",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        15
+      ]
+    },
+    {
+      "io_number": "7000023237, 7000023238",
+      "style_code": "CWJE NOS 90 1000000710 5000009477",
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "color_code": "4127-MANIAC MIDNIGHT",
+      "color_name": null,
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-06-11",
+      "quantity": 2230,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-04-16",
+          "plan_date_col": "Q",
+          "stage_metadata": {
+            "actual_date": "2026-04-16"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-04-10",
+          "plan_date_col": "S",
+          "stage_metadata": {
+            "actual_date": "2026-04-10"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-05-05",
+          "plan_date_col": "U",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-05-06",
+          "plan_date_col": "Y",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-05-09",
+          "plan_date_col": "AA",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-05-12",
+          "plan_date_col": "AD",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-06-11",
+          "plan_date_col": "AF",
+          "stage_metadata": {}
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 6,
+          "source": "A16",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "MARC O'POLO INTERNATIONAL GMBH",
+          "source": "B16",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "WARSAW INTERNATIONAL",
+          "source": "C16",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "MANOS09",
+          "source": "D16",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "F16",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "FABRIC DYE + PANEL WASH",
+          "source": "I16",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-03-26",
+          "source": "N16",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-05-19",
+          "source": "P16",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": -960,
+          "source": "AJ16",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Remarks",
+          "value": "BULK FABRIC READY TO CUT",
+          "source": "AK16",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        16
+      ]
+    }
+  ],
+  "warnings": []
+}

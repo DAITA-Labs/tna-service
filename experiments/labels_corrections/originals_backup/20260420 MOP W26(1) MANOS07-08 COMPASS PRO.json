@@ -1,0 +1,919 @@
+{
+  "total_plis": 13,
+  "plis": [
+    {
+      "io_number": "7000022247, 7000022248",
+      "style_code": "CWJE NOS 90 1000000711 5000009474",
+      "color_code": "4441 DARK BLUE - MULTI 02",
+      "fabric_code": "SZ SLUB JERSEY/100% ORGANIC COTTON/20S/155/YARN DYED + PANEL WASH",
+      "delivery_date": "2026-04-29",
+      "quantity": 670,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "approval": "26-FEB-2026"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-24"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-07"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-29",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-10"
+          }
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        4
+      ]
+    },
+    {
+      "io_number": "7000022247, 7000022248",
+      "style_code": "CWJE NOS 90 1000000711 5000009474",
+      "color_code": "2673-LIGHT BEIGE MULTI01",
+      "fabric_code": "SZ SLUB JERSEY/100% ORGANIC COTTON/20S/155/YARN DYED + PANEL WASH",
+      "delivery_date": "2026-04-29",
+      "quantity": 560,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "approval": "26-FEB-2026"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-24"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-07"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-29",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-10"
+          }
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        4,
+        5
+      ]
+    },
+    {
+      "io_number": "7000022237, 7000022238",
+      "style_code": "CWJE NOS 90 1000001172 5000009473",
+      "color_code": "0163 WHITE",
+      "fabric_code": "1X1 RIB/100% ORGANIC COTTON/48S////24GG/170//FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-04-29",
+      "quantity": 870,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-14",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-14"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "approval": "26-FEB-2026"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-31"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-14",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-14"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-29",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-20"
+          }
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TANK TOP",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        6
+      ]
+    },
+    {
+      "io_number": "7000022237, 7000022238",
+      "style_code": "CWJE NOS 90 1000001172 5000009473",
+      "color_code": "4127-MANIAC MIDNIGHT",
+      "fabric_code": "1X1 RIB/100% ORGANIC COTTON/48S////24GG/170//FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-04-29",
+      "quantity": 660,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "approval": "26-FEB-2026"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-31"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-14",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-14"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-29",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-20"
+          }
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TANK TOP",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        6,
+        7
+      ]
+    },
+    {
+      "io_number": "7000022206",
+      "style_code": "CWJE NOS 90 1000001160 5000009467",
+      "color_code": "0163 WHITE",
+      "fabric_code": "SINGLE JERSEY/96% ORGANIC COTTON 4% ELASTHANE/40S////28GG/160/20D/FABRIC DYED",
+      "delivery_date": "2026-04-29",
+      "quantity": 420,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "approval": "26-FEB-2026"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-03",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-03"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-16"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-29",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-20"
+          }
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TANK TOP",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        8
+      ]
+    },
+    {
+      "io_number": "7000022249, 7000022251, 7000022252",
+      "style_code": "CWJE NOS 90 1000000710 5000009477",
+      "color_code": "0163 WHITE",
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "delivery_date": "2026-05-10",
+      "quantity": 2100,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "approval": "26-FEB-2026"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-24"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-13"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-10",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        9
+      ]
+    },
+    {
+      "io_number": "7000022249, 7000022251, 7000022252",
+      "style_code": "CWJE NOS 90 1000000710 5000009477",
+      "color_code": "4127-MANIAC MIDNIGHT",
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "delivery_date": "2026-05-10",
+      "quantity": 1760,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "approval": "26-FEB-2026"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-24"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-13"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-10",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        9,
+        10
+      ]
+    },
+    {
+      "io_number": "7000022249, 7000022251, 7000022252",
+      "style_code": "CWJE NOS 90 1000000710 5000009477",
+      "color_code": "0001 BLACK",
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "delivery_date": "2026-05-10",
+      "quantity": 630,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "approval": "26-FEB-2026"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-24"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-13"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-10",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        9,
+        11
+      ]
+    },
+    {
+      "io_number": "7000022254, 7000022255, 7000022256",
+      "style_code": "CWJE NOS 90 1000000710 5000009478",
+      "color_code": "0163 WHITE",
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "delivery_date": "2026-05-10",
+      "quantity": 5200,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "approval": "26-FEB-2026"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-01"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-10",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        12
+      ]
+    },
+    {
+      "io_number": "7000022254, 7000022255, 7000022256",
+      "style_code": "CWJE NOS 90 1000000710 5000009478",
+      "color_code": "4127-MANIAC MIDNIGHT",
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "delivery_date": "2026-05-10",
+      "quantity": 1050,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "approval": "26-FEB-2026"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-01"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-10",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        12,
+        13
+      ]
+    },
+    {
+      "io_number": "7000022254, 7000022255, 7000022256",
+      "style_code": "CWJE NOS 90 1000000710 5000009478",
+      "color_code": "0001 BLACK",
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "delivery_date": "2026-05-10",
+      "quantity": 590,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-02-26",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-02-26"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-06",
+          "quantity": null,
+          "metadata": {
+            "approval": "26-FEB-2026"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-01"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-10",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        12,
+        14
+      ]
+    },
+    {
+      "io_number": "7000023237, 7000023238",
+      "style_code": "CWJE NOS 90 1000000710 5000009477",
+      "color_code": "0163 WHITE",
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "delivery_date": "2026-06-11",
+      "quantity": 1270,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-16"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-10"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-05-05",
+          "quantity": null,
+          "metadata": {
+            "approval": "26-MAR-2026"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        15
+      ]
+    },
+    {
+      "io_number": "7000023237, 7000023238",
+      "style_code": "CWJE NOS 90 1000000710 5000009477",
+      "color_code": "4127-MANIAC MIDNIGHT",
+      "fabric_code": "SLUB JERSEY/100% ORGANIC COTTON/20S/155/FABRIC DYED",
+      "delivery_date": "2026-06-11",
+      "quantity": 960,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-16"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-10"
+          }
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-05-05",
+          "quantity": null,
+          "metadata": {
+            "approval": "26-MAR-2026"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        15,
+        16
+      ]
+    }
+  ],
+  "warnings": []
+}

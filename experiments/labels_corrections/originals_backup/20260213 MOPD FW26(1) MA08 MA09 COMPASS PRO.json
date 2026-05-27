@@ -1,0 +1,2652 @@
+{
+  "total_plis": 40,
+  "plis": [
+    {
+      "io_number": "7000018563, 7000018595, 7000018647",
+      "style_code": "DWJE FW26 08 1000000158 5000007952",
+      "color_code": "0093-BLACK MULTI 01",
+      "fabric_code": "DIAGONAL FRENCH TERRY/100% ORGANIC COTTON/34S/260/YARN DYED + PANEL WASH",
+      "delivery_date": "2026-05-09",
+      "quantity": 2176,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-01"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-09",
+            "approval": "2026-04-09 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-17"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        4
+      ]
+    },
+    {
+      "io_number": "7000018537, 7000018567, 7000018601, 7000018604, 7000018659",
+      "style_code": "DWJE FW26 08 1000001702 5000012167",
+      "color_code": "7026 DARK RED MULTI 01",
+      "fabric_code": "2X2 RIB LYCRA/96% ORGANIC COTTON 4% ELASTHANE/50S/40D///28GG/180/34D/FABRIC DYED + AOP",
+      "delivery_date": "2026-05-12",
+      "quantity": 1750,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-23"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-02",
+            "approval": "2026-04-02 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-14"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        5
+      ]
+    },
+    {
+      "io_number": "7000018537, 7000018567, 7000018601, 7000018604, 7000018659",
+      "style_code": "DWJE FW26 08 1000001702 5000012167",
+      "color_code": "9066 LIGHT YELLOW MULTI 01",
+      "fabric_code": "2X2 RIB LYCRA/96% ORGANIC COTTON 4% ELASTHANE/50S/40D///28GG/180/34D/FABRIC DYED + AOP",
+      "delivery_date": "2026-05-12",
+      "quantity": 1152,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-25",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-23"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-02",
+            "approval": "2026-04-02 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-14"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        5,
+        6
+      ]
+    },
+    {
+      "io_number": "7000018534, 7000018561, 7000018588, 7000018592, 7000018642",
+      "style_code": "DWJE FW26 08 1000000099 5000007907",
+      "color_code": "6937-MAHAGONY JAM",
+      "fabric_code": "4X3 RIB/96% ORGANIC COTTON 4% ELASTHANE/34S/230/FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 1527,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-18"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-18",
+            "approval": "2026-03-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-27"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        7
+      ]
+    },
+    {
+      "io_number": "7000018534, 7000018561, 7000018588, 7000018592, 7000018642",
+      "style_code": "DWJE FW26 08 1000000099 5000007907",
+      "color_code": "0361-LIGHT GRAPHITE",
+      "fabric_code": "4X3 RIB/96% ORGANIC COTTON 4% ELASTHANE/34S/230/FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 1596,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-16"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-18",
+            "approval": "2026-03-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-27"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        7,
+        8
+      ]
+    },
+    {
+      "io_number": "7000018534, 7000018561, 7000018588, 7000018592, 7000018642",
+      "style_code": "DWJE FW26 08 1000000099 5000007907",
+      "color_code": "4820 - LAKE BLUE",
+      "fabric_code": "4X3 RIB/96% ORGANIC COTTON 4% ELASTHANE/34S/230/FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 601,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-18",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-18",
+            "approval": "2026-03-18 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-27"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        7,
+        9
+      ]
+    },
+    {
+      "io_number": "7000018535, 7000018564, 7000018596, 7000018648",
+      "style_code": "DWJE FW26 08 1000000052 5000011502",
+      "color_code": "1348- ESPRESSO BROWN",
+      "fabric_code": "DIAGONAL FRENCH TERRY/100% ORGANIC COTTON/34S/260/FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 2281,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-13",
+            "approval": "2026-03-13 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-27"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-17"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        10
+      ]
+    },
+    {
+      "io_number": "7000018535, 7000018564, 7000018596, 7000018648",
+      "style_code": "DWJE FW26 08 1000000052 5000011502",
+      "color_code": "6913- DEEP BURGANDY",
+      "fabric_code": "DIAGONAL FRENCH TERRY/100% ORGANIC COTTON/34S/260/FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 1239,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-12"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-13",
+            "approval": "2026-03-13 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-27"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-22"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "7000018535, 7000018564, 7000018596, 7000018648",
+      "style_code": "DWJE FW26 08 1000000052 5000011502",
+      "color_code": "6322- SMOKY GRAPE",
+      "fabric_code": "DIAGONAL FRENCH TERRY/100% ORGANIC COTTON/34S/260/FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 1305,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-13",
+            "approval": "2026-03-13 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-27"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-20"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        10,
+        12
+      ]
+    },
+    {
+      "io_number": "7000018535, 7000018564, 7000018596, 7000018648",
+      "style_code": "DWJE FW26 08 1000000052 5000011502",
+      "color_code": "8989- BUTTER YELLOW",
+      "fabric_code": "DIAGONAL FRENCH TERRY/100% ORGANIC COTTON/34S/260/FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 1416,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-13",
+            "approval": "2026-03-13 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-27"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-24"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        10,
+        13
+      ]
+    },
+    {
+      "io_number": "7000018535, 7000018564, 7000018596, 7000018648",
+      "style_code": "DWJE FW26 08 1000000052 5000011502",
+      "color_code": "6937- MAHAGONY JAM",
+      "fabric_code": "DIAGONAL FRENCH TERRY/100% ORGANIC COTTON/34S/260/FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 1584,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-12"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-13",
+            "approval": "2026-03-13 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-27"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-22"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        10,
+        14
+      ]
+    },
+    {
+      "io_number": "7000018535, 7000018564, 7000018596, 7000018648",
+      "style_code": "DWJE FW26 08 1000000052 5000011502",
+      "color_code": "4779- FALL SKY",
+      "fabric_code": "DIAGONAL FRENCH TERRY/100% ORGANIC COTTON/34S/260/FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 828,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-11"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-13",
+            "approval": "2026-03-13 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-27"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-22"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        10,
+        15
+      ]
+    },
+    {
+      "io_number": "7000018535, 7000018564, 7000018596, 7000018648",
+      "style_code": "DWJE FW26 08 1000000052 5000011502",
+      "color_code": "4820- LAKE BLUE",
+      "fabric_code": "DIAGONAL FRENCH TERRY/100% ORGANIC COTTON/34S/260/FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 802,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-13",
+            "approval": "2026-03-13 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-27"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-24"
+          }
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        10,
+        16
+      ]
+    },
+    {
+      "io_number": "7000018570, 7000018614, 7000018617, 7000018674",
+      "style_code": "DWJE FW26 08 1000000826 5000012387",
+      "color_code": "6937- MAHAGONY JAM",
+      "fabric_code": "FRENCH TERRY/100% ORGANIC COTTON/30S/30S/10S//20GG/360/34D/FABRIC DYED + PEACHED + BRUSHED + PANEL WASH",
+      "delivery_date": "2026-05-12",
+      "quantity": 1291,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-05"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-04-04",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-06",
+            "approval": "2026-04-06 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-12",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-15"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-14",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        17
+      ]
+    },
+    {
+      "io_number": "7000018570, 7000018614, 7000018617, 7000018674",
+      "style_code": "DWJE FW26 08 1000000826 5000012387",
+      "color_code": "8989- BUTTER YELLOW",
+      "fabric_code": "FRENCH TERRY/100% ORGANIC COTTON/30S/30S/10S//20GG/360/34D/FABRIC DYED + PEACHED + BRUSHED + PANEL WASH",
+      "delivery_date": "2026-05-12",
+      "quantity": 708,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-25"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-04-04",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-06",
+            "approval": "2026-04-06 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-12",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-04-15"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-14",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        17,
+        18
+      ]
+    },
+    {
+      "io_number": "7000018577, 7000018631, 7000018634, 7000018688",
+      "style_code": "DWJE FW26 08 1000000826 5000014733",
+      "color_code": "0361-LIGHT GRAPHITE",
+      "fabric_code": "FRENCH TERRY/100% ORGANIC COTTON/30S/30S/10S//20GG/360/34D/FABRIC DYED + PEACHED + BRUSHED + PANEL WASH",
+      "delivery_date": "2026-05-12",
+      "quantity": 466,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-27"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        19
+      ]
+    },
+    {
+      "io_number": "7000018577, 7000018631, 7000018634, 7000018688",
+      "style_code": "DWJE FW26 08 1000000826 5000014733",
+      "color_code": "6937- MAHAGONY JAM",
+      "fabric_code": "FRENCH TERRY/100% ORGANIC COTTON/30S/30S/10S//20GG/360/34D/FABRIC DYED + PEACHED + BRUSHED + PANEL WASH",
+      "delivery_date": "2026-05-12",
+      "quantity": 596,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        19,
+        20
+      ]
+    },
+    {
+      "io_number": "7000018538, 7000018568, 7000018606, 7000018608, 7000018664",
+      "style_code": "DWJE FW26 08 1000000260 5000012316",
+      "color_code": "6937- MAHAGONY JAM",
+      "fabric_code": "FRENCH TERRY/100% ORGANIC COTTON/30S/30S/10S//20GG/360/30D/RFD + PEACHED +BRUSHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 538,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-12"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-19",
+            "approval": "2026-03-19 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-02",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        21
+      ]
+    },
+    {
+      "io_number": "7000018538, 7000018568, 7000018606, 7000018608, 7000018664",
+      "style_code": "DWJE FW26 08 1000000260 5000012316",
+      "color_code": "8980- PARIS YELLOW",
+      "fabric_code": "FRENCH TERRY/100% ORGANIC COTTON/30S/30S/10S//20GG/360/30D/RFD + PEACHED +BRUSHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 526,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-12"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-19",
+            "approval": "2026-03-19 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-02",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        21,
+        22
+      ]
+    },
+    {
+      "io_number": "7000018538, 7000018568, 7000018606, 7000018608, 7000018664",
+      "style_code": "DWJE FW26 08 1000000260 5000012316",
+      "color_code": "0361-LIGHT GRAPHITE",
+      "fabric_code": "FRENCH TERRY/100% ORGANIC COTTON/30S/30S/10S//20GG/360/30D/RFD + PEACHED +BRUSHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 706,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-15"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-12"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-19",
+            "approval": "2026-03-19 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-02",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30"
+          }
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        21,
+        23
+      ]
+    },
+    {
+      "io_number": "7000018533, 7000018560, 7000018640",
+      "style_code": "DWJE FW26 08 1000000772 5000007068",
+      "color_code": "1358- BURNISHED LOGS",
+      "fabric_code": "4X2 RIB/100% ORGANIC COTTON/34S////18GG/240//FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 954,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-12"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-28"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30",
+            "approval": "2026-04-03 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        24
+      ]
+    },
+    {
+      "io_number": "7000018533, 7000018560, 7000018640",
+      "style_code": "DWJE FW26 08 1000000772 5000007068",
+      "color_code": "1183-SILKY WHITE",
+      "fabric_code": "4X2 RIB/100% ORGANIC COTTON/34S////18GG/240//FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 1054,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-12"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-25"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30",
+            "approval": "2026-04-03 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        24,
+        25
+      ]
+    },
+    {
+      "io_number": "7000018533, 7000018560, 7000018640",
+      "style_code": "DWJE FW26 08 1000000772 5000007068",
+      "color_code": "1348- ESPRESSO BROWN",
+      "fabric_code": "4X2 RIB/100% ORGANIC COTTON/34S////18GG/240//FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-05-12",
+      "quantity": 962,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-12"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-29"
+          }
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-03-31",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-30",
+            "approval": "2026-04-03 00:00:00"
+          }
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-18",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        24,
+        26
+      ]
+    },
+    {
+      "io_number": "7000018611, 7000018670, 7000018569",
+      "style_code": "DWJE FW26 08 1000000787 5000012326",
+      "color_code": "0361-LIGHT GRAPHITE",
+      "fabric_code": "POLAR FLEECE/100% RECYLED POLYESTER/75D/150D///22GG/420//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 338,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        27
+      ]
+    },
+    {
+      "io_number": "7000018611, 7000018670, 7000018569",
+      "style_code": "DWJE FW26 08 1000000787 5000012326",
+      "color_code": "1171 – WHITE BLUSH",
+      "fabric_code": "POLAR FLEECE/100% RECYLED POLYESTER/75D/150D///22GG/420//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 483,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        27,
+        28
+      ]
+    },
+    {
+      "io_number": "7000018598, 7000018656",
+      "style_code": "DWJE FW26 08 1000000787 5000012011",
+      "color_code": "1171 – WHITE BLUSH",
+      "fabric_code": "POLAR FLEECE/100% RECYLED POLYESTER/75D/150D///22GG/420//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 391,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        29
+      ]
+    },
+    {
+      "io_number": "7000018598, 7000018656",
+      "style_code": "DWJE FW26 08 1000000787 5000012011",
+      "color_code": "6937- MAHAGONY JAM",
+      "fabric_code": "POLAR FLEECE/100% RECYLED POLYESTER/75D/150D///22GG/420//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 1,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        29,
+        30
+      ]
+    },
+    {
+      "io_number": "7000018630, 7000018626, 7000018687, 7000018576",
+      "style_code": "DWJE FW26 08 1000000787 5000014558",
+      "color_code": "0361-LIGHT GRAPHITE",
+      "fabric_code": "POLAR FLEECE/100% RECYLED POLYESTER/75D/150D///22GG/420//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 864,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        31
+      ]
+    },
+    {
+      "io_number": "7000018630, 7000018626, 7000018687, 7000018576",
+      "style_code": "DWJE FW26 08 1000000787 5000014558",
+      "color_code": "1171 – WHITE BLUSH",
+      "fabric_code": "POLAR FLEECE/100% RECYLED POLYESTER/75D/150D///22GG/420//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 798,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        31,
+        32
+      ]
+    },
+    {
+      "io_number": "7000018630, 7000018626, 7000018687, 7000018576",
+      "style_code": "DWJE FW26 08 1000000787 5000014558",
+      "color_code": "6937- MAHAGONY JAM",
+      "fabric_code": "POLAR FLEECE/100% RECYLED POLYESTER/75D/150D///22GG/420//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 1656,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-13",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        31,
+        33
+      ]
+    },
+    {
+      "io_number": "7000018532, 7000018559, 7000018586, 7000018637",
+      "style_code": "DWJE FW26 09 1000000772 5000007068",
+      "color_code": "0001-BLACK",
+      "fabric_code": "4X2 RIB/100% ORGANIC COTTON/34S////18GG/240//FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-06-19",
+      "quantity": 1213,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-12"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        34
+      ]
+    },
+    {
+      "io_number": "7000018532, 7000018559, 7000018586, 7000018637",
+      "style_code": "DWJE FW26 09 1000000772 5000007068",
+      "color_code": "6937-MAHAGONY JAM",
+      "fabric_code": "4X2 RIB/100% ORGANIC COTTON/34S////18GG/240//FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-06-19",
+      "quantity": 837,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-12"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        34,
+        35
+      ]
+    },
+    {
+      "io_number": "7000018532, 7000018559, 7000018586, 7000018637",
+      "style_code": "DWJE FW26 09 1000000772 5000007068",
+      "color_code": "8989- BUTTER YELLOW",
+      "fabric_code": "4X2 RIB/100% ORGANIC COTTON/34S////18GG/240//FABRIC DYED + PANEL WASHED",
+      "delivery_date": "2026-06-19",
+      "quantity": 706,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-12"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS TSHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        34,
+        36
+      ]
+    },
+    {
+      "io_number": "7000018539, 7000018611",
+      "style_code": "DWJE FW26 08 1000000787 5000012326",
+      "color_code": "0361-LIGHT GRAPHITE",
+      "fabric_code": "POLAR FLEECE/100% RECYLED POLYESTER/75D/150D///22GG/420//FABRIC DYED",
+      "delivery_date": "2026-06-19",
+      "quantity": 286,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-05-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        37
+      ]
+    },
+    {
+      "io_number": "7000018539, 7000018611",
+      "style_code": "DWJE FW26 08 1000000787 5000012326",
+      "color_code": "1171 – WHITE BLUSH",
+      "fabric_code": "POLAR FLEECE/100% RECYLED POLYESTER/75D/150D///22GG/420//FABRIC DYED",
+      "delivery_date": "2026-06-19",
+      "quantity": 117,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-20",
+          "quantity": null,
+          "metadata": {
+            "actual_date": "2026-03-20"
+          }
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": "2026-05-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        37,
+        38
+      ]
+    },
+    {
+      "io_number": "7000018536, 7000018566, 7000018598,",
+      "style_code": "DWJE FW26 08 1000000787 5000012011",
+      "color_code": "1171 – WHITE BLUSH",
+      "fabric_code": "POLAR FLEECE/100% RECYLED POLYESTER/75D/150D///22GG/420//FABRIC DYED",
+      "delivery_date": "2026-06-19",
+      "quantity": 109,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-11",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-21",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        39
+      ]
+    },
+    {
+      "io_number": "7000018536, 7000018566, 7000018598,",
+      "style_code": "DWJE FW26 08 1000000787 5000012011",
+      "color_code": "6937- MAHAGONY JAM",
+      "fabric_code": "POLAR FLEECE/100% RECYLED POLYESTER/75D/150D///22GG/420//FABRIC DYED",
+      "delivery_date": "2026-06-19",
+      "quantity": 508,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-25",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-11",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-21",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        39,
+        40
+      ]
+    },
+    {
+      "io_number": "7000018547",
+      "style_code": "DWJE FW26 08 1000000787 5000014558",
+      "color_code": "0361-LIGHT GRAPHITE",
+      "fabric_code": "POLAR FLEECE/100% RECYLED POLYESTER/75D/150D///22GG/420//FABRIC DYED",
+      "delivery_date": "2026-06-19",
+      "quantity": 287,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        41
+      ]
+    },
+    {
+      "io_number": "7000018547",
+      "style_code": "DWJE FW26 08 1000000787 5000014558",
+      "color_code": "1171 – WHITE BLUSH",
+      "fabric_code": "POLAR FLEECE/100% RECYLED POLYESTER/75D/150D///22GG/420//FABRIC DYED",
+      "delivery_date": "2026-06-19",
+      "quantity": 220,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        41,
+        42
+      ]
+    },
+    {
+      "io_number": "7000018547",
+      "style_code": "DWJE FW26 08 1000000787 5000014558",
+      "color_code": "6937- MAHAGONY JAM",
+      "fabric_code": "POLAR FLEECE/100% RECYLED POLYESTER/75D/150D///22GG/420//FABRIC DYED",
+      "delivery_date": "2026-06-19",
+      "quantity": 509,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sizeset Submission",
+          "planned_date": null,
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT WOMENS SWEAT JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        41,
+        43
+      ]
+    }
+  ],
+  "warnings": [
+    "[Sheet1] Could not locate header row"
+  ]
+}

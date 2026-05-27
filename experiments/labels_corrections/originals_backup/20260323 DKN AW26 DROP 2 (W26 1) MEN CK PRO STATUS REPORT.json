@@ -1,0 +1,2491 @@
+{
+  "total_plis": 41,
+  "plis": [
+    {
+      "io_number": "131034",
+      "style_code": "49017 RAPHAEL 520198",
+      "color_code": "1507",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/FABRIC DYED",
+      "delivery_date": "2026-04-17",
+      "quantity": 477,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT SHORT SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        4
+      ]
+    },
+    {
+      "io_number": "131034",
+      "style_code": "49017 RAPHAEL 520198",
+      "color_code": "1824",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/FABRIC DYED",
+      "delivery_date": "2026-04-17",
+      "quantity": 300,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT SHORT SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        4,
+        5
+      ]
+    },
+    {
+      "io_number": "131034",
+      "style_code": "49017 RAPHAEL 520198",
+      "color_code": "2109",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/FABRIC DYED",
+      "delivery_date": "2026-04-17",
+      "quantity": 367,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT SHORT SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        4,
+        6
+      ]
+    },
+    {
+      "io_number": "131034",
+      "style_code": "49017 RAPHAEL 520198",
+      "color_code": "2216",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/FABRIC DYED",
+      "delivery_date": "2026-04-17",
+      "quantity": 300,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT SHORT SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        4,
+        7
+      ]
+    },
+    {
+      "io_number": "131034",
+      "style_code": "49017 RAPHAEL 520198",
+      "color_code": "5105",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/FABRIC DYED",
+      "delivery_date": "2026-04-17",
+      "quantity": 1792,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT SHORT SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        4,
+        8
+      ]
+    },
+    {
+      "io_number": "131034",
+      "style_code": "49017 RAPHAEL 520198",
+      "color_code": "1116",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/FABRIC DYED",
+      "delivery_date": "2026-04-17",
+      "quantity": 1431,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT SHORT SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        4,
+        9
+      ]
+    },
+    {
+      "io_number": "131374",
+      "style_code": "49017 RAPHAEL 520198",
+      "color_code": "1000",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/FABRIC DYED",
+      "delivery_date": "2026-05-20",
+      "quantity": 850,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-05",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-19",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT SHORT SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        10
+      ]
+    },
+    {
+      "io_number": "131374",
+      "style_code": "49017 RAPHAEL 520198",
+      "color_code": "6000",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/FABRIC DYED",
+      "delivery_date": "2026-05-20",
+      "quantity": 1250,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-20",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-05",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-19",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-20",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT SHORT SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        10,
+        11
+      ]
+    },
+    {
+      "io_number": "131028",
+      "style_code": "49300 MARRIO 520005",
+      "color_code": "1824",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-04-17",
+      "quantity": 150,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        12
+      ]
+    },
+    {
+      "io_number": "131028",
+      "style_code": "49300 MARRIO 520005",
+      "color_code": "6203",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-04-17",
+      "quantity": 210,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        12,
+        13
+      ]
+    },
+    {
+      "io_number": "131028",
+      "style_code": "49300 MARRIO 520005",
+      "color_code": "1116",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-04-17",
+      "quantity": 479,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        12,
+        14
+      ]
+    },
+    {
+      "io_number": "131028",
+      "style_code": "49300 MARRIO 520005",
+      "color_code": "1930",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-04-17",
+      "quantity": 227,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        12,
+        15
+      ]
+    },
+    {
+      "io_number": "131028",
+      "style_code": "49300 MARRIO 520005",
+      "color_code": "3200",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-04-17",
+      "quantity": 364,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        12,
+        16
+      ]
+    },
+    {
+      "io_number": "131028",
+      "style_code": "49300 MARRIO 520005",
+      "color_code": "6100",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-04-17",
+      "quantity": 498,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-01",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-09",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        12,
+        17
+      ]
+    },
+    {
+      "io_number": "131031",
+      "style_code": "49414 MIWAN_LS 520005",
+      "color_code": "1824",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-04-17",
+      "quantity": 73,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        18
+      ]
+    },
+    {
+      "io_number": "131031",
+      "style_code": "49414 MIWAN_LS 520005",
+      "color_code": "6100",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-04-17",
+      "quantity": 82,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        18,
+        19
+      ]
+    },
+    {
+      "io_number": "131032",
+      "style_code": "49044 THILO 520005",
+      "color_code": "1824",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-04-17",
+      "quantity": 163,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT SHORT SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        20
+      ]
+    },
+    {
+      "io_number": "131032",
+      "style_code": "49044 THILO 520005",
+      "color_code": "2307",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-04-17",
+      "quantity": 230,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT SHORT SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        20,
+        21
+      ]
+    },
+    {
+      "io_number": "131032",
+      "style_code": "49044 THILO 520005",
+      "color_code": "1507",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-04-17",
+      "quantity": 340,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT SHORT SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        20,
+        22
+      ]
+    },
+    {
+      "io_number": "131032",
+      "style_code": "49044 THILO 520005",
+      "color_code": "6100",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-04-17",
+      "quantity": 310,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT SHORT SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        20,
+        23
+      ]
+    },
+    {
+      "io_number": "131032",
+      "style_code": "49044 THILO 520005",
+      "color_code": "1116",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-04-17",
+      "quantity": 1168,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT SHORT SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        20,
+        24
+      ]
+    },
+    {
+      "io_number": "131032",
+      "style_code": "49044 THILO 520005",
+      "color_code": "5105",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-04-17",
+      "quantity": 1284,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-26",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT SHORT SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        20,
+        25
+      ]
+    },
+    {
+      "io_number": "131036",
+      "style_code": "49425 JULIENO_LS 520252",
+      "color_code": "1107",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-06-12",
+      "quantity": 300,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-05-05",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-18",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-12",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        26
+      ]
+    },
+    {
+      "io_number": "131036",
+      "style_code": "49425 JULIENO_LS 520252",
+      "color_code": "1824",
+      "fabric_code": "SINGLE JERSEY/100% BCI COTTON/20S/195/RFD + PEACHED",
+      "delivery_date": "2026-06-12",
+      "quantity": 300,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-05-05",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-18",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-06-11",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-12",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        26,
+        27
+      ]
+    },
+    {
+      "io_number": "131033",
+      "style_code": "49015 ANTON 520062",
+      "color_code": "1116",
+      "fabric_code": "SINGLE JERSEY/94% BCI COTTON 6%  ELASTHANE/40S/175/FABRIC DYED",
+      "delivery_date": "2026-05-29",
+      "quantity": 644,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-29",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T SHIRT HALF SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        28
+      ]
+    },
+    {
+      "io_number": "131033",
+      "style_code": "49015 ANTON 520062",
+      "color_code": "3200",
+      "fabric_code": "SINGLE JERSEY/94% BCI COTTON 6%  ELASTHANE/40S/175/FABRIC DYED",
+      "delivery_date": "2026-05-29",
+      "quantity": 525,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-29",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T SHIRT HALF SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        28,
+        29
+      ]
+    },
+    {
+      "io_number": "131033",
+      "style_code": "49015 ANTON 520062",
+      "color_code": "5303",
+      "fabric_code": "SINGLE JERSEY/94% BCI COTTON 6%  ELASTHANE/40S/175/FABRIC DYED",
+      "delivery_date": "2026-05-29",
+      "quantity": 300,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-29",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T SHIRT HALF SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        28,
+        30
+      ]
+    },
+    {
+      "io_number": "131067",
+      "style_code": "49015 ANTON 520062",
+      "color_code": "3100",
+      "fabric_code": "SINGLE JERSEY/94% COTTON 6% ELASTHANE/40S/30D///28GG/180//FABRIC DYED",
+      "delivery_date": "2026-06-09",
+      "quantity": 510,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-22",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-16",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-06-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-09",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T SHIRT HALF SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        31
+      ]
+    },
+    {
+      "io_number": "131040",
+      "style_code": "49424 ENIL_LS 522148",
+      "color_code": "6602",
+      "fabric_code": "2X2 RIB/100% COTTON/34S////18GG/260//FABRIC DYED",
+      "delivery_date": "2026-05-29",
+      "quantity": 155,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-28",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-29",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        32
+      ]
+    },
+    {
+      "io_number": "131040",
+      "style_code": "49424 ENIL_LS 522148",
+      "color_code": "1116",
+      "fabric_code": "2X2 RIB/100% COTTON/34S////18GG/260//FABRIC DYED",
+      "delivery_date": "2026-05-12",
+      "quantity": 330,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-12",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-11",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-12",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        33
+      ]
+    },
+    {
+      "io_number": "131040",
+      "style_code": "49424 ENIL_LS 522148",
+      "color_code": "1000",
+      "fabric_code": "2X2 RIB/100% COTTON/34S////18GG/260//FABRIC DYED",
+      "delivery_date": "2026-04-17",
+      "quantity": 565,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        34
+      ]
+    },
+    {
+      "io_number": "131040",
+      "style_code": "49424 ENIL_LS 522148",
+      "color_code": "6000",
+      "fabric_code": "2X2 RIB/100% COTTON/34S////18GG/260//FABRIC DYED",
+      "delivery_date": "2026-04-17",
+      "quantity": 570,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-03-27",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-03-30",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-08",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-04-17",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        34,
+        35
+      ]
+    },
+    {
+      "io_number": "131043",
+      "style_code": "49315 KAILEP 522151",
+      "color_code": "1000",
+      "fabric_code": "FRENCH TERRY/80% COTTON 20% POLYESTER/30S/12S////450//FABRIC DYED",
+      "delivery_date": "2026-05-07",
+      "quantity": 164,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        36
+      ]
+    },
+    {
+      "io_number": "131043",
+      "style_code": "49315 KAILEP 522151",
+      "color_code": "1824",
+      "fabric_code": "FRENCH TERRY/80% COTTON 20% POLYESTER/30S/12S////450//FABRIC DYED",
+      "delivery_date": "2026-05-07",
+      "quantity": 250,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        36,
+        37
+      ]
+    },
+    {
+      "io_number": "131042",
+      "style_code": "49319 FAREK 522151",
+      "color_code": "1116",
+      "fabric_code": "FRENCH TERRY/80% COTTON 20% POLYESTER/30S/12S////450//FABRIC DYED",
+      "delivery_date": "2026-05-07",
+      "quantity": 180,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-05",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-10",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS BOMBER JACKET",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        38
+      ]
+    },
+    {
+      "io_number": "131035",
+      "style_code": "49425 JULIENO_LS 520199",
+      "color_code": "1000",
+      "fabric_code": "SINGLE JERSEY/100% COTTON/24S/180/FABRIC DYED",
+      "delivery_date": "2026-05-30",
+      "quantity": 179,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-30",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        39
+      ]
+    },
+    {
+      "io_number": "131035",
+      "style_code": "49425 JULIENO_LS 520199",
+      "color_code": "1507",
+      "fabric_code": "SINGLE JERSEY/100% COTTON/24S/180/FABRIC DYED",
+      "delivery_date": "2026-05-30",
+      "quantity": 185,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-30",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        39,
+        40
+      ]
+    },
+    {
+      "io_number": "131035",
+      "style_code": "49425 JULIENO_LS 520199",
+      "color_code": "3000",
+      "fabric_code": "SINGLE JERSEY/100% COTTON/24S/180/FABRIC DYED",
+      "delivery_date": "2026-05-30",
+      "quantity": 267,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-15",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-21",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-29",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-30",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS T-SHIRT LONG SLEEVE ROUND NECK",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        39,
+        41
+      ]
+    },
+    {
+      "io_number": "131047",
+      "style_code": "49423 NERIK 522197",
+      "color_code": "1107",
+      "fabric_code": "DIAGONAL FRENCH TERRY/100% COTTON/40S/40S/2/20S//20GG/300//FABRIC DYED",
+      "delivery_date": "2026-06-05",
+      "quantity": 180,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-23",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-23",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-13",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-06-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-05",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS HOODED SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        42
+      ]
+    },
+    {
+      "io_number": "131047",
+      "style_code": "49423 NERIK 522197",
+      "color_code": "6602",
+      "fabric_code": "DIAGONAL FRENCH TERRY/100% COTTON/40S/40S/2/20S//20GG/300//FABRIC DYED",
+      "delivery_date": "2026-06-05",
+      "quantity": 129,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-23",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-23",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-30",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-05-13",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-06-04",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-06-05",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS HOODED SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        42,
+        43
+      ]
+    },
+    {
+      "io_number": "131044",
+      "style_code": "49429 KARIO_MOUNTAIN 522152",
+      "color_code": "1116",
+      "fabric_code": "FRENCH TERRY/100% BCI COTTON/40S/2/16S///20GG/400//RFD",
+      "delivery_date": "2026-05-07",
+      "quantity": 450,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "planned_date": "2026-04-07",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "planned_date": "2026-04-11",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Sewing",
+          "planned_date": "2026-04-24",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "planned_date": "2026-05-06",
+          "quantity": null,
+          "metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "planned_date": "2026-05-07",
+          "quantity": null,
+          "metadata": {}
+        }
+      ],
+      "style_name": "CIRCULAR KNIT MENS SWEAT SHIRT",
+      "confidence": {
+        "io_number": 1.0,
+        "style_code": 1.0,
+        "style_name": 1.0,
+        "color_code": 0.85,
+        "fabric_code": 0.9,
+        "delivery_date": 1.0,
+        "quantity": 0.9
+      },
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        44
+      ]
+    }
+  ],
+  "warnings": []
+}

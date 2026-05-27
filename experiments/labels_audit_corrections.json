@@ -1,0 +1,1950 @@
+[
+  {
+    "file": "20260129 DKN AW26 DROP 2 WOMEN NOS CK PRO STATUS",
+    "pli_index": 0,
+    "source_row": 4,
+    "corrections": [
+      {
+        "canonical": "io_number",
+        "old_value": "131673",
+        "new_value": null,
+        "reason": "label value sourced from K4 (header 'Buyer Po No') \u2014 that is buyer_po_no, not io_number. No 'IO No' column exists in this sheet."
+      },
+      {
+        "canonical": "buyer_po_no",
+        "old_value": null,
+        "new_value": "131673",
+        "reason": "the value labeled as io_number is actually buyer's PO (K column)"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "2X2 RIB/100% COTTON/34S////18GG/260//YARN DYED",
+        "new_value": null,
+        "reason": "value at I4 is a long fabric composition (>20 chars); spec says this is fabric_name"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "2X2 RIB/100% COTTON/34S////18GG/260//YARN DYED",
+        "reason": "I header is 'Fabric Quality' \u2014 descriptive composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-06-10",
+        "new_value": null,
+        "reason": "label value sourced from P4 (header 'Etd Ex factory as per P.O'); spec anti-pattern says 'Ex Factory' is metadata.ex_factory_date, not delivery_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-06-10",
+        "reason": "P column header 'Etd Ex factory' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "20260129 DKN AW26 DROP 2 WOMEN NOS CK PRO STATUS",
+    "pli_index": 1,
+    "source_row": 5,
+    "corrections": [
+      {
+        "canonical": "io_number",
+        "old_value": "131675",
+        "new_value": null,
+        "reason": "label value sourced from K5 (header 'Buyer Po No') \u2014 that is buyer_po_no, not io_number. No 'IO No' column exists in this sheet."
+      },
+      {
+        "canonical": "buyer_po_no",
+        "old_value": null,
+        "new_value": "131675",
+        "reason": "the value labeled as io_number is actually buyer's PO (K column)"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "2X2 RIB/100% COTTON/34S////18GG/260//YARN DYED",
+        "new_value": null,
+        "reason": "value at I5 is a long fabric composition (>20 chars); spec says this is fabric_name"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "2X2 RIB/100% COTTON/34S////18GG/260//YARN DYED",
+        "reason": "I header is 'Fabric Quality' \u2014 descriptive composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-06-10",
+        "new_value": null,
+        "reason": "label value sourced from P5 (header 'Etd Ex factory as per P.O'); spec anti-pattern says 'Ex Factory' is metadata.ex_factory_date, not delivery_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-06-10",
+        "reason": "P column header 'Etd Ex factory' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "20260129 DKN AW26 DROP 2 WOMEN NOS CK PRO STATUS",
+    "pli_index": 2,
+    "source_row": 6,
+    "corrections": [
+      {
+        "canonical": "io_number",
+        "old_value": "131673",
+        "new_value": null,
+        "reason": "label value sourced from K6 (header 'Buyer Po No') \u2014 that is buyer_po_no, not io_number. No 'IO No' column exists in this sheet."
+      },
+      {
+        "canonical": "buyer_po_no",
+        "old_value": null,
+        "new_value": "131673",
+        "reason": "the value labeled as io_number is actually buyer's PO (K column)"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "2X2 RIB/100% COTTON/34S////18GG/260//YARN DYED",
+        "new_value": null,
+        "reason": "value at I6 is a long fabric composition (>20 chars); spec says this is fabric_name"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "2X2 RIB/100% COTTON/34S////18GG/260//YARN DYED",
+        "reason": "I header is 'Fabric Quality' \u2014 descriptive composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-06-10",
+        "new_value": null,
+        "reason": "label value sourced from P6 (header 'Etd Ex factory as per P.O'); spec anti-pattern says 'Ex Factory' is metadata.ex_factory_date, not delivery_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-06-10",
+        "reason": "P column header 'Etd Ex factory' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "CHRISTIAN BERG- T&A",
+    "pli_index": 0,
+    "source_rows": [
+      4
+    ],
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "T-SLANIA LONG BP,                    D-T-SHIRT 3/4",
+        "new_value": "569510267",
+        "reason": "label value sourced from F (header 'STYLE') \u2014 that cell is the combined style label, but the proper compact style_code is G4=569510267 (header 'ARTICLE'). Spec max_len=20 expects a code, not 40+ char free text."
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+        "new_value": null,
+        "reason": "I header 'FABRIC' holds composition; >20 chars \u2192 fabric_name per spec"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+        "reason": "I header 'FABRIC' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "422 - MAGENTA",
+        "new_value": null,
+        "reason": "K header 'COLOR' value is descriptive text (e.g. 'NAVY'); spec says short codes only \u2192 color_name"
+      },
+      {
+        "canonical": "color_name",
+        "old_value": null,
+        "new_value": "422 - MAGENTA",
+        "reason": "descriptive color text \u2192 color_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-05",
+        "new_value": null,
+        "reason": "label value sourced from D 'EX FAC DATE' \u2014 spec says this is metadata.ex_factory_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-05",
+        "reason": "D 'EX FAC DATE' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "CHRISTIAN BERG- T&A",
+    "pli_index": 1,
+    "source_rows": [
+      4,
+      5
+    ],
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "T-SLANIA LONG BP,                    D-T-SHIRT 3/4",
+        "new_value": "569510267",
+        "reason": "label value sourced from F (header 'STYLE') \u2014 that cell is the combined style label, but the proper compact style_code is G5=569510267 (header 'ARTICLE'). Spec max_len=20 expects a code, not 40+ char free text."
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+        "new_value": null,
+        "reason": "I header 'FABRIC' holds composition; >20 chars \u2192 fabric_name per spec"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+        "reason": "I header 'FABRIC' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "630 - NAVY",
+        "new_value": null,
+        "reason": "K header 'COLOR' value is descriptive text (e.g. 'NAVY'); spec says short codes only \u2192 color_name"
+      },
+      {
+        "canonical": "color_name",
+        "old_value": null,
+        "new_value": "630 - NAVY",
+        "reason": "descriptive color text \u2192 color_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-05",
+        "new_value": null,
+        "reason": "label value sourced from D 'EX FAC DATE' \u2014 spec says this is metadata.ex_factory_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-05",
+        "reason": "D 'EX FAC DATE' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "CHRISTIAN BERG- T&A",
+    "pli_index": 2,
+    "source_rows": [
+      4,
+      6
+    ],
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "T-SLANIA LONG BP,                    D-T-SHIRT 3/4",
+        "new_value": "569510267",
+        "reason": "label value sourced from F (header 'STYLE') \u2014 that cell is the combined style label, but the proper compact style_code is G6=569510267 (header 'ARTICLE'). Spec max_len=20 expects a code, not 40+ char free text."
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+        "new_value": null,
+        "reason": "I header 'FABRIC' holds composition; >20 chars \u2192 fabric_name per spec"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+        "reason": "I header 'FABRIC' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "840 - WHITE SAND",
+        "new_value": null,
+        "reason": "K header 'COLOR' value is descriptive text (e.g. 'NAVY'); spec says short codes only \u2192 color_name"
+      },
+      {
+        "canonical": "color_name",
+        "old_value": null,
+        "new_value": "840 - WHITE SAND",
+        "reason": "descriptive color text \u2192 color_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-05",
+        "new_value": null,
+        "reason": "label value sourced from D 'EX FAC DATE' \u2014 spec says this is metadata.ex_factory_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-05",
+        "reason": "D 'EX FAC DATE' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "CHRISTIAN BERG- T&A",
+    "pli_index": 3,
+    "source_rows": [
+      4,
+      7
+    ],
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "T-SLANIA LONG BP,                    D-T-SHIRT 3/4",
+        "new_value": "569510267",
+        "reason": "label value sourced from F (header 'STYLE') \u2014 that cell is the combined style label, but the proper compact style_code is G7=569510267 (header 'ARTICLE'). Spec max_len=20 expects a code, not 40+ char free text."
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+        "new_value": null,
+        "reason": "I header 'FABRIC' holds composition; >20 chars \u2192 fabric_name per spec"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+        "reason": "I header 'FABRIC' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "940 - DEEP TAUPE",
+        "new_value": null,
+        "reason": "K header 'COLOR' value is descriptive text (e.g. 'NAVY'); spec says short codes only \u2192 color_name"
+      },
+      {
+        "canonical": "color_name",
+        "old_value": null,
+        "new_value": "940 - DEEP TAUPE",
+        "reason": "descriptive color text \u2192 color_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-05",
+        "new_value": null,
+        "reason": "label value sourced from D 'EX FAC DATE' \u2014 spec says this is metadata.ex_factory_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-05",
+        "reason": "D 'EX FAC DATE' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "CHRISTIAN BERG- T&A",
+    "pli_index": 4,
+    "source_rows": [
+      9
+    ],
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "T-SLANIA R LONG,  D-T-SHIRT 3/4",
+        "new_value": "569510271",
+        "reason": "label value sourced from F (header 'STYLE') \u2014 that cell is the combined style label, but the proper compact style_code is G9=569510271 (header 'ARTICLE'). Spec max_len=20 expects a code, not 40+ char free text."
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+        "new_value": null,
+        "reason": "I header 'FABRIC' holds composition; >20 chars \u2192 fabric_name per spec"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+        "reason": "I header 'FABRIC' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "630 - NAVY / 810 OFF WHITE",
+        "new_value": null,
+        "reason": "K header 'COLOR' value is descriptive text (e.g. 'NAVY'); spec says short codes only \u2192 color_name"
+      },
+      {
+        "canonical": "color_name",
+        "old_value": null,
+        "new_value": "630 - NAVY / 810 OFF WHITE",
+        "reason": "descriptive color text \u2192 color_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-05",
+        "new_value": null,
+        "reason": "label value sourced from D 'EX FAC DATE' \u2014 spec says this is metadata.ex_factory_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-05",
+        "reason": "D 'EX FAC DATE' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "CHRISTIAN BERG- T&A",
+    "pli_index": 5,
+    "source_rows": [
+      9,
+      10
+    ],
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "T-SLANIA R LONG,  D-T-SHIRT 3/4",
+        "new_value": "569510271",
+        "reason": "label value sourced from F (header 'STYLE') \u2014 that cell is the combined style label, but the proper compact style_code is G10=569510271 (header 'ARTICLE'). Spec max_len=20 expects a code, not 40+ char free text."
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+        "new_value": null,
+        "reason": "I header 'FABRIC' holds composition; >20 chars \u2192 fabric_name per spec"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+        "reason": "I header 'FABRIC' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "732 - SMOKE PINE / 630 NAVY",
+        "new_value": null,
+        "reason": "K header 'COLOR' value is descriptive text (e.g. 'NAVY'); spec says short codes only \u2192 color_name"
+      },
+      {
+        "canonical": "color_name",
+        "old_value": null,
+        "new_value": "732 - SMOKE PINE / 630 NAVY",
+        "reason": "descriptive color text \u2192 color_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-05",
+        "new_value": null,
+        "reason": "label value sourced from D 'EX FAC DATE' \u2014 spec says this is metadata.ex_factory_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-05",
+        "reason": "D 'EX FAC DATE' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "CHRISTIAN BERG- T&A",
+    "pli_index": 6,
+    "source_rows": [
+      9,
+      11
+    ],
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "T-SLANIA R LONG,  D-T-SHIRT 3/4",
+        "new_value": "569510271",
+        "reason": "label value sourced from F (header 'STYLE') \u2014 that cell is the combined style label, but the proper compact style_code is G11=569510271 (header 'ARTICLE'). Spec max_len=20 expects a code, not 40+ char free text."
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+        "new_value": null,
+        "reason": "I header 'FABRIC' holds composition; >20 chars \u2192 fabric_name per spec"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "100% ORG COT ( OCS-100 ), SLUB JERSEY, 155 GSM",
+        "reason": "I header 'FABRIC' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "940 - DEEP TAUPE /  840 WHITE SAND",
+        "new_value": null,
+        "reason": "K header 'COLOR' value is descriptive text (e.g. 'NAVY'); spec says short codes only \u2192 color_name"
+      },
+      {
+        "canonical": "color_name",
+        "old_value": null,
+        "new_value": "940 - DEEP TAUPE /  840 WHITE SAND",
+        "reason": "descriptive color text \u2192 color_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-05",
+        "new_value": null,
+        "reason": "label value sourced from D 'EX FAC DATE' \u2014 spec says this is metadata.ex_factory_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-05",
+        "reason": "D 'EX FAC DATE' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "20260304 MOPD W26(1) MANOS COMPASS PRO",
+    "pli_index": 0,
+    "source_rows": [
+      4
+    ],
+    "corrections": [
+      {
+        "canonical": "io_number",
+        "old_value": "7000022459",
+        "new_value": null,
+        "reason": "label value sourced from K4 (header 'Buyer Po No') \u2014 that is buyer_po_no, not io_number"
+      },
+      {
+        "canonical": "buyer_po_no",
+        "old_value": null,
+        "new_value": "7000022459",
+        "reason": "K column 'Buyer Po No' \u2192 buyer_po_no"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "DIAGONAL FRENCH TERRY/100% ORGANIC COTTON/34S/260/ FABRIC DYED + PANEL WASHED",
+        "new_value": null,
+        "reason": "I 'Fabric Quality' value > 20 chars; spec \u2192 fabric_name"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "DIAGONAL FRENCH TERRY/100% ORGANIC COTTON/34S/260/ FABRIC DYED + PANEL WASHED",
+        "reason": "I 'Fabric Quality' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "4139\u2013NAVY TEAL",
+        "new_value": null,
+        "reason": "L 'Color' value is 'code-name' compound or descriptive; per spec \u2192 color_name (or split)"
+      },
+      {
+        "canonical": "color_name",
+        "old_value": null,
+        "new_value": "4139\u2013NAVY TEAL",
+        "reason": "L 'Color' compound \u2192 color_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-19",
+        "new_value": null,
+        "reason": "P 'Etd Ex factory as per P.O' \u2192 spec anti-pattern \u2192 metadata.ex_factory_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-19",
+        "reason": "P 'Etd Ex factory' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "20260304 MOPD W26(1) MANOS COMPASS PRO",
+    "pli_index": 1,
+    "source_rows": [
+      5
+    ],
+    "corrections": [
+      {
+        "canonical": "io_number",
+        "old_value": "7000022450",
+        "new_value": null,
+        "reason": "label value sourced from K5 (header 'Buyer Po No') \u2014 that is buyer_po_no, not io_number"
+      },
+      {
+        "canonical": "buyer_po_no",
+        "old_value": null,
+        "new_value": "7000022450",
+        "reason": "K column 'Buyer Po No' \u2192 buyer_po_no"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "4X3 RIB/96% ORGANIC COTTON 4% ELASTHANE/34S/ 230/ FABRIC DYED + PANEL WASHED",
+        "new_value": null,
+        "reason": "I 'Fabric Quality' value > 20 chars; spec \u2192 fabric_name"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "4X3 RIB/96% ORGANIC COTTON 4% ELASTHANE/34S/ 230/ FABRIC DYED + PANEL WASHED",
+        "reason": "I 'Fabric Quality' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "1183 - SILKY WHITE",
+        "new_value": null,
+        "reason": "L 'Color' value is 'code-name' compound or descriptive; per spec \u2192 color_name (or split)"
+      },
+      {
+        "canonical": "color_name",
+        "old_value": null,
+        "new_value": "1183 - SILKY WHITE",
+        "reason": "L 'Color' compound \u2192 color_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-19",
+        "new_value": null,
+        "reason": "P 'Etd Ex factory as per P.O' \u2192 spec anti-pattern \u2192 metadata.ex_factory_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-19",
+        "reason": "P 'Etd Ex factory' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "20260304 MOPD W26(1) MANOS COMPASS PRO",
+    "pli_index": 2,
+    "source_rows": [
+      6
+    ],
+    "corrections": [
+      {
+        "canonical": "io_number",
+        "old_value": "7000022449",
+        "new_value": null,
+        "reason": "label value sourced from K6 (header 'Buyer Po No') \u2014 that is buyer_po_no, not io_number"
+      },
+      {
+        "canonical": "buyer_po_no",
+        "old_value": null,
+        "new_value": "7000022449",
+        "reason": "K column 'Buyer Po No' \u2192 buyer_po_no"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "2X2 RIB/96% ORGANIC COTTON 4% ELASTHANE/50S/180// FABRIC DYED + PANEL WASHED",
+        "new_value": null,
+        "reason": "I 'Fabric Quality' value > 20 chars; spec \u2192 fabric_name"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "2X2 RIB/96% ORGANIC COTTON 4% ELASTHANE/50S/180// FABRIC DYED + PANEL WASHED",
+        "reason": "I 'Fabric Quality' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "1183 - SILKY WHITE",
+        "new_value": null,
+        "reason": "L 'Color' value is 'code-name' compound or descriptive; per spec \u2192 color_name (or split)"
+      },
+      {
+        "canonical": "color_name",
+        "old_value": null,
+        "new_value": "1183 - SILKY WHITE",
+        "reason": "L 'Color' compound \u2192 color_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-05",
+        "new_value": null,
+        "reason": "P 'Etd Ex factory as per P.O' \u2192 spec anti-pattern \u2192 metadata.ex_factory_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-05",
+        "reason": "P 'Etd Ex factory' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "20260304 MOPD W26(1) MANOS COMPASS PRO",
+    "pli_index": 3,
+    "source_rows": [
+      7
+    ],
+    "corrections": [
+      {
+        "canonical": "io_number",
+        "old_value": "7000022458",
+        "new_value": null,
+        "reason": "label value sourced from K7 (header 'Buyer Po No') \u2014 that is buyer_po_no, not io_number"
+      },
+      {
+        "canonical": "buyer_po_no",
+        "old_value": null,
+        "new_value": "7000022458",
+        "reason": "K column 'Buyer Po No' \u2192 buyer_po_no"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "4X3 RIB/96% ORGANIC COTTON 4% ELASTHANE/34S/ 230/FABRIC DYED + PANEL WASHED",
+        "new_value": null,
+        "reason": "I 'Fabric Quality' value > 20 chars; spec \u2192 fabric_name"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "4X3 RIB/96% ORGANIC COTTON 4% ELASTHANE/34S/ 230/FABRIC DYED + PANEL WASHED",
+        "reason": "I 'Fabric Quality' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "0001-BLACK",
+        "new_value": null,
+        "reason": "L 'Color' value is 'code-name' compound or descriptive; per spec \u2192 color_name (or split)"
+      },
+      {
+        "canonical": "color_name",
+        "old_value": null,
+        "new_value": "0001-BLACK",
+        "reason": "L 'Color' compound \u2192 color_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-05",
+        "new_value": null,
+        "reason": "P 'Etd Ex factory as per P.O' \u2192 spec anti-pattern \u2192 metadata.ex_factory_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-05",
+        "reason": "P 'Etd Ex factory' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "20260304 MOPD W26(1) MANOS COMPASS PRO",
+    "pli_index": 4,
+    "source_rows": [
+      8
+    ],
+    "corrections": [
+      {
+        "canonical": "io_number",
+        "old_value": "7000022456, 7000022457",
+        "new_value": null,
+        "reason": "label value sourced from K8 (header 'Buyer Po No') \u2014 that is buyer_po_no, not io_number"
+      },
+      {
+        "canonical": "buyer_po_no",
+        "old_value": null,
+        "new_value": "7000022456, 7000022457",
+        "reason": "K column 'Buyer Po No' \u2192 buyer_po_no"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "4X3 RIB/96% ORGANIC COTTON 4% ELASTHANE/34S/ 230/FABRIC DYED + PANEL WASHED",
+        "new_value": null,
+        "reason": "I 'Fabric Quality' value > 20 chars; spec \u2192 fabric_name"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "4X3 RIB/96% ORGANIC COTTON 4% ELASTHANE/34S/ 230/FABRIC DYED + PANEL WASHED",
+        "reason": "I 'Fabric Quality' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "1183-SILKY WHITE",
+        "new_value": null,
+        "reason": "L 'Color' value is 'code-name' compound or descriptive; per spec \u2192 color_name (or split)"
+      },
+      {
+        "canonical": "color_name",
+        "old_value": null,
+        "new_value": "1183-SILKY WHITE",
+        "reason": "L 'Color' compound \u2192 color_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-19",
+        "new_value": null,
+        "reason": "P 'Etd Ex factory as per P.O' \u2192 spec anti-pattern \u2192 metadata.ex_factory_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-19",
+        "reason": "P 'Etd Ex factory' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "20260304 MOPD W26(1) MANOS COMPASS PRO",
+    "pli_index": 5,
+    "source_rows": [
+      8,
+      9
+    ],
+    "corrections": [
+      {
+        "canonical": "io_number",
+        "old_value": "7000022456, 7000022457",
+        "new_value": null,
+        "reason": "label value sourced from K9 (header 'Buyer Po No') \u2014 that is buyer_po_no, not io_number"
+      },
+      {
+        "canonical": "buyer_po_no",
+        "old_value": null,
+        "new_value": "7000022456, 7000022457",
+        "reason": "K column 'Buyer Po No' \u2192 buyer_po_no"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "4X3 RIB/96% ORGANIC COTTON 4% ELASTHANE/34S/ 230/FABRIC DYED + PANEL WASHED",
+        "new_value": null,
+        "reason": "I 'Fabric Quality' value > 20 chars; spec \u2192 fabric_name"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "4X3 RIB/96% ORGANIC COTTON 4% ELASTHANE/34S/ 230/FABRIC DYED + PANEL WASHED",
+        "reason": "I 'Fabric Quality' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "4133 - BLUE DEPTHS",
+        "new_value": null,
+        "reason": "L 'Color' value is 'code-name' compound or descriptive; per spec \u2192 color_name (or split)"
+      },
+      {
+        "canonical": "color_name",
+        "old_value": null,
+        "new_value": "4133 - BLUE DEPTHS",
+        "reason": "L 'Color' compound \u2192 color_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-19",
+        "new_value": null,
+        "reason": "P 'Etd Ex factory as per P.O' \u2192 spec anti-pattern \u2192 metadata.ex_factory_date"
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-19",
+        "reason": "P 'Etd Ex factory' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "63261-TNA",
+    "pli_index": 0,
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null; xlsx has no style_code column for this PLI"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 0,
+    "sheet": "62330",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 1,
+    "sheet": "62330.1",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 2,
+    "sheet": "62330.2",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 3,
+    "sheet": "62330.3",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 4,
+    "sheet": "62338",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 5,
+    "sheet": "62338.1",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 6,
+    "sheet": "62338.2",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 7,
+    "sheet": "62328",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 8,
+    "sheet": "62339.1",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 9,
+    "sheet": "62339.2",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 10,
+    "sheet": "62339.3",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 11,
+    "sheet": "62339.4",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 12,
+    "sheet": "62950",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 13,
+    "sheet": "62951",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 14,
+    "sheet": "62949",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 15,
+    "sheet": "62336",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 16,
+    "sheet": "62336.1",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 17,
+    "sheet": "62336.2",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 18,
+    "sheet": "62265",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 19,
+    "sheet": "63305",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 20,
+    "sheet": "63305.1",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 21,
+    "sheet": "63306",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 22,
+    "sheet": "63306.1",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 23,
+    "sheet": "63306.2",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 24,
+    "sheet": "63308",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 25,
+    "sheet": "63308.1",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 26,
+    "sheet": "63309",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 27,
+    "sheet": "63309.1",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 28,
+    "sheet": "63315",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 29,
+    "sheet": "63315.1",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 30,
+    "sheet": "63315.2",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 31,
+    "sheet": "63315.3",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 32,
+    "sheet": "63315.4",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 33,
+    "sheet": "63315.5",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "new Eastman TnAs",
+    "pli_index": 34,
+    "sheet": "63261",
+    "corrections": [
+      {
+        "canonical": "style_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "color_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "",
+        "new_value": null,
+        "reason": "empty-string instead of null"
+      }
+    ]
+  },
+  {
+    "file": "GUESS ATHLEISURE - MAIN FALL 26 MASTER FILE #1",
+    "pli_index": 0,
+    "source_row": 2,
+    "corrections": [
+      {
+        "canonical": "io_number",
+        "old_value": "MA01-2026-00325",
+        "new_value": "1091",
+        "reason": "label value at K2 (header 'PO NO') is buyer_po_no, not io_number. The 'ION' column E2=1091 is the actual io_number (Internal Order Number alias)."
+      },
+      {
+        "canonical": "buyer_po_no",
+        "old_value": null,
+        "new_value": "MA01-2026-00325",
+        "reason": "K 'PO NO' \u2192 buyer_po_no"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "100% COTTON S/J - 160 GSM",
+        "new_value": null,
+        "reason": "H 'FABRIC' value > 20 chars descriptive \u2192 fabric_name"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "100% COTTON S/J - 160 GSM",
+        "reason": "H 'FABRIC' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-07",
+        "new_value": null,
+        "reason": "label value at Z2 ('EX FAC' = ex-factory date) \u2014 spec anti-pattern \u2192 this is metadata.ex_factory_date. AA 'EX CON' (ex-consignee) is more like delivery_date."
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-07",
+        "reason": "Z 'EX FAC' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "GUESS ATHLEISURE - MAIN FALL 26 MASTER FILE #1",
+    "pli_index": 1,
+    "source_row": 3,
+    "corrections": [
+      {
+        "canonical": "io_number",
+        "old_value": "MA03-2026-00367",
+        "new_value": "1091",
+        "reason": "label value at K3 (header 'PO NO') is buyer_po_no, not io_number. The 'ION' column E3=1091 is the actual io_number (Internal Order Number alias)."
+      },
+      {
+        "canonical": "buyer_po_no",
+        "old_value": null,
+        "new_value": "MA03-2026-00367",
+        "reason": "K 'PO NO' \u2192 buyer_po_no"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "100% COTTON S/J - 160 GSM",
+        "new_value": null,
+        "reason": "H 'FABRIC' value > 20 chars descriptive \u2192 fabric_name"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "100% COTTON S/J - 160 GSM",
+        "reason": "H 'FABRIC' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-06",
+        "new_value": null,
+        "reason": "label value at Z3 ('EX FAC' = ex-factory date) \u2014 spec anti-pattern \u2192 this is metadata.ex_factory_date. AA 'EX CON' (ex-consignee) is more like delivery_date."
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-06",
+        "reason": "Z 'EX FAC' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "GUESS ATHLEISURE - MAIN FALL 26 MASTER FILE #1",
+    "pli_index": 10,
+    "source_row": 16,
+    "corrections": [
+      {
+        "canonical": "io_number",
+        "old_value": "SP01-2026-00099",
+        "new_value": "1093",
+        "reason": "label value at K16 (header 'PO NO') is buyer_po_no, not io_number. The 'ION' column E16=1093 is the actual io_number (Internal Order Number alias)."
+      },
+      {
+        "canonical": "buyer_po_no",
+        "old_value": null,
+        "new_value": "SP01-2026-00099",
+        "reason": "K 'PO NO' \u2192 buyer_po_no"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "50% ORG COTTON 50% COTTON FLAT BACK RIB 250 GSM",
+        "new_value": null,
+        "reason": "H 'FABRIC' value > 20 chars descriptive \u2192 fabric_name"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "50% ORG COTTON 50% COTTON FLAT BACK RIB 250 GSM",
+        "reason": "H 'FABRIC' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-05-21",
+        "new_value": null,
+        "reason": "label value at Z16 ('EX FAC' = ex-factory date) \u2014 spec anti-pattern \u2192 this is metadata.ex_factory_date. AA 'EX CON' (ex-consignee) is more like delivery_date."
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-05-21",
+        "reason": "Z 'EX FAC' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "GUESS ATHLEISURE - MAIN FALL 26 MASTER FILE #1",
+    "pli_index": 100,
+    "source_row": 120,
+    "corrections": [
+      {
+        "canonical": "io_number",
+        "old_value": "MX01-2026-00809",
+        "new_value": "1152",
+        "reason": "label value at K120 (header 'PO NO') is buyer_po_no, not io_number. The 'ION' column E120=1152 is the actual io_number (Internal Order Number alias)."
+      },
+      {
+        "canonical": "buyer_po_no",
+        "old_value": null,
+        "new_value": "MX01-2026-00809",
+        "reason": "K 'PO NO' \u2192 buyer_po_no"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "50% ORGANIC COTTON 50% COTTON JERSEY 180 GSM",
+        "new_value": null,
+        "reason": "H 'FABRIC' value > 20 chars descriptive \u2192 fabric_name"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "50% ORGANIC COTTON 50% COTTON JERSEY 180 GSM",
+        "reason": "H 'FABRIC' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-06-04",
+        "new_value": null,
+        "reason": "label value at Z120 ('EX FAC' = ex-factory date) \u2014 spec anti-pattern \u2192 this is metadata.ex_factory_date. AA 'EX CON' (ex-consignee) is more like delivery_date."
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-06-04",
+        "reason": "Z 'EX FAC' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  },
+  {
+    "file": "GUESS ATHLEISURE - MAIN FALL 26 MASTER FILE #1",
+    "pli_index": 169,
+    "source_row": 197,
+    "corrections": [
+      {
+        "canonical": "io_number",
+        "old_value": "SP01-2026-00320",
+        "new_value": "1166",
+        "reason": "label value at K197 (header 'PO NO') is buyer_po_no, not io_number. The 'ION' column E197=1166 is the actual io_number (Internal Order Number alias)."
+      },
+      {
+        "canonical": "buyer_po_no",
+        "old_value": null,
+        "new_value": "SP01-2026-00320",
+        "reason": "K 'PO NO' \u2192 buyer_po_no"
+      },
+      {
+        "canonical": "fabric_code",
+        "old_value": "50% ORGANIC COTTON 50% COTTON SINGLE JERSEY 205 GSM",
+        "new_value": null,
+        "reason": "H 'FABRIC' value > 20 chars descriptive \u2192 fabric_name"
+      },
+      {
+        "canonical": "fabric_name",
+        "old_value": null,
+        "new_value": "50% ORGANIC COTTON 50% COTTON SINGLE JERSEY 205 GSM",
+        "reason": "H 'FABRIC' composition \u2192 fabric_name"
+      },
+      {
+        "canonical": "delivery_date",
+        "old_value": "2026-06-17",
+        "new_value": null,
+        "reason": "label value at Z197 ('EX FAC' = ex-factory date) \u2014 spec anti-pattern \u2192 this is metadata.ex_factory_date. AA 'EX CON' (ex-consignee) is more like delivery_date."
+      },
+      {
+        "canonical": "ex_factory_date",
+        "old_value": null,
+        "new_value": "2026-06-17",
+        "reason": "Z 'EX FAC' \u2192 metadata.ex_factory_date"
+      }
+    ]
+  }
+]
