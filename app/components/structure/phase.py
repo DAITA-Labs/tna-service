@@ -1,22 +1,23 @@
 """StructurePhase orchestrator — sheet → (canvas, bag, LayoutHint).
 
-Chains every Tier 1 + Tier 2 step into a single top-level function:
+`run_structure_phase` is the single public entry point for the structure
+phase. It composes five steps:
 
-  1. build_canvas              (Tier 1a)  — openpyxl sheet → 21-channel canvas
-  2. populate_patterns         (Tier 1b–1d) — every strip detector
-  3. populate_semantics        (Tier 2a)  — six resolvers in dep order
-  4. infer_layout_axes         (Tier 2b)  — three orthogonal axes
-  5. compose_layout_hint       (Tier 2b)  — bundle into a LayoutHint
+  1. `build_canvas`           — openpyxl sheet → 21-channel canvas
+  2. `populate_patterns`      — every strip detector → bag pattern fields
+  3. `populate_semantics`     — six resolvers in dependency order
+  4. `infer_layout_axes`      — three orthogonal axes
+  5. `compose_layout_hint`    — bundle into a LayoutHint
 
-This is the single public entry point Tier 3 (workbook phase) and Tier 4
-(field components) will call. Returning the trio `(canvas, bag, hint)`
-lets downstream code reach back into the canvas for cell values and into
-the bag for any record the LayoutHint doesn't surface directly.
+Returns the trio `(canvas, bag, hint)` so downstream consumers (workbook
+routing and field components) can reach back into the canvas for cell
+values and into the bag for any record the LayoutHint doesn't surface
+directly.
 
-Anchor-sheet selection (which sheet in a `pli_cluster` runs this phase)
-and inheritance verification (whether other sheets in the cluster match
-the anchor's hint) live in Tier 3 — they presume a cluster artifact that
-doesn't yet exist.
+Anchor-sheet selection (choosing which sheet in a `pli_cluster` runs
+this phase) and inheritance verification (whether other sheets in the
+cluster match the anchor's hint) are not handled here — they presume a
+cluster artifact emitted by the workbook layer.
 """
 from __future__ import annotations
 
@@ -34,8 +35,8 @@ def run_structure_phase(sheet, cluster_id: str = "default") -> tuple[GridCanvas,
 
     Args:
         sheet:      openpyxl worksheet
-        cluster_id: pli_cluster identifier propagated onto the LayoutHint
-                    (defaults to "default" for single-sheet smoke tests)
+        cluster_id: `pli_cluster` identifier propagated onto the LayoutHint
+                    (defaults to "default" for single-sheet callers)
 
     Returns:
         canvas — the 21-channel GridCanvas for downstream cell reads

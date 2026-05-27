@@ -1,15 +1,18 @@
-"""Structure phase resolvers — interpret pattern records into semantic roles.
+"""Structure-phase resolvers — interpret pattern records into semantic roles.
 
-Each resolver is a plain function over (canvas, StructureBag) that
-appends semantic records back into the bag. The structure phase
-orchestrator (Tier 2c) calls them in dependency order:
+Each resolver is a plain function over `(canvas, StructureBag)` that
+appends semantic records back into the bag. They are intended to be
+called in dependency order:
 
-  HeaderBandResolver
-    → DataRowRangeResolver
-    → SectionBoundaryResolver
-    → StageArenaResolver
-       → StageBandResolver
-          → SubfieldClusterResolver
+  resolve_header_band
+    → resolve_data_row_ranges
+    → resolve_section_boundaries
+    → resolve_stage_arenas
+       → resolve_stage_bands
+          → resolve_subfield_clusters
+
+`populate_semantics` in the sibling `populate` module is the canonical
+caller and handles the ordering.
 """
 from __future__ import annotations
 

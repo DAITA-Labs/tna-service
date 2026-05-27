@@ -2,18 +2,19 @@
 
 Two helpers, each consuming a `(canvas, bag)` pair and appending records:
 
-  populate_patterns   — fans every Tier 1 strip detector into the bag's
-                        pattern-record fields (date / int / float / text /
-                        color / bold / borders / merges / kv / repeating /
-                        plan markers). No semantic reasoning here.
+  `populate_patterns`  — fans every strip detector into the bag's
+                         pattern-record fields (date / int / float / text /
+                         color / bold / borders / merges / kv / repeating /
+                         plan markers). No semantic reasoning.
 
-  populate_semantics  — runs the six Tier 2a resolvers in dependency order
-                        (header_band → data_row_range → stage_arena →
-                         stage_band → subfield_cluster → section_boundary),
-                        each reading patterns and writing back to the bag.
+  `populate_semantics` — runs the six structural resolvers in dependency
+                         order (header_band → data_row_range → stage_arena
+                         → stage_band → subfield_cluster →
+                         section_boundary), each reading pattern records
+                         and writing semantic records back to the bag.
 
-These exist so the StructurePhase orchestrator stays declarative and so
-tests can exercise either half in isolation.
+The split lets `run_structure_phase` stay declarative and lets tests
+exercise either half in isolation.
 """
 from __future__ import annotations
 
@@ -50,7 +51,7 @@ from app.tools.canvas.strips_visual import (
 
 
 def populate_patterns(canvas: GridCanvas, bag: StructureBag) -> None:
-    """Run every Tier 1 strip detector and append results to `bag`."""
+    """Run every strip detector and append results to `bag`."""
     bag.date_strips.extend(find_date_strips(canvas))
     bag.int_strips.extend(find_int_strips(canvas))
     bag.float_strips.extend(find_float_strips(canvas))
@@ -69,11 +70,10 @@ def populate_patterns(canvas: GridCanvas, bag: StructureBag) -> None:
 
 
 def populate_semantics(canvas: GridCanvas, bag: StructureBag) -> None:
-    """Run the six Tier 2a resolvers in dependency order.
+    """Run the six structural resolvers in dependency order.
 
     Each resolver both returns its records and mutates the bag, so the
-    orchestrator can simply call them in sequence and rely on each step
-    seeing the previous step's output through the bag.
+    caller can chain them through the bag without manual plumbing.
     """
     resolve_header_band(canvas, bag)
     resolve_data_row_ranges(canvas, bag)

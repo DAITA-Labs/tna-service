@@ -15,8 +15,9 @@ Module map:
   metadata.py    metadata FieldSpec instances + METADATA_SPECS registry
   schemas.py     Pydantic input/output schemas for every judge
 
-Prompt templates and renderers live separately under experiments/specs/ for now;
-Tier 6 (judges) relocates them to app/prompts/ + app/tools/render/ per ADR-0007.
+Prompt templates and renderers currently live under `experiments/specs/`;
+they are expected to relocate to `app/prompts/` + `app/tools/render/`
+when the judge layer lands (per ADR-0007).
 
 Usage:
   from app.specs import IO_NUMBER_SPEC, IDENTIFIER_SPECS, FieldSpec
