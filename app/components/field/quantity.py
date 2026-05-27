@@ -70,12 +70,12 @@ class QuantityExtractor(Component):
         band = bundle.hint.header_band
         label_coord = (col_letter, band.rect.r0 if band else 1)
 
-        column_has_strip = TOOL_REGISTRY["column_has_strip"]
-        merged_cells_in_column = TOOL_REGISTRY["merged_cells_in_column"]
+        check_column_has_strip = TOOL_REGISTRY["check_column_has_strip"]
+        find_merged_cells_in_column = TOOL_REGISTRY["find_merged_cells_in_column"]
 
-        int_strip_confirmed = column_has_strip(bundle.bag.int_strips, col_idx, rows)
+        int_strip_confirmed = check_column_has_strip(bundle.bag.int_strips, col_idx, rows)
         constraints = QUANTITY_SPEC.value_constraints
-        merged_cells = merged_cells_in_column(bundle.canvas, col_idx, rows)
+        merged_cells = find_merged_cells_in_column(bundle.canvas, col_idx, rows)
 
         findings: list[Finding] = []
         for row in rows:

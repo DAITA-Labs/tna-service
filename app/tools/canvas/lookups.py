@@ -3,7 +3,7 @@
 Both tools take "where is the candidate column + which data rows are we
 walking?" and return a structural answer. Extractors call these to
 decide whether a candidate column passes the structure-phase
-confirmation gate (any strip type overlap) or to reject a value-cell
+confirmation gate (any strip-type overlap) or to reject a value-cell
 position outright (inside a merge range).
 """
 from __future__ import annotations
@@ -12,10 +12,10 @@ from app.artifacts.canvas import GridCanvas
 from app.tools._decorator import tool
 
 
-@tool("merged_cells_in_column")
-def merged_cells_in_column(canvas: GridCanvas,
-                              col_idx: int,
-                              rows: list[int]) -> set[tuple[int, int]]:
+@tool("find_merged_cells_in_column")
+def find_merged_cells_in_column(canvas: GridCanvas,
+                                   col_idx: int,
+                                   rows: list[int]) -> set[tuple[int, int]]:
     """Return every (row, col_idx) coord inside a merge range overlapping the column.
 
     The returned set is cell-level so callers can do O(1) checks per row.
@@ -32,16 +32,16 @@ def merged_cells_in_column(canvas: GridCanvas,
     return cells
 
 
-@tool("column_has_strip")
-def column_has_strip(strips: list,
-                       col_idx: int,
-                       rows: list[int]) -> bool:
+@tool("check_column_has_strip")
+def check_column_has_strip(strips: list,
+                             col_idx: int,
+                             rows: list[int]) -> bool:
     """True when any strip's rect overlaps `col_idx` and at least one of `rows`.
 
     Generic over strip type — pass `bag.int_strips`, `bag.date_strips`,
     `bag.same_length_strips`, `bag.long_text_strips`, etc. The only
     contract is that each element has a `rect: Rect` attribute with
-    `r0/c0/r1/c1` ints.
+    `r0 / c0 / r1 / c1` ints.
     """
     row_set = set(rows)
     for strip in strips:
