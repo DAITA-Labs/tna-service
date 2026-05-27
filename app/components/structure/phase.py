@@ -21,9 +21,12 @@ cluster artifact emitted by the workbook layer.
 """
 from __future__ import annotations
 
+from haystack import component
+
 from app.artifacts.canvas import GridCanvas
 from app.artifacts.layout import LayoutHint
 from app.artifacts.structure import StructureBag
+from app.components._base import Component
 from app.components.structure.axis_inferrer import infer_layout_axes
 from app.components.structure.layout_composer import compose_layout_hint
 from app.components.structure.populate import populate_patterns, populate_semantics
@@ -50,3 +53,24 @@ def run_structure_phase(sheet, cluster_id: str = "default") -> tuple[GridCanvas,
     axes = infer_layout_axes(canvas, bag)
     hint = compose_layout_hint(canvas, bag, axes, cluster_id=cluster_id)
     return canvas, bag, hint
+
+
+@component
+class StructurePhase(Component):
+    """Haystack wrapper around `run_structure_phase`.
+
+    Inputs:
+        sheet      — an openpyxl worksheet
+        cluster_id — the `pli_cluster` id (defaults to "default")
+
+    Outputs:
+        canvas / bag / hint — the three artifacts the structure phase emits.
+    """
+
+    def __init__(self) -> None:
+        Component.__init__(self)
+
+    @component.output_types(canvas=GridCanvas, bag=StructureBag, hint=LayoutHint)
+    def run(self, sheet, cluster_id: str = "default") -> dict:
+        canvas, bag, hint = run_structure_phase(sheet, cluster_id=cluster_id)
+        return {"canvas": canvas, "bag": bag, "hint": hint}
