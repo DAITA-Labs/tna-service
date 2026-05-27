@@ -8,7 +8,7 @@ from app.pipelines.tuning import Tuning
 
 
 class AgentTuning(Tuning):
-    """Per-agent knobs — extends the pipeline `Tuning` base from sub-plan 1.
+    """Per-agent knobs — extends the pipeline `Tuning` base.
 
     Concrete agents may subclass this further to add their own thresholds.
     """

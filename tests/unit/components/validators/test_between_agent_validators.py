@@ -1,4 +1,4 @@
-"""Sub-plan 5 phase D — between-agents validator tests."""
+"""Between-agents validator tests — post_namer / post_review / pre_apply."""
 from __future__ import annotations
 
 from app.components.validators.post_namer_canonical import validate_post_namer
