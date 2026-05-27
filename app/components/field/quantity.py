@@ -13,7 +13,13 @@ Three signals combine to produce each Finding:
      against `min=1, max=100000`. A violation lowers confidence and tags
      the finding with `CONSTRAINT:<which>`.
 
-Confidence ladder per cell:
+Structural rejection: a value cell that's inside a merged range is
+skipped outright (no Finding emitted). Per-PLI quantities live in
+single-cell positions; a merged cell at the quantity column position
+is a label, a total, or a repeated-value filler — never a real PLI
+order count.
+
+Confidence ladder per cell (for non-rejected cells):
 
   HIGH    header_band + int_strip + constraints satisfied
   MEDIUM  header_band + constraints satisfied, no int_strip
@@ -65,9 +71,15 @@ class QuantityExtractor(Component):
 
         int_strip_confirmed = _column_has_int_strip(bundle.bag, col_idx, rows)
         constraints = QUANTITY_SPEC.value_constraints
+        merged_cells = _merged_cell_set(bundle.canvas.merge_ranges, col_idx, rows)
 
         findings: list[Finding] = []
         for row in rows:
+            # Structural rejection: cells inside a merged range aren't real
+            # per-PLI quantities (labels, totals, repeated-value fillers).
+            if (row, col_idx) in merged_cells:
+                continue
+
             raw = bundle.canvas.cell_values[row - 1][col_idx - 1]
             value = _coerce_quantity(raw)
             if value is None or value == 0:
@@ -95,6 +107,24 @@ class QuantityExtractor(Component):
                 evidence=evidence,
             ))
         return {"findings": findings}
+
+
+def _merged_cell_set(merge_ranges: set[tuple[int, int, int, int]],
+                       col_idx: int, rows: list[int]) -> set[tuple[int, int]]:
+    """Collect every (row, col_idx) coord that falls inside a merge range.
+
+    Returned set is cell-level so the per-row loop is O(1) per check;
+    the underlying merge_ranges may be sparse, so we walk it once here
+    and intersect with the candidate column + data rows.
+    """
+    row_set = set(rows)
+    cells: set[tuple[int, int]] = set()
+    for r0, c0, r1, c1 in merge_ranges:
+        if c0 <= col_idx <= c1:
+            for r in range(r0, r1 + 1):
+                if r in row_set:
+                    cells.add((r, col_idx))
+    return cells
 
 
 def _column_has_int_strip(bag: StructureBag, col_idx: int, rows: list[int]) -> bool:
