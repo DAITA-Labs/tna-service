@@ -6,13 +6,10 @@ import datetime as dt
 import pytest
 from haystack import Pipeline
 
-from app.artifacts.canvas import GridCanvas
-from app.artifacts.layout import LayoutAxes, LayoutHint
-from app.artifacts.structure import DataRowRange, HeaderBand, Rect, StructureBag
-from app.artifacts.workbook import ClusterAnchorBundle, PliCluster
 from app.components.field.delivery_date import DeliveryDateExtractor
 from app.components.field.ex_fty_date import ExFtyDateExtractor
 from app.components.field.shipment_date import ShipmentDateExtractor
+from tests.unit.components.field._bundles import make_bundle
 
 
 DATE_EXTRACTORS = [
@@ -22,24 +19,12 @@ DATE_EXTRACTORS = [
 ]
 
 
-def _bundle_with(values, canonical, *, axis="vertical", columns=None, rows=None):
-    n_rows = len(values)
-    n_cols = len(values[0]) if values else 0
-    canvas = GridCanvas(n_rows=n_rows, n_cols=n_cols, cell_values=values)
-    bag = StructureBag()
-    bag.header_band = HeaderBand(rect=Rect(2, 1, 2, n_cols), score=0.9)
-    bag.data_row_ranges = [DataRowRange(row_start=3, row_end=n_rows)]
-    hint = LayoutHint(
-        axes=LayoutAxes(pli_axis=axis, stage_axis="none", subfield_axis="implicit"),
-        cluster_id="c0", confidence=0.9,
-        header_band=bag.header_band,
-        data_row_ranges=bag.data_row_ranges,
-        candidate_columns=columns if columns is not None else {canonical: [1]},
-        candidate_rows=rows if rows is not None else {canonical: list(range(3, n_rows + 1))},
-    )
-    return ClusterAnchorBundle(
-        cluster=PliCluster(cluster_id="c0", sheet_names=["S"], role="pli_cluster"),
-        anchor_sheet_name="S", canvas=canvas, bag=bag, hint=hint,
+def _bundle_with(values, canonical, *, axis="vertical", columns=None, rows=None,
+                   date_strip_col=None):
+    return make_bundle(
+        values, canonical,
+        axis=axis, columns=columns, rows=rows,
+        date_strip_col=date_strip_col,
     )
 
 
@@ -49,7 +34,7 @@ def test_datetime_cells_extracted_as_dates(extractor_cls, canonical) -> None:
         [None], ["Hdr"],
         [dt.datetime(2026, 5, 27, 9, 0)],
         [dt.datetime(2026, 6, 15, 0, 0)],
-    ], canonical)
+    ], canonical, date_strip_col=1)
     out = extractor_cls().run(bundle=bundle)
     assert [f.value for f in out["findings"]] == [dt.date(2026, 5, 27), dt.date(2026, 6, 15)]
 
@@ -58,7 +43,7 @@ def test_datetime_cells_extracted_as_dates(extractor_cls, canonical) -> None:
 def test_iso_strings_parsed(extractor_cls, canonical) -> None:
     bundle = _bundle_with([
         [None], ["Hdr"], ["2026-05-27"], ["2026/06/15"],
-    ], canonical)
+    ], canonical, date_strip_col=1)
     out = extractor_cls().run(bundle=bundle)
     assert [f.value for f in out["findings"]] == [dt.date(2026, 5, 27), dt.date(2026, 6, 15)]
 
@@ -67,7 +52,7 @@ def test_iso_strings_parsed(extractor_cls, canonical) -> None:
 def test_dmy_strings_parsed(extractor_cls, canonical) -> None:
     bundle = _bundle_with([
         [None], ["Hdr"], ["27-05-2026"], ["27/05/26"],
-    ], canonical)
+    ], canonical, date_strip_col=1)
     out = extractor_cls().run(bundle=bundle)
     assert [f.value for f in out["findings"]] == [dt.date(2026, 5, 27), dt.date(2026, 5, 27)]
 
@@ -76,7 +61,7 @@ def test_dmy_strings_parsed(extractor_cls, canonical) -> None:
 def test_named_month_strings_parsed(extractor_cls, canonical) -> None:
     bundle = _bundle_with([
         [None], ["Hdr"], ["27-May-2026"], ["May 27, 2026"],
-    ], canonical)
+    ], canonical, date_strip_col=1)
     out = extractor_cls().run(bundle=bundle)
     assert [f.value for f in out["findings"]] == [dt.date(2026, 5, 27), dt.date(2026, 5, 27)]
 
@@ -88,14 +73,14 @@ def test_unparseable_and_blank_cells_skipped(extractor_cls, canonical) -> None:
         [None], ["Hdr"],
         ["TBD"], [None], [""],
         ["2026-05-27"],
-    ], canonical)
+    ], canonical, date_strip_col=1)
     out = extractor_cls().run(bundle=bundle)
     assert [f.value for f in out["findings"]] == [dt.date(2026, 5, 27)]
 
 
 @pytest.mark.parametrize("extractor_cls,canonical", DATE_EXTRACTORS)
 def test_finding_carries_correct_canonical_and_coords(extractor_cls, canonical) -> None:
-    bundle = _bundle_with([[None], ["Hdr"], ["2026-05-27"]], canonical)
+    bundle = _bundle_with([[None], ["Hdr"], ["2026-05-27"]], canonical, date_strip_col=1)
     out = extractor_cls().run(bundle=bundle)
     f = out["findings"][0]
     assert f.canonical == canonical
@@ -106,14 +91,16 @@ def test_finding_carries_correct_canonical_and_coords(extractor_cls, canonical) 
 
 @pytest.mark.parametrize("extractor_cls,canonical", DATE_EXTRACTORS)
 def test_no_candidate_columns_yields_no_findings(extractor_cls, canonical) -> None:
-    bundle = _bundle_with([[None], ["Hdr"], ["2026-05-27"]], canonical, columns={})
+    bundle = _bundle_with([[None], ["Hdr"], ["2026-05-27"]], canonical, columns={},
+                            date_strip_col=1)
     assert extractor_cls().run(bundle=bundle)["findings"] == []
 
 
 @pytest.mark.parametrize("extractor_cls,canonical", DATE_EXTRACTORS)
 def test_unsupported_pli_axis_returns_empty(extractor_cls, canonical) -> None:
     for axis in ("sectional", "sheet", "horizontal"):
-        bundle = _bundle_with([[None], ["Hdr"], ["2026-05-27"]], canonical, axis=axis)
+        bundle = _bundle_with([[None], ["Hdr"], ["2026-05-27"]], canonical, axis=axis,
+                                date_strip_col=1)
         assert extractor_cls().run(bundle=bundle)["findings"] == []
 
 

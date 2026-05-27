@@ -3,32 +3,16 @@ from __future__ import annotations
 
 from haystack import Pipeline
 
-from app.artifacts.canvas import GridCanvas
-from app.artifacts.layout import LayoutAxes, LayoutHint
-from app.artifacts.structure import DataRowRange, HeaderBand, Rect, StructureBag
-from app.artifacts.workbook import ClusterAnchorBundle, PliCluster
 from app.components.field.io_number import IoNumberExtractor
+from tests.unit.components.field._bundles import make_bundle
 
 
-def _bundle_with(values, *, axis="vertical", columns=None, rows=None):
-    """Build a bundle whose anchor canvas carries `values`."""
-    n_rows = len(values)
-    n_cols = len(values[0]) if values else 0
-    canvas = GridCanvas(n_rows=n_rows, n_cols=n_cols, cell_values=values)
-    bag = StructureBag()
-    bag.header_band = HeaderBand(rect=Rect(2, 1, 2, n_cols), score=0.9)
-    bag.data_row_ranges = [DataRowRange(row_start=3, row_end=n_rows)]
-    hint = LayoutHint(
-        axes=LayoutAxes(pli_axis=axis, stage_axis="none", subfield_axis="implicit"),
-        cluster_id="c0", confidence=0.9,
-        header_band=bag.header_band,
-        data_row_ranges=bag.data_row_ranges,
-        candidate_columns=columns if columns is not None else {"io_number": [1]},
-        candidate_rows=rows if rows is not None else {"io_number": list(range(3, n_rows + 1))},
-    )
-    return ClusterAnchorBundle(
-        cluster=PliCluster(cluster_id="c0", sheet_names=["S"], role="pli_cluster"),
-        anchor_sheet_name="S", canvas=canvas, bag=bag, hint=hint,
+def _bundle_with(values, *, axis="vertical", columns=None, rows=None,
+                   same_length_strip_col=None):
+    return make_bundle(
+        values, "io_number",
+        axis=axis, columns=columns, rows=rows,
+        same_length_strip_col=same_length_strip_col,
     )
 
 
