@@ -25,6 +25,7 @@ from app.artifacts.layout import Direction, LayoutAxes, LayoutHint
 from app.artifacts.structure import (
     BoldStrip,
     BorderedBox,
+    ColDtypeProfile,
     ColorStrip,
     DataRowRange,
     DateStrip,
@@ -39,6 +40,7 @@ from app.artifacts.structure import (
     PlanMarkerCluster,
     Rect,
     RepeatingRowGroup,
+    RowDtypeProfile,
     SameLengthStrip,
     SectionBoundary,
     StageArena,
@@ -87,6 +89,7 @@ __all__ = [
     "KvBlock", "RepeatingRowGroup", "PlanMarkerCluster",
     "HeaderBand", "DataRowRange", "SectionBoundary",
     "StageArena", "StageBand", "SubfieldCluster",
+    "RowDtypeProfile", "ColDtypeProfile",
     "StructureBag",
     # ─ Canvas: layout ──────────────────────────────────────────────────
     "LayoutAxes", "LayoutHint",
