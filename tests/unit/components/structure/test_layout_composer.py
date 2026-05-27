@@ -68,6 +68,46 @@ def test_candidate_columns_per_canonical_pulled_from_header_band() -> None:
     assert 5 in hint.candidate_columns["style_code"]
 
 
+def test_candidate_columns_ranked_by_aggregate_match_weight() -> None:
+    """A column with multiple matching header cells outranks a column with one.
+
+    `query_spec` emits one match per alias-hit cell at a fixed per-spec
+    weight. Aggregate per column = weight × matching-cell-count, so a
+    multi-row header carrying the same canonical on two rows ranks above
+    a single-cell match elsewhere.
+    """
+    n_rows, n_cols = 20, 20
+    cells = [[None] * n_cols for _ in range(n_rows)]
+    # Col 5 — single match on row 2
+    cells[1][4] = "Style"
+    # Col 10 — TWO matches across rows 2 + 3 (typical multi-row header)
+    cells[1][9] = "Style"
+    cells[2][9] = "Style Code"
+    canvas = GridCanvas(n_rows=n_rows, n_cols=n_cols, cell_values=cells)
+    bag = StructureBag()
+    bag.header_band = HeaderBand(rect=Rect(2, 1, 3, 20), score=0.9)
+
+    hint = compose_layout_hint(canvas, bag, _axes())
+    ranked = hint.candidate_columns["style_code"]
+    assert ranked[0] == 10, f"expected col 10 (2 hits) first, got {ranked}"
+    assert 5 in ranked  # weaker match still present, just not first
+
+
+def test_candidate_columns_tie_break_by_lower_column_index() -> None:
+    """Equal aggregate weight → column with lower index wins (stable ordering)."""
+    n_rows, n_cols = 20, 20
+    cells = [[None] * n_cols for _ in range(n_rows)]
+    cells[1][2] = "Style"   # col 3
+    cells[1][7] = "Style"   # col 8 — same alias, same weight
+    canvas = GridCanvas(n_rows=n_rows, n_cols=n_cols, cell_values=cells)
+    bag = StructureBag()
+    bag.header_band = HeaderBand(rect=Rect(2, 1, 2, 20), score=0.9)
+
+    hint = compose_layout_hint(canvas, bag, _axes())
+    ranked = hint.candidate_columns["style_code"]
+    assert ranked == [3, 8]
+
+
 def test_candidate_rows_share_data_row_range_when_tabular() -> None:
     """When there's a single tabular DataRowRange, every identifier gets those rows."""
     canvas = _canvas_with_header(1, 1, "x")
