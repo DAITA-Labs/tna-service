@@ -75,8 +75,8 @@ To add a NEW known stage to the hint table:
 """
 from __future__ import annotations
 
-from ._base import StageSpec
-from .enums import LabelMatchMode
+from app.specs._base import StageSpec
+from app.specs.enums import LabelMatchMode
 
 
 # =============================================================================

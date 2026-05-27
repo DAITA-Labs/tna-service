@@ -8,9 +8,9 @@ from __future__ import annotations
 
 from typing import Any
 
-from . import prompts
-from ._base import FieldSpec, StageSpec, SubfieldSpec
-from .schemas import (
+from experiments.specs import prompts
+from app.specs._base import FieldSpec, StageSpec, SubfieldSpec
+from app.specs.schemas import (
     ClassificationJudgeInput,
     FieldFindingJudgeInput,
     FindingForJudge,

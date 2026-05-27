@@ -3,6 +3,13 @@
 Every LLM judge agent returns one of these. Pydantic enforces the enum +
 field constraints, so a malformed LLM response fails at parse time rather
 than corrupting the plan.
+
+Note on `Any` usage: cell `value` fields and `metadata`/`refinement_hints`
+dicts hold values that originate from Excel cells, which are genuinely a
+union of str/int/float/date/None at the openpyxl boundary. A narrower
+union type would force casts at every call site without adding type safety
+(pydantic validates the wrapping models, not the cell value itself). Per
+CODING_STANDARD §5 this is an external-API exemption.
 """
 from __future__ import annotations
 
@@ -10,7 +17,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
-from .enums import FieldScope, PhaseAction, PliAxis, PliMode, ReadDirection, Verdict
+from app.specs.enums import FieldScope, PhaseAction, PliAxis, PliMode, ReadDirection, Verdict
 
 
 # =============================================================================

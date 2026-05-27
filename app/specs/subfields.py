@@ -11,8 +11,8 @@ In the proposed simplified Stage model, only `planned_date` is first-class
 """
 from __future__ import annotations
 
-from ._base import SubfieldSpec
-from .enums import LabelMatchMode, ValueDtype
+from app.specs._base import SubfieldSpec
+from app.specs.enums import LabelMatchMode, ValueDtype
 
 
 PLANNED_DATE_SPEC = SubfieldSpec(
