@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from .enums import (
+from app.specs.enums import (
     Area,
     LabelMatchMode,
     ValueDtype,

@@ -31,8 +31,8 @@ To ADD a new known canonical (purely optional improvement):
 """
 from __future__ import annotations
 
-from ._base import FieldSpec, ValueConstraints
-from .enums import Area, LabelMatchMode, ValueDtype, ValueDtypeMode, ValuePattern
+from app.specs._base import FieldSpec, ValueConstraints
+from app.specs.enums import Area, LabelMatchMode, ValueDtype, ValueDtypeMode, ValuePattern
 
 
 BUYER_SPEC = FieldSpec(

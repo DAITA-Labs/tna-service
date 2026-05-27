@@ -14,21 +14,15 @@ Three query granularities:
 """
 from __future__ import annotations
 
-import sys
 from dataclasses import dataclass
-from pathlib import Path
+
 from openpyxl.utils import column_index_from_string
 
-# Add experiments/ root so we can import specs package
-_EXP_ROOT = Path(__file__).resolve().parent.parent.parent
-if str(_EXP_ROOT) not in sys.path:
-    sys.path.insert(0, str(_EXP_ROOT))
-
-from specs.identifiers import IDENTIFIER_SPECS
-from specs.stages import STAGE_SPECS
-from specs.subfields import SUBFIELD_SPECS
-from specs.metadata import METADATA_SPECS
-from specs.enums import LabelMatchMode
+from app.specs.enums import LabelMatchMode
+from app.specs.identifiers import IDENTIFIER_SPECS
+from app.specs.metadata import METADATA_SPECS
+from app.specs.stages import STAGE_SPECS
+from app.specs.subfields import SUBFIELD_SPECS
 
 from build_canvas import GridCanvas
 
@@ -290,7 +284,7 @@ def _expected_canvas_dtype(spec) -> set[int] | None:
     Returns None for ANY (no constraint).
     """
     from build_canvas import DTYPE_DATE, DTYPE_INT, DTYPE_FLOAT, DTYPE_STR
-    from specs.enums import ValueDtype
+    from app.specs.enums import ValueDtype
     dt = getattr(spec, "value_dtype", None)
     if dt is None or dt == ValueDtype.ANY: return None
     if dt == ValueDtype.DATE: return {DTYPE_DATE}
