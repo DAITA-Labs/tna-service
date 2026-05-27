@@ -1,16 +1,23 @@
-"""Workbook-level artifacts — sheet signatures and PLI clusters.
+"""Workbook-level artifacts — sheet signatures, PLI clusters, anchor bundles.
 
 `SheetSignature` is a compact structural fingerprint of one sheet used
 to decide which sheets share a template. `PliCluster` is the grouping
 produced by the clusterer plus the role label produced downstream.
+`ClusterAnchorBundle` is the structure-phase output for a cluster's
+anchor sheet — the handoff artifact downstream field components consume.
 
 These are pure data records; the algorithms that compute them live in
-`app.components.workbook.{profiler,signature,clusterer,role_classifier}`.
+`app.components.workbook.{profiler,signature,clusterer,role_classifier,
+anchor_picker,workbook_phase}`.
 """
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Literal
+
+from app.artifacts.canvas import GridCanvas
+from app.artifacts.layout import LayoutHint
+from app.artifacts.structure import StructureBag
 
 
 # How many rows from the top of each sheet are sampled into the signature.
@@ -97,3 +104,21 @@ class PliCluster:
     cluster_id:  str
     sheet_names: list[str] = field(default_factory=list)
     role:        ClusterRole = "unknown"
+
+
+@dataclass(frozen=True)
+class ClusterAnchorBundle:
+    """Structure-phase artifacts for one cluster, anchored to a chosen sheet.
+
+    Carries the cluster identity plus the canvas / bag / hint computed
+    from running `run_structure_phase` against the anchor sheet. The
+    bundle is the handoff to field components: they read the hint to
+    locate identifiers, the canvas for cell values, and the bag for any
+    record the hint doesn't surface.
+    """
+
+    cluster:     PliCluster
+    anchor_sheet_name: str
+    canvas:      GridCanvas
+    bag:         StructureBag
+    hint:        LayoutHint
