@@ -1,0 +1,426 @@
+{
+  "total_plis": 3,
+  "plis": [
+    {
+      "io_number": "131673",
+      "style_code": "890162 TAVIRA_2 522148",
+      "style_name": "CIRCULAR KNIT WOMENS TANK TOP",
+      "color_code": "6602",
+      "color_name": null,
+      "fabric_code": "2X2 RIB/100% COTTON/34S////18GG/260//YARN DYED",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-06-10",
+      "quantity": 500,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-04-29",
+          "plan_date_col": "R",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-04-29",
+          "plan_date_col": "T",
+          "stage_metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-05-05",
+          "plan_date_col": "V",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-05-23",
+          "plan_date_col": "Z",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-06-05",
+          "plan_date_col": "AB",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-06-09",
+          "plan_date_col": "AE",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-06-10",
+          "plan_date_col": "AG",
+          "stage_metadata": {}
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 1,
+          "source": "A4",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "DRYKORN MODEVERTRIEBS GMBH & CO",
+          "source": "B4",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "ELEVAR FASHION",
+          "source": "C4",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "AW 2026 DROP 2",
+          "source": "D4",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "CT Season",
+          "value": "W26-1",
+          "source": "E4",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "G4",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "YARN DYED + PANEL WASH",
+          "source": "J4",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-03-27",
+          "source": "O4",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-04-30",
+          "source": "Q4",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": -500,
+          "source": "AK4",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        4
+      ]
+    },
+    {
+      "io_number": "131675",
+      "style_code": "89871 KOALE 522148",
+      "style_name": "CIRCULAR KNIT WOMENS T-SHIRT HALF SLEEVE ROUND NECK",
+      "color_code": "6602",
+      "color_name": null,
+      "fabric_code": "2X2 RIB/100% COTTON/34S////18GG/260//YARN DYED",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-06-10",
+      "quantity": 500,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-04-29",
+          "plan_date_col": "R",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-04-29",
+          "plan_date_col": "T",
+          "stage_metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-05-05",
+          "plan_date_col": "V",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-05-23",
+          "plan_date_col": "Z",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-06-05",
+          "plan_date_col": "AB",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-06-09",
+          "plan_date_col": "AE",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-06-10",
+          "plan_date_col": "AG",
+          "stage_metadata": {}
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 2,
+          "source": "A5",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "DRYKORN MODEVERTRIEBS GMBH & CO",
+          "source": "B5",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "ELEVAR FASHION",
+          "source": "C5",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "AW 2026 DROP 2",
+          "source": "D5",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "CT Season",
+          "value": "W26-1",
+          "source": "E5",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "G5",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "FIBRE DYED MELANGE + PANEL BIO WASH",
+          "source": "J5",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-03-27",
+          "source": "O5",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-04-30",
+          "source": "Q5",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": -500,
+          "source": "AK5",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        5
+      ]
+    },
+    {
+      "io_number": "131673",
+      "style_code": "89556 OLINA 522148",
+      "style_name": "CIRCULAR KNIT WOMENS TANK TOP",
+      "color_code": "6602",
+      "color_name": null,
+      "fabric_code": "2X2 RIB/100% COTTON/34S////18GG/260//YARN DYED",
+      "fabric_name": null,
+      "delivery_date": null,
+      "shipment_date": null,
+      "ex_fty_date": "2026-06-10",
+      "quantity": 500,
+      "stages": [
+        {
+          "name": "Trims Inhouse",
+          "canonical": null,
+          "planned_date": "2026-04-29",
+          "plan_date_col": "R",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Fabric Inhouse",
+          "canonical": null,
+          "planned_date": "2026-04-29",
+          "plan_date_col": "T",
+          "stage_metadata": {}
+        },
+        {
+          "name": "PPS Submission",
+          "canonical": null,
+          "planned_date": "2026-05-05",
+          "plan_date_col": "V",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing Start",
+          "canonical": null,
+          "planned_date": "2026-05-23",
+          "plan_date_col": "Z",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Sewing End",
+          "canonical": null,
+          "planned_date": "2026-06-05",
+          "plan_date_col": "AB",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Inspection",
+          "canonical": null,
+          "planned_date": "2026-06-09",
+          "plan_date_col": "AE",
+          "stage_metadata": {}
+        },
+        {
+          "name": "Ex Factory Shipment",
+          "canonical": null,
+          "planned_date": "2026-06-10",
+          "plan_date_col": "AG",
+          "stage_metadata": {}
+        }
+      ],
+      "metadata": [
+        {
+          "key": "S.No",
+          "value": 3,
+          "source": "A6",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Buyer",
+          "value": "DRYKORN MODEVERTRIEBS GMBH & CO",
+          "source": "B6",
+          "canonical": "buyer",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory",
+          "value": "ELEVAR FASHION",
+          "source": "C6",
+          "canonical": "factory",
+          "scope": "pli"
+        },
+        {
+          "key": "Customer Season",
+          "value": "AW 2026 DROP 2",
+          "source": "D6",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "CT Season",
+          "value": "W26-1",
+          "source": "E6",
+          "canonical": "season",
+          "scope": "pli"
+        },
+        {
+          "key": "Image",
+          "value": "#VALUE!",
+          "source": "G6",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Treatment",
+          "value": "FIBRE DYED MELANGE + PANEL BIO WASH",
+          "source": "J6",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Original order received Dt",
+          "value": "2026-03-27",
+          "source": "O6",
+          "canonical": "order_receipt_date",
+          "scope": "pli"
+        },
+        {
+          "key": "Factory Confirmed Dt",
+          "value": "2026-04-30",
+          "source": "Q6",
+          "canonical": null,
+          "scope": "pli"
+        },
+        {
+          "key": "Balance Qty",
+          "value": -500,
+          "source": "AK6",
+          "canonical": null,
+          "scope": "pli"
+        }
+      ],
+      "source_sheet": "Sheet 1",
+      "source_rows": [
+        6
+      ]
+    }
+  ],
+  "warnings": []
+}
