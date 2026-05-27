@@ -12,7 +12,10 @@ clusters — the role classifier later decides whether they belong to
 """
 from __future__ import annotations
 
+from haystack import component
+
 from app.artifacts.workbook import PliCluster, SheetSignature
+from app.components._base import Component
 from app.components.workbook.signature import score_signatures
 
 
@@ -56,3 +59,25 @@ def cluster_sheets(signatures: list[SheetSignature],
         root_to_cluster[root].sheet_names.append(sig.sheet_name)
 
     return [root_to_cluster[root] for root in cluster_order]
+
+
+@component
+class SheetClusterer(Component):
+    """Haystack wrapper around `cluster_sheets`.
+
+    Inputs:
+        signatures — list[SheetSignature] from `WorkbookProfiler`
+        threshold  — optional override of the 0.8 default
+
+    Outputs:
+        clusters — list[PliCluster] in discovery order
+    """
+
+    def __init__(self, threshold: float = DEFAULT_THRESHOLD) -> None:
+        Component.__init__(self)
+        self._threshold = threshold
+
+    @component.output_types(clusters=list[PliCluster])
+    def run(self, signatures: list[SheetSignature]) -> dict:
+        clusters = cluster_sheets(signatures, threshold=self._threshold)
+        return {"clusters": clusters}

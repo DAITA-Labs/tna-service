@@ -18,9 +18,12 @@ once classification is complete.
 """
 from __future__ import annotations
 
+from haystack import component
+
 from app.artifacts.canvas import GridCanvas
 from app.artifacts.structure import StructureBag
 from app.artifacts.workbook import ClusterRole, PliCluster
+from app.components._base import Component
 from app.specs import IDENTIFIER_SPECS
 
 
@@ -73,3 +76,45 @@ def _collected_aliases_lowercased() -> set[str]:
         for alias in spec.aliases:
             out.add(alias.lower())
     return out
+
+
+@component
+class ClusterRoleClassifier(Component):
+    """Haystack wrapper around `classify_cluster_role` for a single cluster.
+
+    Inputs:
+        cluster — the PliCluster whose role to set (mutated in place)
+        canvas  — the anchor sheet's GridCanvas
+        bag     — the anchor sheet's StructureBag
+
+    Outputs:
+        cluster — the same cluster instance with `role` updated
+        role    — the freshly assigned ClusterRole
+    """
+
+    def __init__(self) -> None:
+        Component.__init__(self)
+
+    @component.output_types(cluster=PliCluster, role=str)
+    def run(self, cluster: PliCluster, canvas: GridCanvas, bag: StructureBag) -> dict:
+        role = classify_cluster_role(cluster, canvas, bag)
+        return {"cluster": cluster, "role": role}
+
+
+@component
+class PliClusterFilter(Component):
+    """Haystack wrapper around `filter_pli_clusters`.
+
+    Inputs:
+        clusters — list[PliCluster] with roles already assigned
+
+    Outputs:
+        pli_clusters — only the entries whose role is "pli_cluster"
+    """
+
+    def __init__(self) -> None:
+        Component.__init__(self)
+
+    @component.output_types(pli_clusters=list[PliCluster])
+    def run(self, clusters: list[PliCluster]) -> dict:
+        return {"pli_clusters": filter_pli_clusters(clusters)}
