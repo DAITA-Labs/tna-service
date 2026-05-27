@@ -31,6 +31,13 @@ from app.tools.canvas.query import (
     text_dense_cols,
     text_dense_rows,
 )
+from app.tools.canvas.strips_date import (
+    find_date_strips,
+    find_date_strips_horizontal,
+    find_date_strips_vertical,
+)
+from app.tools.canvas.strips_numeric import find_float_strips, find_int_strips
+from app.tools.canvas.strips_text import find_long_text_strips, find_same_length_strips
 
 __all__ = [
     # build
@@ -56,4 +63,12 @@ __all__ = [
     "find_header_rows_via_specs",
     "find_field_label_cells",
     "spec_summary",
+    # strip detectors
+    "find_date_strips",
+    "find_date_strips_vertical",
+    "find_date_strips_horizontal",
+    "find_int_strips",
+    "find_float_strips",
+    "find_same_length_strips",
+    "find_long_text_strips",
 ]
