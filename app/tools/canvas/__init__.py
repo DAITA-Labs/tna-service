@@ -36,6 +36,7 @@ from app.tools.canvas.dtype_profiles import (
     compute_row_dtype_profiles,
 )
 from app.tools.canvas.kv_block import find_kv_blocks
+from app.tools.canvas.lookups import column_has_strip, merged_cells_in_column
 from app.tools.canvas.plan_marker import find_plan_marker_clusters
 from app.tools.canvas.repeating_group import find_repeating_row_groups
 from app.tools.canvas.strips_date import (
@@ -113,4 +114,7 @@ __all__ = [
     # dtype profile aggregators
     "compute_row_dtype_profiles",
     "compute_col_dtype_profiles",
+    # column/cell lookups used by field extractors
+    "column_has_strip",
+    "merged_cells_in_column",
 ]

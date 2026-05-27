@@ -35,10 +35,10 @@ from haystack import component
 from openpyxl.utils import get_column_letter
 
 from app.artifacts.finding import Confidence, Finding
-from app.artifacts.structure import StructureBag
 from app.artifacts.workbook import ClusterAnchorBundle
 from app.components._base import Component
 from app.specs import QUANTITY_SPEC
+from app.tools.canvas.lookups import column_has_strip, merged_cells_in_column
 
 
 # Strip thousands separators (commas, spaces) and trailing unit text before
@@ -69,9 +69,9 @@ class QuantityExtractor(Component):
         band = bundle.hint.header_band
         label_coord = (col_letter, band.rect.r0 if band else 1)
 
-        int_strip_confirmed = _column_has_int_strip(bundle.bag, col_idx, rows)
+        int_strip_confirmed = column_has_strip(bundle.bag.int_strips, col_idx, rows)
         constraints = QUANTITY_SPEC.value_constraints
-        merged_cells = _merged_cell_set(bundle.canvas.merge_ranges, col_idx, rows)
+        merged_cells = merged_cells_in_column(bundle.canvas, col_idx, rows)
 
         findings: list[Finding] = []
         for row in rows:
@@ -107,36 +107,6 @@ class QuantityExtractor(Component):
                 evidence=evidence,
             ))
         return {"findings": findings}
-
-
-def _merged_cell_set(merge_ranges: set[tuple[int, int, int, int]],
-                       col_idx: int, rows: list[int]) -> set[tuple[int, int]]:
-    """Collect every (row, col_idx) coord that falls inside a merge range.
-
-    Returned set is cell-level so the per-row loop is O(1) per check;
-    the underlying merge_ranges may be sparse, so we walk it once here
-    and intersect with the candidate column + data rows.
-    """
-    row_set = set(rows)
-    cells: set[tuple[int, int]] = set()
-    for r0, c0, r1, c1 in merge_ranges:
-        if c0 <= col_idx <= c1:
-            for r in range(r0, r1 + 1):
-                if r in row_set:
-                    cells.add((r, col_idx))
-    return cells
-
-
-def _column_has_int_strip(bag: StructureBag, col_idx: int, rows: list[int]) -> bool:
-    """True when an IntStrip overlaps `col_idx` and at least one of `rows`."""
-    row_set = set(rows)
-    for strip in bag.int_strips:
-        rect = strip.rect
-        if rect.c0 <= col_idx <= rect.c1 and any(
-            r in row_set for r in range(rect.r0, rect.r1 + 1)
-        ):
-            return True
-    return False
 
 
 def _check_constraints(value: Any, constraints) -> str | None:
