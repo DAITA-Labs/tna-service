@@ -1,0 +1,83 @@
+"""Bag populators — wire strip detectors and resolvers onto a StructureBag.
+
+Two helpers, each consuming a `(canvas, bag)` pair and appending records:
+
+  populate_patterns   — fans every Tier 1 strip detector into the bag's
+                        pattern-record fields (date / int / float / text /
+                        color / bold / borders / merges / kv / repeating /
+                        plan markers). No semantic reasoning here.
+
+  populate_semantics  — runs the six Tier 2a resolvers in dependency order
+                        (header_band → data_row_range → stage_arena →
+                         stage_band → subfield_cluster → section_boundary),
+                        each reading patterns and writing back to the bag.
+
+These exist so the StructurePhase orchestrator stays declarative and so
+tests can exercise either half in isolation.
+"""
+from __future__ import annotations
+
+from app.artifacts.canvas import GridCanvas
+from app.artifacts.structure import StructureBag
+from app.components.structure.resolvers import (
+    resolve_data_row_ranges,
+    resolve_header_band,
+    resolve_section_boundaries,
+    resolve_stage_arenas,
+    resolve_stage_bands,
+    resolve_subfield_clusters,
+)
+from app.tools.canvas.kv_block import find_kv_blocks
+from app.tools.canvas.plan_marker import find_plan_marker_clusters
+from app.tools.canvas.repeating_group import find_repeating_row_groups
+from app.tools.canvas.strips_date import find_date_strips
+from app.tools.canvas.strips_merge import (
+    find_merge_spans,
+    find_merged_column_strips,
+    find_non_merged_strips_horizontal,
+    find_non_merged_strips_vertical,
+)
+from app.tools.canvas.strips_numeric import find_float_strips, find_int_strips
+from app.tools.canvas.strips_text import (
+    find_long_text_strips,
+    find_same_length_strips,
+)
+from app.tools.canvas.strips_visual import (
+    find_bold_strips,
+    find_bordered_boxes,
+    find_color_strips,
+)
+
+
+def populate_patterns(canvas: GridCanvas, bag: StructureBag) -> None:
+    """Run every Tier 1 strip detector and append results to `bag`."""
+    bag.date_strips.extend(find_date_strips(canvas))
+    bag.int_strips.extend(find_int_strips(canvas))
+    bag.float_strips.extend(find_float_strips(canvas))
+    bag.same_length_strips.extend(find_same_length_strips(canvas))
+    bag.long_text_strips.extend(find_long_text_strips(canvas))
+    bag.color_strips.extend(find_color_strips(canvas))
+    bag.bold_strips.extend(find_bold_strips(canvas))
+    bag.bordered_boxes.extend(find_bordered_boxes(canvas))
+    bag.merge_spans.extend(find_merge_spans(canvas))
+    bag.non_merged_strips.extend(find_non_merged_strips_vertical(canvas))
+    bag.non_merged_strips.extend(find_non_merged_strips_horizontal(canvas))
+    bag.merged_column_strips.extend(find_merged_column_strips(canvas))
+    bag.kv_blocks.extend(find_kv_blocks(canvas))
+    bag.repeating_groups.extend(find_repeating_row_groups(canvas))
+    bag.plan_marker_clusters.extend(find_plan_marker_clusters(canvas))
+
+
+def populate_semantics(canvas: GridCanvas, bag: StructureBag) -> None:
+    """Run the six Tier 2a resolvers in dependency order.
+
+    Each resolver both returns its records and mutates the bag, so the
+    orchestrator can simply call them in sequence and rely on each step
+    seeing the previous step's output through the bag.
+    """
+    resolve_header_band(canvas, bag)
+    resolve_data_row_ranges(canvas, bag)
+    resolve_stage_arenas(canvas, bag)
+    resolve_stage_bands(canvas, bag)
+    resolve_subfield_clusters(canvas, bag)
+    resolve_section_boundaries(canvas, bag)
