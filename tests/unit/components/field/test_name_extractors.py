@@ -5,8 +5,15 @@ import pytest
 from haystack import Pipeline
 
 from app.artifacts.canvas import GridCanvas
+from app.artifacts.finding import Confidence
 from app.artifacts.layout import LayoutAxes, LayoutHint
-from app.artifacts.structure import DataRowRange, HeaderBand, Rect, StructureBag
+from app.artifacts.structure import (
+    DataRowRange,
+    HeaderBand,
+    LongTextStrip,
+    Rect,
+    StructureBag,
+)
 from app.artifacts.workbook import ClusterAnchorBundle, PliCluster
 from app.components.field.color_name import ColorNameExtractor
 from app.components.field.fabric_name import FabricNameExtractor
@@ -20,13 +27,20 @@ NAME_EXTRACTORS = [
 ]
 
 
-def _bundle_with(values, canonical, *, axis="vertical", columns=None, rows=None):
+def _bundle_with(values, canonical, *, axis="vertical", columns=None, rows=None,
+                   long_text_col: int | None = None):
+    """Build a bundle. When `long_text_col` is set, bag carries a matching LongTextStrip."""
     n_rows = len(values)
     n_cols = len(values[0]) if values else 0
     canvas = GridCanvas(n_rows=n_rows, n_cols=n_cols, cell_values=values)
     bag = StructureBag()
     bag.header_band = HeaderBand(rect=Rect(2, 1, 2, n_cols), score=0.9)
     bag.data_row_ranges = [DataRowRange(row_start=3, row_end=n_rows)]
+    if long_text_col is not None:
+        bag.long_text_strips = [LongTextStrip(
+            rect=Rect(3, long_text_col, n_rows, long_text_col),
+            mean_length=30.0,
+        )]
     hint = LayoutHint(
         axes=LayoutAxes(pli_axis=axis, stage_axis="none", subfield_axis="implicit"),
         cluster_id="c0", confidence=0.9,
@@ -80,6 +94,42 @@ def test_finding_carries_correct_canonical_and_coords(extractor_cls, canonical) 
     assert f.value_coord == ("A", 3)
     assert f.label_coord == ("A", 2)
     assert "HEADER_BAND_MEMBER" in f.evidence
+
+
+# ─── confidence ladder ─────────────────────────────────────────────────────
+
+
+@pytest.mark.parametrize("extractor_cls,canonical", NAME_EXTRACTORS)
+def test_header_only_match_yields_medium_confidence(extractor_cls, canonical) -> None:
+    """Candidate column with no LongTextStrip → MEDIUM."""
+    bundle = _bundle_with([[None], ["Hdr"], ["TAVIRA WIDE LEG JEAN"]], canonical)
+    f = extractor_cls().run(bundle=bundle)["findings"][0]
+    assert f.confidence == Confidence.MEDIUM
+    assert "LONG_TEXT_STRIP_CONFIRMED" not in f.evidence
+
+
+@pytest.mark.parametrize("extractor_cls,canonical", NAME_EXTRACTORS)
+def test_long_text_strip_confirmation_lifts_to_high(extractor_cls, canonical) -> None:
+    """Candidate column + matching LongTextStrip → HIGH with confirmation tag."""
+    bundle = _bundle_with(
+        [[None], ["Hdr"], ["TAVIRA WIDE LEG JEAN"], ["DARK MIDNIGHT BLUE"]],
+        canonical, long_text_col=1,
+    )
+    f = extractor_cls().run(bundle=bundle)["findings"][0]
+    assert f.confidence == Confidence.HIGH
+    assert "LONG_TEXT_STRIP_CONFIRMED" in f.evidence
+
+
+@pytest.mark.parametrize("extractor_cls,canonical", NAME_EXTRACTORS)
+def test_long_text_strip_in_different_column_does_not_confirm(extractor_cls, canonical) -> None:
+    """A LongTextStrip on a different column doesn't confirm the candidate column."""
+    bundle = _bundle_with(
+        [[None, None], ["Hdr", "Other"], ["NAME", "irrelevant"]],
+        canonical, long_text_col=2,
+    )
+    f = extractor_cls().run(bundle=bundle)["findings"][0]
+    assert f.confidence == Confidence.MEDIUM
+    assert "LONG_TEXT_STRIP_CONFIRMED" not in f.evidence
 
 
 @pytest.mark.parametrize("extractor_cls,canonical", NAME_EXTRACTORS)

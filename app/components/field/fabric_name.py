@@ -1,11 +1,20 @@
-"""FabricNameExtractor — emits Finding(canonical="fabric_name") per PLI.
+"""FabricNameExtractor — spec-driven extraction of descriptive fabric phrases.
 
-Fabric name is the descriptive phrase for a textile (e.g. "100% cotton
-single jersey"), distinct from `fabric_code` which is the buyer's
-identifier (e.g. "COT-2401"). Used only when a sheet has both a
-code-leaning and a description column.
+Three signals combine to produce each Finding (same shape as
+StyleNameExtractor / ColorNameExtractor):
+
+  1. **Header match** — `hint.candidate_columns["fabric_name"]`.
+  2. **LongTextStrip confirmation** — `bag.long_text_strips`.
+  3. **`FABRIC_NAME_SPEC.value_constraints`** — `min_len` / `max_len`.
+
+Confidence ladder per cell:
+  HIGH    header + long_text_strip + constraints satisfied
+  MEDIUM  header + constraints satisfied, no long_text_strip
+  LOW     header but constraint violated
 """
 from __future__ import annotations
+
+from typing import Any
 
 from haystack import component
 from openpyxl.utils import get_column_letter
@@ -13,9 +22,9 @@ from openpyxl.utils import get_column_letter
 from app.artifacts.finding import Confidence, Finding
 from app.artifacts.workbook import ClusterAnchorBundle
 from app.components._base import Component
-
-
-_CANONICAL = "fabric_name"
+from app.specs import FABRIC_NAME_SPEC
+from app.tools import canvas as _canvas_tools  # noqa: F401 — registers @tool entries
+from app.tools._registry import TOOL_REGISTRY
 
 
 @component
@@ -30,27 +39,60 @@ class FabricNameExtractor(Component):
         if bundle.hint.axes.pli_axis != "vertical":
             return {"findings": []}
 
-        columns = bundle.hint.candidate_columns.get(_CANONICAL, [])
-        rows = bundle.hint.candidate_rows.get(_CANONICAL, [])
+        canonical = FABRIC_NAME_SPEC.canonical
+        columns = bundle.hint.candidate_columns.get(canonical, [])
+        rows = bundle.hint.candidate_rows.get(canonical, [])
         if not columns or not rows:
             return {"findings": []}
+
+        check_column_has_strip = TOOL_REGISTRY["check_column_has_strip"]
 
         col_idx = columns[0]
         col_letter = get_column_letter(col_idx)
         band = bundle.hint.header_band
         label_coord = (col_letter, band.rect.r0 if band else 1)
 
+        long_text_confirmed = check_column_has_strip(
+            bundle.bag.long_text_strips, col_idx, rows,
+        )
+        constraints = FABRIC_NAME_SPEC.value_constraints
+
         findings: list[Finding] = []
         for row in rows:
             raw = bundle.canvas.cell_values[row - 1][col_idx - 1]
             if raw is None or raw == "":
                 continue
+            value = str(raw).strip()
+            if not value:
+                continue
+
+            evidence: list[str] = ["HEADER_BAND_MEMBER"]
+            if long_text_confirmed:
+                evidence.append("LONG_TEXT_STRIP_CONFIRMED")
+
+            breach = _check_constraints(value, constraints)
+            if breach is not None:
+                evidence.append(f"CONSTRAINT:{breach}")
+                confidence = Confidence.LOW
+            elif long_text_confirmed:
+                confidence = Confidence.HIGH
+            else:
+                confidence = Confidence.MEDIUM
+
             findings.append(Finding(
-                canonical=_CANONICAL,
+                canonical=canonical,
                 label_coord=label_coord,
                 value_coord=(col_letter, row),
-                value=str(raw).strip(),
-                confidence=Confidence.MEDIUM,
-                evidence=["HEADER_BAND_MEMBER", "DTYPE_MATCH"],
+                value=value,
+                confidence=confidence,
+                evidence=evidence,
             ))
         return {"findings": findings}
+
+
+def _check_constraints(value: Any, constraints) -> str | None:
+    if constraints.min_len is not None and len(value) < constraints.min_len:
+        return "below_min_len"
+    if constraints.max_len is not None and len(value) > constraints.max_len:
+        return "above_max_len"
+    return None

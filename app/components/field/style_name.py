@@ -1,17 +1,22 @@
-"""StyleNameExtractor — emits Finding(canonical="style_name") per PLI.
+"""StyleNameExtractor — spec-driven extraction of descriptive style phrases.
 
-Style name is the descriptive phrase for a style (e.g. "TAVIRA WIDE LEG
-JEAN"), distinct from `style_code` which is the buyer's identifier
-(e.g. "S-2401"). When a sheet has BOTH a code-leaning column AND a
-description column, the description lands here. When a sheet has only
-one style-related column it ALWAYS goes to `style_code` (the *_code >
-*_name priority rule baked into the spec catalog).
+Three signals combine to produce each Finding:
 
-This extractor reads its own candidate column if present and emits
-nothing otherwise. Deriving a name from a code (lookup) is a separate
-concern handled downstream.
+  1. **Header match** — column appears in `hint.candidate_columns["style_name"]`.
+  2. **LongTextStrip confirmation** — `bag.long_text_strips` overlapping the
+     column confirms it carries multi-word descriptive content (vs the
+     single-token codes that belong on `style_code`).
+  3. **`STYLE_NAME_SPEC.value_constraints`** — `min_len` / `max_len` checks.
+     Currently empty on the spec; the hook is in place for future tuning.
+
+Confidence ladder per cell:
+  HIGH    header + long_text_strip + constraints satisfied
+  MEDIUM  header + constraints satisfied, no long_text_strip
+  LOW     header but a constraint was violated
 """
 from __future__ import annotations
+
+from typing import Any
 
 from haystack import component
 from openpyxl.utils import get_column_letter
@@ -19,9 +24,9 @@ from openpyxl.utils import get_column_letter
 from app.artifacts.finding import Confidence, Finding
 from app.artifacts.workbook import ClusterAnchorBundle
 from app.components._base import Component
-
-
-_CANONICAL = "style_name"
+from app.specs import STYLE_NAME_SPEC
+from app.tools import canvas as _canvas_tools  # noqa: F401 — registers @tool entries
+from app.tools._registry import TOOL_REGISTRY
 
 
 @component
@@ -36,27 +41,61 @@ class StyleNameExtractor(Component):
         if bundle.hint.axes.pli_axis != "vertical":
             return {"findings": []}
 
-        columns = bundle.hint.candidate_columns.get(_CANONICAL, [])
-        rows = bundle.hint.candidate_rows.get(_CANONICAL, [])
+        canonical = STYLE_NAME_SPEC.canonical
+        columns = bundle.hint.candidate_columns.get(canonical, [])
+        rows = bundle.hint.candidate_rows.get(canonical, [])
         if not columns or not rows:
             return {"findings": []}
+
+        check_column_has_strip = TOOL_REGISTRY["check_column_has_strip"]
 
         col_idx = columns[0]
         col_letter = get_column_letter(col_idx)
         band = bundle.hint.header_band
         label_coord = (col_letter, band.rect.r0 if band else 1)
 
+        long_text_confirmed = check_column_has_strip(
+            bundle.bag.long_text_strips, col_idx, rows,
+        )
+        constraints = STYLE_NAME_SPEC.value_constraints
+
         findings: list[Finding] = []
         for row in rows:
             raw = bundle.canvas.cell_values[row - 1][col_idx - 1]
             if raw is None or raw == "":
                 continue
+            value = str(raw).strip()
+            if not value:
+                continue
+
+            evidence: list[str] = ["HEADER_BAND_MEMBER"]
+            if long_text_confirmed:
+                evidence.append("LONG_TEXT_STRIP_CONFIRMED")
+
+            breach = _check_constraints(value, constraints)
+            if breach is not None:
+                evidence.append(f"CONSTRAINT:{breach}")
+                confidence = Confidence.LOW
+            elif long_text_confirmed:
+                confidence = Confidence.HIGH
+            else:
+                confidence = Confidence.MEDIUM
+
             findings.append(Finding(
-                canonical=_CANONICAL,
+                canonical=canonical,
                 label_coord=label_coord,
                 value_coord=(col_letter, row),
-                value=str(raw).strip(),
-                confidence=Confidence.MEDIUM,
-                evidence=["HEADER_BAND_MEMBER", "DTYPE_MATCH"],
+                value=value,
+                confidence=confidence,
+                evidence=evidence,
             ))
         return {"findings": findings}
+
+
+def _check_constraints(value: Any, constraints) -> str | None:
+    """Return a short constraint-name token if violated, else None."""
+    if constraints.min_len is not None and len(value) < constraints.min_len:
+        return "below_min_len"
+    if constraints.max_len is not None and len(value) > constraints.max_len:
+        return "above_max_len"
+    return None
