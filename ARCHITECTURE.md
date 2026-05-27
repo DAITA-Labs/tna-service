@@ -4,6 +4,20 @@
 
 ---
 
+## Canvas Architecture (in development)
+
+A second extraction architecture is in flight on the `canvas-architecture` branch off `main`. It replaces today's single SheetRowPlanner path with a layered canvas substrate: per-cell measurement channels → typed pattern records → semantic resolvers → per-canonical field components → two-tier LLM judges, with workbook-level sheet routing above the per-sheet pipeline.
+
+The new architecture targets three current gaps: (a) one mega-function `find_tabular_identifiers` mixing 11 canonicals' policies, (b) raw channels accessed directly by extractors with no semantic layer between them, (c) absent workbook-level routing for multi-sheet files (Eastman 17 PLIs, 63261 mixed templates, MAIN FALL multi-sheet).
+
+The legacy SheetRowPlanner path stays untouched on `main` until the canvas path beats it on `dataset/extracted_2` by ≥5pts identifier recall AND ≥5pts identifier precision AND no stage regression. Until then, this document remains the authoritative architecture; canvas is referenced through:
+
+- **Design spec:** `docs/superpowers/specs/2026-05-27-canvas-architecture-design.md`
+- **ADR-0008:** `docs/adrs/0008-canvas-architecture.md`
+- **Master plan:** `docs/superpowers/plans/2026-05-27-canvas-architecture-master-plan.md`
+
+---
+
 ## Contents
 
 1. [Glossary](#glossary)
