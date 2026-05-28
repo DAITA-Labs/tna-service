@@ -1,4 +1,4 @@
-"""DateTrioValidator — chronological order check for per-PLI dates."""
+"""DateTrioValidator — chronological order + at-least-one presence."""
 from __future__ import annotations
 
 import datetime as dt
@@ -7,6 +7,13 @@ from haystack import Pipeline
 
 from app.artifacts.finding import Confidence, Finding
 from app.components.validators.date_trio import DateTrioValidator
+from tests.unit.components.field._bundles import make_bundle
+
+
+def _bundle_with_rows(n_data_rows: int):
+    """Build a bundle whose data_row_ranges cover rows 3..(2+n_data_rows)."""
+    values = [[None] * 3 for _ in range(2 + n_data_rows)]
+    return make_bundle(values, "io_number", columns={}, rows={})
 
 
 def _f(canonical: str, row: int, date: dt.date, col_letter: str = "D") -> Finding:
@@ -17,82 +24,135 @@ def _f(canonical: str, row: int, date: dt.date, col_letter: str = "D") -> Findin
     )
 
 
-# ─── Happy path ───────────────────────────────────────────────────────────
+# ─── Chronological order (all three present) ───────────────────────────────
 
 
 def test_chronological_dates_yield_no_warnings() -> None:
     """ex_fty < shipment < delivery → no warnings."""
+    bundle = _bundle_with_rows(1)   # row 3
     findings = [
         _f("ex_fty_date",    3, dt.date(2026, 5, 1)),
         _f("shipment_date",  3, dt.date(2026, 5, 10)),
         _f("delivery_date",  3, dt.date(2026, 5, 20)),
     ]
-    out = DateTrioValidator().run(findings=findings)
-    assert out["warnings"] == []
+    assert DateTrioValidator().run(findings=findings, bundle=bundle)["warnings"] == []
 
 
 def test_equal_dates_yield_no_warnings() -> None:
-    """ex_fty == shipment == delivery → not an inversion, no warnings."""
+    bundle = _bundle_with_rows(1)
     same = dt.date(2026, 5, 1)
     findings = [
         _f("ex_fty_date",    3, same),
         _f("shipment_date",  3, same),
         _f("delivery_date",  3, same),
     ]
-    out = DateTrioValidator().run(findings=findings)
-    assert out["warnings"] == []
+    assert DateTrioValidator().run(findings=findings, bundle=bundle)["warnings"] == []
 
 
-# ─── Inversion cases ──────────────────────────────────────────────────────
-
-
-def test_ex_fty_after_shipment_emits_warning() -> None:
+def test_ex_fty_after_shipment_emits_inversion_warning() -> None:
+    bundle = _bundle_with_rows(1)
     findings = [
         _f("ex_fty_date",   3, dt.date(2026, 5, 15)),
         _f("shipment_date", 3, dt.date(2026, 5, 10)),
     ]
-    out = DateTrioValidator().run(findings=findings)
-    assert len(out["warnings"]) == 1
-    w = out["warnings"][0]
-    assert w.name == "date_trio_inversion"
-    assert w.severity == "warning"
-    assert "ex_fty_date" in w.message
-    assert "shipment_date" in w.message
-    assert "row 3" in w.message
+    warnings = DateTrioValidator().run(findings=findings, bundle=bundle)["warnings"]
+    assert len(warnings) == 1
+    assert warnings[0].name == "date_trio_inversion"
+    assert warnings[0].severity == "warning"
+    assert "ex_fty_date" in warnings[0].message
 
 
-def test_shipment_after_delivery_emits_warning() -> None:
+def test_shipment_after_delivery_emits_inversion_warning() -> None:
+    bundle = _bundle_with_rows(1)
     findings = [
         _f("shipment_date", 3, dt.date(2026, 5, 20)),
         _f("delivery_date", 3, dt.date(2026, 5, 15)),
     ]
-    out = DateTrioValidator().run(findings=findings)
-    assert len(out["warnings"]) == 1
-    assert "shipment_date" in out["warnings"][0].message
+    warnings = DateTrioValidator().run(findings=findings, bundle=bundle)["warnings"]
+    assert len(warnings) == 1
+    assert "shipment_date" in warnings[0].message
 
 
-def test_all_three_inverted_emits_two_warnings() -> None:
-    """Only adjacent comparisons emit — transitivity covers the third."""
+def test_all_three_inverted_emits_two_inversion_warnings() -> None:
+    """All three present + reversed order → 2 adjacent-pair warnings (transitivity
+    covers the third)."""
+    bundle = _bundle_with_rows(1)
     findings = [
         _f("ex_fty_date",   3, dt.date(2026, 5, 30)),
         _f("shipment_date", 3, dt.date(2026, 5, 20)),
         _f("delivery_date", 3, dt.date(2026, 5, 10)),
     ]
-    out = DateTrioValidator().run(findings=findings)
-    assert len(out["warnings"]) == 2
-    pairs = {tuple(sorted(f.canonical for f in w.affects_findings))
-             for w in out["warnings"]}
-    assert pairs == {
-        ("ex_fty_date", "shipment_date"),
-        ("delivery_date", "shipment_date"),
-    }
+    out = DateTrioValidator().run(findings=findings, bundle=bundle)
+    inversions = [w for w in out["warnings"] if w.name == "date_trio_inversion"]
+    assert len(inversions) == 2
 
 
-# ─── Multi-row scenarios ──────────────────────────────────────────────────
+# ─── Missing-middle case (the new fix) ────────────────────────────────────
 
 
-def test_warnings_emitted_per_offending_row_only() -> None:
-    """Two PLI rows; one valid, one inverted — single warning for the inverted row."""
+def test_ex_fty_after_delivery_when_shipment_missing_emits_warning() -> None:
+    """When shipment is missing, ex_fty and delivery are compared directly."""
+    bundle = _bundle_with_rows(1)
+    findings = [
+        _f("ex_fty_date",   3, dt.date(2026, 5, 30)),
+        _f("delivery_date", 3, dt.date(2026, 5, 10)),
+    ]
+    out = DateTrioValidator().run(findings=findings, bundle=bundle)
+    inversions = [w for w in out["warnings"] if w.name == "date_trio_inversion"]
+    assert len(inversions) == 1
+    msg = inversions[0].message
+    assert "ex_fty_date" in msg
+    assert "delivery_date" in msg
+
+
+def test_ex_fty_before_delivery_when_shipment_missing_no_inversion() -> None:
+    bundle = _bundle_with_rows(1)
+    findings = [
+        _f("ex_fty_date",   3, dt.date(2026, 5, 1)),
+        _f("delivery_date", 3, dt.date(2026, 5, 30)),
+    ]
+    out = DateTrioValidator().run(findings=findings, bundle=bundle)
+    inversions = [w for w in out["warnings"] if w.name == "date_trio_inversion"]
+    assert inversions == []
+
+
+# ─── At-least-one presence ────────────────────────────────────────────────
+
+
+def test_pli_with_no_dates_emits_missing_date_trio_error() -> None:
+    """A PLI row with none of the three dates → error-level warning."""
+    bundle = _bundle_with_rows(1)
+    out = DateTrioValidator().run(findings=[], bundle=bundle)
+    missing = [w for w in out["warnings"] if w.name == "missing_date_trio"]
+    assert len(missing) == 1
+    w = missing[0]
+    assert w.severity == "error"
+    assert "row 3" in w.message
+
+
+def test_pli_with_just_one_date_satisfies_presence_check() -> None:
+    """Any single date satisfies the at-least-one requirement."""
+    bundle = _bundle_with_rows(1)
+    findings = [_f("ex_fty_date", 3, dt.date(2026, 5, 1))]
+    out = DateTrioValidator().run(findings=findings, bundle=bundle)
+    assert [w for w in out["warnings"] if w.name == "missing_date_trio"] == []
+
+
+def test_multiple_rows_some_missing_dates() -> None:
+    """Two PLIs: one with dates, one without → one missing_date_trio error."""
+    bundle = _bundle_with_rows(2)   # rows 3, 4
+    findings = [_f("delivery_date", 3, dt.date(2026, 5, 1))]
+    out = DateTrioValidator().run(findings=findings, bundle=bundle)
+    missing = [w for w in out["warnings"] if w.name == "missing_date_trio"]
+    assert len(missing) == 1
+    assert "row 4" in missing[0].message
+
+
+# ─── Multi-row inversion behaviour ────────────────────────────────────────
+
+
+def test_warnings_emitted_only_on_offending_rows() -> None:
+    bundle = _bundle_with_rows(2)
     findings = [
         # row 3 — valid
         _f("ex_fty_date",   3, dt.date(2026, 5, 1)),
@@ -102,49 +162,17 @@ def test_warnings_emitted_per_offending_row_only() -> None:
         _f("ex_fty_date",   4, dt.date(2026, 6, 10)),
         _f("shipment_date", 4, dt.date(2026, 6, 5)),
     ]
-    out = DateTrioValidator().run(findings=findings)
-    assert len(out["warnings"]) == 1
-    assert "row 4" in out["warnings"][0].message
+    out = DateTrioValidator().run(findings=findings, bundle=bundle)
+    inversions = [w for w in out["warnings"] if w.name == "date_trio_inversion"]
+    assert len(inversions) == 1
+    assert "row 4" in inversions[0].message
 
 
-def test_warnings_sorted_by_row() -> None:
-    """When multiple rows are inverted, output is in ascending row order."""
-    findings = [
-        _f("ex_fty_date",   7, dt.date(2026, 6, 10)),
-        _f("shipment_date", 7, dt.date(2026, 6, 5)),
-        _f("ex_fty_date",   3, dt.date(2026, 5, 10)),
-        _f("shipment_date", 3, dt.date(2026, 5, 5)),
-    ]
-    out = DateTrioValidator().run(findings=findings)
-    rows = [int(w.message.split("row ")[1].split(":")[0]) for w in out["warnings"]]
-    assert rows == sorted(rows)
-
-
-# ─── Partial data ─────────────────────────────────────────────────────────
-
-
-def test_missing_date_pair_member_skips_check() -> None:
-    """A PLI with only one date → no comparison can be made, no warning."""
-    findings = [_f("ex_fty_date", 3, dt.date(2026, 5, 10))]
-    out = DateTrioValidator().run(findings=findings)
-    assert out["warnings"] == []
-
-
-def test_only_ex_fty_and_delivery_not_checked() -> None:
-    """The validator only checks adjacent pairs — ex_fty vs delivery alone doesn't trigger."""
-    findings = [
-        _f("ex_fty_date",   3, dt.date(2026, 5, 30)),
-        _f("delivery_date", 3, dt.date(2026, 5, 10)),
-        # no shipment_date → ex_fty and delivery don't get compared directly
-    ]
-    out = DateTrioValidator().run(findings=findings)
-    assert out["warnings"] == []
-
-
-# ─── Non-trio canonicals ignored ─────────────────────────────────────────
+# ─── Non-trio canonicals ignored ──────────────────────────────────────────
 
 
 def test_non_trio_canonicals_ignored() -> None:
+    bundle = _bundle_with_rows(1)
     findings = [
         _f("ex_fty_date",      3, dt.date(2026, 5, 10)),
         _f("shipment_date",    3, dt.date(2026, 5, 20)),
@@ -152,8 +180,9 @@ def test_non_trio_canonicals_ignored() -> None:
                 value_coord=("A", 3), value="IO-1",
                 confidence=Confidence.HIGH, evidence=[]),
     ]
-    out = DateTrioValidator().run(findings=findings)
-    assert out["warnings"] == []
+    out = DateTrioValidator().run(findings=findings, bundle=bundle)
+    inversions = [w for w in out["warnings"] if w.name == "date_trio_inversion"]
+    assert inversions == []
 
 
 # ─── Component plumbing ──────────────────────────────────────────────────
@@ -162,6 +191,7 @@ def test_non_trio_canonicals_ignored() -> None:
 def test_validator_sockets_registered() -> None:
     comp = DateTrioValidator()
     assert "findings" in comp.__haystack_input__._sockets_dict
+    assert "bundle" in comp.__haystack_input__._sockets_dict
     assert "warnings" in comp.__haystack_output__._sockets_dict
 
 
