@@ -4,10 +4,10 @@ from __future__ import annotations
 from haystack import Pipeline
 
 from app.artifacts.finding import Confidence, Finding, ValidationWarning
+from app.components.judges._render import render_sheet_excerpt
 from app.components.judges.identifier_finding_gate import (
     IdentifierFindingGate,
     _apply_verdict,
-    _render_sheet_excerpt,
     _render_spec_snippet,
 )
 from app.agents.judges.identifier_finding.schema import IdentifierVerdict
@@ -226,22 +226,22 @@ def test_apply_verdict_rewrite_out_of_bounds_yields_none_value() -> None:
     assert new is not None and new.value is None
 
 
-# ─── _render_sheet_excerpt helper ────────────────────────────────────────
+# ─── render_sheet_excerpt helper ────────────────────────────────────────
 
 
-def test_render_sheet_excerpt_includes_centre_and_neighbours() -> None:
+def testrender_sheet_excerpt_includes_centre_and_neighbours() -> None:
     overlay = {(3, 1): "row3-A", (3, 2): "row3-B", (2, 1): "row2-A"}
     canvas = _bundle(overlay=overlay).canvas
-    text = _render_sheet_excerpt(canvas, ("A", 3), half_rows=1, half_cols=1)
+    text = render_sheet_excerpt(canvas, ("A", 3), half_rows=1, half_cols=1)
     assert "row3-A" in text
     assert "row3-B" in text
     assert "row2-A" in text
 
 
-def test_render_sheet_excerpt_clamps_to_canvas_bounds() -> None:
+def testrender_sheet_excerpt_clamps_to_canvas_bounds() -> None:
     """Asking for a window past the canvas edge clips without error."""
     canvas = _bundle().canvas
-    text = _render_sheet_excerpt(canvas, ("A", 1), half_rows=5, half_cols=5)
+    text = render_sheet_excerpt(canvas, ("A", 1), half_rows=5, half_cols=5)
     assert text  # didn't raise
 
 

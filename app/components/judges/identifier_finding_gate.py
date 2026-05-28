@@ -29,7 +29,7 @@ from __future__ import annotations
 from typing import Any
 
 from haystack import component
-from openpyxl.utils import column_index_from_string, get_column_letter
+from openpyxl.utils import column_index_from_string
 
 from app.agents._base import AgentRunFailure
 from app.agents.judges.identifier_finding import IdentifierFindingJudge
@@ -41,6 +41,7 @@ from app.artifacts.canvas import GridCanvas
 from app.artifacts.finding import Confidence, Finding, ValidationWarning
 from app.artifacts.workbook import ClusterAnchorBundle
 from app.components._base import Component
+from app.components.judges._render import render_sheet_excerpt
 from app.inferencing._base import BaseProvider
 from app.specs.identifiers import IDENTIFIER_SPECS, get_identifier_spec
 
@@ -132,7 +133,7 @@ class IdentifierFindingGate(Component):
         """Invoke the judge on one finding; return the adjudicated finding (or None to drop)."""
         inputs = FindingForJudge(
             finding=finding,
-            sheet_excerpt=_render_sheet_excerpt(bundle.canvas, finding.value_coord),
+            sheet_excerpt=render_sheet_excerpt(bundle.canvas, finding.value_coord),
             spec_snippet=_render_spec_snippet(finding.canonical),
             alternative_candidates=[
                 other for other in all_findings
@@ -178,38 +179,6 @@ def _apply_verdict(
         confidence=_VERDICT_CONF_TO_FINDING_CONF[verdict.confidence],
         evidence=[*finding.evidence, "judge_rewrite"],
     )
-
-
-def _render_sheet_excerpt(
-    canvas: GridCanvas,
-    center: tuple[str, int],
-    *,
-    half_rows: int = 3,
-    half_cols: int = 3,
-) -> str:
-    """Render the cells around `center` as a fixed-width grid string for the LLM."""
-    col_letter, row = center
-    col = column_index_from_string(col_letter)
-    r0 = max(1, row - half_rows)
-    r1 = min(canvas.n_rows, row + half_rows)
-    c0 = max(1, col - half_cols)
-    c1 = min(canvas.n_cols, col + half_cols)
-
-    width = 14
-    lines: list[str] = []
-    header_cells = [f"({get_column_letter(c)})".center(width) for c in range(c0, c1 + 1)]
-    lines.append(" " * 6 + "".join(header_cells))
-    for r in range(r0, r1 + 1):
-        marker = "*" if r == row else " "
-        row_cells = []
-        for c in range(c0, c1 + 1):
-            value = canvas.cell_values[r - 1][c - 1]
-            text = "" if value is None else str(value)
-            if len(text) > width - 2:
-                text = text[: width - 5] + "..."
-            row_cells.append(text.ljust(width))
-        lines.append(f"{marker}{r:>4} " + "".join(row_cells))
-    return "\n".join(lines)
 
 
 def _render_spec_snippet(canonical: str) -> str:
