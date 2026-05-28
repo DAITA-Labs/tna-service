@@ -4,9 +4,14 @@ The judge takes a `FindingForJudge` describing one ambiguous identifier
 Finding plus its context (sheet excerpt, spec snippet, competing claims,
 validator warnings) and returns an `IdentifierVerdict` saying whether to
 keep, drop, or rewrite the finding.
+
+`IdentifierFindingAudit` is the trace record the gate emits for each
+finding the judge reviewed — consumed downstream by `IdentifierPhaseGate`
+so the phase judge can see what per-finding judging decided.
 """
 from __future__ import annotations
 
+from dataclasses import dataclass
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
@@ -52,3 +57,18 @@ class IdentifierVerdict(AgentOutput):
     alternative_coord:  Coord | None = None
     reason:             str = Field(min_length=1, max_length=500)
     confidence:         Literal["high", "medium", "low"]
+
+
+@dataclass(frozen=True)
+class IdentifierFindingAudit:
+    """One row in the per-finding judging trail, parallel to the input bag.
+
+    The gate emits one of these for every input finding it considered.
+    `verdict` is `None` when the finding was never routed to the judge
+    (no ambiguity trigger); `judge_failed=True` when the judge produced
+    an `AgentRunFailure` and the original finding was kept (fail-safe).
+    """
+
+    finding_index: int
+    verdict:       IdentifierVerdict | None = None
+    judge_failed:  bool = False

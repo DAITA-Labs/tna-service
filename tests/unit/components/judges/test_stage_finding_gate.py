@@ -11,7 +11,7 @@ from app.components.judges.stage_finding_gate import (
     _is_novel,
     _render_stage_catalog,
 )
-from app.agents.judges.stage_finding.schema import StageVerdict
+from app.agents.judges.stage_finding.schema import StageFindingAudit, StageVerdict
 from app.specs.schemas import FinalStage
 from tests.fixtures.fake_llm import FakeLLM
 from tests.unit.components.field._bundles import make_bundle
@@ -169,6 +169,48 @@ def test_render_stage_catalog_lists_known_canonicals() -> None:
     assert "aliases:" in text
 
 
+# ─── Audit output socket ────────────────────────────────────────────────
+
+
+def test_audits_empty_when_no_stages() -> None:
+    gate = StageFindingGate(llm=FakeLLM(canned={}))
+    out = gate.run(stages_per_row={}, bundle=_bundle())
+    assert out["audits"] == []
+
+
+def test_audits_empty_when_nothing_novel() -> None:
+    gate = StageFindingGate(llm=FakeLLM(canned={}))
+    out = gate.run(stages_per_row={3: [_stage(canonical="fabric")]}, bundle=_bundle())
+    assert out["audits"] == []
+
+
+def test_audit_carries_verdict_with_row_and_index() -> None:
+    llm = FakeLLM(canned={"StageVerdict": _verdict("rewrite", alt="fabric")})
+    gate = StageFindingGate(llm=llm)
+    stages = {3: [_stage(canonical="cutting"),    # idx 0, clean
+                  _stage(name="Sample Inspect", canonical=None)]}   # idx 1, judged
+    out = gate.run(stages_per_row=stages, bundle=_bundle())
+    assert len(out["audits"]) == 1
+    audit = out["audits"][0]
+    assert isinstance(audit, StageFindingAudit)
+    assert audit.row == 3
+    assert audit.stage_index == 1
+    assert audit.verdict is not None
+    assert audit.verdict.alternative_canonical == "fabric"
+    assert audit.judge_failed is False
+
+
+def test_audit_marks_judge_failed_on_agent_run_failure() -> None:
+    bad = {"decision": "rewrite", "alternative_canonical": "made_up",
+            "reason": "x", "confidence": "low"}
+    llm = FakeLLM(canned={}).script_responses(bad, bad)
+    gate = StageFindingGate(llm=llm)
+    out = gate.run(stages_per_row={3: [_stage()]}, bundle=_bundle())
+    assert len(out["audits"]) == 1
+    assert out["audits"][0].verdict is None
+    assert out["audits"][0].judge_failed is True
+
+
 # ─── Component plumbing ─────────────────────────────────────────────────
 
 
@@ -176,7 +218,9 @@ def test_gate_sockets_registered() -> None:
     gate = StageFindingGate(llm=FakeLLM(canned={}))
     assert "stages_per_row" in gate.__haystack_input__._sockets_dict
     assert "bundle" in gate.__haystack_input__._sockets_dict
-    assert "stages_per_row" in gate.__haystack_output__._sockets_dict
+    outputs = gate.__haystack_output__._sockets_dict
+    assert "stages_per_row" in outputs
+    assert "audits" in outputs
 
 
 def test_gate_addable_to_pipeline() -> None:

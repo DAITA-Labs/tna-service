@@ -10,7 +10,10 @@ from app.components.judges.identifier_finding_gate import (
     _apply_verdict,
     _render_spec_snippet,
 )
-from app.agents.judges.identifier_finding.schema import IdentifierVerdict
+from app.agents.judges.identifier_finding.schema import (
+    IdentifierFindingAudit,
+    IdentifierVerdict,
+)
 from tests.fixtures.fake_llm import FakeLLM
 from tests.unit.components.field._bundles import make_bundle
 
@@ -259,6 +262,65 @@ def test_render_spec_snippet_unknown_canonical_returns_placeholder() -> None:
     assert "not_a_real_canonical" in text
 
 
+# ─── Audit output socket ─────────────────────────────────────────────────
+
+
+def test_audits_empty_when_no_findings() -> None:
+    gate = IdentifierFindingGate(llm=FakeLLM(canned={}))
+    out = gate.run(findings=[], warnings=[], bundle=_bundle())
+    assert out["audits"] == []
+
+
+def test_audits_empty_when_nothing_ambiguous() -> None:
+    """No judge calls → no audit rows."""
+    gate = IdentifierFindingGate(llm=FakeLLM(canned={}))
+    findings = [_f("io_number", "A", 3, confidence=Confidence.HIGH)]
+    out = gate.run(findings=findings, warnings=[], bundle=_bundle())
+    assert out["audits"] == []
+
+
+def test_audit_carries_verdict_for_judged_finding() -> None:
+    llm = FakeLLM(canned={"IdentifierVerdict": _keep_verdict()})
+    gate = IdentifierFindingGate(llm=llm)
+    findings = [_f("io_number", "A", 3, confidence=Confidence.LOW)]
+    out = gate.run(findings=findings, warnings=[], bundle=_bundle())
+    assert len(out["audits"]) == 1
+    audit = out["audits"][0]
+    assert isinstance(audit, IdentifierFindingAudit)
+    assert audit.finding_index == 0
+    assert audit.verdict is not None
+    assert audit.verdict.decision == "keep"
+    assert audit.judge_failed is False
+
+
+def test_audit_marks_judge_failed_on_agent_run_failure() -> None:
+    """AgentRunFailure path → audit row has verdict=None and judge_failed=True."""
+    bad = {"decision": "rewrite", "alternative_coord": None,
+            "reason": "x", "confidence": "low"}
+    llm = FakeLLM(canned={}).script_responses(bad, bad)
+    gate = IdentifierFindingGate(llm=llm)
+    findings = [_f("io_number", "A", 3, confidence=Confidence.LOW)]
+    out = gate.run(findings=findings, warnings=[], bundle=_bundle())
+    assert len(out["audits"]) == 1
+    audit = out["audits"][0]
+    assert audit.verdict is None
+    assert audit.judge_failed is True
+
+
+def test_audit_index_matches_original_finding_position() -> None:
+    """Audit's finding_index points back into the input findings list."""
+    llm = FakeLLM(canned={"IdentifierVerdict": _drop_verdict()})
+    gate = IdentifierFindingGate(llm=llm)
+    findings = [
+        _f("style_code", "A", 3, confidence=Confidence.HIGH),       # idx 0, clean
+        _f("io_number",  "B", 3, confidence=Confidence.LOW),        # idx 1, judged
+        _f("color_code", "C", 3, confidence=Confidence.HIGH),       # idx 2, clean
+    ]
+    out = gate.run(findings=findings, warnings=[], bundle=_bundle())
+    assert len(out["audits"]) == 1
+    assert out["audits"][0].finding_index == 1
+
+
 # ─── Component plumbing ──────────────────────────────────────────────────
 
 
@@ -268,7 +330,9 @@ def test_gate_sockets_registered() -> None:
     assert "findings" in inputs
     assert "warnings" in inputs
     assert "bundle" in inputs
-    assert "findings" in gate.__haystack_output__._sockets_dict
+    outputs = gate.__haystack_output__._sockets_dict
+    assert "findings" in outputs
+    assert "audits" in outputs
 
 
 def test_gate_addable_to_pipeline() -> None:
