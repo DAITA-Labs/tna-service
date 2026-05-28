@@ -27,6 +27,7 @@ from haystack import component
 from app.agents._base import AgentRunFailure
 from app.agents.judges.stage_finding import StageFindingJudge
 from app.agents.judges.stage_finding.schema import (
+    StageFindingAudit,
     StageFindingForJudge,
     StageVerdict,
 )
@@ -47,35 +48,41 @@ class StageFindingGate(Component):
         self._agent = StageFindingJudge()
         self._llm = llm
 
-    @component.output_types(stages_per_row=dict[int, list[FinalStage]])
+    @component.output_types(
+        stages_per_row=dict[int, list[FinalStage]],
+        audits=list[StageFindingAudit],
+    )
     def run(
         self,
         stages_per_row: dict[int, list[FinalStage]],
         bundle: ClusterAnchorBundle,
     ) -> dict:
         if not stages_per_row:
-            return {"stages_per_row": {}}
+            return {"stages_per_row": {}, "audits": []}
 
         out: dict[int, list[FinalStage]] = {}
+        audits: list[StageFindingAudit] = []
         for row, stages in stages_per_row.items():
             adjudicated: list[FinalStage] = []
-            for stage in stages:
+            for stage_index, stage in enumerate(stages):
                 if not _is_novel(stage):
                     adjudicated.append(stage)
                     continue
-                kept = self._judge_one(stage, row, bundle)
+                kept, audit = self._judge_one(stage, row, stage_index, bundle)
+                audits.append(audit)
                 if kept is not None:
                     adjudicated.append(kept)
             out[row] = adjudicated
-        return {"stages_per_row": out}
+        return {"stages_per_row": out, "audits": audits}
 
     def _judge_one(
         self,
         stage: FinalStage,
         row: int,
+        stage_index: int,
         bundle: ClusterAnchorBundle,
-    ) -> FinalStage | None:
-        """Invoke the judge; return the adjudicated stage (or None to drop)."""
+    ) -> tuple[FinalStage | None, StageFindingAudit]:
+        """Invoke the judge; return (adjudicated stage | None, audit record)."""
         inputs = StageFindingForJudge(
             stage=stage,
             row=row,
@@ -89,8 +96,13 @@ class StageFindingGate(Component):
         if isinstance(verdict, AgentRunFailure):
             self.log.warning("judge_fallback_kept_stage",
                               stage_name=stage.name, reason=verdict.reason)
-            return stage
-        return _apply_verdict(stage, verdict)
+            return stage, StageFindingAudit(
+                row=row, stage_index=stage_index, verdict=None, judge_failed=True,
+            )
+        return (
+            _apply_verdict(stage, verdict),
+            StageFindingAudit(row=row, stage_index=stage_index, verdict=verdict),
+        )
 
 
 def _is_novel(stage: FinalStage) -> bool:

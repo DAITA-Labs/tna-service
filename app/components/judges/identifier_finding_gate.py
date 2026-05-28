@@ -35,6 +35,7 @@ from app.agents._base import AgentRunFailure
 from app.agents.judges.identifier_finding import IdentifierFindingJudge
 from app.agents.judges.identifier_finding.schema import (
     FindingForJudge,
+    IdentifierFindingAudit,
     IdentifierVerdict,
 )
 from app.artifacts.canvas import GridCanvas
@@ -80,7 +81,10 @@ class IdentifierFindingGate(Component):
         self._llm = llm
         self._threshold: float = self._agent.tuning.confidence_threshold
 
-    @component.output_types(findings=list[Finding])
+    @component.output_types(
+        findings=list[Finding],
+        audits=list[IdentifierFindingAudit],
+    )
     def run(
         self,
         findings: list[Finding],
@@ -88,21 +92,23 @@ class IdentifierFindingGate(Component):
         bundle: ClusterAnchorBundle,
     ) -> dict:
         if not findings:
-            return {"findings": []}
+            return {"findings": [], "audits": []}
 
         ambiguous_ids = self._ambiguous_indices(findings, warnings)
         if not ambiguous_ids:
-            return {"findings": findings}
+            return {"findings": findings, "audits": []}
 
         out: list[Finding] = []
+        audits: list[IdentifierFindingAudit] = []
         for idx, finding in enumerate(findings):
             if idx not in ambiguous_ids:
                 out.append(finding)
                 continue
-            adjudicated = self._judge_one(finding, findings, warnings, bundle)
+            adjudicated, audit = self._judge_one(idx, finding, findings, warnings, bundle)
+            audits.append(audit)
             if adjudicated is not None:
                 out.append(adjudicated)
-        return {"findings": out}
+        return {"findings": out, "audits": audits}
 
     # ── private helpers ──────────────────────────────────────────────────
 
@@ -125,12 +131,13 @@ class IdentifierFindingGate(Component):
 
     def _judge_one(
         self,
+        finding_index: int,
         finding: Finding,
         all_findings: list[Finding],
         all_warnings: list[ValidationWarning],
         bundle: ClusterAnchorBundle,
-    ) -> Finding | None:
-        """Invoke the judge on one finding; return the adjudicated finding (or None to drop)."""
+    ) -> tuple[Finding | None, IdentifierFindingAudit]:
+        """Invoke the judge; return (adjudicated finding | None, audit record)."""
         inputs = FindingForJudge(
             finding=finding,
             sheet_excerpt=render_sheet_excerpt(bundle.canvas, finding.value_coord),
@@ -148,8 +155,13 @@ class IdentifierFindingGate(Component):
         if isinstance(verdict, AgentRunFailure):
             self.log.warning("judge_fallback_kept_finding",
                               canonical=finding.canonical, reason=verdict.reason)
-            return finding
-        return _apply_verdict(finding, verdict, bundle.canvas)
+            return finding, IdentifierFindingAudit(
+                finding_index=finding_index, verdict=None, judge_failed=True,
+            )
+        return (
+            _apply_verdict(finding, verdict, bundle.canvas),
+            IdentifierFindingAudit(finding_index=finding_index, verdict=verdict),
+        )
 
 
 # ── module-level pure helpers ───────────────────────────────────────────
