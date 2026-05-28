@@ -38,7 +38,6 @@ def test_validators_each_in_own_module():
         "post_review_plan", "post_namer_canonical", "pre_apply_readiness",
         "post_review_validator", "post_namer_validator", "pre_apply_validator",
         # canvas-architecture validators (consume list[Finding] + ClusterAnchorBundle)
-        "_orchestrator",
         "cardinality",
         "date_trio",
         "quantity_dtype",
