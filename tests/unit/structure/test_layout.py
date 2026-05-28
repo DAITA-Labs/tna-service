@@ -40,6 +40,7 @@ def test_validators_each_in_own_module():
         # canvas-architecture validators (consume list[Finding] + ClusterAnchorBundle)
         "cardinality",
         "date_trio",
+        "row_alignment",
         "stage_sequence",
         "stage_structure",
     }
