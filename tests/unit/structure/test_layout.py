@@ -39,6 +39,7 @@ def test_validators_each_in_own_module():
         "post_review_validator", "post_namer_validator", "pre_apply_validator",
         # canvas-architecture validators (consume list[Finding] + ClusterAnchorBundle)
         "cardinality",
+        "date_trio",
     }
 
 
