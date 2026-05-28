@@ -43,6 +43,7 @@ def test_validators_each_in_own_module():
         "row_alignment",
         "stage_sequence",
         "stage_structure",
+        "stage_wins",
     }
 
 

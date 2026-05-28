@@ -29,6 +29,7 @@ from app.artifacts.structure import (
     MergeSpan,
     Rect,
     SameLengthStrip,
+    StageArena,
     StageBand,
     StructureBag,
     SubfieldCluster,
@@ -66,6 +67,7 @@ def make_bundle(values: list[list[Any]],
                  same_length_strip_col: int | None = None,
                  long_text_strip_col: int | None = None,
                  candidate_kv_blocks: dict[str, list[KvBlock]] | None = None,
+                 stage_arenas: list[StageArena] | None = None,
                  stage_bands: list[StageBand] | None = None,
                  subfield_clusters: list[SubfieldCluster] | None = None,
                  merge_spans: list[MergeSpan] | None = None,
@@ -109,6 +111,8 @@ def make_bundle(values: list[list[Any]],
             rect=Rect(3, long_text_strip_col, n_rows, long_text_strip_col),
             mean_length=30.0,
         )]
+    if stage_arenas is not None:
+        bag.stage_arenas = list(stage_arenas)
     if stage_bands is not None:
         bag.stage_bands = list(stage_bands)
     if subfield_clusters is not None:
