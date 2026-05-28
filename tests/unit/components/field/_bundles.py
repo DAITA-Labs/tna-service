@@ -26,6 +26,7 @@ from app.artifacts.structure import (
     IntStrip,
     KvBlock,
     LongTextStrip,
+    MergeSpan,
     Rect,
     SameLengthStrip,
     StageBand,
@@ -67,6 +68,7 @@ def make_bundle(values: list[list[Any]],
                  candidate_kv_blocks: dict[str, list[KvBlock]] | None = None,
                  stage_bands: list[StageBand] | None = None,
                  subfield_clusters: list[SubfieldCluster] | None = None,
+                 merge_spans: list[MergeSpan] | None = None,
                  merge_ranges: set[tuple[int, int, int, int]] | None = None,
                  ) -> ClusterAnchorBundle:
     """Construct a ClusterAnchorBundle for extractor tests.
@@ -111,6 +113,8 @@ def make_bundle(values: list[list[Any]],
         bag.stage_bands = list(stage_bands)
     if subfield_clusters is not None:
         bag.subfield_clusters = list(subfield_clusters)
+    if merge_spans is not None:
+        bag.merge_spans = list(merge_spans)
 
     hint = LayoutHint(
         axes=LayoutAxes(pli_axis=axis, stage_axis="none", subfield_axis="implicit"),

@@ -41,6 +41,7 @@ def test_validators_each_in_own_module():
         "cardinality",
         "date_trio",
         "stage_sequence",
+        "stage_structure",
     }
 
 
