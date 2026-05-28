@@ -3,9 +3,15 @@
 For each PLI's `FinalStage`s, the validator:
 
   1. Filters to stages with a known `canonical` (matched a STAGE_SPECS
-     alias) AND a non-null `plan_date`. Stages with `canonical=None`
-     (novel labels, open-vocab) are skipped — we have no canonical
-     position for them.
+     alias) AND a non-null `plan_date`. Skipped stages get separate
+     treatment:
+        - `canonical is None` (open-vocab novel label) → emit an
+          `info`-level `unrecognised_stage` warning so operators see
+          which novel labels recur across sheets. The validator can't
+          place a novel stage in chronological order — but flagging it
+          drives growth of the STAGE_SPECS alias catalog.
+        - `plan_date is None` (metadata-only stage) → silent skip,
+          nothing to compare.
 
   2. Sorts the remaining stages by `(sequence_hint_bucket, spec_index)`,
      where:
@@ -19,9 +25,6 @@ For each PLI's `FinalStage`s, the validator:
      downgrade to `warning` (not `error`) because real TNA flows do
      legitimately reshuffle stages (sample fast-tracks, fit cycles,
      reworks).
-
-Stages without a known canonical or without a plan_date pass through
-silently — they don't get validated, they don't get penalised.
 """
 from __future__ import annotations
 
@@ -57,18 +60,33 @@ class StageSequenceValidator(Component):
         for row in sorted(stages_per_row):
             stages = stages_per_row[row]
 
-            # Filter to stages with known canonical + plan_date set, decorate
-            # with priority for sorting.
-            sortable: list[tuple[tuple[int, int], FinalStage]] = []
+            # Surface novel (open-vocab) stages so operators can grow the
+            # STAGE_SPECS catalog. `info` severity — not blocking, just
+            # observability.
             for s in stages:
-                if s.canonical is None or s.plan_date is None:
-                    continue
-                priority = _PRIORITY.get(s.canonical)
-                if priority is None:
-                    continue
-                sortable.append((priority, s))
+                if s.canonical is None and s.name:
+                    warnings.append(ValidationWarning(
+                        name="unrecognised_stage",
+                        severity="info",
+                        message=(
+                            f"PLI row {row}: stage `{s.name}` did not match "
+                            f"any STAGE_SPECS alias — sequence not validated. "
+                            f"Consider adding to the catalog if it recurs."
+                        ),
+                    ))
 
-            sortable.sort(key=lambda x: x[0])
+            # Filter to stages with known canonical + plan_date set, decorate
+            # with priority for sorting. `_PRIORITY` is built from every
+            # STAGE_SPECS entry, so any non-None canonical is guaranteed to
+            # have a priority — no defensive check needed.
+            sortable = sorted(
+                (
+                    (_PRIORITY[s.canonical], s)
+                    for s in stages
+                    if s.canonical is not None and s.plan_date is not None
+                ),
+                key=lambda x: x[0],
+            )
 
             # Walk adjacent pairs in sorted order; flag any inversion.
             for i in range(len(sortable) - 1):

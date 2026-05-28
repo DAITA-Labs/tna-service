@@ -121,8 +121,8 @@ def test_rows_emitted_in_sorted_order() -> None:
 # ─── Filter cases ─────────────────────────────────────────────────────────
 
 
-def test_stage_with_canonical_none_is_skipped() -> None:
-    """Novel (open-vocab) stages don't trigger validation — no priority info."""
+def test_stage_with_canonical_none_emits_info_warning() -> None:
+    """Novel (open-vocab) stages emit `info` so operators can grow the catalog."""
     stages_per_row = {
         3: [
             _stage("fabric",  dt.date(2026, 6, 1)),
@@ -130,7 +130,14 @@ def test_stage_with_canonical_none_is_skipped() -> None:
         ],
     }
     out = StageSequenceValidator().run(stages_per_row=stages_per_row)
-    assert out["warnings"] == []
+    # No inversion (fabric and the novel one can't be compared).
+    assert [w for w in out["warnings"] if w.name == "stage_sequence_inversion"] == []
+    # But the novel stage surfaces as info.
+    infos = [w for w in out["warnings"] if w.name == "unrecognised_stage"]
+    assert len(infos) == 1
+    assert infos[0].severity == "info"
+    assert "Some Custom Stage" in infos[0].message
+    assert "row 3" in infos[0].message
 
 
 def test_stage_with_no_plan_date_skipped() -> None:
