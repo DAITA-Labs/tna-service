@@ -27,7 +27,7 @@ def test_services_contains_only_service_layer():
 
 
 def test_validators_each_in_own_module():
-    """One file per validator in components/validators/."""
+    """One file per validator (or validator-pipeline helper) in components/validators/."""
     v_dir = ROOT / "app" / "components" / "validators"
     vals = {p.stem for p in v_dir.glob("*.py")
             if p.name not in ("__init__.py",)}
@@ -45,6 +45,8 @@ def test_validators_each_in_own_module():
         "stage_sequence",
         "stage_structure",
         "stage_wins",
+        # pipeline-wiring helper: concatenates the warnings from the validators above
+        "canvas_warning_aggregator",
     }
 
 

@@ -11,10 +11,8 @@ from app.artifacts.structure import (
     StageArena,
     StageBand,
 )
-from app.pipelines.canvas_validators import (
-    CanvasWarningAggregator,
-    make_canvas_validators_pipeline,
-)
+from app.components.validators.canvas_warning_aggregator import CanvasWarningAggregator
+from app.pipelines.canvas_validators import make_canvas_validators_pipeline
 from app.specs.schemas import FinalStage
 from tests.unit.components.field._bundles import make_bundle
 
