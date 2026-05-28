@@ -28,7 +28,9 @@ from app.artifacts.structure import (
     LongTextStrip,
     Rect,
     SameLengthStrip,
+    StageBand,
     StructureBag,
+    SubfieldCluster,
 )
 from app.artifacts.workbook import ClusterAnchorBundle, PliCluster
 
@@ -63,6 +65,8 @@ def make_bundle(values: list[list[Any]],
                  same_length_strip_col: int | None = None,
                  long_text_strip_col: int | None = None,
                  candidate_kv_blocks: dict[str, list[KvBlock]] | None = None,
+                 stage_bands: list[StageBand] | None = None,
+                 subfield_clusters: list[SubfieldCluster] | None = None,
                  merge_ranges: set[tuple[int, int, int, int]] | None = None,
                  ) -> ClusterAnchorBundle:
     """Construct a ClusterAnchorBundle for extractor tests.
@@ -103,6 +107,10 @@ def make_bundle(values: list[list[Any]],
             rect=Rect(3, long_text_strip_col, n_rows, long_text_strip_col),
             mean_length=30.0,
         )]
+    if stage_bands is not None:
+        bag.stage_bands = list(stage_bands)
+    if subfield_clusters is not None:
+        bag.subfield_clusters = list(subfield_clusters)
 
     hint = LayoutHint(
         axes=LayoutAxes(pli_axis=axis, stage_axis="none", subfield_axis="implicit"),
