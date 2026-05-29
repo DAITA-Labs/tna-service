@@ -34,6 +34,8 @@ We're not throwing the existing work away. The tools, structure resolvers, workb
 
 8. **No silent data loss.** Every cell that carries information must ship somewhere in the output. If a column isn't claimed by any canonical, its per-row values flow into `pli.metadata` with the column's header text as the key. If a kv-block isn't claimed by an identifier or stage, it ships as SHEET-scoped metadata. If a date or fabric value is detected but doesn't have a flat PLI field, it lands in metadata under its canonical name. The plan tells the applier explicitly **what to keep and where to put it** — no cell that the planner saw should disappear without a deliberate decision recorded in the plan.
 
+9. **Policies share helpers.** When multiple policies compute the same underlying signal (dtype density, header-alias match, strip overlap, merge presence, row coverage), that computation lives once in `app/policies/_helpers.py` and the policies call into it. Each policy stays small and focused on its scoring decision (the score_delta + eliminate logic); the cell-level computation is shared. Test the helper once; trust it everywhere.
+
 ## 3. The layered architecture
 
 ```
@@ -319,6 +321,33 @@ All verdicts ride along on the `CanvasPlan.all_verdicts` field for downstream au
 ## 9. Pickers — full enumeration
 
 This is the initial picker + policy inventory. Each policy is a starting point; we'll add/refine as real workbooks expose failure modes (per principle 7 in §2).
+
+### Policy helpers (`app/policies/_helpers.py`)
+
+Per principle 9 (DRY), repeated cell-level computations live in one module and every policy calls into them. Initial helper inventory — reading through the policy lists below, these are the patterns that recur:
+
+| Helper | What it returns | Used by |
+|---|---|---|
+| `dtype_density(col, canvas, dtype, rows)` | ratio of cells matching `dtype` in `col` across `rows` | every `*_int_float_policy`, `*_date_dtype_policy`, `header_band_no_numeric_dtype_policy`, `header_band_no_date_dtype_policy` |
+| `column_coverage(col, canvas, rows)` | ratio of non-blank cells in `col` across `rows` | `io_number_present_on_all_pli_rows_policy`, `column_has_data_policy` |
+| `match_header_aliases(col, canvas, header_row, aliases)` | best fuzzy-match score against `aliases` | every `*_header_alias_match_policy` (~12 policies) |
+| `column_overlaps_strip(col, strips)` | True if any strip in `strips` covers `col` | `*_same_length_policy` (3 canonicals), `*_long_text_policy` (3 canonicals) |
+| `column_has_vertical_merge(col, merge_spans)` | True if `col` is inside any vertical merge | `quantity_not_merged_policy` (and any future "should-not-be-merged" policies) |
+| `column_inside_any_rect(col, rects)` | True if `col` lies inside any rect from `rects` | `date_not_inside_stage_arena_policy` |
+| `text_density(row, canvas, cols)` | ratio of str-dtype cells in `row` across `cols` | `header_band_text_dense_policy`, `subfield_text_dense_policy`, `stage_band_text_dense_policy` |
+| `row_overlaps_strip(row, strips)` | True if any strip covers `row` | `header_band_bold_or_filled_policy` |
+| `value_in_numeric_range(value, lo, hi)` | True if `lo <= value <= hi` and value is numeric | `quantity_value_in_range_policy`, future numeric-range policies |
+| `chronological_dates_ordered(dates)` | True if all non-None dates are non-decreasing | `chronological_date_order_policy`, `stage_sequence_chronological_policy` |
+| `cells_in_merged_range(coord, merge_spans)` | the merge rect containing `coord` (or None) | `column_not_already_claimed_policy`, future merge-aware policies |
+| `text_matches_alias(text, aliases)` | best alias match score for a single string | `match_header_aliases` (internal), `metadata_alias_match_policy` |
+
+Each helper:
+- Is a pure function, fully unit-tested independently.
+- Returns a primitive (`float`, `bool`, `Optional[Rect]`) — never a `PolicyVerdict`. Policies wrap helpers in scoring + elimination logic.
+- Lives in `app/policies/_helpers.py` (one module, grouped by signal type).
+- Has no dependencies on policy code (no circular imports).
+
+Adding a new helper: write the function in `_helpers.py`, write its unit tests, import it from any policy that needs it. The helper inventory grows organically — when two policies start sharing computation, extract it.
 
 ### Layer 1 (Structure)
 
