@@ -424,26 +424,65 @@ LLM judge — see §10. No picker here; the judge consumes the draft plan + verd
 - Cross-field policies: `trio_date_at_least_one_present_policy(plis)`, `chronological_date_order_policy(plis)`
 - Distribution policies: `io_number_consistency_across_plis_policy(plis)` (informational)
 
-## 10. LLM judge integration — judges review the plan, not the sheet
+## 10. LLM judge integration — judges review the plan, with bounded sheet access
 
-Once the plan is assembled (post Layer 4), the judge gets a **compact prompt input**: the plan (a few hundred lines of structured data) + the policy verdict trail (a few dozen entries) + a small sheet excerpt around any cells the judge flags ambiguous. The full canvas — which can be 1000+ rows × 30+ columns — is **never** sent to the LLM.
+The judge gets a **compact default context**: the plan (a few hundred lines of structured data) + the policy verdict trail (a few dozen entries). That's enough to read the planner's decisions, but a judge can't responsibly evaluate plan correctness without ever seeing the underlying data. So the judge ALSO gets **tools to peek at the sheet and at structural info** — with hard limits per call.
 
-The judge's job is to answer: **"are the plan-level details we found correct?"** It returns:
-- `approve` — the plan looks sound; finalize as-is
-- `modify(field, new_location)` — a specific field's location is wrong; the relevant `IdentifierColumnPicker` re-runs with the judge's hint
-- `escalate` — the plan has issues the judge can't resolve; flag for human review (high-severity warning in `ExtractionResult.warnings`)
+### Judge tool set
 
-Token economics:
-- Plan size: ~200 lines for a typical TNA sheet
-- Verdict trail: ~30-50 verdicts
-- Sheet excerpt (when needed): ±3 cells around 1-3 flagged coordinates
-- Total prompt size: ~1500-3000 tokens regardless of sheet size
+Each judge agent receives a tool bundle, registered in `TOOL_REGISTRY` and exposed via the existing `@tool` decorator pattern. Per-call limits enforced by the tool implementation:
 
-This is the architectural payoff of the plan-driven shape: **the LLM cost is bounded by plan size, not by sheet size**.
+| Tool | What it returns | Per-call limit |
+|---|---|---|
+| `peek_range(sheet, r0, c0, r1, c1)` | Raw cell values in a rectangle | max 20 rows × 10 cols (200 cells) per call |
+| `get_column_profile(sheet, col)` | `ColDtypeProfile` — dtype counts down the column | cheap, no rate limit |
+| `get_row_profile(sheet, row)` | `RowDtypeProfile` — dtype counts across the row | cheap, no rate limit |
+| `get_strips_at(strip_type, col_or_row)` | Pre-computed strips (`DateStrip`, `IntStrip`, `SameLengthStrip`, `ColorStrip`, etc.) intersecting the location | pre-computed, no rate limit |
+| `get_merge_spans_in(r0, c0, r1, c1)` | `MergeSpan` records overlapping the rectangle | pre-computed, no rate limit |
+| `get_kv_blocks_near(coord)` | KvBlocks within a small window of `coord` | pre-computed, no rate limit |
 
-Existing Tier 6 per-finding/phase judges (PR #80-#83) get reshaped into this single plan-reviewer model. The judge agent class becomes `CanvasPlanReviewer`; the gate component is `CanvasPlanReviewerGate`. Verdicts apply at the plan level, not per finding.
+Per-judge-call upper bound on tool use: **max 5 `peek_range` calls + unlimited structural lookups**. Structural lookups are cheap because they read pre-computed records, not raw cells. The peek limit caps the total fresh-cell exposure at ~1000 cells per judge invocation — small even against 1000+ row sheets.
 
-Post-apply judges (escalations from Layer 7 policies) remain useful for the cases where the apply step produces suspicious PLIs (e.g., out-of-range quantity values that survived planning). These are per-PLI judges; same compact prompt shape — one PLI + its verdicts + a tiny excerpt.
+### What the judge does
+
+The judge's contract:
+
+1. **Receives** the plan + verdict trail.
+2. **Optionally calls tools** to gather evidence — peek at suspicious columns, fetch dtype profiles, inspect strips around flagged locations.
+3. **Returns** one of:
+   - `approve` — the plan looks sound; finalize as-is
+   - `modify(field, new_location, evidence)` — a specific field's location is wrong; the relevant picker re-runs with the judge's hint
+   - `escalate(reason)` — the plan has issues the judge can't resolve; flag for human review (high-severity warning in `ExtractionResult.warnings`)
+
+The `evidence` field on `modify` cites which tool calls / observations led to the decision, so the rerun picker has grounded context.
+
+### Token economics
+
+| Source | Typical size |
+|---|---|
+| Plan | ~200 lines |
+| Verdict trail | ~30-50 verdicts |
+| Default context (plan + verdicts) | ~1500 tokens |
+| One `peek_range` call result | ~150-300 tokens |
+| One structural-lookup result | ~50-100 tokens |
+| Judge prompt + responses (worst case, 5 peeks + a few lookups) | ~5000-7000 tokens |
+| Judge prompt (typical case, 1-2 peeks) | ~2000-3000 tokens |
+
+The architectural payoff of the plan-driven shape: **LLM cost is bounded by plan + bounded tool budget, not by sheet size**. A 1000-row sheet and a 50-row sheet have nearly the same judge cost.
+
+### What the judge sees vs what it doesn't
+
+- ✅ Plan, verdict trail (always)
+- ✅ Peek of cell ranges it explicitly requests (bounded)
+- ✅ Structural records (dtype profiles, strips, merges, kv blocks) on demand
+- ❌ The full sheet contents
+- ❌ Arbitrary cross-sheet correlations (judges are per-bundle)
+
+### Reshaping the existing Tier 6 judges
+
+Existing per-finding / phase judges (PR #80-#83) get reshaped into this single plan-reviewer model. The judge agent class becomes `CanvasPlanReviewer`; the gate component is `CanvasPlanReviewerGate`. Verdicts apply at the plan level, not per finding.
+
+Post-apply judges (escalations from Layer 7 policies) remain useful for the cases where the apply step produces suspicious PLIs (e.g., out-of-range quantity values that survived planning). These are per-PLI judges; same tool set + per-PLI scope.
 
 ## 11. Migration plan — fresh branch, parallel work
 
@@ -507,6 +546,12 @@ These are deliberately left fuzzy. We'll converge as the build proceeds.
 6. **Plan reviewer prompt patterns.** What format works best for the judge? JSON-rendered plan, markdown bullet list, ASCII grid of field locations? Try and iterate; capture in ADR-0009 update.
 
 7. **Backward compatibility of `ExtractionResult`.** The new chain might want richer per-field provenance (which policies fired, which judge intervened). Either extend the public PLI schema or add an opt-in `extras` field. Decide when we have real consumers.
+
+8. **Judge tool limits.** §10 proposes `peek_range` max 20×10 cells per call, max 5 peeks per judge invocation. These are placeholders. Measure actual judge token usage on the dataset and tune — could go tighter (cost discipline) or looser (better evidence quality). The tool implementation enforces whatever number we settle on.
+
+9. **Judge tool prompt design.** How does the judge LEARN to use the tools effectively? Few-shot examples in the SHARED prompt block? Per-tool description strings in the tool registry? Trial-and-error during real judge calls and capture the patterns in ADR-0009 update.
+
+10. **What triggers a judge call.** Not every plan needs a judge review. Candidate triggers: (a) any mandatory policy verdict failed; (b) any picker emitted `winner_score < threshold`; (c) any pair of candidates had `score_delta < margin`. Calibrate which conditions actually warrant the LLM cost — too aggressive and we pay for trivial reviews; too lax and we miss the catches.
 
 ## 14. Risks and mitigations
 
