@@ -35,18 +35,13 @@ from __future__ import annotations
 from app.artifacts.canvas import GridCanvas
 from app.artifacts.layout import LayoutAxes
 from app.artifacts.structure import StructureBag
+from app.components.pickers.pli_axis import PliAxisPicker
 from app.tools.canvas.dtype_profiles import (
     compute_col_dtype_profiles,
     compute_row_dtype_profiles,
 )
 
 
-_KV_BLOCKS_FOR_SHEET = 3
-_DATA_ROWS_MAX_FOR_SHEET = 5
-_SHEET_SIZE_MAX = 600
-_REPEATING_GROUPS_FOR_SECTIONAL = 3
-_DATA_ROWS_MIN_FOR_SECTIONAL = 10
-_AXIS_RATIO = 2.0
 _DATE_STRIPS_FOR_SHEET_STAGE = 2
 _DATE_STRIPS_FOR_TABULAR_STAGE = 3
 _HIGH_CONFIDENCE = 0.9
@@ -65,9 +60,14 @@ def infer_layout_axes(canvas: GridCanvas, bag: StructureBag) -> LayoutAxes:
 
     vert_dates, horiz_dates = _count_date_strip_orientations(bag)
 
-    pli_axis, pli_conf = _decide_pli_axis(
-        kv_count, repeating_count, n_data_rows, n_data_cols, sheet_size
+    pli_result = PliAxisPicker().run(
+        kv_count=kv_count,
+        repeating_count=repeating_count,
+        n_data_rows=n_data_rows,
+        n_data_cols=n_data_cols,
+        sheet_size=sheet_size,
     )
+    pli_axis, pli_conf = pli_result["pli_axis"], pli_result["confidence"]
     stage_axis, stage_conf = _decide_stage_axis(pli_axis, vert_dates, horiz_dates)
     subfield_axis, subfield_conf = _decide_subfield_axis(canvas, bag)
 
@@ -104,24 +104,6 @@ def _count_date_strip_orientations(bag: StructureBag) -> tuple[int, int]:
     vert = sum(1 for s in bag.date_strips if s.orientation == "vertical")
     horiz = sum(1 for s in bag.date_strips if s.orientation == "horizontal")
     return vert, horiz
-
-
-def _decide_pli_axis(kv: int,
-                       repeating: int,
-                       n_data_rows: int,
-                       n_data_cols: int,
-                       sheet_size: int) -> tuple[str, float]:
-    """Apply the PliAxis decision tree; return (axis, confidence)."""
-    if kv >= _KV_BLOCKS_FOR_SHEET and n_data_rows < _DATA_ROWS_MAX_FOR_SHEET \
-            and sheet_size < _SHEET_SIZE_MAX:
-        return "sheet", _HIGH_CONFIDENCE
-    if repeating >= _REPEATING_GROUPS_FOR_SECTIONAL and n_data_rows >= _DATA_ROWS_MIN_FOR_SECTIONAL:
-        return "sectional", _HIGH_CONFIDENCE
-    if n_data_rows > n_data_cols * _AXIS_RATIO:
-        return "vertical", _HIGH_CONFIDENCE
-    if n_data_cols > n_data_rows * _AXIS_RATIO:
-        return "horizontal", _HIGH_CONFIDENCE
-    return "vertical", _LOW_CONFIDENCE
 
 
 def _decide_stage_axis(pli_axis: str,
