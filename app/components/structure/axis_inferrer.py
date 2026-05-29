@@ -36,16 +36,12 @@ from app.artifacts.canvas import GridCanvas
 from app.artifacts.layout import LayoutAxes
 from app.artifacts.structure import StructureBag
 from app.components.pickers.pli_axis import PliAxisPicker
+from app.components.pickers.stage_axis import StageAxisPicker
+from app.components.pickers.subfield_axis import SubfieldAxisPicker
 from app.tools.canvas.dtype_profiles import (
     compute_col_dtype_profiles,
     compute_row_dtype_profiles,
 )
-
-
-_DATE_STRIPS_FOR_SHEET_STAGE = 2
-_DATE_STRIPS_FOR_TABULAR_STAGE = 3
-_HIGH_CONFIDENCE = 0.9
-_LOW_CONFIDENCE = 0.5
 
 
 def infer_layout_axes(canvas: GridCanvas, bag: StructureBag) -> LayoutAxes:
@@ -68,8 +64,18 @@ def infer_layout_axes(canvas: GridCanvas, bag: StructureBag) -> LayoutAxes:
         sheet_size=sheet_size,
     )
     pli_axis, pli_conf = pli_result["pli_axis"], pli_result["confidence"]
-    stage_axis, stage_conf = _decide_stage_axis(pli_axis, vert_dates, horiz_dates)
-    subfield_axis, subfield_conf = _decide_subfield_axis(canvas, bag)
+
+    stage_result = StageAxisPicker().run(
+        pli_axis=pli_axis,
+        vert_dates=vert_dates,
+        horiz_dates=horiz_dates,
+    )
+    stage_axis, stage_conf = stage_result["stage_axis"], stage_result["confidence"]
+
+    subfield_result = SubfieldAxisPicker().run(canvas=canvas, bag=bag)
+    subfield_axis, subfield_conf = (
+        subfield_result["subfield_axis"], subfield_result["confidence"],
+    )
 
     return LayoutAxes(
         pli_axis=pli_axis,
@@ -106,35 +112,3 @@ def _count_date_strip_orientations(bag: StructureBag) -> tuple[int, int]:
     return vert, horiz
 
 
-def _decide_stage_axis(pli_axis: str,
-                         vert_dates: int,
-                         horiz_dates: int) -> tuple[str, float]:
-    """Apply the StageAxis decision tree; return (axis, confidence)."""
-    if pli_axis == "sheet":
-        if horiz_dates >= _DATE_STRIPS_FOR_SHEET_STAGE:
-            return "horizontal", _HIGH_CONFIDENCE
-        if vert_dates >= _DATE_STRIPS_FOR_SHEET_STAGE:
-            return "vertical", _HIGH_CONFIDENCE
-        return "none", _HIGH_CONFIDENCE
-    if pli_axis in ("vertical", "sectional"):
-        if vert_dates >= _DATE_STRIPS_FOR_TABULAR_STAGE:
-            return "horizontal", _HIGH_CONFIDENCE
-        if horiz_dates >= _DATE_STRIPS_FOR_TABULAR_STAGE:
-            return "vertical", _HIGH_CONFIDENCE
-        return "none", _LOW_CONFIDENCE
-    return "unknown", _LOW_CONFIDENCE
-
-
-def _decide_subfield_axis(canvas: GridCanvas, bag: StructureBag) -> tuple[str, float]:
-    """Inspect one StageBand to decide whether sub-columns flow horizontally / vertically."""
-    if not bag.stage_bands:
-        return "implicit", _HIGH_CONFIDENCE
-
-    band = bag.stage_bands[0]
-    if any(span.orientation == "horizontal"
-           and span.rect.r1 < band.rect.r0
-           and span.rect.c0 <= band.rect.c1
-           and span.rect.c1 >= band.rect.c0
-           for span in bag.merge_spans):
-        return "horizontal", _HIGH_CONFIDENCE
-    return "horizontal", _LOW_CONFIDENCE
