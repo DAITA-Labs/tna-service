@@ -1,70 +1,35 @@
-"""HeaderBandResolver — find the contiguous header rows of a tabular layout.
+"""resolve_header_band — thin facade over `HeaderBandPicker`.
 
-Combines three signals to score each row:
-  - spec-alias hits per phase (identifier/stage/subfield/metadata)
-  - bold-cell density
-  - fill-colour density
+Identifies the contiguous header rows of a tabular layout. Internally
+delegates to `HeaderBandPicker`, which decomposes the scoring into
+composable policies (see `app/components/pickers/header_band.py`).
 
-The top-scoring row becomes the header band's anchor. If adjacent rows
-(±1, ±2) also score above threshold, they're absorbed into the same
-band (multi-row headers — DKN rows 1-3, CB rows 2-3).
-
-Emits a single HeaderBand record into the bag. If no row scores above
-`min_score`, emits None (the sheet has no tabular header — likely
-SHEET_IS_PLI or empty).
+Kept as a function (rather than swapping the call site to the picker
+directly) so existing `populate_semantics` chaining and tests stay
+unchanged. New code should consume `HeaderBandPicker` directly.
 """
 from __future__ import annotations
 
 from app.artifacts.canvas import GridCanvas
-from app.artifacts.structure import HeaderBand, Rect, StructureBag
-from app.tools.canvas.query import find_header_rows_via_specs
+from app.artifacts.structure import HeaderBand, StructureBag
+from app.components.pickers.header_band import HeaderBandPicker
 
 
-_BAND_ADJACENCY_WINDOW = 2
 _MIN_SCORE = 1.0
 
 
-def resolve_header_band(canvas: GridCanvas,
-                        bag: StructureBag,
-                        min_score: float = _MIN_SCORE) -> HeaderBand | None:
-    """Identify the header band of a tabular sheet; mutate `bag.header_band`.
+def resolve_header_band(
+    canvas:    GridCanvas,
+    bag:       StructureBag,
+    min_score: float = _MIN_SCORE,
+) -> HeaderBand | None:
+    """Identify the header band; write it onto `bag.header_band`.
 
-    Returns the same HeaderBand it wrote (or None when no row scored
-    high enough). Idempotent — calling twice yields the same result.
+    Returns the same HeaderBand it wrote (or None when no row qualified).
+    Idempotent.
     """
-    scored = find_header_rows_via_specs(canvas, min_score=min_score)
-    if not scored:
-        bag.header_band = None
-        return None
-
-    anchor_row, anchor_score, _ = scored[0]
-    band_rows = _absorb_adjacent_scored_rows(anchor_row, scored)
-
-    rect = Rect(
-        r0=min(band_rows),
-        c0=1,
-        r1=max(band_rows),
-        c1=canvas.n_cols,
-    )
-    header_band = HeaderBand(rect=rect, score=anchor_score)
+    picker = HeaderBandPicker(score_floor=min_score)
+    result = picker.run(canvas=canvas)
+    header_band = result["header_band"]
     bag.header_band = header_band
     return header_band
-
-
-def _absorb_adjacent_scored_rows(anchor_row: int,
-                                  scored: list[tuple[int, float, dict]]) -> set[int]:
-    """Walk outward from `anchor_row`, absorbing scored rows in a contiguous band."""
-    scored_set = {row for row, _, _ in scored}
-    band_rows = {anchor_row}
-
-    # Walk upward
-    candidate = anchor_row - 1
-    while candidate >= anchor_row - _BAND_ADJACENCY_WINDOW and candidate in scored_set:
-        band_rows.add(candidate)
-        candidate -= 1
-    # Walk downward
-    candidate = anchor_row + 1
-    while candidate <= anchor_row + _BAND_ADJACENCY_WINDOW and candidate in scored_set:
-        band_rows.add(candidate)
-        candidate += 1
-    return band_rows
