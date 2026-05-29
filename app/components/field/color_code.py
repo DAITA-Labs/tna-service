@@ -14,6 +14,7 @@ from openpyxl.utils import get_column_letter
 from app.artifacts.finding import Confidence, Finding
 from app.artifacts.workbook import ClusterAnchorBundle
 from app.components._base import Component
+from app.components.pickers.identifier_column import IdentifierColumnPicker
 from app.specs import COLOR_CODE_SPEC
 from app.tools import canvas as _canvas_tools  # noqa: F401 — registers @tool entries
 from app.tools._registry import TOOL_REGISTRY
@@ -28,6 +29,10 @@ class ColorCodeExtractor(Component):
 
     def __init__(self) -> None:
         Component.__init__(self)
+        self._picker = IdentifierColumnPicker(
+            spec=COLOR_CODE_SPEC, strips_attr_name="same_length_strips",
+            score_floor=_COLUMN_FLOOR,
+        )
 
     @component.output_types(findings=list[Finding])
     def run(self, bundle: ClusterAnchorBundle) -> dict:
@@ -37,21 +42,15 @@ class ColorCodeExtractor(Component):
         canonical = COLOR_CODE_SPEC.canonical
         columns = bundle.hint.candidate_columns.get(canonical, [])
         rows = bundle.hint.candidate_rows.get(canonical, [])
-        if not columns or not rows:
+
+        col_idx, _score, _verdicts = self._picker.pick(
+            canvas=bundle.canvas, bag=bundle.bag,
+            columns=columns, rows=rows,
+        )
+        if col_idx is None:
             return {"findings": []}
 
-        score_column = TOOL_REGISTRY["score_column_for_canonical"]
         check_column_has_strip = TOOL_REGISTRY["check_column_has_strip"]
-
-        scored = [
-            (col, score_column(
-                bundle.canvas, col, rows, COLOR_CODE_SPEC, bundle.bag.same_length_strips,
-            ))
-            for col in columns
-        ]
-        col_idx, best_score = max(scored, key=lambda x: x[1])
-        if best_score < _COLUMN_FLOOR:
-            return {"findings": []}
 
         col_letter = get_column_letter(col_idx)
         band = bundle.hint.header_band
