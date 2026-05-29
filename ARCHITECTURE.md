@@ -77,6 +77,8 @@ The legacy SheetRowPlanner path stays untouched on `main` until the canvas path 
 
 The codebase follows `docs/CODING_STANDARD.md` — Python-specific rules for naming, docstrings, function decomposition, type hints, error handling, imports, module organisation, and the seven framework primitives (§11). Section 10 is the master checklist a reviewer or AI agent runs against any changed file before commit.
 
+**Enums live in `app/enums/`** — one file per enum, alphabetically ordered. New code MUST import from `app/enums/` (the package re-exports every enum, including the legacy ones still defined in `app/specs/enums.py`). Inline `Literal[...]` types are not used where an enum exists. See `app/enums/__init__.py` for the canonical list.
+
 ---
 
 ## Three-layer separation
