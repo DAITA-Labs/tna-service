@@ -561,6 +561,74 @@ Existing per-finding / phase judges (PR #80-#83) get reshaped into this single p
 
 Post-apply judges (escalations from Layer 7 policies) remain useful for the cases where the apply step produces suspicious PLIs (e.g., out-of-range quantity values that survived planning). These are per-PLI judges; same tool set + per-PLI scope.
 
+### 10.1 Judge agent runtime — Haystack `Agent` + forced terminator tool
+
+The judges run on Haystack 2.x's first-class [`Agent`](https://docs.haystack.deepset.ai/docs/agent) component. It is itself a `@component`, runs the [Anthropic tool-use loop](https://platform.claude.com/docs/en/agents-and-tools/tool-use/how-tool-use-works) internally (request → `tool_use` blocks → execute → `tool_result` → repeat), and stops on a configurable exit condition. That gives us multi-turn evidence-gathering with no new dependency, no async machinery, and tight reuse of our existing `@tool` registry.
+
+**Pattern:** every judge has exactly one **terminator tool** (`submit_<judge>_verdict`). Its input schema IS the verdict schema — calling it ends the loop, and we Pydantic-validate the tool input to get a typed verdict. No JSON parsing, no schema-prompt-engineering.
+
+```python
+# app/agents/judges/canvas_plan_reviewer/agent.py
+from haystack.components.agents import Agent
+from haystack.components.generators.chat import AnthropicChatGenerator
+from app.tools.canvas import (peek_range, get_column_profile, get_row_profile,
+                              get_strips_at, get_merge_spans_in, get_kv_blocks_near)
+from app.tools.judges import submit_plan_review_verdict  # @tool, the terminator
+
+def build_canvas_plan_reviewer(*, model: str, system_prompt: str) -> Agent:
+    return Agent(
+        chat_generator=AnthropicChatGenerator(model=model),
+        tools=[peek_range, get_column_profile, get_row_profile,
+               get_strips_at, get_merge_spans_in, get_kv_blocks_near,
+               submit_plan_review_verdict],
+        system_prompt=system_prompt,
+        exit_conditions=["submit_plan_review_verdict"],
+        max_agent_steps=10,
+    )
+```
+
+The gate wraps the Agent the same way `StagePhaseGate` wraps its agent today:
+
+```python
+@component
+class CanvasPlanReviewerGate(Component):
+    def __init__(self, llm_model: str) -> None:
+        Component.__init__(self)
+        self._agent = build_canvas_plan_reviewer(
+            model=llm_model, system_prompt=CANVAS_PLAN_REVIEWER,
+        )
+
+    @component.output_types(plan=CanvasPlan, warnings=list[ValidationWarning])
+    def run(self, plan: CanvasPlan, verdict_trail: list[PolicyVerdict],
+            bundle: ClusterAnchorBundle) -> dict:
+        if not _should_invoke(plan, verdict_trail):
+            return {"plan": plan, "warnings": []}
+        user_msg = render_compact_plan_context(plan, verdict_trail, bundle)
+        result = self._agent.run(messages=[ChatMessage.from_user(user_msg)])
+        verdict = extract_terminator_input(result, PlanReviewVerdict)
+        return _apply_verdict(plan, verdict)
+```
+
+**Why this pattern fits us:**
+
+- **Native @component nesting** — the Haystack `Agent` plugs into the same pipeline DSL as every other component; no event-loop / executor mismatch.
+- **Reuses `TOOL_REGISTRY`** — every `@tool` we ship for extractors becomes a candidate judge tool with zero wrapping work. Honours [[feedback_extractors_use_tools]] and [[feedback_tool_naming]].
+- **Bounded by design** — `exit_conditions` forces a structured terminator; `max_agent_steps` caps the loop; per-tool per-call limits cap evidence exposure. Hitting the step ceiling without a terminator is treated as `AgentRunFailure` and the gate falls back to the pre-judge plan, exactly the way `StagePhaseGate` falls back today.
+- **Typed output for free** — the terminator tool's input is validated against a Pydantic verdict schema. No structured-output prompt scaffolding.
+
+**Considered alternatives** (rejected):
+
+| Pattern | Why not |
+|---|---|
+| Raw Anthropic SDK loop in `app/agents/_base.py` | ~40 LoC of hand-rolled loop, retry, dispatch; reinvents what Haystack ships. Keep as a fallback only if Haystack's loop blocks a hook (custom capture, custom retry policy) we need. |
+| `pydantic-ai` | Async-first; bringing in a second LLM stack alongside `AnthropicProvider` doubles the capture / observability surface. |
+| `smolagents`, LangChain agents, LangGraph | Drag in extra runtimes (litellm, etc.) and a second component model competing with Haystack's. |
+
+**What stays vs what changes:**
+
+- **Stays:** the single-call `Agent` base in `app/agents/_base.py` keeps serving non-peek agents (sheet classifier, layout hinter, field namer) — they don't need a loop.
+- **Changes:** the per-finding / per-phase judges (PRs #80–#83) collapse into the single `CanvasPlanReviewer` + `CanvasPlanReviewerGate`, using the Haystack `Agent` pattern above. Per-PLI post-apply judges use the same pattern with a per-PLI scope.
+
 ## 11. Migration plan — fresh branch, parallel work
 
 The existing canvas-architecture branch keeps working. Tiers 0-6 stay merged. We create a new branch:
