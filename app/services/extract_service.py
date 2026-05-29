@@ -25,7 +25,7 @@ from app.core.telemetry import (
     plis_extracted_total,
 )
 from app.core.tracing import get_tracer
-from app.inferencing.anthropic import AnthropicProvider
+from app.inferencing.factory import build_provider
 from app.models.extraction import ExtractionResult, Warning
 from app.pipelines.extract import make_extract_pipeline
 from app.repositories.workbook_repo import register_workbook
@@ -38,7 +38,7 @@ def extract(workbook_path: Path | str, *, llm: Any = None) -> ExtractionResult:
     """Extract structured PLIs from a TNA workbook via the Haystack Pipeline."""
     t0 = time.monotonic()
     ctx = register_workbook(workbook_path)
-    llm = llm or AnthropicProvider.from_env()
+    llm = llm or build_provider()
 
     log.info("extract_start", file=str(ctx.path))
     with get_tracer(__name__).start_as_current_span("extract") as root_span:

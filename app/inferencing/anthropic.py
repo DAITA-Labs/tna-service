@@ -157,3 +157,11 @@ class AnthropicProvider(BaseProvider):
             f"Anthropic returned no tool_use block for {tool_name!r}. "
             f"stop_reason={raw.stop_reason}; content={raw.content!r}"
         )
+
+
+# Self-register with the provider factory so build_provider("anthropic") works.
+# Importing this module triggers the registration; build_provider also forces
+# the import as a safety net.
+from app.inferencing.factory import register_provider  # noqa: E402
+
+register_provider("anthropic", AnthropicProvider.from_env)

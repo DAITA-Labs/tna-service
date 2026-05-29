@@ -42,7 +42,7 @@ from app.core.telemetry import (
 )
 from app.core.tracing import get_tracer
 from app.inferencing._base import BaseProvider
-from app.inferencing.anthropic import AnthropicProvider
+from app.inferencing.factory import build_provider
 from app.models.extraction import ExtractionResult, Warning
 from app.repositories import register_workbook
 from app.pipelines.canvas_extract import make_canvas_extract_pipeline
@@ -67,7 +67,7 @@ def extract_canvas(
     """Run the canvas-architecture extraction chain end-to-end."""
     t0 = time.monotonic()
     ctx = register_workbook(workbook_path)
-    llm = llm or AnthropicProvider.from_env()
+    llm = llm or build_provider()
 
     log.info("canvas_extract_start", file=str(ctx.path))
     with get_tracer(__name__).start_as_current_span("canvas_extract") as root_span:

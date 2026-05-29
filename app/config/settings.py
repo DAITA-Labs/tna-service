@@ -50,6 +50,11 @@ class Settings(BaseSettings):
     temperature: float = 0.0
     retry_limit: int = 1
 
+    # Multi-provider LLM seam. Names map to BaseProvider factories registered
+    # via app.inferencing.factory.register_provider. Default keeps the existing
+    # behaviour; swap providers by setting LLM_PROVIDER in .env.
+    llm_provider: str = "anthropic"
+
 
 @lru_cache(maxsize=1)
 def get_settings() -> Settings:
