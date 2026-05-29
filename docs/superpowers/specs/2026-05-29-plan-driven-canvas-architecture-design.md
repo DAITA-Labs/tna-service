@@ -32,6 +32,8 @@ We're not throwing the existing work away. The tools, structure resolvers, workb
 
 7. **Policies refine during iteration.** The initial policy list per picker (§9) is a starting point. We will add, drop, and re-weight policies as real workbooks expose new failure modes. The architecture admits this without restructuring.
 
+8. **No silent data loss.** Every cell that carries information must ship somewhere in the output. If a column isn't claimed by any canonical, its per-row values flow into `pli.metadata` with the column's header text as the key. If a kv-block isn't claimed by an identifier or stage, it ships as SHEET-scoped metadata. If a date or fabric value is detected but doesn't have a flat PLI field, it lands in metadata under its canonical name. The plan tells the applier explicitly **what to keep and where to put it** — no cell that the planner saw should disappear without a deliberate decision recorded in the plan.
+
 ## 3. The layered architecture
 
 ```
@@ -81,6 +83,21 @@ LAYER 8 — RECONCILIATION
 
 ## 4. Core types
 
+**Enum locations:** every `Literal[...]` and `Enum` referenced in this design lives in `app/enums/` — one file per enum, alphabetically ordered, with no inline `Literal` types in the new code. This keeps the vocabulary in one place. The complete list of new enums introduced by this design:
+
+```
+app/enums/
+  field_location_mode.py      FieldLocationMode = {COLUMN, KV_BLOCK, MISSING}
+  pli_axis.py                 PliAxis           = {VERTICAL, SECTIONAL, SHEET}
+  stage_axis.py               StageAxis         = {HORIZONTAL, VERTICAL, NONE}
+  subfield_axis.py            SubfieldAxis      = {HORIZONTAL, IMPLICIT, NONE}
+  judge_decision.py           JudgeDecision     = {APPROVE, MODIFY, ESCALATE}
+  policy_severity.py          PolicySeverity    = {INFO, WARNING, ERROR}    # optional
+  cluster_role.py             ClusterRole       = {PLI_CLUSTER, METADATA_ONLY, SUMMARY, OTHER}
+```
+
+Plus the existing enums that already live in `app/enums/` (`Environment`, `CellDtype`, `LocationPattern`, `ValidationSeverity`, `PliMode`, `RowRole`, `StageScope`) — those stay where they are. Anything in `app/specs/enums.py` (`FieldScope`, `ValueDtype`, `ValueDtypeMode`, `LabelMatchMode`) that the new code references gets re-exported from `app/enums/` for a single import path. Migration plan §11 covers this consolidation as a discrete step.
+
 ```python
 # app/policies/_base.py
 @dataclass(frozen=True)
@@ -97,13 +114,15 @@ class PolicyVerdict:
 
 ```python
 # app/artifacts/plan.py
+from app.enums.field_location_mode import FieldLocationMode
+
 @dataclass(frozen=True)
 class FieldLocation:
     """Where one canonical's value lives in the bundle."""
     canonical:   str
-    mode:        Literal["column", "kv_block", "missing"]
-    column:      int | None = None        # set when mode == "column"
-    kv_block:    KvBlock | None = None    # set when mode == "kv_block"
+    mode:        FieldLocationMode        # COLUMN / KV_BLOCK / MISSING
+    column:      int | None = None        # set when mode == COLUMN
+    kv_block:    KvBlock | None = None    # set when mode == KV_BLOCK
     score:       float = 0.0              # aggregate from policies
     verdicts:    list[PolicyVerdict] = field(default_factory=list)
 
@@ -120,11 +139,19 @@ class StageBandPlan:
 
 
 @dataclass(frozen=True)
+class MetadataColumn:
+    """An unclaimed tabular column whose per-row values ship as PLI metadata."""
+    column:       int
+    header_text:  str                              # the column header — becomes the metadata key
+    canonical:    str | None = None                # set when header matched a METADATA_SPECS alias
+
+
+@dataclass(frozen=True)
 class CanvasPlan:
     """The complete, deterministic recipe for extracting PLIs from one bundle."""
     cluster_id:         str
     anchor_sheet_name:  str
-    pli_axis:           Literal["vertical", "sectional", "sheet"]
+    pli_axis:           PliAxis                             # VERTICAL / SECTIONAL / SHEET
 
     # WHERE PLIs iterate
     pli_rows:           list[int]                       # for vertical/sectional
@@ -136,8 +163,10 @@ class CanvasPlan:
     # WHERE stages live
     stage_bands:        list[StageBandPlan]
 
-    # WHERE metadata lives (unclaimed kv blocks)
-    metadata_blocks:    list[KvBlock]
+    # WHERE metadata lives — per principle 8 (no silent data loss)
+    metadata_blocks:    list[KvBlock]                   # SHEET-scoped: unclaimed kv pairs
+    metadata_columns:   list[MetadataColumn]            # PLI-scoped: unclaimed tabular columns;
+                                                         # values read per-row during apply
 
     # Audit trail
     all_verdicts:       list[PolicyVerdict] = field(default_factory=list)
@@ -236,8 +265,16 @@ def apply_canvas_plan(plan: CanvasPlan, canvas: GridCanvas) -> list[PLI]:
         flat_fields = _read_flat_fields(plan.field_locations, canvas, row)
         # Walk each stage band, read planned_date / actual_date / status / remarks
         stages = _read_stages(plan.stage_bands, canvas, row)
-        # Attach metadata (scope-aware)
-        metadata = _read_metadata(plan.metadata_blocks, canvas, plan.cluster_id, row)
+        # Per-row metadata starts empty
+        metadata: dict[str, Any] = {}
+        # 1. Attach SHEET-scoped metadata (from unclaimed kv blocks)
+        _attach_sheet_metadata(metadata, plan.metadata_blocks, canvas, plan.cluster_id)
+        # 2. Attach PLI-scoped metadata — every unclaimed column ships its cell value at this row
+        for mc in plan.metadata_columns:
+            value = canvas.cell_values[row - 1][mc.column - 1]
+            if value is not None and value != "":
+                key = mc.canonical or mc.header_text
+                metadata[key] = value
         plis.append(_assemble_pli(row, flat_fields, stages, metadata, canvas))
     return plis
 ```
@@ -245,6 +282,7 @@ def apply_canvas_plan(plan: CanvasPlan, canvas: GridCanvas) -> list[PLI]:
 - One iteration loop. Merged-cell values flow naturally because the canvas's `cell_values` already carries merge-expanded values, and the plan tells us which column to read at each row.
 - PLI identity is the iteration plus the `PliKey` derivation — if two rows share the same `PliKey`, they collapse into one `PLI` with combined stages and metadata.
 - No policies. No LLM. No retries. The applier never decides; it executes.
+- **Every unclaimed column lands in `pli.metadata`** with the column's header text as the key (or the matched canonical name when the header matched a `METADATA_SPECS` alias). Principle 8 — no silent data loss — is enforced by the apply step reading EVERY column the plan flagged: either as a claimed canonical, or as a metadata column.
 
 ## 7. The `PolicyApplier` component (a.k.a. the picker)
 
@@ -398,10 +436,20 @@ This is the initial picker + policy inventory. Each policy is a starting point; 
 - `stage_subfield_alias_match_policy` — match against SUBFIELD_SPECS aliases
 - `stage_subfield_dtype_match_policy` — match planned_date column dtype = date, etc.
 
-**`MetadataKvPicker`** — picks which KvBlocks are metadata (not claimed by identifiers).
+**`MetadataKvPicker`** — picks which KvBlocks are SHEET-scoped metadata (not claimed by identifiers).
 - Candidates: `bag.kv_blocks`
 - `metadata_not_claimed_policy` — eliminate kv blocks whose value cells were claimed by IdentifierColumnPicker output
-- `metadata_alias_match_policy` — informational, attempts canonical assignment
+- `metadata_alias_match_policy` — informational; attempts canonical assignment via `METADATA_SPECS` hints
+
+**`UnclaimedColumnPicker`** — picks tabular columns that no canonical claimed → ship as PLI-scoped metadata.
+- Candidates: every column referenced in `bundle.hint.header_band` that didn't end up in any `field_locations[*].column`
+- Emits `MetadataColumn(column, header_text, canonical=optional)` per surviving column
+- Policies:
+  - `column_has_header_text_policy` — eliminate columns with blank header (can't make a metadata key)
+  - `column_not_already_claimed_policy` — eliminate columns already taken by an `IdentifierColumnPicker` winner
+  - `column_has_data_policy` — eliminate columns whose values are 100% blank across `pli_rows`
+  - `column_metadata_alias_match_policy` — informational; tag the column with a `METADATA_SPECS` canonical when the header matches an alias
+- This picker enforces principle 8 — every column the planner saw lands somewhere (claimed canonical OR metadata column).
 
 ### Layer 4 (Plan assembly cross-field)
 
@@ -501,23 +549,25 @@ Phasing:
 
 1. **Branch from canvas-architecture, add the new shape alongside**. Most of Tier 1 (sensors) is reused unchanged. The canvas, LayoutHint, and structural records are all reusable substrate.
 
-2. **Build the picker base + first picker (HeaderBandPicker)**. Validate the shape end-to-end on one structural decision.
+2. **Consolidate enums in `app/enums/`** as a discrete step before any picker code lands. Add the new enums listed in §4 (`FieldLocationMode`, `PliAxis`, `StageAxis`, `SubfieldAxis`, `JudgeDecision`, `PolicySeverity`, `ClusterRole`), and re-export the existing scattered ones (`FieldScope`, `ValueDtype`, `ValueDtypeMode`, `LabelMatchMode` from `app/specs/enums.py`). New code imports from `app/enums/`; existing imports keep working via re-export. Inline `Literal[...]` types in the new code are not allowed — they must reference an enum.
 
-3. **Migrate Tier 2 structural resolvers to pickers**, one at a time. Each migration: extract candidate generation → write policies → swap the resolver out. Existing structure-phase tests adapt.
+3. **Build the picker base + first picker (HeaderBandPicker)**. Validate the shape end-to-end on one structural decision.
 
-4. **Migrate Tier 3 workbook routing similarly**.
+4. **Migrate Tier 2 structural resolvers to pickers**, one at a time. Each migration: extract candidate generation → write policies → swap the resolver out. Existing structure-phase tests adapt.
 
-5. **Build IdentifierColumnPicker + its 11-canonical policy list**. Retire Tier 4 extractors. Build StagesPicker + MetadataKvPicker.
+5. **Migrate Tier 3 workbook routing similarly**.
 
-6. **Build PlanAssembler + PlanCrossFieldPicker + the CanvasPlan artifact + CanvasApplier**. Wire /extract_canvas_v2 end-to-end.
+6. **Build IdentifierColumnPicker + its 11-canonical policy list**. Retire Tier 4 extractors. Build StagesPicker + MetadataKvPicker + UnclaimedColumnPicker.
 
-7. **Migrate Tier 5 validators to post-apply policies**. Wire PostApplyPolicyApplier.
+7. **Build PlanAssembler + PlanCrossFieldPicker + the CanvasPlan artifact + CanvasApplier**. Wire /extract_canvas_v2 end-to-end. CanvasApplier reads claimed canonicals AND unclaimed columns → enforces principle 8.
 
-8. **Build CanvasPlanReviewer judge** + retire the per-finding / phase judge gates (PR #80-#83).
+8. **Migrate Tier 5 validators to post-apply policies**. Wire PostApplyPolicyApplier.
 
-9. **Run canvas eval on /extract_canvas_v2 vs /extract_canvas**. When v2 matches or beats v1, switch the canonical /extract_canvas endpoint to the new chain; deprecate v1.
+9. **Build CanvasPlanReviewer judge + the judge tool set** (`peek_range`, `get_column_profile`, etc.). Retire the per-finding / phase judge gates (PR #80-#83).
 
-10. **Cleanup PR**: remove the old per-canonical extractors, the per-finding judges, the row-grain reconciler. Update ADR-0008 / ADR-0009 with the new architecture as the canonical canvas-arch.
+10. **Run canvas eval on /extract_canvas_v2 vs /extract_canvas**. When v2 matches or beats v1, switch the canonical /extract_canvas endpoint to the new chain; deprecate v1.
+
+11. **Cleanup PR**: remove the old per-canonical extractors, the per-finding judges, the row-grain reconciler. Update ADR-0008 / ADR-0009 with the new architecture as the canonical canvas-arch.
 
 Throughout, the policy lists in §9 are starting points. Adding a policy = a new function + one line in the picker. Removing one = delete the import + line.
 
