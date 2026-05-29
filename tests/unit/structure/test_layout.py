@@ -18,12 +18,14 @@ def test_workflow_agents_each_in_own_module():
 
 
 def test_services_contains_only_service_layer():
-    """app/services/ contains only the orchestration service layer."""
+    """app/services/ contains the orchestration service layer (legacy + canvas)."""
     svc_dir = ROOT / "app" / "services"
     files = {p.name for p in svc_dir.glob("*.py")}
-    assert files == {"__init__.py", "extract_service.py"}, (
-        f"Unexpected files in app/services/: {files}"
-    )
+    assert files == {
+        "__init__.py",
+        "extract_service.py",
+        "canvas_extract_service.py",
+    }, f"Unexpected files in app/services/: {files}"
 
 
 def test_validators_each_in_own_module():
