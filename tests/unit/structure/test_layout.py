@@ -24,7 +24,7 @@ def test_services_contains_only_service_layer():
     assert files == {
         "__init__.py",
         "extract_service.py",
-        "canvas_extract_v2_service.py",
+        "canvas_extract_plan_service.py",
     }, f"Unexpected files in app/services/: {files}"
 
 

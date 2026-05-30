@@ -1,8 +1,7 @@
-"""Plan-driven canvas extraction service — `/extract_canvas_v2` orchestration.
+"""Plan-driven canvas extraction service — `/extract_canvas_plan` orchestration.
 
-Parallel to the legacy `canvas_extract_service` (per-canonical extractors
-+ arbiter + validators + judges + reconciler). This service runs the
-three-component plan-driven chain end-to-end:
+Parallel to the legacy `/extract` planner service. Runs the
+plan-driven chain end-to-end:
 
   1. `WorkbookPhase`              — workbook → list[ClusterAnchorBundle]
   2. `PlanAssembler`              — bundle → CanvasPlan          (per bundle)
@@ -19,7 +18,6 @@ from pathlib import Path
 from typing import Any
 
 from app.artifacts.finding import ValidationWarning
-from app.artifacts.workbook import ClusterAnchorBundle
 from app.components.judges.canvas_plan_reviewer_gate import CanvasPlanReviewerGate
 from app.components.plan import CanvasApplier, PlanAssembler
 from app.components.workbook.workbook_phase import WorkbookPhase
@@ -39,10 +37,10 @@ from app.repositories import register_workbook
 
 log = get_logger(__name__)
 
-_PATH_LABEL = "canvas_v2"
+_PATH_LABEL = "canvas_plan"
 
 
-def extract_canvas_v2(
+def extract_canvas_plan(
     workbook_path: Path | str, *, llm: BaseProvider | None = None,
 ) -> ExtractionResult:
     """Run the plan-driven canvas extraction chain end-to-end."""
@@ -50,8 +48,8 @@ def extract_canvas_v2(
     ctx = register_workbook(workbook_path)
     llm = llm or build_provider()
 
-    log.info("canvas_v2_extract_start", file=str(ctx.path))
-    with get_tracer(__name__).start_as_current_span("canvas_extract_v2") as root_span:
+    log.info("canvas_plan_extract_start", file=str(ctx.path))
+    with get_tracer(__name__).start_as_current_span("canvas_extract_plan") as root_span:
         root_span.set_attribute("file", str(ctx.path))
         try:
             result = _run_chain(ctx, llm)
@@ -67,7 +65,7 @@ def _run_chain(ctx: Any, llm: BaseProvider) -> ExtractionResult:
     """Drive WorkbookPhase → (PlanAssembler → ReviewerGate → CanvasApplier) per bundle."""
     bundles = WorkbookPhase().run(workbook=ctx.wb)["bundles"]
     if not bundles:
-        log.info("canvas_v2_no_pli_clusters", file=str(ctx.path))
+        log.info("canvas_plan_no_pli_clusters", file=str(ctx.path))
         extractions_total.add(1, {"status": "empty", "path": _PATH_LABEL})
         return ExtractionResult(
             plis=[], source_file=str(ctx.path),
@@ -110,7 +108,7 @@ def _record_telemetry(result: ExtractionResult, ctx: Any, t0: float) -> None:
     plis_extracted_total.add(pli_count,       {"path": _PATH_LABEL})
     extractions_total.add(1, {"status": "success", "path": _PATH_LABEL})
     log.info(
-        "canvas_v2_extract_complete",
+        "canvas_plan_extract_complete",
         file=str(ctx.path),
         elapsed_seconds=elapsed,
         pli_count=pli_count,
