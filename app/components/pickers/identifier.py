@@ -36,6 +36,7 @@ from app.policies.field.identifier import (
     score_lc_kv_via_label_match,
     score_lc_row_via_spec,
 )
+from app.tools import canvas as _canvas_tools  # noqa: F401 — registers @tool entries
 
 
 class IdentifierPicker(Picker[LocationCandidate]):

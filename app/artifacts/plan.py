@@ -22,6 +22,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import date
 
+from app.artifacts.finding import ValidationWarning
 from app.artifacts.structure import KvBlock, Rect, SectionBoundary
 from app.enums.field_location_mode import FieldLocationMode
 from app.enums.field_scope import FieldScope
@@ -154,6 +155,10 @@ class CanvasPlan:
 
     # Audit trail + aggregate confidence.
     all_verdicts:       list[PolicyVerdict]          = field(default_factory=list)
+    warnings:           list[ValidationWarning]      = field(default_factory=list)
+    # Per-canonical scoreboards for judge introspection and re-pick context.
+    # Each entry: (LocationCandidate, aggregate_score, eliminated_flag).
+    scoreboards:        dict[str, list[tuple["LocationCandidate", float, bool]]] = field(default_factory=dict)
     confidence:         float                        = 0.0
 
 
