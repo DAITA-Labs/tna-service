@@ -57,6 +57,55 @@ class Picker(Component, Generic[C]):
             f"{type(self).__name__} must override candidates()."
         )
 
+    def _score_all_candidates(
+        self,
+        candidates:      Sequence[C],
+        **policy_context: Any,
+    ) -> tuple[list[tuple[C, float, bool]], list[PolicyVerdict]]:
+        """Run every policy against every candidate; return the full scoreboard.
+
+        Returns `(scoreboard, verdicts)` where:
+          - `scoreboard` is an order-preserving list of
+            `(candidate, aggregate_score, eliminated)` triples — every
+            candidate appears, including eliminated ones. The aggregate
+            score is the sum of every policy's `score_delta` for that
+            candidate.
+          - `verdicts` is the full audit trail (every policy × every
+            candidate, in candidate-then-policy order).
+
+        Eliminated candidates remain in the scoreboard so judges and
+        cross-field policies can see them; `_score_candidates` filters
+        them when picking a winner.
+        """
+        all_verdicts: list[PolicyVerdict]         = []
+        scoreboard:   list[tuple[C, float, bool]] = []
+
+        for candidate in candidates:
+            verdicts_for_candidate = [
+                policy(candidate, **policy_context) for policy in self.policies
+            ]
+            all_verdicts.extend(verdicts_for_candidate)
+            total, eliminated = aggregate_verdicts(verdicts_for_candidate)
+            scoreboard.append((candidate, total, eliminated))
+
+        return scoreboard, all_verdicts
+
+    def score_all(
+        self,
+        **kwargs: Any,
+    ) -> tuple[list[tuple[C, float, bool]], list[PolicyVerdict]]:
+        """Public scoreboard accessor — scores every candidate without picking.
+
+        Useful for cross-decision layers (PlanCrossFieldPicker) and judge
+        introspection: every candidate's aggregate score remains visible
+        so callers can detect close calls, conflicts, or runner-ups.
+
+        Delegates candidate generation to `candidates(**kwargs)`, then
+        scores via `_score_all_candidates`.
+        """
+        candidates = self.candidates(**kwargs)
+        return self._score_all_candidates(candidates, **kwargs)
+
     def _score_candidates(
         self,
         candidates:      Sequence[C],
@@ -74,21 +123,10 @@ class Picker(Component, Generic[C]):
         Tie-breaking is unspecified — when two candidates share the top
         score, `max()`'s first-encountered-wins semantics apply.
         """
-        all_verdicts: list[PolicyVerdict]            = []
-        scored:       list[tuple[C, float, bool]]    = []
-
-        for candidate in candidates:
-            verdicts_for_candidate = [
-                policy(candidate, **policy_context) for policy in self.policies
-            ]
-            all_verdicts.extend(verdicts_for_candidate)
-            total, eliminated = aggregate_verdicts(verdicts_for_candidate)
-            scored.append((candidate, total, eliminated))
-
-        surviving = [(c, score) for c, score, elim in scored if not elim]
+        scoreboard, all_verdicts = self._score_all_candidates(candidates, **policy_context)
+        surviving = [(c, score) for c, score, elim in scoreboard if not elim]
         if not surviving:
             return None, all_verdicts
-
         winner, top_score = max(surviving, key=lambda pair: pair[1])
         if top_score < self.score_floor:
             return None, all_verdicts

@@ -148,3 +148,73 @@ def test_negative_candidate_can_still_win_with_high_boost() -> None:
     winner, _ = picker._score_candidates(picker.candidates())
     # -1 scores 10.0 - 0.5 = 9.5; 1 scores 10.0 + 0.0 = 10.0. 1 wins.
     assert winner == 1
+
+
+# ── score_all() — public scoreboard accessor ───────────────────────────────
+
+
+def test_score_all_returns_every_candidate_with_aggregate_score() -> None:
+    picker = _IntPicker(
+        policies=[_boost_if_even, _penalise_negatives],
+        candidates_list=[-2, -1, 0, 1, 2],
+    )
+    scoreboard, verdicts = picker.score_all()
+
+    assert len(scoreboard) == 5  # every candidate present (no winner-only filter)
+    by_candidate = {c: (score, elim) for c, score, elim in scoreboard}
+    assert by_candidate[-2] == (1.0 - 0.5, False)     # boost(even) + penalty
+    assert by_candidate[-1] == (0.0 - 0.5, False)     # only penalty
+    assert by_candidate[0]  == (1.0,        False)    # boost only
+    assert by_candidate[1]  == (0.0,        False)
+    assert by_candidate[2]  == (1.0,        False)
+    assert len(verdicts) == 5 * 2  # candidates × policies
+
+
+def test_score_all_preserves_eliminated_candidates_with_flag() -> None:
+    picker = _IntPicker(
+        policies=[_boost_if_even, _eliminate_if_zero],
+        candidates_list=[0, 1, 2],
+    )
+    scoreboard, _ = picker.score_all()
+
+    by_candidate = {c: (score, elim) for c, score, elim in scoreboard}
+    assert by_candidate[0] == (1.0, True)    # eliminated but score retained
+    assert by_candidate[1] == (0.0, False)
+    assert by_candidate[2] == (1.0, False)
+
+
+def test_score_all_preserves_candidate_order() -> None:
+    picker = _IntPicker(
+        policies=[_boost_if_even],
+        candidates_list=[5, 2, 7, 4, 1],
+    )
+    scoreboard, _ = picker.score_all()
+    assert [c for c, _, _ in scoreboard] == [5, 2, 7, 4, 1]
+
+
+def test_score_all_and_score_candidates_agree_on_winner() -> None:
+    """Whatever score_all reports, _score_candidates picks the same winner."""
+    picker = _IntPicker(
+        policies=[_boost_if_even, _penalise_negatives],
+        candidates_list=[-2, 1, 2, 4],
+    )
+    scoreboard, _ = picker.score_all()
+    winner, _   = picker._score_candidates(picker.candidates())
+
+    surviving = [(c, score) for c, score, elim in scoreboard if not elim]
+    expected_winner, _ = max(surviving, key=lambda pair: pair[1])
+    assert winner == expected_winner
+
+
+def test_score_all_empty_candidates_returns_empty_scoreboard() -> None:
+    picker = _IntPicker(policies=[_boost_if_even], candidates_list=[])
+    scoreboard, verdicts = picker.score_all()
+    assert scoreboard == []
+    assert verdicts == []
+
+
+def test_score_all_no_policies_returns_zero_scores() -> None:
+    picker = _IntPicker(policies=[], candidates_list=[1, 2, 3])
+    scoreboard, verdicts = picker.score_all()
+    assert [(c, s, e) for c, s, e in scoreboard] == [(1, 0.0, False), (2, 0.0, False), (3, 0.0, False)]
+    assert verdicts == []
