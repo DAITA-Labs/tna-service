@@ -32,6 +32,24 @@ from app.policies._base import PolicyVerdict
 
 
 @dataclass(frozen=True)
+class LocationCandidate:
+    """Tagged-union candidate that `IdentifierPicker` scores across modes.
+
+    A picker scoring across COLUMN / ROW / KV candidates needs a uniform
+    candidate type. `LocationCandidate` carries the mode discriminator
+    plus the mode-specific coordinate slot. The winner's `mode` tells
+    PlanAssembler which `FieldLocation` shape to construct.
+
+    Frozen so it's hashable — picker scoreboards use it as a dict key.
+    """
+
+    mode:     FieldLocationMode
+    column:   int | None     = None    # set when mode = COLUMN
+    row:      int | None     = None    # set when mode = ROW
+    kv_block: KvBlock | None = None    # set when mode = KV_BLOCK
+
+
+@dataclass(frozen=True)
 class FieldLocation:
     """Where one canonical identifier's value lives + how to read it.
 
