@@ -109,18 +109,19 @@ class CanvasPlan:
 
 @dataclass(frozen=True)
 class PliKey:
-    """Identity tuple for a single PLI — all seven dimensions participate.
+    """Identity tuple for a single PLI — all eight dimensions participate.
 
     A PLI is the unique combination of (io_number, style_code, color_code,
-    fabric_code) intersected with one of (ex_fty_date, shipment_date,
-    delivery_date). Equality is structural; instances are hashable so
-    callers can dedupe.
+    fabric_code, quantity) intersected with one of (ex_fty_date,
+    shipment_date, delivery_date). Equality is structural; instances are
+    hashable so callers can dedupe.
     """
 
     io_number:     str | None
     style_code:    str | None
     color_code:    str | None
     fabric_code:   str | None
+    quantity:      int | None
     ex_fty_date:   date | None
     shipment_date: date | None
     delivery_date: date | None

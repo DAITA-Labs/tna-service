@@ -119,7 +119,7 @@ def test_canvas_plan_populated() -> None:
 def test_pli_key_is_hashable() -> None:
     k = PliKey(
         io_number="IO-1", style_code="S-1",
-        color_code=None, fabric_code=None,
+        color_code=None, fabric_code=None, quantity=100,
         ex_fty_date=None, shipment_date=date(2026, 1, 1), delivery_date=None,
     )
     s = {k}
@@ -128,8 +128,10 @@ def test_pli_key_is_hashable() -> None:
 
 def test_pli_key_equality_is_structural() -> None:
     k1 = PliKey(io_number="A", style_code="B", color_code=None, fabric_code=None,
+                quantity=500,
                 ex_fty_date=None, shipment_date=None, delivery_date=date(2026, 1, 1))
     k2 = PliKey(io_number="A", style_code="B", color_code=None, fabric_code=None,
+                quantity=500,
                 ex_fty_date=None, shipment_date=None, delivery_date=date(2026, 1, 1))
     assert k1 == k2
     assert hash(k1) == hash(k2)
@@ -137,9 +139,22 @@ def test_pli_key_equality_is_structural() -> None:
 
 def test_pli_key_diff_delivery_dates_not_equal() -> None:
     k1 = PliKey(io_number="A", style_code="B", color_code=None, fabric_code=None,
+                quantity=500,
                 ex_fty_date=None, shipment_date=None, delivery_date=date(2026, 1, 1))
     k2 = PliKey(io_number="A", style_code="B", color_code=None, fabric_code=None,
+                quantity=500,
                 ex_fty_date=None, shipment_date=None, delivery_date=date(2026, 2, 1))
+    assert k1 != k2
+
+
+def test_pli_key_diff_quantity_not_equal() -> None:
+    """Quantity is part of identity — different quantities = different PLIs."""
+    k1 = PliKey(io_number="A", style_code="B", color_code=None, fabric_code=None,
+                quantity=100,
+                ex_fty_date=None, shipment_date=None, delivery_date=date(2026, 1, 1))
+    k2 = PliKey(io_number="A", style_code="B", color_code=None, fabric_code=None,
+                quantity=200,
+                ex_fty_date=None, shipment_date=None, delivery_date=date(2026, 1, 1))
     assert k1 != k2
 
 
