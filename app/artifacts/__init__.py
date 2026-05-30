@@ -20,7 +20,7 @@ from typing import Any
 # ─── Canvas-architecture artifacts (direct re-exports) ──────────────────────
 
 from app.artifacts.canvas import GridCanvas
-from app.artifacts.finding import Confidence, Coord, Finding, ValidationWarning, Verdict
+from app.artifacts.finding import ValidationWarning
 from app.artifacts.layout import Direction, LayoutAxes, LayoutHint
 from app.artifacts.plan import (
     CanvasPlan,
@@ -101,8 +101,8 @@ __all__ = [
     "StructureBag",
     # ─ Canvas: layout ──────────────────────────────────────────────────
     "LayoutAxes", "LayoutHint",
-    # ─ Canvas: findings ────────────────────────────────────────────────
-    "Confidence", "Coord", "Finding", "Verdict", "ValidationWarning",
+    # ─ Canvas: validation ─────────────────────────────────────────────
+    "ValidationWarning",
     # ─ Canvas: plan ─────────────────────────────────────────────────────
     "CanvasPlan", "FieldLocation", "LocationCandidate",
     "MetadataPlan", "PliKey", "StageBandPlan",

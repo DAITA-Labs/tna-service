@@ -9,10 +9,8 @@ from __future__ import annotations
 def test_canvas_artifacts_direct_reexport() -> None:
     """Canvas-architecture types are importable directly from app.artifacts."""
     from app.artifacts import (
-        Confidence,
         DataRowRange,
         DateStrip,
-        Finding,
         GridCanvas,
         HeaderBand,
         IntStrip,
@@ -23,7 +21,6 @@ def test_canvas_artifacts_direct_reexport() -> None:
         StageArena,
         StructureBag,
         ValidationWarning,
-        Verdict,
     )
 
     # Construct one of each to prove they're real types not strings
@@ -32,6 +29,7 @@ def test_canvas_artifacts_direct_reexport() -> None:
     assert LayoutAxes(
         pli_axis="vertical", stage_axis="horizontal", subfield_axis="horizontal"
     ).pli_axis == "vertical"
+    assert ValidationWarning(name="x", severity="info", message="m").severity == "info"
 
 
 def test_legacy_artifacts_lazy_reexport() -> None:
@@ -48,7 +46,7 @@ def test_dir_includes_both_families() -> None:
     exported = set(artifacts.__all__)
     # canvas
     assert "GridCanvas" in exported
-    assert "Finding" in exported
+    assert "ValidationWarning" in exported
     assert "LayoutHint" in exported
     # legacy
     assert "SheetPlan" in exported

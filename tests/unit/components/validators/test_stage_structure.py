@@ -14,7 +14,7 @@ from app.artifacts.structure import (
     SubfieldCluster,
 )
 from app.components.validators.stage_structure import StageStructureValidator
-from tests.unit.components.field._bundles import make_bundle
+from tests.fixtures.bundles import make_bundle
 
 
 def _band(name: str, *, r0: int, c0: int, c1: int,

@@ -18,19 +18,23 @@ def test_workflow_agents_each_in_own_module():
 
 
 def test_services_contains_only_service_layer():
-    """app/services/ contains the orchestration service layer (legacy + canvas)."""
+    """app/services/ contains the orchestration service layer."""
     svc_dir = ROOT / "app" / "services"
     files = {p.name for p in svc_dir.glob("*.py")}
     assert files == {
         "__init__.py",
         "extract_service.py",
-        "canvas_extract_service.py",
         "canvas_extract_v2_service.py",
     }, f"Unexpected files in app/services/: {files}"
 
 
 def test_validators_each_in_own_module():
-    """One file per validator (or validator-pipeline helper) in components/validators/."""
+    """One file per validator in components/validators/.
+
+    Only the legacy planner's validators (and the canvas plan-driven
+    `stage_structure`) survive; the v1-canvas Finding-consuming
+    validators were retired with the v1 chain.
+    """
     v_dir = ROOT / "app" / "components" / "validators"
     vals = {p.stem for p in v_dir.glob("*.py")
             if p.name not in ("__init__.py",)}
@@ -40,16 +44,7 @@ def test_validators_each_in_own_module():
         "plan_invariants", "plan_statistics",
         "post_review_plan", "post_namer_canonical", "pre_apply_readiness",
         "post_review_validator", "post_namer_validator", "pre_apply_validator",
-        # canvas-architecture validators (consume list[Finding] + ClusterAnchorBundle)
-        "cardinality",
-        "date_trio",
-        "quantity_dtype",
-        "row_alignment",
-        "stage_sequence",
         "stage_structure",
-        "stage_wins",
-        # pipeline-wiring helper: concatenates the warnings from the validators above
-        "canvas_warning_aggregator",
     }
 
 

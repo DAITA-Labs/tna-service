@@ -9,7 +9,6 @@ from app.core.middleware import RequestIdMiddleware
 from app.core.telemetry import extractions_total  # noqa: F401 — register collectors
 from app.enums.environment import Environment
 from app.routers.extract import router as extract_router
-from app.routers.extract_canvas import router as extract_canvas_router
 from app.routers.extract_canvas_v2 import router as extract_canvas_v2_router
 from app.routers.health import router as health_router
 
@@ -46,6 +45,5 @@ if _tracing_enabled:
 
 app.add_middleware(RequestIdMiddleware)
 app.include_router(extract_router)
-app.include_router(extract_canvas_router)
 app.include_router(extract_canvas_v2_router)
 app.include_router(health_router)
