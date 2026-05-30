@@ -25,7 +25,7 @@ from app.artifacts.layout import Direction, LayoutAxes, LayoutHint
 from app.artifacts.plan import (
     CanvasPlan,
     FieldLocation,
-    MetadataColumn,
+    MetadataPlan,
     PliKey,
     StageBandPlan,
 )
@@ -103,7 +103,7 @@ __all__ = [
     # ─ Canvas: findings ────────────────────────────────────────────────
     "Confidence", "Coord", "Finding", "Verdict", "ValidationWarning",
     # ─ Canvas: plan ─────────────────────────────────────────────────────
-    "CanvasPlan", "FieldLocation", "MetadataColumn", "PliKey", "StageBandPlan",
+    "CanvasPlan", "FieldLocation", "MetadataPlan", "PliKey", "StageBandPlan",
     # ─ Legacy ──────────────────────────────────────────────────────────
     *_LEGACY_NAMES,
 ]

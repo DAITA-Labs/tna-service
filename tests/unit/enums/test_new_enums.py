@@ -6,8 +6,9 @@ from __future__ import annotations
 def test_field_location_mode_values() -> None:
     from app.enums.field_location_mode import FieldLocationMode
 
-    assert {m.value for m in FieldLocationMode} == {"column", "kv_block", "missing"}
+    assert {m.value for m in FieldLocationMode} == {"column", "row", "kv_block", "missing"}
     assert FieldLocationMode.COLUMN.value    == "column"
+    assert FieldLocationMode.ROW.value       == "row"
     assert FieldLocationMode.KV_BLOCK.value  == "kv_block"
     assert FieldLocationMode.MISSING.value   == "missing"
 
@@ -37,8 +38,9 @@ def test_stage_axis_is_str_enum() -> None:
 def test_subfield_axis_values() -> None:
     from app.enums.subfield_axis import SubfieldAxis
 
-    assert {m.value for m in SubfieldAxis} == {"horizontal", "implicit", "none"}
+    assert {m.value for m in SubfieldAxis} == {"horizontal", "vertical", "implicit", "none"}
     assert SubfieldAxis.HORIZONTAL.value == "horizontal"
+    assert SubfieldAxis.VERTICAL.value   == "vertical"
     assert SubfieldAxis.IMPLICIT.value   == "implicit"
     assert SubfieldAxis.NONE.value       == "none"
 
