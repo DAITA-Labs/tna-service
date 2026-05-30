@@ -82,8 +82,11 @@ class PlanAssembler(Component):
         stage_verdicts  = stages_out["verdicts"]
 
         claimed_kvs       = _kv_blocks_claimed_by(field_locations)
+        claimed_cols      = _columns_claimed_by(field_locations)
         metadata_out      = self._metadata_assembler.run(
-            bundle=bundle, claimed_kv_blocks=claimed_kvs,
+            bundle=bundle,
+            claimed_kv_blocks=claimed_kvs,
+            claimed_columns=claimed_cols,
         )
         metadata_entries  = metadata_out["metadata_entries"]
 
@@ -204,6 +207,15 @@ def _kv_blocks_claimed_by(field_locations: dict[str, FieldLocation]) -> set:
     for fl in field_locations.values():
         if fl.mode == FieldLocationMode.KV_BLOCK and fl.kv_block is not None:
             out.add(fl.kv_block)
+    return out
+
+
+def _columns_claimed_by(field_locations: dict[str, FieldLocation]) -> set[int]:
+    """Collect every column index that an identifier picker claimed as its winner."""
+    out: set[int] = set()
+    for fl in field_locations.values():
+        if fl.mode == FieldLocationMode.COLUMN and fl.column is not None:
+            out.add(fl.column)
     return out
 
 
