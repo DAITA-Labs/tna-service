@@ -2,15 +2,15 @@
 
 Parallel to the legacy `canvas_extract_service` (per-canonical extractors
 + arbiter + validators + judges + reconciler). This service runs the
-two-component plan-driven chain end-to-end:
+three-component plan-driven chain end-to-end:
 
-  1. `WorkbookPhase`   — workbook → list[ClusterAnchorBundle]
-  2. `PlanAssembler`   — bundle   → CanvasPlan          (per bundle)
-  3. `CanvasApplier`   — plan + canvas → list[PLI]      (per bundle)
+  1. `WorkbookPhase`              — workbook → list[ClusterAnchorBundle]
+  2. `PlanAssembler`              — bundle → CanvasPlan          (per bundle)
+  3. `CanvasPlanReviewerGate`     — plan → plan' (LLM review only when
+                                      warnings or low confidence fire)
+  4. `CanvasApplier`              — plan' + canvas → list[PLI]   (per bundle)
 
-Per-bundle outputs merge into one `ExtractionResult`. The plan-driven
-chain is fully deterministic — no LLM is invoked. `CanvasPlanReviewer`
-(LLM-based) is wired in a follow-on phase.
+Per-bundle outputs merge into one `ExtractionResult`.
 """
 from __future__ import annotations
 
@@ -20,6 +20,7 @@ from typing import Any
 
 from app.artifacts.finding import ValidationWarning
 from app.artifacts.workbook import ClusterAnchorBundle
+from app.components.judges.canvas_plan_reviewer_gate import CanvasPlanReviewerGate
 from app.components.plan import CanvasApplier, PlanAssembler
 from app.components.workbook.workbook_phase import WorkbookPhase
 from app.core.logs import get_logger
@@ -30,6 +31,8 @@ from app.core.telemetry import (
     plis_extracted_total,
 )
 from app.core.tracing import get_tracer
+from app.inferencing._base import BaseProvider
+from app.inferencing.factory import build_provider
 from app.models.extraction import ExtractionResult, PLI, Warning
 from app.repositories import register_workbook
 
@@ -39,16 +42,19 @@ log = get_logger(__name__)
 _PATH_LABEL = "canvas_v2"
 
 
-def extract_canvas_v2(workbook_path: Path | str) -> ExtractionResult:
+def extract_canvas_v2(
+    workbook_path: Path | str, *, llm: BaseProvider | None = None,
+) -> ExtractionResult:
     """Run the plan-driven canvas extraction chain end-to-end."""
     t0  = time.monotonic()
     ctx = register_workbook(workbook_path)
+    llm = llm or build_provider()
 
     log.info("canvas_v2_extract_start", file=str(ctx.path))
     with get_tracer(__name__).start_as_current_span("canvas_extract_v2") as root_span:
         root_span.set_attribute("file", str(ctx.path))
         try:
-            result = _run_chain(ctx)
+            result = _run_chain(ctx, llm)
         except Exception:
             extractions_total.add(1, {"status": "failure", "path": _PATH_LABEL})
             raise
@@ -57,8 +63,8 @@ def extract_canvas_v2(workbook_path: Path | str) -> ExtractionResult:
     return result
 
 
-def _run_chain(ctx: Any) -> ExtractionResult:
-    """Drive WorkbookPhase → (PlanAssembler → CanvasApplier) per bundle."""
+def _run_chain(ctx: Any, llm: BaseProvider) -> ExtractionResult:
+    """Drive WorkbookPhase → (PlanAssembler → ReviewerGate → CanvasApplier) per bundle."""
     bundles = WorkbookPhase().run(workbook=ctx.wb)["bundles"]
     if not bundles:
         log.info("canvas_v2_no_pli_clusters", file=str(ctx.path))
@@ -70,13 +76,15 @@ def _run_chain(ctx: Any) -> ExtractionResult:
             )],
         )
 
-    planner = PlanAssembler()
-    applier = CanvasApplier()
+    planner       = PlanAssembler()
+    reviewer_gate = CanvasPlanReviewerGate(llm=llm)
+    applier       = CanvasApplier()
 
     all_plis:     list[PLI]     = []
     all_warnings: list[Warning] = []
     for bundle in bundles:
         plan = planner.run(bundle=bundle)["plan"]
+        plan = reviewer_gate.run(plan=plan, bundle=bundle)["plan"]
         plis = applier.run(
             plan=plan, canvas=bundle.canvas, sheet=bundle.anchor_sheet_name,
         )["plis"]
