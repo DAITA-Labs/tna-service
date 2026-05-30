@@ -1,6 +1,6 @@
-"""PlanAssembler — assemble a CanvasPlan from per-canonical scoreboards.
+"""PlanAssembler — assemble a CanvasPlan from per-canonical scoreboards + stages.
 
-Three phases (the scoreboard architecture in code):
+Four phases (the scoreboard architecture in code):
 
   1. Per-canonical scoring — run one `IdentifierPicker` per registered
      identifier canonical, collect every candidate's score into the
@@ -13,12 +13,15 @@ Three phases (the scoreboard architecture in code):
      candidate above the score floor; build the matching `FieldLocation`
      dispatching on the winner's `mode`. Missing canonicals get
      `FieldLocation(mode=MISSING)`.
+  4. Stages assembly — `StagesAssembler` runs the multi-winner stage band
+     flow (every band above the floor survives) and produces a
+     `list[StageBandPlan]` that lands on `CanvasPlan.stage_bands`.
 
-Output: `CanvasPlan` carrying field_locations, scoreboards, all_verdicts,
-warnings, and the rest. The CanvasApplier (planned) consumes this plan
-to produce `list[PLI]`.
+Output: `CanvasPlan` carrying field_locations, stage_bands, scoreboards,
+all_verdicts, warnings, and the rest. The CanvasApplier (planned)
+consumes this plan to produce `list[PLI]`.
 
-Stages and metadata are deferred to follow-on PRs.
+Metadata is deferred to a follow-on PR.
 """
 from __future__ import annotations
 
@@ -37,6 +40,7 @@ from app.components.pickers.identifier_picker_registry import (
     IDENTIFIER_PICKER_CONFIGS,
 )
 from app.components.pickers.plan_cross_field import PlanCrossFieldPicker
+from app.components.plan.stages_assembler import StagesAssembler
 from app.enums.field_location_mode import FieldLocationMode
 from app.enums.field_scope import FieldScope
 from app.enums.pli_axis import PliAxis
@@ -58,6 +62,7 @@ class PlanAssembler(Component):
         Component.__init__(self)
         self._score_floor          = score_floor
         self._cross_field_picker   = PlanCrossFieldPicker()
+        self._stages_assembler     = StagesAssembler(score_floor=score_floor)
 
     @component.output_types(plan=CanvasPlan)
     def run(self, bundle: ClusterAnchorBundle) -> dict:
@@ -70,6 +75,10 @@ class PlanAssembler(Component):
         )
         field_locations = self._select_winners(scoreboards)
 
+        stages_out      = self._stages_assembler.run(bundle=bundle)
+        stage_bands     = stages_out["stage_bands"]
+        stage_verdicts  = stages_out["verdicts"]
+
         return {
             "plan": CanvasPlan(
                 cluster_id=bundle.cluster.cluster_id,
@@ -77,7 +86,8 @@ class PlanAssembler(Component):
                 pli_axis=pli_axis,
                 pli_rows=rows,
                 field_locations=field_locations,
-                all_verdicts=per_canonical_verdicts + cross_verdicts,
+                stage_bands=stage_bands,
+                all_verdicts=per_canonical_verdicts + cross_verdicts + stage_verdicts,
                 warnings=warnings,
                 scoreboards=scoreboards,
             ),

@@ -6,7 +6,7 @@ import pytest
 from app.artifacts.canvas import GridCanvas
 from app.artifacts.layout import LayoutAxes, LayoutHint
 from app.artifacts.plan import LocationCandidate
-from app.artifacts.structure import DataRowRange, KvBlock, StructureBag
+from app.artifacts.structure import DataRowRange, KvBlock, Rect, StageBand, StructureBag
 from app.artifacts.workbook import ClusterAnchorBundle, PliCluster
 from app.components.plan.plan_assembler import PlanAssembler
 from app.components.pickers.identifier_picker_registry import (
@@ -29,6 +29,7 @@ def _make_bundle(
     candidate_rows:      dict[str, list[int]] | None = None,
     candidate_kv_blocks: dict[str, list[KvBlock]] | None = None,
     data_row_ranges:     list[DataRowRange] | None = None,
+    stage_bands:         list[StageBand] | None = None,
     cluster_id:          str = "c0",
     anchor_sheet_name:   str = "TNA",
 ) -> ClusterAnchorBundle:
@@ -38,6 +39,7 @@ def _make_bundle(
         channels={},
     )
     bag = StructureBag()
+    bag.stage_bands = stage_bands or []
     hint = LayoutHint(
         axes=LayoutAxes(
             pli_axis=pli_axis, stage_axis="horizontal", subfield_axis="horizontal",
@@ -197,3 +199,36 @@ def test_below_floor_winner_becomes_missing(monkeypatch) -> None:
     plan = PlanAssembler().run(bundle=_make_bundle())["plan"]
     for canonical in IDENTIFIER_PICKER_CONFIGS:
         assert plan.field_locations[canonical].mode == FieldLocationMode.MISSING
+
+
+# ── Stages wired into the plan ─────────────────────────────────────────────
+
+
+def test_plan_carries_no_stage_bands_when_bag_has_none() -> None:
+    """Empty bag.stage_bands → empty plan.stage_bands."""
+    plan = PlanAssembler().run(bundle=_make_bundle(stage_bands=[]))["plan"]
+    assert plan.stage_bands == []
+
+
+def test_plan_carries_stage_bands_from_stages_assembler() -> None:
+    """Detected bands in bag → StageBandPlan entries on the plan."""
+    bands = [
+        StageBand(rect=Rect(r0=3, c0=5, r1=15, c1=7),
+                   name_coord=("E", 3), name_text="Sewing"),
+        StageBand(rect=Rect(r0=3, c0=8, r1=15, c1=10),
+                   name_coord=("H", 3), name_text="Inspection"),
+    ]
+    plan = PlanAssembler().run(bundle=_make_bundle(stage_bands=bands))["plan"]
+    assert len(plan.stage_bands) == 2
+    names = [b.name for b in plan.stage_bands]
+    assert names == ["Sewing", "Inspection"]
+
+
+def test_stage_band_verdicts_merged_into_all_verdicts() -> None:
+    """score_band_detected verdicts ride along on plan.all_verdicts."""
+    bands = [
+        StageBand(rect=Rect(r0=3, c0=5, r1=15, c1=7),
+                   name_coord=("E", 3), name_text="Sewing"),
+    ]
+    plan = PlanAssembler().run(bundle=_make_bundle(stage_bands=bands))["plan"]
+    assert any(v.name == "score_band_detected" for v in plan.all_verdicts)
