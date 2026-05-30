@@ -32,42 +32,10 @@ class PliMode(str, Enum):
 from app.enums.pli_axis import PliAxis  # noqa: F401
 
 
-class FieldScope(str, Enum):
-    """Scope at which a field's value applies across PLIs.
-
-    SHEET — one value applies to ALL PLIs in the sheet. Read once; broadcast.
-            Typical for buyer, season, ex_factory_date (when sheet-level).
-    GROUP — one value applies to a GROUP of consecutive PLIs in the sheet.
-            Typical for hybrid layouts: first 3 PLIs share an io_number;
-            next 4 share a different io_number; etc. Groups are themselves
-            detected and named (group_id).
-    PLI   — one value per PLI. The default for most identifiers and stages.
-
-    A single sheet can have fields at MULTIPLE scopes simultaneously.
-    """
-    SHEET = "sheet"
-    GROUP = "group"
-    PLI   = "pli"
-
-
-class ReadDirection(str, Enum):
-    """How apply_plan walks from a PLI anchor to a field's value cell.
-
-    SAME_ROW    — value lives at (pli_anchor_row, fixed_col).
-                  Used when axis=ROW and field is PLI-scoped.
-    SAME_COLUMN — value lives at (fixed_row, pli_anchor_col).
-                  Used when axis=COLUMN (transposed) and field is PLI-scoped.
-    OFFSET      — value lives at (pli_anchor + delta_row, pli_anchor + delta_col).
-                  Used when value is at a constant offset from the PLI anchor
-                  (e.g. a SECTION_PER_PLI block where each section has
-                  identifier cells at fixed (+1, +2) from the section header).
-    FIXED       — value lives at a hard-coded cell, ignoring PLI anchor.
-                  Used for SHEET-scoped fields.
-    """
-    SAME_ROW    = "same_row"
-    SAME_COLUMN = "same_column"
-    OFFSET      = "offset"
-    FIXED       = "fixed"
+# Moved to app/enums/field_scope.py + app/enums/read_direction.py.
+# Re-exported here for backward compatibility with existing imports.
+from app.enums.field_scope import FieldScope  # noqa: F401
+from app.enums.read_direction import ReadDirection  # noqa: F401
 
 
 class Area(str, Enum):

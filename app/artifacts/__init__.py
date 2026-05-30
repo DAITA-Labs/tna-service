@@ -22,6 +22,13 @@ from typing import Any
 from app.artifacts.canvas import GridCanvas
 from app.artifacts.finding import Confidence, Coord, Finding, ValidationWarning, Verdict
 from app.artifacts.layout import Direction, LayoutAxes, LayoutHint
+from app.artifacts.plan import (
+    CanvasPlan,
+    FieldLocation,
+    MetadataPlan,
+    PliKey,
+    StageBandPlan,
+)
 from app.artifacts.structure import (
     BoldStrip,
     BorderedBox,
@@ -95,6 +102,8 @@ __all__ = [
     "LayoutAxes", "LayoutHint",
     # ─ Canvas: findings ────────────────────────────────────────────────
     "Confidence", "Coord", "Finding", "Verdict", "ValidationWarning",
+    # ─ Canvas: plan ─────────────────────────────────────────────────────
+    "CanvasPlan", "FieldLocation", "MetadataPlan", "PliKey", "StageBandPlan",
     # ─ Legacy ──────────────────────────────────────────────────────────
     *_LEGACY_NAMES,
 ]
