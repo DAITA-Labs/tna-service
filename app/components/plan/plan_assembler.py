@@ -40,6 +40,7 @@ from app.components.pickers.identifier_picker_registry import (
     IDENTIFIER_PICKER_CONFIGS,
 )
 from app.components.pickers.plan_cross_field import PlanCrossFieldPicker
+from app.components.plan.metadata_assembler import MetadataAssembler
 from app.components.plan.stages_assembler import StagesAssembler
 from app.enums.field_location_mode import FieldLocationMode
 from app.enums.field_scope import FieldScope
@@ -63,6 +64,7 @@ class PlanAssembler(Component):
         self._score_floor          = score_floor
         self._cross_field_picker   = PlanCrossFieldPicker()
         self._stages_assembler     = StagesAssembler(score_floor=score_floor)
+        self._metadata_assembler   = MetadataAssembler()
 
     @component.output_types(plan=CanvasPlan)
     def run(self, bundle: ClusterAnchorBundle) -> dict:
@@ -79,6 +81,12 @@ class PlanAssembler(Component):
         stage_bands     = stages_out["stage_bands"]
         stage_verdicts  = stages_out["verdicts"]
 
+        claimed_kvs       = _kv_blocks_claimed_by(field_locations)
+        metadata_out      = self._metadata_assembler.run(
+            bundle=bundle, claimed_kv_blocks=claimed_kvs,
+        )
+        metadata_entries  = metadata_out["metadata_entries"]
+
         return {
             "plan": CanvasPlan(
                 cluster_id=bundle.cluster.cluster_id,
@@ -87,6 +95,7 @@ class PlanAssembler(Component):
                 pli_rows=rows,
                 field_locations=field_locations,
                 stage_bands=stage_bands,
+                metadata_entries=metadata_entries,
                 all_verdicts=per_canonical_verdicts + cross_verdicts + stage_verdicts,
                 warnings=warnings,
                 scoreboards=scoreboards,
@@ -187,6 +196,15 @@ def _build_field_location(
         scope=FieldScope.PLI,
         read_direction=ReadDirection.SAME_ROW,
     )
+
+
+def _kv_blocks_claimed_by(field_locations: dict[str, FieldLocation]) -> set:
+    """Collect every KvBlock that an identifier picker claimed as its winner."""
+    out = set()
+    for fl in field_locations.values():
+        if fl.mode == FieldLocationMode.KV_BLOCK and fl.kv_block is not None:
+            out.add(fl.kv_block)
+    return out
 
 
 def _resolve_pli_axis(raw: str) -> PliAxis:
