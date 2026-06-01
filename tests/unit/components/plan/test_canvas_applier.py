@@ -172,6 +172,101 @@ def test_blank_cell_does_not_emit_value() -> None:
     assert pli.io_number is None
 
 
+# ── Defensive coercion for typed PLI fields ───────────────────────────────
+
+
+def test_unparseable_delivery_date_falls_to_metadata_raw() -> None:
+    """A string that no date format parses → metadata['delivery_date_raw'], delivery_date None."""
+    cells = [[None] * 5 for _ in range(10)]
+    cells[3][1] = "30/3-7/4"   # date range, not a date
+    plan = _row_plan(
+        pli_rows=[4],
+        field_locations={"delivery_date": FieldLocation(
+            canonical="delivery_date",
+            mode=FieldLocationMode.COLUMN,
+            scope=FieldScope.PLI,
+            read_direction=ReadDirection.SAME_ROW,
+            column=2, score=0.8,
+        )},
+    )
+    pli = CanvasApplier().run(plan=plan, canvas=_canvas(cells))["plis"][0]
+    assert pli.delivery_date is None
+    assert pli.metadata["delivery_date_raw"] == "30/3-7/4"
+
+
+def test_numeric_io_number_is_stringified() -> None:
+    """A numeric cell in io_number column → str on PLI, not a Pydantic crash."""
+    cells = [[None] * 5 for _ in range(10)]
+    cells[3][1] = 7000018563   # int cell
+    plan = _row_plan(
+        pli_rows=[4],
+        field_locations={"io_number": FieldLocation(
+            canonical="io_number",
+            mode=FieldLocationMode.COLUMN,
+            scope=FieldScope.PLI,
+            read_direction=ReadDirection.SAME_ROW,
+            column=2, score=0.9,
+        )},
+    )
+    pli = CanvasApplier().run(plan=plan, canvas=_canvas(cells))["plis"][0]
+    assert pli.io_number == "7000018563"
+
+
+def test_float_quantity_coerces_to_int_when_whole() -> None:
+    cells = [[None] * 5 for _ in range(10)]
+    cells[3][1] = 2176.0
+    plan = _row_plan(
+        pli_rows=[4],
+        field_locations={"quantity": FieldLocation(
+            canonical="quantity",
+            mode=FieldLocationMode.COLUMN,
+            scope=FieldScope.PLI,
+            read_direction=ReadDirection.SAME_ROW,
+            column=2, score=0.9,
+        )},
+    )
+    pli = CanvasApplier().run(plan=plan, canvas=_canvas(cells))["plis"][0]
+    assert pli.quantity == 2176
+
+
+def test_non_integer_quantity_string_falls_to_metadata_raw() -> None:
+    cells = [[None] * 5 for _ in range(10)]
+    cells[3][1] = "TBD"
+    plan = _row_plan(
+        pli_rows=[4],
+        field_locations={"quantity": FieldLocation(
+            canonical="quantity",
+            mode=FieldLocationMode.COLUMN,
+            scope=FieldScope.PLI,
+            read_direction=ReadDirection.SAME_ROW,
+            column=2, score=0.9,
+        )},
+    )
+    pli = CanvasApplier().run(plan=plan, canvas=_canvas(cells))["plis"][0]
+    assert pli.quantity is None
+    assert pli.metadata["quantity_raw"] == "TBD"
+
+
+def test_unparseable_stage_planned_date_falls_to_stage_metadata_raw() -> None:
+    """A stage band whose planned_date cell is unparseable → stage.metadata['planned_date_raw']."""
+    cells = [[None] * 6 for _ in range(10)]
+    cells[3][4] = "30/3-7/4"
+    band = StageBandPlan(
+        name="Sewing", canonical="sewing",
+        anchor_coord=(3, 5),
+        anchor_rect=Rect(r0=3, c0=5, r1=15, c1=5),
+        scope=FieldScope.PLI,
+        subfield_axis=SubfieldAxis.HORIZONTAL,
+        read_direction=ReadDirection.SAME_ROW,
+        score=0.9,
+    )
+    plan = _row_plan(pli_rows=[4], stage_bands=[band])
+    pli  = CanvasApplier().run(plan=plan, canvas=_canvas(cells))["plis"][0]
+    stage = pli.stages[0]
+    assert stage.planned_date is None
+    assert stage.metadata["planned_date_raw"] == "30/3-7/4"
+
+
 # ── Off-PLI identifiers go to metadata ─────────────────────────────────────
 
 
