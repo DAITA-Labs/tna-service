@@ -76,8 +76,27 @@ def populate_semantics(canvas: GridCanvas, bag: StructureBag) -> None:
     caller can chain them through the bag without manual plumbing.
     """
     resolve_header_band(canvas, bag)
+    _refine_numeric_strips_after_header(canvas, bag)
     resolve_data_row_ranges(canvas, bag)
     resolve_stage_arenas(canvas, bag)
     resolve_stage_bands(canvas, bag)
     resolve_subfield_clusters(canvas, bag)
     resolve_section_boundaries(canvas, bag)
+
+
+def _refine_numeric_strips_after_header(canvas: GridCanvas, bag: StructureBag) -> None:
+    """Re-detect int/float strips below the header band.
+
+    `populate_patterns` runs before the header band is known, so density
+    on a real quantity column is dragged below threshold by title +
+    sub-header strings sitting above the data. Once `resolve_header_band`
+    fixes the band rect, re-run the detectors with `data_row_start` past
+    the header and replace the bag entries — header pollution removed.
+
+    No-op when no header band was detected.
+    """
+    if bag.header_band is None:
+        return
+    data_row_start = bag.header_band.rect.r1 + 1
+    bag.int_strips   = find_int_strips(canvas, data_row_start=data_row_start)
+    bag.float_strips = find_float_strips(canvas, data_row_start=data_row_start)

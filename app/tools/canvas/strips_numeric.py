@@ -35,26 +35,39 @@ Magnitude = Literal["small", "medium", "large"]
 @tool("find_int_strips")
 def find_int_strips(canvas: GridCanvas,
                     min_density: float = _MIN_DENSITY,
-                    min_non_blank: int = _MIN_NON_BLANK) -> list[IntStrip]:
-    """Detect every vertical IntStrip on the canvas, magnitude-tagged."""
+                    min_non_blank: int = _MIN_NON_BLANK,
+                    data_row_start: int = 1) -> list[IntStrip]:
+    """Detect every vertical IntStrip on the canvas, magnitude-tagged.
+
+    `data_row_start` is 1-indexed: cells in rows < `data_row_start` are
+    skipped when computing density. Use it after `resolve_header_band`
+    runs so title rows + sub-headers don't pollute the int density of a
+    real quantity column.
+    """
     return _find_numeric_strips(canvas, _DTYPE_INT, _build_int_strip,
-                                 min_density, min_non_blank)
+                                 min_density, min_non_blank, data_row_start)
 
 
 @tool("find_float_strips")
 def find_float_strips(canvas: GridCanvas,
                       min_density: float = _MIN_DENSITY,
-                      min_non_blank: int = _MIN_NON_BLANK) -> list[FloatStrip]:
-    """Detect every vertical FloatStrip on the canvas."""
+                      min_non_blank: int = _MIN_NON_BLANK,
+                      data_row_start: int = 1) -> list[FloatStrip]:
+    """Detect every vertical FloatStrip on the canvas.
+
+    `data_row_start` excludes rows above the header band from the
+    density calculation — see `find_int_strips`.
+    """
     return _find_numeric_strips(canvas, _DTYPE_FLOAT, _build_float_strip,
-                                 min_density, min_non_blank)
+                                 min_density, min_non_blank, data_row_start)
 
 
 def _find_numeric_strips(canvas: GridCanvas,
                          match_dtype: int,
                          build_strip,
                          min_density: float,
-                         min_non_blank: int) -> list:
+                         min_non_blank: int,
+                         data_row_start: int) -> list:
     """Generic walker: for each column, compute density of `match_dtype` cells."""
     dtype = canvas.channels.get("dtype")
     if dtype is None:
@@ -63,7 +76,7 @@ def _find_numeric_strips(canvas: GridCanvas,
     strips: list = []
     for c in range(canvas.n_cols):
         r_start, r_end, density, matched_values = _column_density(
-            canvas, c, match_dtype
+            canvas, c, match_dtype, data_row_start,
         )
         if r_start is None or len(matched_values) < min_non_blank or density < min_density:
             continue
@@ -76,11 +89,13 @@ def _find_numeric_strips(canvas: GridCanvas,
     return strips
 
 
-def _column_density(canvas: GridCanvas, col: int, match_dtype: int):
-    """Return (r_start, r_end, density, matched_values) for the non-blank span of `col`.
+def _column_density(canvas: GridCanvas, col: int, match_dtype: int,
+                    data_row_start: int):
+    """Return (r_start, r_end, density, matched_values) for the data span of `col`.
 
-    `density` is the fraction of non-blank cells in the column whose dtype
-    equals `match_dtype`. r_start/r_end are 0-indexed; None if no non-blank cells.
+    `density` is the fraction of non-blank cells (in rows ≥ `data_row_start`
+    in 1-indexed terms) whose dtype equals `match_dtype`. r_start/r_end
+    are 0-indexed; None if no non-blank cells.
     """
     dtype = canvas.channels["dtype"]
     r_start: int | None = None
@@ -88,8 +103,9 @@ def _column_density(canvas: GridCanvas, col: int, match_dtype: int):
     matched_count = 0
     non_blank_count = 0
     matched_values: list = []
+    first_data_row = max(0, data_row_start - 1)   # 1-indexed → 0-indexed
 
-    for r in range(canvas.n_rows):
+    for r in range(first_data_row, canvas.n_rows):
         dt = dtype[r][col]
         if dt == _DTYPE_BLANK:
             continue

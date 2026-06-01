@@ -81,3 +81,72 @@ def test_tools_registered() -> None:
     names = TOOL_REGISTRY.names()
     assert "find_int_strips" in names
     assert "find_float_strips" in names
+
+
+# ── data_row_start excludes header rows from density ──────────────────────
+
+
+def _synthetic_canvas(cells: list[list]):
+    """Build a GridCanvas + dtype channel from a 2-D cell array, no openpyxl."""
+    from app.artifacts.canvas import GridCanvas
+
+    n_rows, n_cols = len(cells), len(cells[0])
+    dtype = [[0] * n_cols for _ in range(n_rows)]
+    for r in range(n_rows):
+        for c in range(n_cols):
+            v = cells[r][c]
+            if v is None or v == "":
+                dtype[r][c] = 0
+            elif isinstance(v, bool):
+                dtype[r][c] = 2
+            elif isinstance(v, int):
+                dtype[r][c] = 2
+            elif isinstance(v, float):
+                dtype[r][c] = 3
+            else:
+                dtype[r][c] = 4
+    return GridCanvas(
+        n_rows=n_rows, n_cols=n_cols, cell_values=cells,
+        channels={"dtype": dtype},
+    )
+
+
+def test_int_strip_rejected_when_headers_drag_density_below_threshold() -> None:
+    """Column with 3 header strings + 5 ints is 62% int — below 80% default."""
+    cells = [
+        ["Title"], ["Quantity"], ["Qty"],
+        [498], [821], [553], [694], [605],
+    ]
+    canvas = _synthetic_canvas(cells)
+    assert find_int_strips(canvas) == []
+
+
+def test_int_strip_detected_when_data_row_start_skips_headers() -> None:
+    """Same canvas, `data_row_start=4` makes the column 100% int."""
+    cells = [
+        ["Title"], ["Quantity"], ["Qty"],
+        [498], [821], [553], [694], [605],
+    ]
+    canvas = _synthetic_canvas(cells)
+    strips = find_int_strips(canvas, data_row_start=4)
+    assert len(strips) == 1
+    assert strips[0].density == 1.0
+
+
+def test_data_row_start_works_for_float_strips() -> None:
+    cells = [
+        ["Header"], ["Sub-header"],
+        [1.5], [2.0], [3.25], [4.0],
+    ]
+    canvas = _synthetic_canvas(cells)
+    assert find_float_strips(canvas) == []
+    strips = find_float_strips(canvas, data_row_start=3)
+    assert len(strips) == 1
+    assert strips[0].density == 1.0
+
+
+def test_data_row_start_default_is_no_op() -> None:
+    """Default `data_row_start=1` includes the whole sheet."""
+    cells = [[1], [2], [3], [4], [5]]
+    canvas = _synthetic_canvas(cells)
+    assert len(find_int_strips(canvas)) == 1
