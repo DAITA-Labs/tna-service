@@ -20,6 +20,7 @@ from app.policies.structure.pli_axis import (
     prefer_horizontal_when_more_cols_than_rows,
     prefer_sectional_for_repeating_groups,
     prefer_sheet_for_kv_blocks,
+    prefer_vertical_when_header_band_is_horizontal,
     prefer_vertical_when_more_rows_than_cols,
 )
 
@@ -42,6 +43,7 @@ class PliAxisPicker(Picker[str]):
                 prefer_sectional_for_repeating_groups,
                 prefer_vertical_when_more_rows_than_cols,
                 prefer_horizontal_when_more_cols_than_rows,
+                prefer_vertical_when_header_band_is_horizontal,
             ],
             # Score floor stays at 0.0 so we can fall back deterministically
             # when no policy fires (matches legacy behaviour).
@@ -58,11 +60,13 @@ class PliAxisPicker(Picker[str]):
     )
     def run(
         self,
-        kv_count:        int,
-        repeating_count: int,
-        n_data_rows:     int,
-        n_data_cols:     int,
-        sheet_size:      int,
+        kv_count:           int,
+        repeating_count:    int,
+        n_data_rows:        int,
+        n_data_cols:        int,
+        sheet_size:         int,
+        header_band_height: int = 0,
+        header_band_width:  int = 0,
     ) -> dict:
         winner, verdicts = self._score_candidates(
             self.candidates(),
@@ -71,6 +75,8 @@ class PliAxisPicker(Picker[str]):
             n_data_rows=n_data_rows,
             n_data_cols=n_data_cols,
             sheet_size=sheet_size,
+            header_band_height=header_band_height,
+            header_band_width=header_band_width,
         )
         if winner is None or _no_policy_fired(verdicts):
             return {
