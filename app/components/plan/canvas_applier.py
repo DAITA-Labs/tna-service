@@ -12,6 +12,7 @@ SECTION axes are wired when the planner begins emitting them.
 """
 from __future__ import annotations
 
+from datetime import date, datetime
 from typing import Any
 
 from haystack import component
@@ -28,7 +29,7 @@ from app.components._base import Component
 from app.enums.field_location_mode import FieldLocationMode
 from app.enums.field_scope import FieldScope
 from app.enums.pli_axis import PliAxis
-from app.models.extraction import PLI, Source, Stage
+from app.models.extraction import PLI, Source, Stage, _parse_flexible_date
 
 
 # Canonicals that map onto a flat PLI attribute (mirror of CanvasReconciler).
@@ -222,7 +223,16 @@ def _stash_canonical_value(
     confidence:   dict[str, float],
     source_cells: dict[str, str],
 ) -> None:
-    """Route a canonical value to its PLI attribute or into metadata."""
+    """Route a canonical value to its PLI attribute or into metadata.
+
+    The PLI model has typed fields (str | None, int | None, FlexibleDate).
+    A cell can carry an unexpected type — a date in the io_number column,
+    a hyphenated range in delivery_date — and Pydantic would reject it.
+    Coerce defensively: when the value fits the field's type, set it on
+    the flat attribute; otherwise stash the raw value under
+    `<canonical>_raw` in metadata so the operator can still see what the
+    sheet contained.
+    """
     pli_field = _CANONICAL_TO_PLI_FIELD.get(canonical)
     if pli_field is None:
         # Off-PLI identifiers (shipment_date, ex_fty_date, fabric_name, etc.)
@@ -231,10 +241,69 @@ def _stash_canonical_value(
         if coord is not None:
             source_cells[canonical] = coord
         return
-    flat[pli_field]       = value
+
+    coerced = _coerce_for_pli_field(pli_field, value)
+    if coerced is None and value is not None:
+        # Type mismatch — keep the raw value visible.
+        metadata[f"{canonical}_raw"] = value
+        return
+    flat[pli_field]       = coerced
     confidence[pli_field] = score
     if coord is not None:
         source_cells[pli_field] = coord
+
+
+def _coerce_for_pli_field(pli_field: str, value: Any) -> Any:
+    """Coerce `value` to match the target PLI field's type, or return None."""
+    if pli_field == "delivery_date":
+        return _date_or_none(value)
+    if pli_field == "quantity":
+        if isinstance(value, bool):
+            return None
+        if isinstance(value, int):
+            return value
+        if isinstance(value, float) and value.is_integer():
+            return int(value)
+        if isinstance(value, str):
+            stripped = value.strip().replace(",", "")
+            if stripped.isdigit():
+                return int(stripped)
+            try:
+                f = float(stripped)
+            except ValueError:
+                return None
+            return int(f) if f.is_integer() else None
+        return None
+    # All remaining flat fields are str | None.
+    if isinstance(value, str):
+        s = value.strip()
+        return s or None
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        # Numeric io_number / *_code: stringify without trailing ".0".
+        if isinstance(value, float) and value.is_integer():
+            return str(int(value))
+        return str(value)
+    return None
+
+
+# ── date coercion ──────────────────────────────────────────────────────────
+
+
+def _date_or_none(raw: Any) -> date | None:
+    """Return raw as a date when parseable, else None.
+
+    Stage.planned_date is `FlexibleDate`, which Pydantic-rejects strings
+    that don't match any known supplier format. We don't want the
+    applier to crash on cells like 'TBD' or '30/3-7/4'; treat
+    unparseable strings as 'no date' and let the caller stash the raw
+    value somewhere visible.
+    """
+    parsed = _parse_flexible_date(raw)
+    if isinstance(parsed, datetime):
+        return parsed.date()
+    if isinstance(parsed, date) or parsed is None:
+        return parsed
+    return None
 
 
 # ── stage assembly ─────────────────────────────────────────────────────────
@@ -247,11 +316,18 @@ def _build_stage(
     sheet:  str,
 ) -> Stage:
     """Build one Stage from a StageBandPlan at the given PLI row."""
-    planned_col = band.subfield_indices.get("planned_date", band.anchor_coord[1])
-    value, coord = _read_cell(canvas, row, planned_col)
+    planned_col  = band.subfield_indices.get("planned_date", band.anchor_coord[1])
+    raw, coord   = _read_cell(canvas, row, planned_col)
     source_cells = {"planned_date": coord} if coord is not None else {}
 
+    planned_date  = _date_or_none(raw)
     stage_metadata: dict[str, Any] = {}
+    if raw is not None and planned_date is None:
+        # Cell carried a value the date parser can't reduce to a date.
+        # Don't silently drop it: surface as raw metadata so an operator
+        # can see what the sheet actually says.
+        stage_metadata["planned_date_raw"] = raw
+
     for subfield, col in band.subfield_indices.items():
         if subfield == "planned_date":
             continue
@@ -264,7 +340,7 @@ def _build_stage(
 
     return Stage(
         name=band.name,
-        planned_date=value,
+        planned_date=planned_date,
         metadata=stage_metadata,
         confidence=band.score if band.score else 1.0,
         source=Source(
