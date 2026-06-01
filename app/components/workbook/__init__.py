@@ -5,20 +5,14 @@ from app.components.workbook.extraction_result_builder import ExtractionResultBu
 from app.components.workbook.per_sheet import PerSheetProcessor
 from app.components.workbook.profiler import WorkbookProfiler
 from app.components.workbook.reconciler import Reconciler
-from app.components.workbook.role_classifier import (
-    ClusterRoleClassifier,
-    PliClusterFilter,
-)
 from app.components.workbook.sheet_classifier import SheetClassifier
 from app.components.workbook.summary_provider import WorkbookSummaryProvider
 from app.components.workbook.workbook_phase import WorkbookPhase
 
 __all__ = [
     "AnchorPicker",
-    "ClusterRoleClassifier",
     "ExtractionResultBuilder",
     "PerSheetProcessor",
-    "PliClusterFilter",
     "Reconciler",
     "SheetClassifier",
     "SheetClusterer",

@@ -47,7 +47,15 @@ _CANONICAL_TO_PLI_FIELD: dict[str, str] = {
 
 @component
 class CanvasApplier(Component):
-    """Walk a CanvasPlan + canvas → list[PLI] (one cluster's worth)."""
+    """Walk a CanvasPlan + canvas(es) → list[PLI] (one cluster's worth).
+
+    A cluster's plan is built from the anchor sheet, but every other
+    sheet in the cluster shares that same plan (that's what made them
+    cluster). When `sibling_canvases` is supplied, the same plan
+    iterates against each sibling's canvas in addition to the anchor's
+    — so a 35-sheet SHEET_IS_PLI cluster produces 35 PLIs and a 10-sheet
+    ROW-per-PLI cluster produces 10× whatever pli_rows yields per sheet.
+    """
 
     def __init__(self) -> None:
         Component.__init__(self)
@@ -55,22 +63,34 @@ class CanvasApplier(Component):
     @component.output_types(plis=list[PLI])
     def run(
         self,
-        plan:    CanvasPlan,
-        canvas:  GridCanvas,
-        sheet:   str | None = None,
+        plan:             CanvasPlan,
+        canvas:           GridCanvas,
+        sheet:            str | None = None,
+        sibling_canvases: dict[str, GridCanvas] | None = None,
     ) -> dict:
-        sheet_name = sheet or plan.anchor_sheet_name
-        if plan.pli_axis == PliAxis.ROW:
-            plis = [
-                _build_pli_for_row(row, plan, canvas, sheet_name)
-                for row in plan.pli_rows
-            ]
-        elif plan.pli_axis == PliAxis.WHOLE_SHEET:
-            plis = [_build_whole_sheet_pli(plan, canvas, sheet_name)]
-        else:
-            # COLUMN and SECTION wait on the planner emitting them.
-            plis = []
+        anchor_sheet = sheet or plan.anchor_sheet_name
+        sheets: list[tuple[str, GridCanvas]] = [(anchor_sheet, canvas)]
+        if sibling_canvases:
+            sheets.extend(sibling_canvases.items())
+
+        plis: list[PLI] = []
+        for sheet_name, sheet_canvas in sheets:
+            plis.extend(_apply_plan_to_sheet(plan, sheet_canvas, sheet_name))
         return {"plis": plis}
+
+
+def _apply_plan_to_sheet(
+    plan:   CanvasPlan,
+    canvas: GridCanvas,
+    sheet:  str,
+) -> list[PLI]:
+    """Apply the cluster's plan to one sheet's canvas; return PLIs."""
+    if plan.pli_axis == PliAxis.ROW:
+        return [_build_pli_for_row(row, plan, canvas, sheet) for row in plan.pli_rows]
+    if plan.pli_axis == PliAxis.WHOLE_SHEET:
+        return [_build_whole_sheet_pli(plan, canvas, sheet)]
+    # COLUMN and SECTION wait on the planner emitting them.
+    return []
 
 
 # ── row-per-PLI ────────────────────────────────────────────────────────────

@@ -130,6 +130,6 @@ def make_bundle(values: list[list[Any]],
         candidate_kv_blocks=candidate_kv_blocks or {},
     )
     return ClusterAnchorBundle(
-        cluster=PliCluster(cluster_id="c0", sheet_names=["S"], role="pli_cluster"),
+        cluster=PliCluster(cluster_id="c0", sheet_names=["S"]),
         anchor_sheet_name="S", canvas=canvas, bag=bag, hint=hint,
     )

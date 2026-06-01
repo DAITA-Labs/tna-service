@@ -32,18 +32,11 @@ def test_sheet_signature_is_frozen() -> None:
     raise AssertionError("SheetSignature must be frozen")
 
 
-def test_pli_cluster_defaults_to_unknown_role() -> None:
-    """A new cluster starts as 'unknown' until the role classifier runs."""
+def test_pli_cluster_defaults() -> None:
+    """A new cluster has its id + an empty sheet list."""
     cluster = PliCluster(cluster_id="c0")
-    assert cluster.role == "unknown"
+    assert cluster.cluster_id == "c0"
     assert cluster.sheet_names == []
-
-
-def test_pli_cluster_accepts_role_label() -> None:
-    """The clusterer / role classifier can write to the role field."""
-    cluster = PliCluster(cluster_id="c0", sheet_names=["S1", "S2"])
-    cluster.role = "pli_cluster"
-    assert cluster.role == "pli_cluster"
 
 
 def test_signature_sample_row_constants_are_sensible() -> None:
@@ -54,7 +47,7 @@ def test_signature_sample_row_constants_are_sensible() -> None:
 
 def test_cluster_anchor_bundle_carries_phase_artifacts() -> None:
     """ClusterAnchorBundle is frozen and bundles cluster + canvas + bag + hint."""
-    cluster = PliCluster(cluster_id="c0", sheet_names=["S"], role="pli_cluster")
+    cluster = PliCluster(cluster_id="c0", sheet_names=["S"])
     canvas = GridCanvas(n_rows=1, n_cols=1, cell_values=[[None]])
     bag = StructureBag()
     hint = LayoutHint(

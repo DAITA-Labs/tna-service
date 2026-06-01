@@ -435,6 +435,49 @@ def test_out_of_bounds_column_yields_no_value() -> None:
     assert "io_number" not in pli.confidence
 
 
+# ── Sibling canvas iteration (multi-sheet clusters) ───────────────────────
+
+
+def test_sibling_canvases_each_contribute_their_own_plis() -> None:
+    """Plan from anchor is re-applied to each sibling canvas; PLIs concatenate."""
+    def _with(io_at: str) -> GridCanvas:
+        cells = [[None] * 5 for _ in range(10)]
+        cells[3][1] = io_at
+        return _canvas(cells)
+
+    plan = _row_plan(
+        pli_rows=[4],
+        field_locations={"io_number": FieldLocation(
+            canonical="io_number", mode=FieldLocationMode.COLUMN,
+            scope=FieldScope.PLI, read_direction=ReadDirection.SAME_ROW,
+            column=2, score=0.9,
+        )},
+    )
+    out = CanvasApplier().run(
+        plan=plan, canvas=_with("IO-A"), sheet="anchor",
+        sibling_canvases={"sib1": _with("IO-B"), "sib2": _with("IO-C")},
+    )
+    assert [p.io_number for p in out["plis"]] == ["IO-A", "IO-B", "IO-C"]
+    assert [p.source.sheet for p in out["plis"]] == ["anchor", "sib1", "sib2"]
+
+
+def test_no_sibling_canvases_yields_anchor_only() -> None:
+    """Backward-compat: omitting sibling_canvases gives one cluster's worth from the anchor."""
+    cells = [[None] * 5 for _ in range(10)]
+    cells[3][1] = "IO-A"
+    plan = _row_plan(
+        pli_rows=[4],
+        field_locations={"io_number": FieldLocation(
+            canonical="io_number", mode=FieldLocationMode.COLUMN,
+            scope=FieldScope.PLI, read_direction=ReadDirection.SAME_ROW,
+            column=2, score=0.9,
+        )},
+    )
+    out = CanvasApplier().run(plan=plan, canvas=_canvas(cells))
+    assert len(out["plis"]) == 1
+    assert out["plis"][0].io_number == "IO-A"
+
+
 # ── Sheet name resolution ──────────────────────────────────────────────────
 
 

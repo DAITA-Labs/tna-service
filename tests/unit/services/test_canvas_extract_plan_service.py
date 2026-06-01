@@ -49,8 +49,8 @@ def test_source_file_attached_to_result(tmp_path: Path) -> None:
 def test_per_bundle_plis_and_warnings_merge_into_one_result(tmp_path: Path) -> None:
     """Two bundles → both planners + appliers run, PLIs concatenated, warnings mapped."""
     ctx = _mock_ctx(tmp_path)
-    bundle_a   = SimpleNamespace(canvas=MagicMock(), anchor_sheet_name="A")
-    bundle_b   = SimpleNamespace(canvas=MagicMock(), anchor_sheet_name="B")
+    bundle_a   = SimpleNamespace(canvas=MagicMock(), anchor_sheet_name="A", sibling_canvases={})
+    bundle_b   = SimpleNamespace(canvas=MagicMock(), anchor_sheet_name="B", sibling_canvases={})
     plan_a     = SimpleNamespace(warnings=[ValidationWarning(
         message="trio missing", name="date_trio_all_missing", severity="warning",
     )])
@@ -65,7 +65,7 @@ def test_per_bundle_plis_and_warnings_merge_into_one_result(tmp_path: Path) -> N
     def reviewer_run(plan, bundle):
         return {"plan": plan}
 
-    def applier_run(plan, canvas, sheet):
+    def applier_run(plan, canvas, sheet, sibling_canvases=None):
         return {"plis": [pli_a] if plan is plan_a else [pli_b1, pli_b2]}
 
     with patch("app.services.canvas_extract_plan_service.register_workbook", return_value=ctx), \
@@ -88,7 +88,7 @@ def test_per_bundle_plis_and_warnings_merge_into_one_result(tmp_path: Path) -> N
 def test_applier_receives_bundle_canvas_and_sheet(tmp_path: Path) -> None:
     """The service passes bundle.canvas + bundle.anchor_sheet_name into the applier."""
     ctx    = _mock_ctx(tmp_path)
-    bundle = SimpleNamespace(canvas=MagicMock(name="canvas"), anchor_sheet_name="TNA")
+    bundle = SimpleNamespace(canvas=MagicMock(name="canvas"), anchor_sheet_name="TNA", sibling_canvases={})
     plan   = SimpleNamespace(warnings=[])
 
     with patch("app.services.canvas_extract_plan_service.register_workbook", return_value=ctx), \
@@ -111,7 +111,7 @@ def test_applier_receives_bundle_canvas_and_sheet(tmp_path: Path) -> None:
 def test_reviewer_gate_runs_between_planner_and_applier(tmp_path: Path) -> None:
     """The plan passed to the applier is whatever the reviewer gate returned."""
     ctx     = _mock_ctx(tmp_path)
-    bundle  = SimpleNamespace(canvas=MagicMock(), anchor_sheet_name="TNA")
+    bundle  = SimpleNamespace(canvas=MagicMock(), anchor_sheet_name="TNA", sibling_canvases={})
     plan_in  = SimpleNamespace(warnings=[], name="planner_out")
     plan_out = SimpleNamespace(warnings=[], name="reviewer_out")
 
