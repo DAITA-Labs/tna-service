@@ -31,6 +31,11 @@ from app.policies.structure.header_band import (
 from app.tools.canvas.query import text_dense_rows
 
 
+# Dtype channel codes — mirror app/tools/canvas/build.py.
+_DTYPE_INT   = 2
+_DTYPE_FLOAT = 3
+
+
 @component
 class HeaderBandPicker(Picker[int]):
     """Find the header band of a tabular sheet."""
@@ -68,7 +73,7 @@ class HeaderBandPicker(Picker[int]):
         if winner is None:
             return {"header_band": None, "verdicts": verdicts}
 
-        band_rows = self._absorb_adjacent(winner, verdicts)
+        band_rows = self._absorb_adjacent(winner, verdicts, canvas)
         rect = Rect(
             r0=min(band_rows),
             c0=1,
@@ -85,8 +90,17 @@ class HeaderBandPicker(Picker[int]):
         self,
         anchor:   int,
         verdicts: list[PolicyVerdict],
+        canvas:   GridCanvas,
     ) -> set[int]:
-        """Walk ±adjacency_window from anchor; absorb rows that also qualified."""
+        """Walk ±adjacency_window from anchor; absorb rows that also qualified.
+
+        Header rows are by definition label-only — string cells naming
+        the columns. A row that contains any numeric (int or float)
+        cell is data, not a header. Without this guard a TNA's first
+        PLI row gets swallowed by the header band because its data
+        values happen to match identifier/quantity/date patterns in
+        `query_all` (e.g. "131034" looks like an io_number int).
+        """
         per_row_score:      dict[int, float] = {}
         per_row_eliminated: dict[int, bool]  = {}
         for v in verdicts:
@@ -100,17 +114,32 @@ class HeaderBandPicker(Picker[int]):
                 row in per_row_score
                 and not per_row_eliminated[row]
                 and per_row_score[row] >= self.score_floor
+                and not _row_has_numeric_cell(canvas, row)
             )
 
         band = {anchor}
-        # Walk upward.
         probe = anchor - 1
         while probe >= anchor - self._adjacency_window and qualifies(probe):
             band.add(probe)
             probe -= 1
-        # Walk downward.
         probe = anchor + 1
         while probe <= anchor + self._adjacency_window and qualifies(probe):
             band.add(probe)
             probe += 1
         return band
+
+
+def _row_has_numeric_cell(canvas: GridCanvas, row: int) -> bool:
+    """True if any cell on `row` (1-indexed) has int or float dtype.
+
+    Header rows are label-only; the first numeric cell on a row is the
+    cleanest signal it's data, not header. Returns False when the
+    dtype channel isn't built (the picker still works, just without
+    this guard).
+    """
+    dtype = canvas.channels.get("dtype")
+    if dtype is None:
+        return False
+    if row < 1 or row > canvas.n_rows:
+        return False
+    return any(d in (_DTYPE_INT, _DTYPE_FLOAT) for d in dtype[row - 1])

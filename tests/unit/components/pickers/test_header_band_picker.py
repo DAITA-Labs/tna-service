@@ -12,14 +12,31 @@ from app.policies._base import PolicyVerdict
 # ── Helpers ────────────────────────────────────────────────────────────────
 
 
-def _minimal_canvas(n_rows: int = 6, n_cols: int = 4) -> GridCanvas:
-    """Build a tiny canvas with `empty_row` channel all-zero (rows non-empty)."""
+_DTYPE_STR   = 4
+_DTYPE_INT   = 2
+_DTYPE_FLOAT = 3
+
+
+def _minimal_canvas(
+    n_rows: int = 6,
+    n_cols: int = 4,
+    *,
+    dtype: list[list[int]] | None = None,
+) -> GridCanvas:
+    """Tiny canvas with `empty_row` and `dtype` channels.
+
+    Default dtype is all-string so the no-numeric-cell guard never
+    fires on its own; pass a custom matrix to exercise the guard.
+    """
+    if dtype is None:
+        dtype = [[_DTYPE_STR] * n_cols for _ in range(n_rows)]
     return GridCanvas(
         n_rows=n_rows,
         n_cols=n_cols,
         cell_values=[[None] * n_cols for _ in range(n_rows)],
         channels={
             "empty_row": [[0] * n_cols for _ in range(n_rows)],
+            "dtype":     dtype,
         },
     )
 
@@ -155,5 +172,71 @@ def test_run_handles_single_candidate(monkeypatch) -> None:
     assert result["header_band"].rect.r0 == 3
     assert result["header_band"].rect.r1 == 3
     assert result["header_band"].rect.c1 == canvas.n_cols
+
+
+def test_row_with_numeric_cell_not_absorbed_into_band(monkeypatch) -> None:
+    """A scoring-qualified row that contains an int cell is data, not header.
+
+    Models the DKN MEN failure: row 4 had `query_all` hits from data
+    values (131034, 477, 14-MAR-2026, ...) and would have been
+    absorbed into the band. With the numeric-cell guard, it stays out.
+    """
+    # 6×4 canvas. Rows 1-3 all-string (header-shape). Row 4 has an int
+    # cell (data). Anchor will be row 2; row 3 should absorb, row 4
+    # should NOT.
+    dtype = [[_DTYPE_STR] * 4 for _ in range(6)]
+    dtype[3][2] = _DTYPE_INT   # row 4, col C is a data int
+    canvas = _minimal_canvas(dtype=dtype)
+    monkeypatch.setattr(
+        "app.components.pickers.header_band.text_dense_rows",
+        lambda *a, **kw: {1, 2, 3, 4},
+    )
+    picker = HeaderBandPicker(score_floor=1.0, adjacency_window=2)
+    picker.policies = [
+        lambda row, **kw: _verdict_for(row, 5.0 if row == 2 else 2.0),
+    ]
+    result = picker.run(canvas=canvas)
+    assert result["header_band"] is not None
+    # Anchor 2, absorb 1 (above) and 3 (below string-only) — but NOT 4.
+    assert result["header_band"].rect.r0 == 1
+    assert result["header_band"].rect.r1 == 3
+
+
+def test_float_cell_in_row_also_blocks_absorption(monkeypatch) -> None:
+    """Same guard fires on float cells (quantity columns sometimes carry floats)."""
+    dtype = [[_DTYPE_STR] * 4 for _ in range(6)]
+    dtype[3][1] = _DTYPE_FLOAT
+    canvas = _minimal_canvas(dtype=dtype)
+    monkeypatch.setattr(
+        "app.components.pickers.header_band.text_dense_rows",
+        lambda *a, **kw: {2, 3, 4},
+    )
+    picker = HeaderBandPicker(score_floor=1.0, adjacency_window=2)
+    picker.policies = [
+        lambda row, **kw: _verdict_for(row, 5.0 if row == 2 else 2.0),
+    ]
+    result = picker.run(canvas=canvas)
+    assert result["header_band"].rect.r1 == 3  # row 4 (with float) not absorbed
+
+
+def test_dtype_channel_absent_keeps_old_behavior(monkeypatch) -> None:
+    """When dtype channel isn't built, the guard is a no-op (defensive)."""
+    canvas = GridCanvas(
+        n_rows=6, n_cols=4,
+        cell_values=[[None] * 4 for _ in range(6)],
+        channels={"empty_row": [[0] * 4 for _ in range(6)]},
+        # no dtype channel
+    )
+    monkeypatch.setattr(
+        "app.components.pickers.header_band.text_dense_rows",
+        lambda *a, **kw: {2, 3, 4},
+    )
+    picker = HeaderBandPicker(score_floor=1.0, adjacency_window=2)
+    picker.policies = [
+        lambda row, **kw: _verdict_for(row, 5.0 if row == 2 else 2.0),
+    ]
+    result = picker.run(canvas=canvas)
+    # Without dtype, the guard returns False → row 4 absorbs as before.
+    assert result["header_band"].rect.r1 == 4
 
 
