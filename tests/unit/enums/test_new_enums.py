@@ -81,19 +81,3 @@ def test_policy_severity_is_str_enum() -> None:
     assert isinstance(PolicySeverity.INFO, str)
 
 
-def test_cluster_role_values() -> None:
-    from app.enums.cluster_role import ClusterRole
-
-    assert {m.value for m in ClusterRole} == {
-        "pli_cluster", "metadata_only", "summary", "other",
-    }
-    assert ClusterRole.PLI_CLUSTER.value   == "pli_cluster"
-    assert ClusterRole.METADATA_ONLY.value == "metadata_only"
-    assert ClusterRole.SUMMARY.value       == "summary"
-    assert ClusterRole.OTHER.value         == "other"
-
-
-def test_cluster_role_is_str_enum() -> None:
-    from app.enums.cluster_role import ClusterRole
-
-    assert isinstance(ClusterRole.PLI_CLUSTER, str)

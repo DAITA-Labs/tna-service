@@ -13,7 +13,6 @@ anchor_picker,workbook_phase}`.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Literal
 
 from app.artifacts.canvas import GridCanvas
 from app.artifacts.layout import LayoutHint
@@ -27,9 +26,6 @@ SIGNATURE_SAMPLE_ROWS = 20
 
 # How many rows from the top are scanned for label-text positions.
 SIGNATURE_LABEL_ROWS = 5
-
-
-ClusterRole = Literal["pli_cluster", "other_sheets", "unknown"]
 
 
 @dataclass(frozen=True)
@@ -95,15 +91,10 @@ class PliCluster:
     discovery order: "c0", "c1", ...). `sheet_names` carries every sheet
     grouped into this cluster; the anchor sheet (template) is chosen
     separately at structure-phase time.
-
-    `role` defaults to "unknown"; the role classifier sets it to
-    "pli_cluster" or "other_sheets" once StructureBag signals are
-    available.
     """
 
     cluster_id:  str
     sheet_names: list[str] = field(default_factory=list)
-    role:        ClusterRole = "unknown"
 
 
 @dataclass(frozen=True)
@@ -115,6 +106,13 @@ class ClusterAnchorBundle:
     bundle is the handoff to field components: they read the hint to
     locate identifiers, the canvas for cell values, and the bag for any
     record the hint doesn't surface.
+
+    `sibling_canvases` maps every *other* sheet in the cluster (i.e.
+    cluster members minus the anchor) to its `GridCanvas`. Siblings
+    share the cluster's plan with the anchor (that's what makes them a
+    cluster) but carry their own cell data; the applier walks them to
+    produce per-sibling PLIs in addition to the anchor's. Empty for
+    singleton clusters.
     """
 
     cluster:     PliCluster
@@ -122,3 +120,4 @@ class ClusterAnchorBundle:
     canvas:      GridCanvas
     bag:         StructureBag
     hint:        LayoutHint
+    sibling_canvases: dict[str, GridCanvas] = field(default_factory=dict)

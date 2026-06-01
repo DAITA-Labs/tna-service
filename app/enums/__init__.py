@@ -7,7 +7,6 @@ New code MUST import every enum from this package. Legacy modules
 from __future__ import annotations
 
 # Phase 1 (plan-driven canvas arch) new enums.
-from app.enums.cluster_role        import ClusterRole
 from app.enums.field_location_mode import FieldLocationMode
 from app.enums.field_scope         import FieldScope
 from app.enums.judge_decision      import JudgeDecision
@@ -36,7 +35,6 @@ from app.specs.enums import (
 
 __all__ = [
     # Phase-1 new
-    "ClusterRole",
     "FieldLocationMode",
     "FieldScope",
     "JudgeDecision",

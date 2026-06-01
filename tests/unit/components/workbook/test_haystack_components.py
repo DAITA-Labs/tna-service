@@ -1,25 +1,12 @@
-"""Haystack @component wrappers: WorkbookProfiler / SheetClusterer / ClusterRoleClassifier / PliClusterFilter."""
+"""Haystack @component wrappers: WorkbookProfiler / SheetClusterer."""
 from __future__ import annotations
 
 import openpyxl
 from haystack import Pipeline
 
-from app.artifacts.canvas import GridCanvas
-from app.artifacts.structure import (
-    DateStrip,
-    HeaderBand,
-    IntStrip,
-    KvBlock,
-    Rect,
-    StructureBag,
-)
 from app.artifacts.workbook import PliCluster, SheetSignature
 from app.components.workbook.clusterer import SheetClusterer
 from app.components.workbook.profiler import WorkbookProfiler
-from app.components.workbook.role_classifier import (
-    ClusterRoleClassifier,
-    PliClusterFilter,
-)
 
 
 def _wb_with_sheets(*sheet_specs):
@@ -87,44 +74,3 @@ def test_sheet_clusterer_pipeline_addable() -> None:
     pipeline = Pipeline()
     pipeline.add_component("clusterer", SheetClusterer())
     assert "clusterer" in pipeline.graph.nodes
-
-
-# ─── ClusterRoleClassifier ──────────────────────────────────────────────────
-
-
-def _bag_with_pli_signals() -> StructureBag:
-    bag = StructureBag()
-    bag.date_strips = [DateStrip(rect=Rect(1, 1, 5, 1), orientation="vertical", density=1.0)]
-    bag.int_strips = [IntStrip(rect=Rect(1, 2, 5, 2), magnitude="medium", density=1.0)]
-    bag.kv_blocks = [KvBlock(label_coord=("A", 1), value_coord=("B", 1),
-                                label_text="Job", value_dtype=2)]
-    return bag
-
-
-def test_role_classifier_mutates_cluster_role() -> None:
-    cluster = PliCluster(cluster_id="c0", sheet_names=["S"])
-    canvas = GridCanvas(n_rows=5, n_cols=5, cell_values=[[None] * 5 for _ in range(5)])
-    out = ClusterRoleClassifier().run(cluster=cluster, canvas=canvas, bag=_bag_with_pli_signals())
-    assert out["role"] == "pli_cluster"
-    assert out["cluster"].role == "pli_cluster"
-    assert out["cluster"] is cluster
-
-
-def test_role_classifier_other_sheets_when_signals_absent() -> None:
-    cluster = PliCluster(cluster_id="c0", sheet_names=["S"])
-    canvas = GridCanvas(n_rows=5, n_cols=5, cell_values=[[None] * 5 for _ in range(5)])
-    out = ClusterRoleClassifier().run(cluster=cluster, canvas=canvas, bag=StructureBag())
-    assert out["role"] == "other_sheets"
-
-
-# ─── PliClusterFilter ───────────────────────────────────────────────────────
-
-
-def test_pli_cluster_filter_keeps_only_pli_clusters() -> None:
-    clusters = [
-        PliCluster(cluster_id="c0", sheet_names=["A"], role="pli_cluster"),
-        PliCluster(cluster_id="c1", sheet_names=["B"], role="other_sheets"),
-        PliCluster(cluster_id="c2", sheet_names=["C"], role="unknown"),
-    ]
-    out = PliClusterFilter().run(clusters=clusters)
-    assert [c.cluster_id for c in out["pli_clusters"]] == ["c0"]

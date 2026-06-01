@@ -7,35 +7,40 @@
   3. for each cluster:
        a. pick its anchor sheet          (`pick_anchor_sheet_name`)
        b. run the structure phase        (`run_structure_phase`)
-       c. classify the cluster's role    (`classify_cluster_role`)
-  4. keep only clusters whose role is `pli_cluster`
-  5. return one `ClusterAnchorBundle` per surviving cluster
+       c. build canvases for every sibling sheet so the cluster's
+          plan can be applied to each member in turn
 
-`ClusterAnchorBundle` is the handoff artifact for field components:
-they take a bundle, read the hint to locate identifiers, and use the
-canvas + bag for spatial reasoning.
+`ClusterAnchorBundle` is the handoff artifact for the planning + applier
+layer: structure phase outputs (canvas / bag / hint) come from the
+anchor sheet; `sibling_canvases` carries every other sheet in the
+cluster so per-sheet PLIs can flow out of multi-sheet clusters.
+
+The workbook handed to this phase is assumed to be operator-curated —
+every sheet in the workbook is expected to contribute PLI data, so
+no role filter runs here. Empty / structurally-foreign sheets fall
+into singleton clusters and contribute no PLIs downstream.
 """
 from __future__ import annotations
 
 from haystack import component
 
+from app.artifacts.canvas import GridCanvas
 from app.artifacts.workbook import ClusterAnchorBundle
 from app.components._base import Component
 from app.components.structure.phase import run_structure_phase
 from app.components.workbook.anchor_picker import pick_anchor_sheet_name
 from app.components.workbook.clusterer import cluster_sheets
 from app.components.workbook.profiler import compute_sheet_signature
-from app.components.workbook.role_classifier import (
-    classify_cluster_role,
-    filter_pli_clusters,
-)
+from app.tools.canvas.build import build_canvas
 
 
 def run_workbook_phase(workbook) -> list[ClusterAnchorBundle]:
-    """Profile + cluster + classify + anchor + structure-phase the workbook.
+    """Profile + cluster + structure-phase the workbook.
 
-    Returns one `ClusterAnchorBundle` per `pli_cluster` after role
-    classification. Non-PLI clusters are dropped.
+    Returns one `ClusterAnchorBundle` per cluster. The bundle's
+    `sibling_canvases` carries the cluster's other member sheets'
+    canvases so the applier can iterate them with the cluster's
+    shared plan.
     """
     signatures = [compute_sheet_signature(ws) for ws in workbook.worksheets]
     clusters = cluster_sheets(signatures)
@@ -48,16 +53,18 @@ def run_workbook_phase(workbook) -> list[ClusterAnchorBundle]:
             continue
         anchor_sheet = sheets_by_name[anchor_name]
         canvas, bag, hint = run_structure_phase(anchor_sheet, cluster_id=cluster.cluster_id)
-        classify_cluster_role(cluster, canvas, bag)
+        siblings: dict[str, GridCanvas] = {
+            name: build_canvas(sheets_by_name[name])
+            for name in cluster.sheet_names
+            if name != anchor_name and name in sheets_by_name
+        }
         bundles.append(ClusterAnchorBundle(
             cluster=cluster,
             anchor_sheet_name=anchor_name,
             canvas=canvas, bag=bag, hint=hint,
+            sibling_canvases=siblings,
         ))
-
-    # Drop other_sheets/unknown — caller only sees pli_cluster bundles.
-    pli_cluster_ids = {c.cluster_id for c in filter_pli_clusters(clusters)}
-    return [b for b in bundles if b.cluster.cluster_id in pli_cluster_ids]
+    return bundles
 
 
 @component
@@ -68,8 +75,7 @@ class WorkbookPhase(Component):
         workbook — an openpyxl Workbook
 
     Outputs:
-        bundles — list[ClusterAnchorBundle], one per pli_cluster after
-                   role classification
+        bundles — list[ClusterAnchorBundle], one per cluster
     """
 
     def __init__(self) -> None:

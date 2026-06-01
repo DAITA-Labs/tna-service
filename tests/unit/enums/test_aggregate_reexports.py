@@ -33,7 +33,6 @@ def test_label_match_mode_reexported() -> None:
 def test_new_enums_reexported_from_package() -> None:
     """Every new enum from Phase 1 is reachable via `from app.enums import …`."""
     from app.enums import (
-        ClusterRole,
         FieldLocationMode,
         JudgeDecision,
         PliAxis,
@@ -47,7 +46,6 @@ def test_new_enums_reexported_from_package() -> None:
     assert SubfieldAxis.IMPLICIT.value    == "implicit"
     assert JudgeDecision.APPROVE.value    == "approve"
     assert PolicySeverity.WARNING.value   == "warning"
-    assert ClusterRole.PLI_CLUSTER.value  == "pli_cluster"
     assert PliAxis.ROW.value              == "row"
 
 

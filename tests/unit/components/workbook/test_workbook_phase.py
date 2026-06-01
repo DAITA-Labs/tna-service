@@ -44,7 +44,12 @@ def _workbook(*sheet_specs):
     return wb
 
 
-def test_run_workbook_phase_returns_bundles_per_pli_cluster() -> None:
+def test_run_workbook_phase_emits_one_bundle_per_cluster() -> None:
+    """Every cluster the clusterer produces becomes a bundle.
+
+    No role filter — operators curate the workbook upstream, so the
+    phase passes every cluster through to the planner.
+    """
     wb = _workbook(
         ("PLI-1", lambda ws: _tabular_pli_sheet(ws, "P1")),
         ("PLI-2", lambda ws: _tabular_pli_sheet(ws, "P2")),
@@ -53,15 +58,24 @@ def test_run_workbook_phase_returns_bundles_per_pli_cluster() -> None:
     bundles = run_workbook_phase(wb)
 
     assert all(isinstance(b, ClusterAnchorBundle) for b in bundles)
-    assert all(b.cluster.role == "pli_cluster" for b in bundles)
-    # The metadata-shaped sheet must not appear as an anchor
-    assert all(b.anchor_sheet_name != "Info" for b in bundles)
+    # All clusters surface — including the metadata-shaped one.
+    anchors = {b.anchor_sheet_name for b in bundles}
+    assert anchors.issuperset({"PLI-1", "Info"}) or anchors.issuperset({"PLI-2", "Info"})
 
 
-def test_other_sheets_dropped_from_results() -> None:
-    """A workbook where every sheet is non-PLI yields an empty bundle list."""
-    wb = _workbook(("Info", _other_sheet))
-    assert run_workbook_phase(wb) == []
+def test_sibling_canvases_populated_for_multi_sheet_clusters() -> None:
+    """A cluster grouping multiple sibling sheets carries their canvases on the bundle."""
+    wb = _workbook(
+        ("PLI-1", lambda ws: _tabular_pli_sheet(ws, "P1")),
+        ("PLI-2", lambda ws: _tabular_pli_sheet(ws, "P2")),
+    )
+    bundles = run_workbook_phase(wb)
+    # Both PLI sheets share a signature — they should cluster together.
+    multi = [b for b in bundles if len(b.cluster.sheet_names) >= 2]
+    assert multi, "expected the two identically-shaped sheets to share a cluster"
+    bundle = multi[0]
+    expected_siblings = set(bundle.cluster.sheet_names) - {bundle.anchor_sheet_name}
+    assert set(bundle.sibling_canvases.keys()) == expected_siblings
 
 
 def test_bundle_propagates_cluster_id_onto_hint() -> None:

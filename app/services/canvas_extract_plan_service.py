@@ -85,6 +85,7 @@ def _run_chain(ctx: Any, llm: BaseProvider) -> ExtractionResult:
         plan = reviewer_gate.run(plan=plan, bundle=bundle)["plan"]
         plis = applier.run(
             plan=plan, canvas=bundle.canvas, sheet=bundle.anchor_sheet_name,
+            sibling_canvases=bundle.sibling_canvases,
         )["plis"]
         all_plis.extend(plis)
         all_warnings.extend(_warning_to_public(w) for w in plan.warnings)
