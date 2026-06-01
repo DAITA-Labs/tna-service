@@ -56,12 +56,19 @@ def infer_layout_axes(canvas: GridCanvas, bag: StructureBag) -> LayoutAxes:
 
     vert_dates, horiz_dates = _count_date_strip_orientations(bag)
 
+    hb_h, hb_w = 0, 0
+    if bag.header_band is not None:
+        hb_h = bag.header_band.rect.r1 - bag.header_band.rect.r0 + 1
+        hb_w = bag.header_band.rect.c1 - bag.header_band.rect.c0 + 1
+
     pli_result = PliAxisPicker().run(
         kv_count=kv_count,
         repeating_count=repeating_count,
         n_data_rows=n_data_rows,
         n_data_cols=n_data_cols,
         sheet_size=sheet_size,
+        header_band_height=hb_h,
+        header_band_width=hb_w,
     )
     pli_axis, pli_conf = pli_result["pli_axis"], pli_result["confidence"]
 

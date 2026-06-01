@@ -23,7 +23,14 @@ _REPEATING_GROUPS_FOR_SECTIONAL = 3
 _DATA_ROWS_MIN_FOR_SECTIONAL    = 10
 _AXIS_RATIO                     = 2.0
 
-_BOOST = 1.0
+# A header band of height ≤ 3 spanning ≥ 6 columns is a horizontal header —
+# strong evidence the table is row-per-PLI even when the sheet is wider than
+# tall (e.g. 5 PLI rows × 30 stage columns).
+_HORIZ_HEADER_MAX_HEIGHT = 3
+_HORIZ_HEADER_MIN_WIDTH  = 6
+
+_BOOST        = 1.0
+_STRONG_BOOST = 2.0
 
 
 def prefer_sheet_for_kv_blocks(
@@ -103,4 +110,34 @@ def prefer_horizontal_when_more_cols_than_rows(
         candidate=candidate,
         score_delta=score,
         message=f"rows={n_data_rows} cols={n_data_cols}" if score else "",
+    )
+
+
+def prefer_vertical_when_header_band_is_horizontal(
+    candidate: str,
+    *,
+    header_band_height: int,
+    header_band_width:  int,
+    **_:                Any,
+) -> PolicyVerdict:
+    """Boost 'vertical' when the header band is wide-and-short.
+
+    A horizontal header (height ≤ 3 rows spanning ≥ 6 columns) is the
+    cleanest "PLIs grow down" signal we have: the column headers ARE
+    fixed and PLIs march down beneath them. This boost is +2.0 because
+    it should outvote `prefer_horizontal_when_more_cols_than_rows` —
+    real TNAs are often wide-but-short (e.g. 5 PLI rows × 30 stage
+    columns) where the raw col/row ratio falsely flips to 'horizontal'.
+    """
+    fits = (
+        header_band_height > 0
+        and header_band_height <= _HORIZ_HEADER_MAX_HEIGHT
+        and header_band_width  >= _HORIZ_HEADER_MIN_WIDTH
+    )
+    score = _STRONG_BOOST if (candidate == "vertical" and fits) else 0.0
+    return PolicyVerdict(
+        name="prefer_vertical_when_header_band_is_horizontal",
+        candidate=candidate,
+        score_delta=score,
+        message=f"hb_h={header_band_height} hb_w={header_band_width}" if score else "",
     )
